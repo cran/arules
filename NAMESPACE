@@ -1,0 +1,27 @@
+useDynLib(arules)
+
+import(Matrix)
+export("read.transactions", "apriori", "eclat")
+exportClasses(
+    "itemMatrix", "summary.itemMatrix",
+    "transactions", "summary.transactions",
+    "tidList", "summary.tidList", 
+    "associations", "summary.associations",
+    "itemsets", "summary.itemsets",
+    "rules", "summary.rules",
+    "ASparameter", "AScontrol",
+    "APparameter", "APcontrol", "APappearance",
+    "ECparameter", "ECcontrol")
+exportMethods("%in%",
+              "LIST",
+              "SORT",
+              "[",
+              "coerce",
+              "decode", "dim", 
+              "image", "initialize", "inspect", "itemInfo",
+              "itemInfo<-", "items", "items<-",
+              "labels", "labels<-", "length", "lhs", "lhs<-",
+              "quality", "quality<-",
+              "rhs", "rhs<-",
+              "show", "size", "subset", "summary", 
+              "tidList", "transactionInfo", "transactionInfo<-")
