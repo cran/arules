@@ -37,9 +37,14 @@ if(!isGeneric("labels")) {
                function(object, ...) standardGeneric("labels"))
 }
 
-if(!isGeneric("labels<-")) {
-    setGeneric("labels<-",
-               function(object, value) standardGeneric("labels<-"))
+if(!isGeneric("itemLabels")) {
+    setGeneric("itemLabels",
+               function(object, ...) standardGeneric("itemLabels"))
+}
+
+if(!isGeneric("itemLabels<-")) {
+    setGeneric("itemLabels<-",
+               function(object, value) standardGeneric("itemLabels<-"))
 }
 
 if(!isGeneric("items")) {

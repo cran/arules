@@ -13,7 +13,7 @@
 }
 \usage{
 size(x)
-\S4method{size}{itemMatrix}{x}
+\S4method{size}{itemMatrix}(x)
 }
 \arguments{
   \item{x}{an object.}

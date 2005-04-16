@@ -4,7 +4,7 @@
 setAs("matrix", "transactions",
     function(from) {
     new("transactions", as(from, "itemMatrix"), 
-     transactionInfo = data.frame(transactionIDs = dimnames(from)[[1]]))
+     transactionInfo = data.frame(transactionIDs = labels(from)[[1]]))
     })
 
 setAs("transactions", "matrix",
@@ -19,7 +19,7 @@ setAs("transactions", "matrix",
 setAs("list", "transactions",
 	  function(from) {
 	  new("transactions", as(from, "itemMatrix"), 
-	       transactionInfo = data.frame(transactionIDs = names(from)))
+	       transactionInfo = data.frame(transactionIDs = labels(from)))
 	  })
 
 setAs("transactions", "list",
@@ -65,7 +65,7 @@ setAs("data.frame", "transactions", function(from) {
     p <- as.integer(c(0, cumsum(len)))
     z <- new("dgCMatrix", x = rep(as.numeric(1), length(i)),
       i = i, p = p, Dim = to_dim)
-    cat("Recoded",dim(from)[2],"variables to",to_dim[1],"binary items\n")
+    #cat("Recoded",dim(from)[2],"variables to",to_dim[1],"binary items\n")
     new("transactions", new("itemMatrix", data = z,
       itemInfo=data.frame(labels = to_labels, variables = to_vars, 
       levels=to_levels)))
@@ -76,8 +76,10 @@ setAs("data.frame", "transactions", function(from) {
 ### subset
 
 setMethod("[", signature(x = "transactions"),
-    function(x, i, j, ..., drop) {
-    if(missing(i)) i <- c(1:length(x))
+    function(x, i, j, ..., drop = FALSE) {
+    if(missing(i)) new("transactions",as(x, "itemMatrix")[,j,...,drop=drop],
+            transactionInfo = x@transactionInfo)
+    
     new("transactions",as(x, "itemMatrix")[i,j,...,drop=drop],
     	transactionInfo = x@transactionInfo[i,,drop=FALSE])
     })
@@ -133,6 +135,13 @@ setReplaceMethod("transactionInfo", signature(x = "transactions"),
     x
     })
 
+setMethod("labels", signature(object = "transactions"),
+    function(object, ...) {
+    list(items = itemLabels(object),
+      transactionIDs = as(object@transactionInfo[["transactionIDs"]], 
+      "character"))
+    })
+			      
 
 ###***************************************************************
 ### read function

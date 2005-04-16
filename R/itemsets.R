@@ -20,9 +20,7 @@ setAs("itemsets", "data.frame",
 
 setMethod("labels", signature(object = "itemsets"),
    function(object) {
-    items <- sapply(as(object@items, "list"), 
-      function(x) paste(x, collapse =", ")) 
-    paste("{",items,"}", sep="")
+     labels(object@items)$elements
 })
 
 ###************************************************

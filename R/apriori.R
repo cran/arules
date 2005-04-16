@@ -4,19 +4,19 @@ apriori <-  function(data, parameter = NULL, appearance = NULL, control = NULL)
     data <- as(data, "transactions")
     items <- data@data
     if (is(appearance, "list")) appearance <- 
-      as(c(appearance,list(labels = labels(data))), "APappearance")
+      as(c(appearance, list(labels = itemLabels(data))), "APappearance")
     appearance <- as(appearance, "APappearance")   
     control <- as(control, "APcontrol")
     parameter <- as(parameter, "APparameter")
    
-    ### print parameter
-    cat("\nParameter specification:\n")
-    print(parameter)
     if(control@verbose) {
-      cat("\nAlgorithmic control:\n")
+      ### print parameter
+      cat("\nparameter specification:\n")
+      print(parameter)
+      cat("\nalgorithmic control:\n")
       print(control)
+      cat("\n")
     }
-    cat("\n")
     
     ### call apriori
     result <- .Call("rapriori", 
@@ -39,9 +39,7 @@ apriori <-  function(data, parameter = NULL, appearance = NULL, control = NULL)
     ### make quality a data.frame
     #result@quality <- as(result@quality, "data.frame")
     result@quality <- as.data.frame(result@quality)
-    cat("\nResult: ")
-    print(result)
-    
+     
     result
   }
 

@@ -1,6 +1,6 @@
 Package: arules
-Version: 0.1-0
-Date: 2005/04/15
+Version: 0.1-1
+Date: 2005/04/16
 Title: Mining Association Rules and Frequent Itemsets with R
 Author: Bettina Gruen, Michael Hahsler and Kurt Hornik
 Maintainer: Michael Hahsler <hahsler@ai.wu-wien.ac.at> 
@@ -11,4 +11,4 @@ Depends: R (>= 2.0.0), Matrix (>= 0.95-3), stats4
 License: GPL version 2 or later
  This R package includes code from Christian Borgelt which is
  distributed under the GPL version 2.1.
-Packaged: Fri Apr 15 15:43:04 2005; hornik
+Packaged: Mon May  2 11:34:59 2005; hahsler

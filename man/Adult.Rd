@@ -7,72 +7,85 @@
   The \code{Adult} data set contains the questionnaire data of the
   \dQuote{Adult} database (originally called the \dQuote{Census Income}
   Database) formatted as a \code{data.frame} prepared for use with
-  \pkg{arules}.  The \code{Adult_transactions} data set contains the data 
-  already coerced to \code{\link[transactions-class]{transactions}}.
+  \pkg{arules}.  
+  The \code{Adult_transactions} data set contains the data 
+  already prepared and coerced to 
+  \code{\link[transactions-class]{transactions}}.
 }
 \usage{
 data("Adult")
 data("Adult_transactions")
 }
 \details{
-  The \dQuote{Adult} database was extracted from the census bureau
-  database found at
-  \url{http://www.census.gov/ftp/pub/DES/www/welcome.html} in 1994 by
+  The \dQuote{Adult} database was extracted from the census bureau database
+  found at \url{http://www.census.gov/ftp/pub/DES/www/welcome.html} in 1994 by
   Ronny Kohavi and Barry Becker, Data Mining and Visualization, Silicon
-  Graphics. It was originally used to predict whether income exceeds
-  \$50K/yr based on census data.
+  Graphics. It was originally used to predict whether income exceeds USD 50K/yr
+  based on census data. We added the attribute \code{income} with levels
+  \code{small} and \code{large} (>50K).
  
   To prepare the data set for association mining, we removed the
-  continuous attribute \code{fnlwgt} (final weight) and added the
-  attribute \code{salary} with levels \sQuote{small} and \sQuote{large}
-  ($>$\$50K/yr).  The original data contained 5 more continuous
-  attributes (\code{age}, \code{education-num}, \code{capital-gain},
-  \code{capital-loss} and \code{hours-per-week}) which we coded using
-  discrete values.
+  continuous attribute \code{fnlwgt} (final weight).
+  We also eliminated \code{education-num} because it is just a
+  numeric representation of the attribute \code{education}.
+  The other 4 continuous attributes we mapped to ordinal attributes as
+  follows:
+    \describe{
+    \item{age}{cut into levels 
+    	\code{Young} (0-25),
+    	\code{Middle-aged} (26-45),
+    	\code{Senior} (46-65) and
+    	\code{Old} (66+).}
+    \item{hours-per-week}{cut into levels
+        \code{Part-time} (0-25),
+        \code{Full-time} (25-40),
+        \code{Over-time} (40-60) and
+        \code{Too-much} (60+).}
+ 
+    \item{capital-gain and capital-loss}{each cut into levels
+    \code{None} (0),
+    \code{Low} (0 < median of the values greater zero < max) and
+    \code{High} (>=max).}
+    }
 }
 \format{
-  \code{Adult} contains a \code{data.frame} with 48842 observations on
-  the following 14 variables:
+  The \code{Adult} data set contains a data frame with 48842
+  observations on the following 15 variables.
   \describe{
-    \item{age}{a factor with levels \code{middle-aged}, \code{old},
-      \code{senior}, \code{young}}
+    \item{age}{a numeric vector.}
     \item{workclass}{a factor with levels \code{Federal-gov},
       \code{Local-gov}, \code{Never-worked}, \code{Private},
       \code{Self-emp-inc}, \code{Self-emp-not-inc}, \code{State-gov},
-      \code{Without-pay}}
-    \item{education}{a factor with levels \code{10th}, \code{11th},
-      \code{12th}, \code{1st-4th}, \code{5th-6th}, \code{7th-8th},
-      \code{9th}, \code{Assoc-acdm}, \code{Assoc-voc}, \code{Bachelors},
-      \code{Doctorate}, \code{HS-grad}, \code{Masters},
-      \code{Preschool}, \code{Prof-school}, \code{Some-college}}
-    \item{education-num}{a factor with levels \code{1}, \code{10},
-      \code{11}, \code{12}, \code{13}, \code{14}, \code{15}, \code{16},
-      \code{2}, \code{3}, \code{4}, \code{5}, \code{6}, \code{7},
-      \code{8}, \code{9}} 
+      and \code{Without-pay}.}
+    \item{education}{an ordered factor with levels \code{Preschool} <
+      \code{1st-4th} < \code{5th-6th} < \code{7th-8th} < \code{9th} <
+      \code{10th} < \code{11th} < \code{12th} < \code{HS-grad} <
+      \code{Prof-school} < \code{Assoc-acdm} < \code{Assoc-voc} <
+      \code{Some-college} < \code{Bachelors} < \code{Masters} <
+      \code{Doctorate}.} 
+    \item{education-num}{a numeric vector.}
     \item{marital-status}{a factor with levels \code{Divorced},
       \code{Married-AF-spouse}, \code{Married-civ-spouse},
       \code{Married-spouse-absent}, \code{Never-married},
-      \code{Separated}, \code{Widowed}} 
+      \code{Separated}, and \code{Widowed}.}
     \item{occupation}{a factor with levels \code{Adm-clerical},
       \code{Armed-Forces}, \code{Craft-repair}, \code{Exec-managerial},
       \code{Farming-fishing}, \code{Handlers-cleaners},
       \code{Machine-op-inspct}, \code{Other-service},
       \code{Priv-house-serv}, \code{Prof-specialty},
-      \code{Protective-serv}, \code{Sales}, \code{Tech-support},
-      \code{Transport-moving}} 
+      \code{Protective-serv}, \code{Sales}, \code{Tech-support}, and
+      \code{Transport-moving}.}
     \item{relationship}{a factor with levels \code{Husband},
       \code{Not-in-family}, \code{Other-relative}, \code{Own-child},
-      \code{Unmarried}, \code{Wife}} 
+      \code{Unmarried}, and \code{Wife}.}
     \item{race}{a factor with levels \code{Amer-Indian-Eskimo},
-      \code{Asian-Pac-Islander}, \code{Black}, \code{Other},
-      \code{White}} 
-    \item{sex}{a factor with levels \code{Female}, \code{Male}}
-    \item{capital-gain}{a factor with levels \code{high}, \code{medium},
-      \code{none}, \code{small}}
-    \item{capital-loss}{a factor with levels \code{medium}, \code{none},
-      \code{small}}
-    \item{hours-per-week}{a factor with levels \code{full-time},
-      \code{half-time}, \code{overtime}, \code{too-many}}
+      \code{Asian-Pac-Islander}, \code{Black}, \code{Other}, and
+      \code{White}.} 
+    \item{sex}{a factor with levels \code{Female} and \code{Male}.}
+    \item{capital-gain}{a numeric vector.}
+    \item{capital-loss}{a numeric vector.}
+    \item{fnlwgt}{a numeric vector.}
+    \item{hours-per-week}{a numeric vector.}
     \item{native-country}{a factor with levels \code{Cambodia},
       \code{Canada}, \code{China}, \code{Columbia}, \code{Cuba},
       \code{Dominican-Republic}, \code{Ecuador}, \code{El-Salvador},
@@ -85,8 +98,9 @@ data("Adult_transactions")
       \code{Philippines}, \code{Poland}, \code{Portugal},
       \code{Puerto-Rico}, \code{Scotland}, \code{South}, \code{Taiwan},
       \code{Thailand}, \code{Trinadad&Tobago}, \code{United-States},
-      \code{Vietnam}, \code{Yugoslavia}}
-    \item{salary}{a factor with levels \code{small}, \code{large}}
+      \code{Vietnam}, and \code{Yugoslavia}.}
+    \item{income}{an ordered factor with levels \code{small} <
+      \code{large}.}
   }
 }
 \source{
@@ -108,9 +122,32 @@ data("Adult_transactions")
 \examples{
 data("Adult")
 dim(Adult)
-Adult[1:2, 1:4]
+Adult[1:2,]
 
-data("Adult_transactions")
+### remove attributes
+Adult[["fnlwgt"]] <- NULL
+Adult[["education-num"]] <- NULL
+
+### map metric attributes
+Adult[[ "age"]] <- ordered(cut(Adult[[ "age"]], c(15,25,45,65,100)),
+    labels = c("Young", "Middle-aged", "Senior", "Old"))
+
+Adult[[ "hours-per-week"]] <- ordered(cut(Adult[[ "hours-per-week"]],
+      c(0,25,40,60,168)),
+    labels = c("Part-time", "Full-time", "Over-time", "Workaholic"))
+
+Adult[[ "capital-gain"]] <- ordered(cut(Adult[[ "capital-gain"]],
+      c(-Inf,0,median(Adult[[ "capital-gain"]][Adult[[ "capital-gain"]]>0]),1000000)),
+    labels = c("None", "Low", "High"))
+
+Adult[[ "capital-loss"]] <- ordered(cut(Adult[[ "capital-loss"]],
+      c(-Inf,0,
+	median(Adult[[ "capital-loss"]][Adult[[ "capital-loss"]]>0]),1000000)),
+    labels = c("None", "Low", "High"))
+
+### create transactions
+Adult_transactions <- as(Adult, "transactions")
 Adult_transactions
+
 }
 \keyword{datasets}

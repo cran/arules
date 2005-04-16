@@ -1,14 +1,19 @@
 \documentclass[10pt,a4paper]{article}
+
 \usepackage{a4wide}
-\usepackage[round,longnamesfirst]{natbib}
-\usepackage{hyperref}
 \setlength{\parskip}{0.5ex plus0.1ex minus0.1ex}
 \setlength{\parindent}{0em}
+
+\usepackage[round,longnamesfirst]{natbib}
+\usepackage{hyperref}
+
 \newcommand{\strong}[1]{{\normalfont\fontseries{b}\selectfont #1}}
 \newcommand{\class}[1]{\textsf{#1}}
 \newcommand{\code}[1]{\texttt{#1}}
 \newcommand{\pkg}[1]{\strong{#1}}
 \newcommand{\samp}[1]{`\texttt{#1}'}
+\newcommand{\proglang}[1]{\textsf{#1}}
+
 \usepackage{Sweave}
 %% \VignetteIndexEntry{Data structures for association rules}
 
@@ -25,12 +30,12 @@
 %% ------------------------------------------------------------------
 \begin{abstract}
   Mining frequent itemsets and association rules is a popular and well
-  researched approach to discovering interesting relationships between
-  variables in large databases.  The \textsf{R} package \pkg{arules}
+  researched approach for discovering interesting relationships between
+  variables in large databases.  The \proglang{R} package \pkg{arules}
   presented in this paper provides a basic infrastructure for creating
   and manipulating input data sets and for analyzing the resulting
   itemsets and rules.  The package also includes interfaces to two fast
-  mining algorithms, the popular \textsf{C} implementations of Apriori
+  mining algorithms, the popular \proglang{C} implementations of Apriori
   and Eclat by Christian Borgelt.  These algorithms can be used to mine
   frequent itemsets, maximal frequent itemsets, closed frequent itemsets
   and association rules.
@@ -54,7 +59,7 @@ Let $I=\{i_1, i_2,\ldots,i_n\}$ be a set of $n$ binary attributes called
 transactions called the \emph{database}.  Each transaction
 in~$\mathcal{D}$ contains a subset of the items in~$I$.
 
-A \emph{rule} is defined as an implication of the from $X \Rightarrow Y$
+A \emph{rule} is defined as an implication of the form $X \Rightarrow Y$
 where $X, Y \subseteq I$ and $X \cap Y = \emptyset$.  The sets of items
 (for short \emph{itemsets}) $X$ and $Y$ are called \emph{antecedent}
 (left-hand-side or LHS) and \emph{consequent} (right-hand-side or RHS)
@@ -84,9 +89,10 @@ probability estimation.
 = \mathrm{supp}(X \cup Y) / \mathrm{supp}(X)$.  This can be interpreted
 as an estimate of the probability $P(Y|X)$, the probability of finding
 the RHS of the rule in transactions under the condition that these
-transactions also contain the LHS \citep[see
-e.g.,][]{arules:Hipp+Guentzer+Nakhaeizadeh:2000}.  Association rules are
-typically required to satisfy both constraints, minimum support and
+transactions also contain the LHS 
+\citep[see e.g.,][]{arules:Hipp+Guentzer+Nakhaeizadeh:2000}.  
+Association rules are
+required to satisfy both constraints, minimum support and
 minimum confidence, at the same time.
 
 At medium to low support values, often a great number of frequent
@@ -105,9 +111,23 @@ maximal frequent itemsets.  Their advantage over maximal frequent
 itemsets is that in addition to be able to infer all frequent itemsets,
 they also preserve the support information for all frequent itemsets
 which can be important for computing additional interest measures after
-the mining process is finished (e.g.,
-\emph{lift}~\citep{arules:Brin+Motwani+Ullman+Tsur:1997}, or
+the mining process is finished (e.g., confidence for rules
+generated from the found itemsets, or 
 \emph{all-confidence}~\citep{arules:Omiecinski:2003}).
+
+
+A practical solution to the problem of finding too many 
+association rules with support and confidence is
+to further filter or rank found rules using additional interest measures.
+A popular measure for this purpose is 
+\emph{lift}~\citep{arules:Brin+Motwani+Ullman+Tsur:1997}.
+Lift is defined on rules as $\mathrm{lift}(X \Rightarrow Y) = 
+\frac{\mathrm{supp}(X \cup Y)}{ \mathrm{supp}(X) \mathrm{supp}(Y)}$.
+It can be interpreted as the deviation of the support of the whole 
+rule from the support expected under independence given the 
+supports of the LHS and the RHS.
+Greater lift values indicate stronger associations.
+
 
 In the last decade research on algorithms to solve the frequent itemset
 problem has been abundant.  \cite{arules:Goethals+Zaki:2004} compare the
@@ -123,7 +143,7 @@ The algorithms can be used to mine frequent itemsets, maximal frequent
 itemsets and closed frequent itemsets.  The implementation of Apriori
 can additionally be used to generate association rules.
 
-The \textsf{R} package \pkg{arules} presented in this paper provides
+The \proglang{R} package \pkg{arules} presented in this paper provides
 the infrastructure needed to create and manipulate input data sets for
 the mining algorithms and for analyzing the resulting itemsets and
 rules.  Since it is common to work with large sets of rules and
@@ -133,16 +153,17 @@ created to explicitly facilitate easy extensions, both for interfacing
 new algorithms and for adding new types of interest measures and
 associations.
 
-The rest of the paper is organized as follows: In the next section we
+The rest of the paper is organized as follows: In the next section, we
 give an overview of the data structure implemented in the package
-\pkg{arules}.  In sections~\ref{sec:transactions} and
+\pkg{arules}.  In Sections~\ref{sec:transactions} and
 \ref{sec:associations} we introduce the functionality of the classes to
 handle transaction data and associations.  In
-section~\ref{sec:interfaces} we describe the way mining algorithms are
+Section~\ref{sec:interfaces} we describe the way mining algorithms are
 interfaced in \pkg{arules} using the already implemented interfaces for
 Apriori and Eclat as examples.  We provide several examples in
-sections~\ref{sec:example-screen} to \ref{sec:example-allconf}.  The
-first two examples show typical \textsf{R} sessions for analyzing and
+Sections~\ref{sec:example-screen} to \ref{sec:example-allconf}.  The
+first two examples show typical \proglang{R} sessions for preparing, 
+analyzing and
 manipulating a transaction data set, and for mining association rules.
 The third example demonstrates how \pkg{arules} can be extended to
 integrate a new interest measure.  We conclude with a summary of the
@@ -154,9 +175,10 @@ environment for mining association rules and frequent itemsets.
 \section{Data structure overview\label{sec:overview}}
 
 To enable the user to represent and work with input and output data of
-association rule mining algorithms in \textsf{R}, a well thought out
+association rule mining algorithms in \proglang{R}, a well thought out
 structure is necessary which can deal in an efficient way with large
-amounts of sparse binary data.  The S4 class structure implemented in
+amounts of sparse binary data.  The \proglang{S4} class structure 
+implemented in
 the package \pkg{arules} is presented in
 figure~\ref{fig:arules-classes}.
 
@@ -179,7 +201,7 @@ a new class that extends \class{associations}.
 
 Items in \class{associations} and \class{transactions} are implemented
 by the \class{itemMatrix} class which provides a facade for the sparse
-Matrix implementation \class{dgCMatrix} from package \pkg{Matrix}
+matrix implementation \class{dgCMatrix} from package \pkg{Matrix}
 \citep{arules:Bates+Maechler:2005}.
 Objects of the \class{itemMatrix} class are not intended to be directly
 accessed by the end user of \pkg{arules}.  The interfaces of
@@ -193,7 +215,7 @@ To control the behavior of the mining algorithms, the two classes
 \class{ASparameter} and \class{AScontrol} are used.  Since each
 algorithm can use additional algorithm-specific parameters, we
 implemented for each interfaced algorithm its own set of control
-classes.  We used the prefix \samp{AP} for Apriori and \samp{EC} for
+classes.  We used the prefix \class{AP} for Apriori and \class{EC} for
 Eclat.  In this way, it is easy to extend the control classes when
 interfacing a new algorithm.
 
@@ -205,7 +227,7 @@ interfacing a new algorithm.
 The main application of association rules is for market basket analysis
 where large transaction data sets are mined.  In this setting each
 transaction contains the items which were purchased at one visit to a
-retail store \citep[(see e.g.,][]{arules:Berry+Linoff:1997}).
+retail store \citep[see e.g.,][]{arules:Berry+Linoff:1997}.
 Transaction data are normally recorded by point-of-sale
 scanners and consists of tuples of the form:
 
@@ -234,7 +256,7 @@ Alternatively, transaction data can be represented in a
 layout in the form of a \emph{transaction ID list}~\citep{arules:Zaki:2000}.
 In this format for each item a list of IDs of the
 transactions the item is contained in is stored.
-Depending of the algorithm, one of the layouts is used for mining.
+Depending on the algorithm, one of the layouts is used for mining.
 In \pkg{arules} both layouts are implemented as the
 classes~\class{transactions} and \class{tidList} and the data can be
 directly transformed from one format to the other.
@@ -253,14 +275,14 @@ binary incidence matrix will
 in general be very sparse with many items and a very large number of
 transactions.  A natural representation for such data is a sparse matrix
 format.  For our implementation we chose the \class{dgCMatrix} which is
-defined in the \textsf{R} package \pkg{Matrix} 
+defined in the \proglang{R} package \pkg{Matrix} 
 implemented by~\cite{arules:Bates+Maechler:2005}. The \class{dgCMatrix}
 is a compressed, sparse, column-oriented matrix which contains the
 indices of the rows unequal to zero, the pointers to the initial indices
 of elements in each column and the non-zero elements of the matrix.
 Since the package \pkg{Matrix} does not provide subset selection
 functionality for \class{dgCMatrix}, we implemented a suitable function
-in \textsf{C} and interfaced is as the subset selection method (\code{[}).
+in \proglang{C} and interfaced it as the subset selection method (\code{[}).
 Despite the column orientation of the \class{dgCMatrix}, it is more
 convenient to work with incidence matrices which are row-oriented.  This
 makes the most important manipulation, selecting a set of transactions
@@ -274,7 +296,7 @@ of the items) and handles the necessary mapping between the item label and the
 corresponding column number in the incidence matrix.  Optionally,
 \class{itemMatrix} can also store additional information on items. For
 example, the category hierarchy in a supermarket setting can be stored which
-enables the analyst to select only transactions (or as we late see also rules
+enables the analyst to select only transactions (or as we later see also rules
 and itemsets) which contain items from a certain category (e.g., all dairy
 products). 
 
@@ -328,38 +350,35 @@ Finally, the method \code{inspect} can be used to
 inspect transactions (e.g., an interesting transaction selected
 with subset selection).
 
-Another important 
-application of mining association rules has been proposed for
-discovering interesting relationships between the values of different
-categorical variables. An example can be found in
-\cite{arules:Hastie+Tibshirani+Friedman:2001}, where questionnaire data is
-used.  The natural format for questionnaire data in \textsf{R} is a
-\class{data.frame} with the answers coded as ordinal, nominal and metric
-variables.  In order to mine associations with Apriori or Eclat this data needs
-to be transformed into a binary incidence matrix with each row representing one
-questionnaire.  To create the binary matrix, first the metric variables are
-transformed into ordinal variables by building categories (e.g., the variable
-salary is transformed into an ordinal variable with the
-three values: low, medium and high).
-Then, each variable with $k$ categories is represented
-by $k$ binary dummy variables.
-Since it is crucial to carefully choose a value range for each categories,
-the first transformation has to be done manually by the analyst.
-The result is a \class{data.frame} with all ordinal or nominal variables
-coded as factors. 
-The second step, the generation of the needed number of
-dummy variables, is then done
-automatically by
-the \code{coerce} method from \class{data.frame}
-to \class{transactions}.
-In this process, the original variable names and categories
-from the questionnaire are
-preserved as additional item information and
-can later be used to select itemsets or rules which contain items
-referring to a certain original variable.
-The resulting \class{transactions} object can be mined and analyzed the
-same way as market basket data, see the example in
+Another important application of mining association rules has been proposed by
+\cite{arules:Piatetsky-Shapiro:1991} and \cite{arules:Srikant+Agrawal:1996} for
+discovering interesting relationships between the values of categorical and
+quantitative (metric) attributes.  For mining associations rules, non-binary
+attributes have to be mapped to binary attributes. The straight forward mapping
+method is to transform the metric attributes into $k$ ordinal attributes by
+building categories (e.g., an attribute income might be transformed into a
+ordinal attribute with the three categories: ``low'', ``medium'' and ``high'').
+Then, in a second step, each categorical attribute with $k$ categories is
+represented by $k$ binary dummy attributes which correspond to the items used
+for mining.  An example application using questionnaire data can be found in
+\cite{arules:Hastie+Tibshirani+Friedman:2001}.
+
+The typical representation for data with categorical and quantitative
+attributes in \proglang{R} is a \class{data.frame}.  First, a domain expert has
+to create useful categories for all metric attributes.  This task is
+supported in \proglang{R} by functions as \code{cut(x, \ldots)}, etc.  The
+second step, the generation of binary dummy items, is automated in package
+\pkg{arules} by the \code{coerce} method from \class{data.frame} to
+\class{transactions}.  In this process, the original attribute names and
+categories are preserved as additional item information and can be used
+to select itemsets or rules which contain items referring to a certain original
+attributes.  The resulting \class{transactions} object can be mined and
+analyzed the same way as market basket data, see the example in
 Section~\ref{sec:example-screen}.
+
+
+
+
 
 %% ------------------------------------------------------------------
 %% ------------------------------------------------------------------
@@ -367,9 +386,9 @@ Section~\ref{sec:example-screen}.
 
 The result of mining transaction data in \pkg{arules} are
 \class{associations.} 
-Associations are conceptually sets of 
+Conceptually, associations are sets of 
 objects. Each object describes the relationship between some items (e.g., 
-an itemset or a rule). and
+an itemset or a rule) and
 has values for different measures of quality assigned.
 Such quality measures can be measures of significance (e.g., support) 
 or measures of interest (e.g., confidence, lift)
@@ -424,9 +443,12 @@ extending the virtual \class{associations} class.
 In package \pkg{arules} we interface free reference implementations of
 Apriori and Eclat by Christian Borgelt
 \citep{arules:Borgelt+Kruse:2002,arules:Borgelt:2003}.  The code is
-called directly from \textsf{R} by the functions \code{apriori} and
-\code{eclat} and the data objects are directly passed from \textsf{R} to
-the \textsf{C} code and back without writing to external files.
+called directly from \proglang{R} by the functions \code{apriori} and
+\code{eclat} and the data objects are directly passed from \proglang{R} to
+the \proglang{C} code and back without writing to external files.
+The implementations can mine association rules, frequent itemsets,
+and closed and maximal frequent itemsets. 
+
 
 %% <<apriori>>=
 %% library(arules)
@@ -454,8 +476,8 @@ the function \code{eclat}, respectively.  Alternatively, data which can be coerc
 these classes (e.g., \code{NULL}
 which will give the default values or a named list
 with names equal to slot names to change the default values) can be passed.
-In these classes each slot specifies a different parameter and the values.  The
-default values are equal to the defaults of the stand-alone \textsf{C}
+In these classes, each slot specifies a different parameter and the values.  The
+default values are equal to the defaults of the stand-alone \proglang{C}
 programs \citep{arules:Borgelt:2004} except that by
 default the more common original
 support definition (instead of the
@@ -480,27 +502,40 @@ necessary steps are:
 \begin{enumerate}
  \item Adding interface code to the algorithm, preferably by directly
   calling into the native implementation language (rather than using
-  files for communication), and an \textsf{R} function calling this
+  files for communication), and an \proglang{R} function calling this
   interface.
  \item Implementing extensions for \class{parameter} and
   \class{control}.
 \end{enumerate}
 
-Implementations of algorithms as kDCI, LCM, FP-Growth or Patricia are
-discussed in~\cite{arules:Goethals+Zaki:2003}, and the source code is
-available on the internet.
+There exist many different algorithms which solve the frequent 
+and closed frequent itemset problems.
+Each algorithm has specific strength which can be important for
+very large databases.
+Such algorithms, e.g. kDCI, LCM, FP-Growth or Patricia, are
+discussed in~\cite{arules:Goethals+Zaki:2003}.  
+The source code is available on the internet and can be interfaced 
+in the future for \pkg{arules}. 
+
 
 %% ------------------------------------------------------------------
 %% ------------------------------------------------------------------
 
 
-\section{Example 1: Analyzing the Epub data set \label{sec:example-screen}}
+\section{Example 1: Analyzing and preparing a data set \label{sec:example-screen}}
 
-In this example we look at the \code{Epub} transaction data contained in
+In this example, 
+we show how a data set can be analyzed and manipulated
+before associations are mined.
+This is important for finding problems in the data set which 
+could make the mined associations useless or at least inferior
+to associations mined on a properly prepared data set.
+For the example,
+we look at the \code{Epub} transaction data contained in
 package \pkg{arules}.  This data set contains downloads of documents
 from the Electronic Publication platform of the Vienna University of
 Economics and Business Administration available via
-\url{http://epub.wu-wien.ac.at}.
+\url{http://epub.wu-wien.ac.at} from January 2003 to April 2005.
 
 First, we load \pkg{arules} and the data set.
 
@@ -523,17 +558,18 @@ summary(Epub)
 The summary method displays the most frequent items in the data set,
 information about the transaction length distribution and that the data
 set contains some extended transaction information.  We see that the
-data set contains transaction IDs and in addition time stamps for the
+data set contains transaction IDs and in addition time stamps (using class
+\class{POSIXct}) for the
 transactions.  The additional information can be used for analyzing the
 data set.
 
 <<>>=
-year <- substr(as(transactionInfo(Epub)[["TimeStamp"]], "character"),21,24)
+year <- strftime(as.POSIXlt(transactionInfo(Epub)[["TimeStamp"]]), "%Y")
 table(year)
 @
 
 We selected only the year part of the time stamps. For 2003, the first year
-in the dataset we have \Sexpr{table(year)[1]} transactions.
+in the data set we have \Sexpr{table(year)[1]} transactions.
 We can select the corresponding transactions and inspect the structure
 using a level-plot. 
 
@@ -554,7 +590,7 @@ the the dark dots represent the ones in the matrix.  From the plot we
 see that the items in the data set are not evenly distributed.  In fact,
 the white area to the top right site suggests, that in the beginning of
 2003 only very few items were available (less than 50) and then during
-the year more items were added till it reached a number of around 300
+the year more items were added until it reached a number of around 300
 items. Also, we can see that there are two transactions in the data set
 which contain a very high number of items (denser horizontal lines).
 These transactions need further investigation since they could originate
@@ -581,7 +617,7 @@ inspect(Epub_2003[1:5])
 @
 
 Most transactions contain one item. Only transaction 4 contains three items. 
-Alternatively, transactions can be converted into a list with:
+For further inspection transactions can be converted into a list with:
 
 <<>>=
 as(Epub_2003[1:5], "list")
@@ -603,41 +639,99 @@ can be used.
 as(Epub_tidList[1:3], "list") 
 @
 
-In this representation each item has an entry in 
-with a list of all transactions it occurs in.
+In this representation each item has an entry
+which is a vector of all transactions it occurs in.
+Transaction ID list can be directly used as input for mining algorithms which 
+use such a vertical database layout to mine associations.
 
-\section{Example 2: Mining the 
-Adult data set\label{sec:example-adult}}
 
-As a second example, we use the Adult data set from the UCI machine
+\section{Example 2: Preparing and mining a 
+questionnaire data set\label{sec:example-adult}}
+
+As a second example, 
+we prepare and mine questionnaire data.
+We use the Adult data set from the UCI machine
 learning repository \citep{arules:Blake+Merz:1998} provided by
 package~\pkg{arules}.  This data set is similar to the data used by
 \cite{arules:Hastie+Tibshirani+Friedman:2001}.  The data originates from
 the U.S. census bureau database and contains 48842 instances with 14
-variable like age, work class, education, salary, etc.
+attributes like age, work class, education, etc. 
+In the original applications of the data, the
+attributes were used to predict the income level of individuals.
+We added the attribute income with levels \code{Low} and \code{High},
+representing an income of $\le \$50,000$ and $> \$50,000$, respectively.
+This data is included in \pkg{arules} 
+as the data set \code{Adult}.
+
 
 <<data>>=
 library("arules")
 data("Adult")
 dim(Adult)
-Adult[1:2,1:4]
+Adult[1:2,]
 @
 
 
-The metric variables in the \code{Adult} data frame have already been
-transformed into suitable categories and the values of all variables
-have been encoded as factors.  The data can be automatically recoded as
+\code{Adult} contains a mixture of categorical and metric attributes and
+needs some preparations before it can be transformed into
+transaction data suitable for association mining.
+First, we remove the two attributes \code{fnlwgt} and
+\code{education-num}. The first attribute is a weight calculated
+by the creators of the data set from control data provided by
+the Population Division of the U.S. census bureau. 
+The second removed attribute is just a numeric representation of the
+attribute \code{education} which is also part of the data set.
+
+<<>>=
+Adult[["fnlwgt"]] <- NULL
+Adult[["education-num"]] <- NULL
+@
+
+Next, we need to map the four remaining metric attributes (\code{age},
+\code{hours-per-week}, \code{capital-gain} and \code{capital-loss}) to ordinal
+attributes by building suitable categories.
+We divide the attributes \code{age} and \code{hours-per-week}
+into suitable categories using knowledge about typical age groups 
+and working hours. 
+For the two capital related attributes,
+we create a category called \code{None} 
+for cases which have no gains/losses. 
+Then we further divide the group with gains/losses
+at their median into the two categories \code{Low} and \code{High}.
+
+
+<<>>=
+Adult[[ "age"]] <- ordered(cut(Adult[[ "age"]], c(15,25,45,65,100)),
+    labels = c("Young", "Middle-aged", "Senior", "Old"))
+
+Adult[[ "hours-per-week"]] <- ordered(cut(Adult[[ "hours-per-week"]],
+      c(0,25,40,60,168)),
+    labels = c("Part-time", "Full-time", "Over-time", "Workaholic"))
+			    
+Adult[[ "capital-gain"]] <- ordered(cut(Adult[[ "capital-gain"]],
+      c(-Inf,0,median(Adult[[ "capital-gain"]][Adult[[ "capital-gain"]]>0]),1000000)),
+    labels = c("None", "Low", "High"))
+
+Adult[[ "capital-loss"]] <- ordered(cut(Adult[[ "capital-loss"]],
+      c(-Inf,0,
+	median(Adult[[ "capital-loss"]][Adult[[ "capital-loss"]]>0]),1000000)),
+    labels = c("none", "low", "high"))
+@
+
+Now, the data can be automatically recoded as
 a binary incidence matrix by coercing the data set to
 \class{transactions}.
 
 <<coerce>>=
 Adult_transactions <- as(Adult, "transactions")
+Adult_transactions
 @
 
-The census data set contains \Sexpr{dim(Adult)[2]} categorical variables
-which are automatically recoded into \Sexpr{dim(Adult_transactions)[2]}
+The remaining \Sexpr{dim(Adult)[2]} categorical attributes were
+automatically recoded into \Sexpr{dim(Adult_transactions)[2]}
 binary items. During encoding the item labels were generated in the
-form of \texttt{<\emph{variable name}> = <\emph{category label}>}.
+form of 
+\texttt{<\emph{variable name}> = <\emph{category label}>}.
 
 <<summary>>=
 summary(Adult_transactions)
@@ -647,18 +741,17 @@ The summary of the transaction data set gives a rough overview showing
 the most frequent items, the length distribution of the transactions and
 the extended item information which shows which variable and which value
 were used to create each binary item. In the first example we see that
-the item with label \texttt{age=middle-aged} was generated by variable
-\texttt{age} and value \texttt{middle-aged}.  
+the item with label \texttt{age = middle-aged} was generated by variable
+\texttt{age} and level \texttt{middle-aged}.  
 
 Next, we call the function
 \code{apriori} to find all rules (the default association type for
-\code{apriori}) with a minimum support of 0.01 and a confidence of 0.8
-in the first 40,000 transactions.
+\code{apriori}) with a minimum support of 0.5\% and a confidence of 0.7.
 
 <<apriori>>=
-rules <- apriori(Adult_transactions[1:40000], 
-                 parameter = list(support = 0.01, confidence = 0.8))
-#rules
+rules <- apriori(Adult_transactions, 
+                 parameter = list(support = 0.005, confidence = 0.7))
+rules
 @
 
 %The specified parameter values are validated and, for example,
@@ -675,7 +768,7 @@ the default values. It is important to note that with parameter
 \code{maxlen}, the maximum size of mined frequent itemsets, is by
 default restricted to 5.  Longer association rules are only mined if
 \code{maxlen} is set to a higher value.  After the parameter settings,
-the output of the \textsf{C} implementation of the algorithm with timing
+the output of the \proglang{C} implementation of the algorithm with timing
 information is displayed.
 
 The result of the mining algorithm is a set of \Sexpr{length(rules)}
@@ -692,11 +785,11 @@ summary(rules)
 As typical for association rule mining, the number of found rules is
 huge.  To analyze these rules, for example, the function \code{subset}
 can be used to produce a subset of rules which contain items which
-resulted form the variable \code{salary} in the right-hand-side of the
+resulted form the variable \code{income} in the right-hand-side of the
 rule and the \code{lift} measure exceeds $1.4$.
 
 <<rules>>=
-rules.sub <- subset(rules, subset = rhs %in% "salary" & lift > 1.4)
+rules.sub <- subset(rules, subset = rhs %in% "income" & lift > 1.4)
 @
 
 We can then inspect the three rules with the highest lift value (using the
@@ -711,9 +804,9 @@ inspect(SORT(rules.sub, by = "lift")[1 : 3])
 Using such subset selection and sorting a set of associations can be
 analyzed even if it is huge.
 
-\section{Example 3: Extending arules for all-confidence\label{sec:example-allconf}}
+\section{Example 3: Extending arules with a new interest measure\label{sec:example-allconf}}
 
-In this example we show how easy it is to add a new interest measure.
+In this example, we show how easy it is to add a new interest measure.
 As the interest measure we chose \emph{all-confidence}
 introduced by \cite{arules:Omiecinski:2003}. All-confidence is
 defined on itemsets $X$ as:
@@ -748,7 +841,8 @@ single_item_fsets <- fsets[size(items(fsets)) == 1]
 single_items <- data.frame(
 	item = unlist(LIST(items(single_item_fsets), decode = FALSE)),
  	support = quality(single_item_fsets)) 
-single_items[1:3,]
+#single_items[1:3,]
+head(single_items, n = 3)
 @
 
 Next, we can calculate the all-confidence for all itemsets and add it to
@@ -763,7 +857,14 @@ all_conf <- sapply(1:length(itemset_list),
 quality(fsets) <- cbind(quality(fsets), all_conf)
 @
 
-The new quality measure can now be used to manipulate the set.  For
+The new quality measure is now part of the set of itemsets.
+
+<<>>=
+summary(fsets)
+@
+
+The new measure 
+can now be used to manipulate the set.  For
 example the set can be sorted by all-confidence.
 
 <<>>=
@@ -775,11 +876,12 @@ inspect(SORT(fsets, by = "all_conf")[1 : 3])
 
 \section{Summary and outlook\label{sec:conclusion}}
 
-Previously, there was no functionality for mining and handling
-associations available for \textsf{R}.  With package \pkg{arules} we
+With package \pkg{arules} we
 provide the basic infrastructure which enables us to easily combine
 association mining with clustering and visualization techniques already
-available in \textsf{R}.  The main features are as follows.
+available in \proglang{R}.  
+Previously, there was no such infrastructure available.
+The main features of \pkg{arules} are:
 
 \begin{itemize}
  \item Efficient implementation using sparse matrices.
@@ -811,10 +913,17 @@ Alternatively data can be generated by simple probabilistic models
 as done by
 \cite{arules:Hahsler+Hornik+Reutterer:2005}.
 
-Finally, similarity measuers between itemsets and rules can be
+Finally, similarity measures between itemsets and rules can be
 implemented in \pkg{arules}. With such measures distance based
-clustering and visualization of associations is possible \citep[see
-e.g.,][]{arules:Strehl+Gosh:2003}).
+clustering and visualization of associations is possible 
+\citep[see e.g.,][]{arules:Strehl+Gosh:2003}).
+
+\section*{Acknowledgments}
+Part of \pkg{arules} was developed  during the project 
+``Statistical Computing with R'' funded by  of the
+``Jubil\"aumsstiftung der WU Wien.''
+The authors of \pkg{arules} would like to thank Christian Borgelt for the
+implementation of Apriori and Eclat.
 
 
 \bibliographystyle{plainnat}

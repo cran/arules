@@ -1,9 +1,5 @@
 library("arules")
-data("Adult")
-dim(Adult)
-Adult[1:2,1:4]
-Adult_transactions <- as(Adult, "transactions")
-
+data("Adult_transactions")
 summary(Adult_transactions)
 
 
