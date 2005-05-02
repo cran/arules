@@ -8,6 +8,7 @@
 \alias{coerce,transactions,list-method}
 \alias{coerce,data.frame,transactions-method}
 \alias{image,transactions-method}
+\alias{labels,transactions-method}
 \alias{transactionInfo<-,transactions-method}
 \alias{transactionInfo,transactions-method}
 \alias{transactionInfo<-}
@@ -39,7 +40,7 @@
       \code{\link[Matrix:dgCMatrix-class]{dgCMatrix}} to store the
       binary incidence matrix (see
       \code{\link[itemMatrix-class]{itemMatrix}} class)} 
-    \item{\code{labels}:}{object of class \code{"data.frame"} to store 
+    \item{\code{itemInfo}:}{object of class \code{"data.frame"} to store 
       item labels (see \code{\link[itemMatrix-class]{itemMatrix}} class)}
   }
 }
@@ -74,6 +75,10 @@
       as the components \code{variables} and \code{levels}.}
     \item{image}{\code{signature(x = "transactions")};
       plots an image of the transactions for visual inspection}
+    \item{labels}{\code{signature(x = "transactions")};
+      returns the labels (item labels and transaction IDs) 
+      for the incidence matrix as a list of two vectors named \code{items}
+      and \code{transactionIDs}.}
     \item{transactionInfo<-}{\code{signature(x = "transactions")};
       replaces the transactionInfo data frame}
     \item{transactionInfo}{\code{signature(x = "transactions")};
@@ -89,12 +94,21 @@
   \code{\link{itemMatrix-class}}
 }
 \examples{
-data("Adult")
+data <- list(
+      c("a","b","c"),
+      c("a","b"),
+      c("a","b","d"),
+      c("c","e"),
+      c("a","b","d","e"),
+      )
 
-## Coerce the Adult data.frame to transactions.
-Adult_transactions <- as(Adult, "transactions")
-summary(Adult_transactions)
+names(data) <- paste("Tr",c(1:5), sep = "")
 
-image(Adult_transactions[1:500,1:100])
+### coerce data into transactins
+trans <- as(data, "transactions")
+
+### analyze transactions
+summary(trans)
+image(trans)
 }
 \keyword{classes}

@@ -10,15 +10,18 @@
 \alias{coerce,matrix,itemMatrix-method}
 \alias{coerce,list,itemMatrix-method}
 \alias{coerce,itemMatrix,matrix-method}
+\alias{coerce,itemMatrix,dgCMatrix-method}
 \alias{coerce,itemMatrix,list-method}
 \alias{decode,itemMatrix-method}
 \alias{decode}
 \alias{dim,itemMatrix-method}
 \alias{image,itemMatrix-method}
 \alias{\%in\%,itemMatrix-method}
-\alias{labels<-,itemMatrix-method}
+\alias{itemLabels<-,itemMatrix-method}
+\alias{itemLabels,itemMatrix-method}
+\alias{itemLabels<-}
+\alias{itemLabels}
 \alias{labels,itemMatrix-method}
-\alias{labels<-}
 \alias{labels}
 \alias{itemInfo<-,itemMatrix-method}
 \alias{itemInfo,itemMatrix-method}
@@ -91,6 +94,9 @@
 %      column numbers in the \code{itemMatrix} instead.}
     \item{coerce}{\code{signature(from = "matrix", to = "itemMatrix")}}
     \item{coerce}{\code{signature(from = "list", to = "itemMatrix")}}
+    \item{coerce}{\code{signature(from = "itemMatrix", to = "dgCMatrix")}};
+      access the sparse matrix representation. Note, the \code{dgCMatrix} 
+      contains a transposed from of the itemMatrix.
     \item{coerce}{\code{signature(from = "itemMatrix", to = "matrix")}}
     \item{coerce}{\code{signature(from = "itemMatrix", to = "list")}}
     \item{decode}{\code{signature(x = "itemMatrix")};
@@ -105,9 +111,9 @@
     \item{\%in\%}{\code{signature(x = "itemMatrix")}: matches values 
       against the item labels (and the additional information) for 
       each element (row) in the itemMatrix.}
-    \item{labels}{\code{signature(object = "itemMatrix")};
+    \item{itemLabels}{\code{signature(object = "itemMatrix")};
       returns the item labels as a \code{character} vector.}
-    \item{labels<-}{\code{signature(object = "itemMatrix")};
+    \item{itemLabels<-}{\code{signature(object = "itemMatrix")};
       replaces the item labels.}
     \item{itemInfo}{\code{signature(object = "itemMatrix")};
       returns the whole item information \code{data.frame} including
@@ -116,6 +122,10 @@
       replaces the item info by a \code{data.frame}.
       The length of the vectors in the \code{data.frame} has to match
       the number of elements (rows) in the itemMatrix.}
+    \item{labels}{\code{signature(x = "transactions")};
+      returns the labels (item labels and element names) 
+      for the matrix as a list of two vectors named \code{items}
+      and \code{elements}.}
     \item{length}{\code{signature(x = "itemMatrix")};
       returns the number of elements (rows) in the itemMatrix.}
     \item{show}{\code{signature(object = "itemMatrix")}}

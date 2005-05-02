@@ -1,21 +1,23 @@
 ###*******************************************************
-### dimension
+### dimensions
 
+### dimensions of the binary matrix
 setMethod("dim", signature(x = "itemMatrix"),
     function(x) {
     rev(dim(x@data))
     })
 
+### number of elements (rows)
 setMethod("length", signature(x = "itemMatrix"),
     function(x) {
     dim(x)[1]
     })
 
+### produces a vector of element sizes
 setMethod("size", signature(x = "itemMatrix"),
     function(x) {
     diff(x@data@p)
     })
-
 
 
 ###*******************************************************
@@ -28,19 +30,14 @@ setAs("matrix", "itemMatrix",
     ### make it binary
     i@x <- rep.int(1,length(i@x))
 
-    if (is.null(dimnames(from)[[2]])) {
-    ### default names 1 ... number of items
-      l = as.character(c(1:(dim(m)[2])))
-    }else{
-      l = dimnames(from)[[2]]
-    }
-    new("itemMatrix", data = i,  itemInfo = data.frame(labels = l))
+    new("itemMatrix", data = i,  
+    	itemInfo = data.frame(labels = labels(from)[[2]]))
     })
 
 setAs("itemMatrix", "matrix",
     function(from) {
     m <- as(t(from@data), "matrix")
-    dimnames(m) <- list(NULL,from@itemInfo[["labels"]])
+    dimnames(m)[[2]] <- from@itemInfo[["labels"]]
     return(m)
     })
 
@@ -69,15 +66,26 @@ setAs("list","itemMatrix", function(from, to) {
     new("itemMatrix", data=z, itemInfo = data.frame(labels = from_names))
     })
 
+setAs("itemMatrix", "dgCMatrix",
+    function(from) {
+    tmp <- from@data
+    dimnames(tmp)[[1]] <- from@itemInfo[["labels"]]
+    return(tmp)
+    })
+ 
+
 ###*******************************************************
 ### subset
 
+### remember the sparce matrix is tored in transposed form (i <-> j)
 setMethod("[", signature(x = "itemMatrix"),
-    function(x, i, j, ..., drop) {
+    function(x, i, j, ..., drop = FALSE) {
     y <- x
-    y@data <- x@data[j,i,...,drop=drop]
     if(!missing(j)) {
+      y@data <- x@data[j, i, ..., drop=drop]
       y@itemInfo <- x@itemInfo[j, , drop=FALSE]
+    }else{
+      y@data <- x@data[ ,i, ..., drop=drop]
     }
     return(y)
     })
@@ -119,10 +127,17 @@ setMethod("LIST", signature(from = "itemMatrix"),
 
 setMethod("labels", signature(object = "itemMatrix"),
     function(object, ...) {
+    list(items = as(object@itemInfo[["labels"]], "character"),
+    	elements = paste("{",sapply(as(object, "list"),
+          function(x) paste(x, collapse =", ")),"}", sep=""))
+    })
+
+setMethod("itemLabels", signature(object = "itemMatrix"),
+    function(object, ...) {
     as(object@itemInfo[["labels"]], "character")
     })
 
-setReplaceMethod("labels", signature(object = "itemMatrix"),
+setReplaceMethod("itemLabels", signature(object = "itemMatrix"),
     function(object, value) {
     object@itemInfo <- data.frame(labels = value)
     object

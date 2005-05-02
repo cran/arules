@@ -7,14 +7,14 @@ eclat <-  function(data, parameter = NULL, control = NULL)
     parameter <- as(parameter, "ECparameter")
     control <- as(control, "ECcontrol")
     
-    ### print parameter
-    cat("\nParameter specification:\n")
-    print(parameter)
     if(control@verbose) {
-      cat("\nAlgorithmic control:\n")
+      ### print parameter
+      cat("\nparameter specification:\n")
+      print(parameter)
+      cat("\nalgorithmic control:\n")
       print(control)
+      cat("\n")
     }
-    cat("\n")
 
     ### call eclat
     result <- .Call("reclat", 
@@ -38,9 +38,6 @@ eclat <-  function(data, parameter = NULL, control = NULL)
       result@tidList@transactionInfo <- data@transactionInfo
     }
     
-    cat("\nResult: ")
-    print(result)
-	  
 
     result
   }

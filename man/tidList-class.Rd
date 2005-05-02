@@ -8,7 +8,9 @@
 \alias{coerce,transactions,tidList-method}
 \alias{coerce,tidList,matrix-method}
 \alias{coerce,tidList,list-method}
+\alias{coerce,tidList,dgCMatrix-method}
 \alias{decode,tidList-method}
+\alias{labels,tidList-method}
 \alias{show,tidList-method}
 \alias{summary,tidList-method}
 \alias{transactionInfo,tidList-method}
@@ -36,7 +38,7 @@
     \item{\code{data}:}{object of class
       \code{\link[Matrix:dgCMatrix-class]{dgCMatrix}} (see
       \code{\link[itemMatrix-class]{itemMatrix}})}
-     \item{\code{labels}:}{object of class \code{"data.frame"} always an
+     \item{\code{itemInfo}:}{object of class \code{"data.frame"} always an
        empty data.frame for transaction ID lists.}
      \item{\code{transactionInfo}:}{object of class \code{"data.frame"} 
        with vectors of the same length as the number of transactions. 
@@ -48,6 +50,10 @@
   \item{[}{\code{signature(x = "tidList")};
     extracts parts (transaction ID vectors) from the tidList. 
     The argument selects the item or itemset.}
+  \item{coerce}{\code{signature(from = "tidList", to = "dgCMatrix")};
+      access the sparse matrix representation. In the
+      \code{dgCMatrix} each column represents the transaction IDs
+      for one item/itemset.}
   \item{coerce}{\code{signature(from = "tidList", to = "list")}}
   \item{coerce}{\code{signature(from = "tidList", to = "matrix")}}
   \item{coerce}{\code{signature(from = "tidList", to = "transactions")}}
@@ -56,6 +62,10 @@
     decodes the numeric transaction codes (column numbers in the
     tidList) given in argument \code{tids} to the transaction IDs stored
     in \code{x}.  \code{tids} can be a vector or list.}
+  \item{labels}{\code{signature(x = "transactions")};
+    returns the labels (item labels and transaction IDs)
+    for the incidence matrix as a list of two vectors named \code{items}
+    and \code{transactionIDs}.}
   \item{transactionInfo}{\code{signature(x = "transactions")}:
     returns transactionInfo}
   \item{show}{\code{signature(object = "tidList")}}

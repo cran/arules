@@ -19,9 +19,8 @@ setAs("rules", "data.frame",
 
 setMethod("labels", signature(object = "rules"),
     function(object) {
-    lhs <- sapply(as(object@lhs, "list"), function(x) paste(x, collapse =", "))
-    rhs <- sapply(as(object@rhs, "list"), function(x) paste(x, collapse =", "))
-    paste("{",lhs,"}", " => ","{",rhs,"}", sep="")
+    paste(labels(object@lhs)$elements, " => ",
+      labels(object@rhs)$elements, sep="")
 })
 
 

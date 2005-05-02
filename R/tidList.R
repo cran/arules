@@ -50,7 +50,7 @@ setMethod("LIST", signature(from = "tidList"),
     l <- LIST(as(from, "itemMatrix"), decode = FALSE)
     if(decode == TRUE) {
     l <- decode(from, l)
-    names(l) <- labels(from)
+    names(l) <- itemLabels(from)
     }
     return(l)
     })
@@ -78,6 +78,16 @@ setAs("transactions", "tidList",
       itemInfo = from@itemInfo, transactionInfo = from@transactionInfo)
     })
 
+setAs("tidList", "dgCMatrix",
+    function(from) {
+    tmp <- from@data
+    dimnames(tmp)[[2]] <- from@itemInfo[["labels"]]
+    return(tmp)
+    })
+
+
+
+
 ### overwrite decode from itemMatrix
 setMethod("decode", signature(x = "tidList"),
     function(x, tids) {
@@ -98,3 +108,11 @@ setMethod("transactionInfo", signature(x = "tidList"),
     function(x) {
     x@transactionInfo
     })
+
+setMethod("labels", signature(object = "tidList"),
+    function(object, ...) {
+    list(items = itemLabels(object),
+      transactionIDs = as(object@transactionInfo[["transactionIDs"]],
+	"character"))
+    })
+

@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------
-modefication from Bettina Gruen and Michael Hahsler
+modefication from Bettina Gruen and Michael Hahsler (MFH)
 based on Christian Borgelt's code
 ----------------------------------------------------------------------*/
 
@@ -402,7 +402,8 @@ void frequentItem(ARparameter *param, INPUT *in)
 	    Rprintf("done [%.2fs].", SEC_SINCE(t));
 	    Rprintf("\n"); /* check the number of items */
     }
-    if (n <= 0) {cleanup(); error(msgs(E_NOTAS));} 
+    /* if (n <= 0) {cleanup(); error(msgs(E_NOTAS));} 
+      MFH: I just want an empty result in this case */
   }                             /* (which may be zero now) */
 
 

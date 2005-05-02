@@ -54,7 +54,7 @@
     \item{labels}{\code{signature(object = "rules")};
       returns labels for the rules ("{lhs} => {rhs}") as a
       \code{character} vector} 
-    \item{length}{\code{signature(x = "rules")};
+   \item{length}{\code{signature(x = "rules")};
       returns the number of rules stored in the the set}
     \item{lhs}{\code{signature(x = "rules")};
       returns the \code{\link[itemMatrix-class]{itemMatrix}}
