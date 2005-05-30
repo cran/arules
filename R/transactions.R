@@ -77,11 +77,14 @@ setAs("data.frame", "transactions", function(from) {
 
 setMethod("[", signature(x = "transactions"),
     function(x, i, j, ..., drop = FALSE) {
-    if(missing(i)) new("transactions",as(x, "itemMatrix")[,j,...,drop=drop],
+    if(missing(i)) {
+      new("transactions",as(x, "itemMatrix")[,j,...,drop=drop],
             transactionInfo = x@transactionInfo)
-    
-    new("transactions",as(x, "itemMatrix")[i,j,...,drop=drop],
+    }
+    else {
+      new("transactions",as(x, "itemMatrix")[i,j,...,drop=drop],
     	transactionInfo = x@transactionInfo[i,,drop=FALSE])
+    }
     })
 
 

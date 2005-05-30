@@ -19,6 +19,19 @@ setMethod("size", signature(x = "itemMatrix"),
     diff(x@data@p)
     })
 
+### return item support in a set
+setMethod("itemSupport", signature(x = "itemMatrix"),
+    function(x, type= c("relative", "absolute")) {
+      type <- match.arg(type)
+      
+      supports <- diff(t(x@data)@p)
+      names(supports) <- itemLabels(x)
+
+      switch(type,
+	relative =  supports/length(x),
+	absolute =  supports)
+      })
+
 
 ###*******************************************************
 ### Coercions
@@ -115,8 +128,10 @@ setMethod("LIST", signature(from = "itemMatrix"),
       data <- from@data
       z <- vector(length = (data@Dim[2]), mode = "list")
       l <- which(diff(data@p) != 0)
-      sapply(l, function(i) z[[i]] <<- data@i[(data@p[i]+1):data@p[i+1]]+1,
+      sapply(l, function(i) 
+            z[[i]] <<- as.integer(data@i[(data@p[i]+1):data@p[i+1]]+1),
             simplify=FALSE)
+            # +1 since i starts with index 0 instead of 1
       if (decode == TRUE ) return(decode(from, z))
       else return(z)
    })

@@ -43,10 +43,11 @@ data("Income_transactions")
 \details{
   To create \code{Income_transactions}, the original data frame in
   \code{Income} prepared in a similar way as described in \sQuote{The Elements
-  of Statistical Learning.} We cut each ordinal variable (age, education,
+  of Statistical Learning.} We 
+  removed cases with missing values and
+  cut each ordinal variable (age, education,
   income, years in bay area, number in household, and number of children) 
-  roughly at its median into two values (see Section examples).
-  
+  at its median into two values (see Section examples).
 }
 \source{
   Impact Resources, Inc., Columbus, OH (1987).
@@ -61,6 +62,9 @@ data("Income_transactions")
 \examples{
 data("Income")
 Income[1:3, ]
+
+### remove incomplete cases
+Income <- Income[complete.cases(Income), ]
 
 ### preparing the data set
 Income[["income"]] <- factor((as.numeric(Income[["income"]]) > 6) +1,
@@ -77,12 +81,12 @@ Income[["years in bay area"]] <- factor(
 	levels = 1 : 2 , labels = c("1-9", "10+"))
 
 Income[["number in household"]] <- factor(
-	(as.numeric(Income[["number in household"]]) > 1) +1,
+	(as.numeric(Income[["number in household"]]) > 3) +1,
     levels = 1 : 2 , labels = c("1", "2+"))
 
 Income[["number of children"]] <- factor(
-     (as.numeric(Income[["number of children"]]) > 1) +1,
-     levels = 1 : 2 , labels = c("0", "1+"))
+     (as.numeric(Income[["number of children"]]) > 1) +0,
+     levels = 0 : 1 , labels = c("0", "1+"))
 	
 ##  creating transactions
 Income_transactions <- as(Income, "transactions")

@@ -85,7 +85,19 @@ setAs("tidList", "dgCMatrix",
     return(tmp)
     })
 
-
+### overwrite item support from itemMatrix
+### return item support in a set
+    setMethod("itemSupport", signature(x = "tidList"),
+      function(x, type= c("relative", "absolute")) {
+      type <- match.arg(type)
+      
+      supports <-  size(x)
+      names(supports) <- itemLabels(x)
+       
+      switch(type,
+	relative =  supports/dim(x)[2],
+	absolute =  supports)
+      })
 
 
 ### overwrite decode from itemMatrix

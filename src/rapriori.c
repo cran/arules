@@ -717,11 +717,10 @@ void createRules(ISTREE *istree, ARparameter *param) {
 }
 
 
-SEXP returnObject(RULESET *set, ARparameter *param)
+SEXP returnObject(RULESET *set, SEXP dim, ARparameter *param)
 {
 	int i, len, j, k;
-	SEXP ans, tp, q, dmns, names, items, lhs, rhs, trans, tidList, dim;
-
+	SEXP ans, tp, q, dmns, names, items, lhs, rhs, trans, tidList;
 	
 	
 	if (param->target <= TT_CLSET)	{
@@ -761,10 +760,10 @@ SEXP returnObject(RULESET *set, ARparameter *param)
 	SET_SLOT(items, install("x"), duplicate(tp));
 	UNPROTECT(1);
 	
-	dim = PROTECT(allocVector(INTSXP, 2));
-	INTEGER(dim)[0] = set->cnt;
-	INTEGER(dim)[1] = set->rnb;
-	SET_SLOT(items, install("Dim"), duplicate(dim));
+	tp = PROTECT(allocVector(INTSXP, 2));
+	INTEGER(tp)[0] = INTEGER(dim)[0];
+	INTEGER(tp)[1] = set->rnb;
+	SET_SLOT(items, install("Dim"), duplicate(tp));
 	UNPROTECT(1);
 	
 	lhs = PROTECT(NEW_OBJECT(MAKE_CLASS("itemMatrix")));
@@ -798,11 +797,11 @@ SEXP returnObject(RULESET *set, ARparameter *param)
 	  SET_SLOT(items, install("x"),  duplicate(tp));
 	  UNPROTECT(1);
 	
-	  dim = PROTECT(allocVector(INTSXP, 2));
-	  INTEGER(dim)[0] = set->cnt;
-	  INTEGER(dim)[1] = set->rnb;
-	  SET_SLOT(items, install("Dim"), duplicate(dim));
-	  UNPROTECT(1);
+	  tp = PROTECT(allocVector(INTSXP, 2));
+	  INTEGER(tp)[0] = INTEGER(dim)[0];
+	  INTEGER(tp)[1] = set->rnb;
+	  SET_SLOT(items, install("Dim"), duplicate(tp));
+	  UNPROTECT(1); 
 	  
 	  rhs =  PROTECT(NEW_OBJECT(MAKE_CLASS("itemMatrix")));
 	  SET_SLOT(rhs, install("data"), duplicate(items));
@@ -886,7 +885,7 @@ SEXP returnObject(RULESET *set, ARparameter *param)
 	return ans;
 }
 
-SEXP rapriori(SEXP x, SEXP y, SEXP parms, SEXP control, SEXP app)
+SEXP rapriori(SEXP x, SEXP y, SEXP dim, SEXP parms, SEXP control, SEXP app)
 {
  	ARparameter param;
  	int k;
@@ -1026,7 +1025,7 @@ SEXP rapriori(SEXP x, SEXP y, SEXP parms, SEXP control, SEXP app)
 	
 	t = clock();
 	if (param.verbose) Rprintf("creating S4 object  ... ");
-	ans = PROTECT(returnObject(ruleset, &param));
+	ans = PROTECT(returnObject(ruleset, dim, &param));
 	cleanup();
         UNPROTECT(1);
 	

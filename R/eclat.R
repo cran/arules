@@ -21,7 +21,8 @@ eclat <-  function(data, parameter = NULL, control = NULL)
                  ## Transactions
                  as(items@p, "integer"),
                  as(items@i, "integer"),
-                 ## parameter
+                 items@Dim,
+		 ## parameter
                  parameter, control,
                  PACKAGE = "arules")                  
     

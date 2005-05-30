@@ -1,42 +1,47 @@
 setMethod("inspect", signature(x = "itemsets"),
     function(x, ...) {
 
-        n_of_itemsets <- length(x)
+	n_of_itemsets <- length(x)
 
         if(length(n_of_itemsets) == 0) return()
         ## Nothing to inspect here ...
-        
-        items <- as(items(x), "list")
-        quality <- quality(x)
 
-        ## Various lengths ...
-        n_of_items <- sapply(items, length)
-        entry_end_pos <- cumsum(n_of_items) + 1
-        entry_beg_pos <- c(1, entry_end_pos[-n_of_itemsets]) + 1
-        n_of_rows <- entry_end_pos[n_of_itemsets]
+	items <- unlist(as(items(x), "list"))
 
+	### number of rows + fix empty itemsets
+	n_of_items <- size(items(x))
+	items[n_of_items == 0] <- ""
+	n_of_items[n_of_items == 0] <- 1
+	
+        ## calculate begin and end positions
+	entry_beg_pos <- cumsum(c(1, n_of_items[-n_of_itemsets]))
+	entry_end_pos <- entry_beg_pos+n_of_items-1
+
+        ### prepare output
+	n_of_rows <- sum(n_of_items)
+	quality <- quality(x)
         ## Output.
-        out <- matrix("", nr = n_of_rows, nc = 2 + NCOL(quality))
+	out <- matrix("", nr = n_of_rows+1, nc = 2 + NCOL(quality))
 
-        ## Column 1: counts.
-        tmp <- rep.int("", n_of_rows)
-        tmp[entry_beg_pos] <- seq(length = n_of_itemsets)
-        out[, 1] <- format(tmp)
+        ### Column 1: itemset nr.
+        tmp <- rep.int("", n_of_rows + 1)
+	tmp[entry_beg_pos+1] <- c(1:n_of_itemsets) 
+	out[,1] <- format(tmp)
 
         ## Column 2: items in the item sets, one per line.
-        pre <- rep.int("  ", n_of_rows)
-        pre[entry_beg_pos] <- "{"
-        post <- rep.int(",", n_of_rows)
-        post[entry_end_pos] <- "}"
-        out[, 2] <-
-            format(c("items",
-                     paste(pre, unlist(items), post, sep = "")[-1]))
+	pre <- rep.int(" ", n_of_rows)
+	pre[entry_beg_pos] <- rep.int("{", length(entry_beg_pos))
+	post <- rep.int(",", n_of_rows)
+	post[entry_end_pos] <- rep.int("}", length(entry_end_pos))
+	out[, 2] <- format(c("items",
+	      paste(pre, unlist(items), post, sep = "")))
+
         
         ## Remaining columns: quality measures.
         for(i in seq(length = NCOL(quality))) {
-            tmp <- rep.int("", n_of_rows)
+            tmp <- rep.int("", n_of_rows + 1)
             tmp[1] <- names(quality)[i]
-            tmp[entry_end_pos] <- format(quality[[i]])
+            tmp[entry_end_pos + 1] <- format(quality[[i]])
             out[, i + 2] <- format(tmp, justify = "right")
         }
         
@@ -124,46 +129,53 @@ setMethod("inspect", signature(x = "rules"),
 setMethod("inspect", signature(x = "transactions"),
     function(x, ...) {
 
-        n_of_itemsets <- length(x)
+        
+	n_of_itemsets <- length(x)
 
         if(length(n_of_itemsets) == 0) return()
         ## Nothing to inspect here ...
-        
-        items <- as(x, "list")
-        transactionInfo <- transactionInfo(x)
 
-        ## Various lengths ...
-        n_of_items <- sapply(items, length)
-        entry_end_pos <- cumsum(n_of_items) + 1
-        entry_beg_pos <- c(1, entry_end_pos[-n_of_itemsets]) + 1
-        n_of_rows <- entry_end_pos[n_of_itemsets]
+	items <- unlist(as(x, "list"))
 
+	### number of rows + fix empty itemsets
+	n_of_items <- size(x)
+	items[n_of_items == 0] <- ""
+	n_of_items[n_of_items == 0] <- 1
+	
+        ## calculate begin and end positions
+	entry_beg_pos <- cumsum(c(1, n_of_items[-n_of_itemsets]))
+	entry_end_pos <- entry_beg_pos+n_of_items-1
+
+        ### prepare output
+	n_of_rows <- sum(n_of_items)
+	transactionInfo <- transactionInfo(x)
         ## Output.
-        out <- matrix("", nr = n_of_rows, nc = 2 + NCOL(transactionInfo))
+	out <- matrix("", nr = n_of_rows+1, nc = 2 + NCOL(transactionInfo))
 
-        ## Column 1: counts.
-        tmp <- rep.int("", n_of_rows)
-        tmp[entry_beg_pos] <- seq(length = n_of_itemsets)
-        out[, 1] <- format(tmp)
+        ### Column 1: itemset nr.
+        tmp <- rep.int("", n_of_rows + 1)
+	tmp[entry_beg_pos+1] <- c(1:n_of_itemsets) 
+	out[,1] <- format(tmp)
 
         ## Column 2: items in the item sets, one per line.
-        pre <- rep.int("  ", n_of_rows)
-        pre[entry_beg_pos] <- "{"
-        post <- rep.int(",", n_of_rows)
-        post[entry_end_pos] <- "}"
-        out[, 2] <-
-            format(c("items",
-                     paste(pre, unlist(items), post, sep = "")[-1]))
+	pre <- rep.int(" ", n_of_rows)
+	pre[entry_beg_pos] <- rep.int("{", length(entry_beg_pos))
+	post <- rep.int(",", n_of_rows)
+	post[entry_end_pos] <- rep.int("}", length(entry_end_pos))
+	out[, 2] <- format(c("items",
+	      paste(pre, unlist(items), post, sep = "")))
+
         
-        ## Remaining columns.
+        ## Remaining columns: transactionInfo.
         for(i in seq(length = NCOL(transactionInfo))) {
-            tmp <- rep.int("", n_of_rows)
+            tmp <- rep.int("", n_of_rows + 1)
             tmp[1] <- names(transactionInfo)[i]
-            tmp[entry_end_pos] <- format(transactionInfo[[i]])
+            tmp[entry_end_pos + 1] <- format(transactionInfo[[i]])
             out[, i + 2] <- format(tmp, justify = "right")
         }
         
         ## Output.
         cat(t(out), sep = c(rep.int(" ", NCOL(out) - 1), "\n"))
+
 
     })

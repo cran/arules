@@ -13,9 +13,20 @@ if(!isGeneric("LIST")) {
                function(from, ...) standardGeneric("LIST"))
 }
 
+if(!isGeneric("all_confidence")) {
+    setGeneric("all_confidence",
+               function(x, ...) standardGeneric("all_confidence"))
+}
+
 if(!isGeneric("decode")) {
     setGeneric("decode",
                function(x, ...) standardGeneric("decode"))
+}
+
+
+if(!isGeneric("hyperlift")) {
+    setGeneric("hyperlift",
+               function(x, ...) standardGeneric("hyperlift"))
 }
 
 if(!isGeneric("inspect"))
@@ -90,6 +101,11 @@ if(!isGeneric("rhs<-")) {
 if(!isGeneric("size")) {
     setGeneric("size",
                function(x) standardGeneric("size"))
+}
+
+if(!isGeneric("itemSupport")) {
+    setGeneric("itemSupport",
+               function(x, ...) standardGeneric("itemSupport"))
 }
 
 if(!isGeneric("subset")) {

@@ -23,7 +23,8 @@ apriori <-  function(data, parameter = NULL, appearance = NULL, control = NULL)
                  ## transactions
                  as(items@p, "integer"),
                  as(items@i, "integer"),
-                 ## parameter
+                 items@Dim,
+		 ## parameter
 		 parameter, control,
                  appearance,
                  PACKAGE = "arules")                  
