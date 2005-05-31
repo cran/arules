@@ -7,6 +7,11 @@ setMethod("length", signature(x = "itemsets"),
    length(x@items)
 })
 
+setMethod("size", signature(x = "itemsets"),
+   function(x) {
+   size(x@items)
+})
+
 ###***********************************************
 ### coercion
 

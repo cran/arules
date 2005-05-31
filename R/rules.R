@@ -2,9 +2,15 @@
 ### dimensions
 
 setMethod("length", signature(x = "rules"),
-   function(x) {
-   length(x@lhs)
-})
+    function(x) {
+    length(x@lhs)
+    })
+
+setMethod("size", signature(x = "rules"),
+    function(x) {
+    size(x@lhs) + size(x@rhs)
+    })
+
 
 ###***********************************************
 ### coercion

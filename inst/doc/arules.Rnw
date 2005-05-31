@@ -510,7 +510,7 @@ necessary steps are:
 
 There exist many different algorithms which solve the frequent 
 and closed frequent itemset problems.
-Each algorithm has specific strength which can be important for
+Each algorithm has specific strengths which can be important for
 very large databases.
 Such algorithms, e.g. kDCI, LCM, FP-Growth or Patricia, are
 discussed in~\cite{arules:Goethals+Zaki:2003}.  
