@@ -171,7 +171,7 @@ setReplaceMethod("itemInfo", signature(object = "itemMatrix"),
 
 
 ###*******************************************************
-### show/summary
+### show/summary + plots
 
 setMethod("show", signature(object = "itemMatrix"),
     function(object) {
@@ -181,12 +181,40 @@ setMethod("show", signature(object = "itemMatrix"),
     invisible(object)
     })
 
+
 setMethod("image", signature(x = "itemMatrix"),
     function(x, colorkey=FALSE, ylab="Elements (Rows)",
       xlab="Items (Columns)",...) {
     i <- t(as(x@data, "dgTMatrix"))
     image(i,colorkey=colorkey, ylab=ylab, xlab=xlab, ...)
     })
+
+
+setMethod("itemFrequencyPlot", signature(x = "itemMatrix"),
+    function(x, type = c("relative", "absolute"),  
+    	cex.names =  par("cex.axis"), ...) {
+      type <- match.arg(type)
+     
+      itemFrequency <- itemSupport(x, type)
+     
+      # make enough space for item labels
+      maxLabel <- max(strwidth(names(itemFrequency), units = "inches", 
+      	cex = cex.names))
+      mai <- par("mai")
+      par(mai = c(maxLabel+0.5, mai[-1]))
+     
+      midpoints <- barplot(itemFrequency, 
+        las = 2, cex.name = cex.names,
+	ylab = paste("item frequency (", type, ")", sep = ""), 
+	...)
+      
+      # reset image margins
+      par(mai = mai)
+      
+      # return mitpoints
+      invisible(midpoints)
+      })
+
 
 
 setMethod("summary", signature(object = "itemMatrix"),

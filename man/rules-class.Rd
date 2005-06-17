@@ -89,7 +89,7 @@ data("Adult_transactions")
 rules <- apriori(Adult_transactions, parameter = list(support = 0.4))
 
 ## Select a subset using an item in the right-hand-side
-## and a quality measure/
+## and a quality measure
 rules.sub <- subset(rules, subset = rhs \%in\% "sex" & lift > 1.3)
 
 ## Display rules.
