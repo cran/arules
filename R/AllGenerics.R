@@ -23,7 +23,6 @@ if(!isGeneric("decode")) {
                function(x, ...) standardGeneric("decode"))
 }
 
-
 if(!isGeneric("hyperlift")) {
     setGeneric("hyperlift",
                function(x, ...) standardGeneric("hyperlift"))
@@ -41,11 +40,6 @@ if(!isGeneric("itemInfo")) {
 if(!isGeneric("itemInfo<-")) {
     setGeneric("itemInfo<-",
                function(object, value) standardGeneric("itemInfo<-"))
-}
-
-if(!isGeneric("labels")) {
-    setGeneric("labels",
-               function(object, ...) standardGeneric("labels"))
 }
 
 if(!isGeneric("itemLabels")) {
@@ -66,6 +60,21 @@ if(!isGeneric("items")) {
 if(!isGeneric("items<-")) {
     setGeneric("items<-",
                function(x, value) standardGeneric("items<-"))
+}
+
+if(!isGeneric("itemSupport")) {
+    setGeneric("itemSupport",
+               function(x, ...) standardGeneric("itemSupport"))
+}
+
+if(!isGeneric("itemFrequencyPlot")) {
+    setGeneric("itemFrequencyPlot",
+               function(x, ...) standardGeneric("itemFrequencyPlot"))
+}
+
+if(!isGeneric("labels")) {
+    setGeneric("labels",
+               function(object, ...) standardGeneric("labels"))
 }
 
 if(!isGeneric("lhs")) {
@@ -98,14 +107,14 @@ if(!isGeneric("rhs<-")) {
                function(x, value) standardGeneric("rhs<-"))
 }
 
+if(!isGeneric("ruleInduction")) {
+    setGeneric("ruleInduction",
+               function(x, ...) standardGeneric("ruleInduction"))
+}
+
 if(!isGeneric("size")) {
     setGeneric("size",
                function(x) standardGeneric("size"))
-}
-
-if(!isGeneric("itemSupport")) {
-    setGeneric("itemSupport",
-               function(x, ...) standardGeneric("itemSupport"))
 }
 
 if(!isGeneric("subset")) {

@@ -2,10 +2,10 @@
 
 SEXP csc_subset(SEXP x, SEXP i, SEXP j)
 {
-    SEXP val, dim_R, tmp, xi_R;
-    int nj = 0, nnz = 0, l, 
-	    h, k, ii, jj, ind,  maxnz, 
-	    *dim, *ndim, *xi, *xp, *zi, *zp;
+    SEXP val, dim_R, xi_R;
+    int nj = 0, nnz = 0, 
+	h, k, ii, jj, ind,  maxnz, 
+	*dim, *ndim, *xi, *xp, *zi, *zp;
     double *xx, *zx;
     
     /* get slots of the matrix */

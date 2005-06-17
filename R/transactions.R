@@ -108,7 +108,8 @@ setMethod("image", signature(x = "transactions"),
 setMethod("summary", signature(object = "transactions"),
    function(object, ...) {
    new("summary.transactions", summary(as(object,"itemMatrix")),
-   	transactionInfo = transactionInfo(object[1:min(3, length(object))]))
+   	transactionInfo = transactionInfo(object)[1:min(3, length(object)), 
+		, drop = FALSE])
 })
 
 setMethod("show", signature(object = "summary.transactions"),
