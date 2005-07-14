@@ -4,7 +4,7 @@
 \title{Sorting Associations}
 \description{
   Provides the generic function \code{SORT} and the S4 method to sort 
-  elements in class \code{\link[associations-class]{associations}}
+  elements in class \code{\link[arules:associations-class]{associations}}
   (e.g., itemsets or rules).
 }
 \usage{
@@ -19,9 +19,10 @@ SORT(x, \dots)
   \item{decreasing}{logical.  Should the sort be increasing or
     decreasing?}
 }
-\author{
-  Michael Hahsler
+\value{
+  An object of the same class as \code{x}.
 }
+
 \seealso{
   \code{\link{associations-class}}
 }
@@ -34,4 +35,4 @@ fsets <- eclat(Adult_transactions, parameter = list(supp = 0.5))
 ## Print the 5 itemsets with the highest support as a list.
 as(SORT(fsets)[1:5], "list")
 }
-\keyword{methods}
+\keyword{manip}

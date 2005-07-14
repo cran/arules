@@ -88,9 +88,6 @@
     Algorithm}.
   \url{http://fuzzy.cs.uni-magdeburg.de/~borgelt/apriori.html}
 }
-\author{
-  Bettina Gruen and Michael Hahsler
-}
 \seealso{
   \code{\link{apriori}},
   \code{\link{eclat}}

@@ -1,6 +1,6 @@
 \name{eclat}
 \alias{eclat}
-\title{Call Eclat}
+\title{Mining Associations with Eclat}
 \description{
   Mine frequent itemsets with the Eclat algorithm.
   This algorithm uses simple intersection operations for equivalence
@@ -11,15 +11,15 @@ eclat(data, parameter = NULL, control = NULL)
 }
 \arguments{
  \item{data}{object of class
-   \code{\link[transactions-class]{transactions}} or any data structure
+   \code{\link[arules:transactions-class]{transactions}} or any data structure
    which can be coerced into
-   \code{\link[transactions-class]{transactions}} (e.g., binary
+   \code{\link[arules:transactions-class]{transactions}} (e.g., binary
    \code{matrix}, \code{data.frame}).}
  \item{parameter}{object of class
-   \code{\link[ECparameter-class]{ECparameter}} or named list (default
+   \code{\link[arules:ECparameter-class]{ECparameter}} or named list (default
    values are: support 0.1 and maxlen 5)}
   \item{control}{Object of class
-    \code{\link[ECcontrol-class]{ECcontrol}} or named list for
+    \code{\link[arules:ECcontrol-class]{ECcontrol}} or named list for
     algorithmic controls.}
 }
 \details{
@@ -27,7 +27,7 @@ eclat(data, parameter = NULL, control = NULL)
   Borgelt for mining frequent itemsets. 
 }
 \value{
-  Returns an object of class \code{\link[itemsets-class]{itemsets}}.
+  Returns an object of class \code{\link[arules:itemsets-class]{itemsets}}.
 }
 \references{
   Mohammed J. Zaki, Srinivasan Parthasarathy, Mitsunori Ogihara, and Wei
@@ -39,9 +39,6 @@ eclat(data, parameter = NULL, control = NULL)
   Christian Borgelt. Efficient Implementations of Apriori and
   Eclat. \emph{Workshop of Frequent Item Set Mining Implementations}
   (FIMI 2003, Melbourne, FL, USA).
-}
-\author{
-  Bettina Gruen and Michael Hahsler
 }
 \seealso{
   \code{\link{ECparameter-class}},

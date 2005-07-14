@@ -28,12 +28,19 @@ apriori <-  function(data, parameter = NULL, appearance = NULL, control = NULL)
 		 parameter, control,
                  appearance,
                  PACKAGE = "arules")                  
-    
-    ### copy itemInfo
+
+
     if (is(result, "rules"))  { 
+      ### validate sparse Matrix (this takes care of sorting vector i)
+      validObject(result@lhs@data)
+      validObject(result@rhs@data)
+    
       result@lhs@itemInfo <- data@itemInfo
       result@rhs@itemInfo <- data@itemInfo
     } else {
+      ### validate sparse Matrix (this takes care of sorting vector i)
+      validObject(result@items@data)
+      
       result@items@itemInfo <- data@itemInfo
     }
     

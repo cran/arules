@@ -1,6 +1,6 @@
 \name{apriori}
 \alias{apriori}
-\title{Call Apriori}
+\title{Mining Associations with Apriori}
 \description{
   Mine frequent itemsets, association rules or association hyperedges
   using the Apriori algorithm.  The Apriori algorithm employs level-wise
@@ -12,20 +12,20 @@ apriori(data, parameter = NULL, appearance = NULL, control = NULL)
 }
 \arguments{
   \item{data}{object of class
-    \code{\link[transactions-class]{transactions}} or any data structure
+    \code{\link[arules:transactions-class]{transactions}} or any data structure
     which can be coerced into
-    \code{\link[transactions-class]{transactions}} (e.g., binary
+    \code{\link[arules:transactions-class]{transactions}} (e.g., binary
     \code{matrix}, \code{data.frame}).}
   \item{parameter}{object of class
-    \code{\link[APparameter-class]{APparameter}} or named list.
+    \code{\link[arules:APparameter-class]{APparameter}} or named list.
     The default behavior is to mine rules with support 0.1, confidence
     0.8, and maxlen 5.}
   \item{appearance}{Object of class
-    \code{\link[APappearance-class]{APappearance}} or named list.
+    \code{\link[arules:APappearance-class]{APappearance}} or named list.
     With this argument item appearance can be restricted.
     By default all items can appear unrestricted.}
   \item{control}{Object of class
-    \code{\link[APcontrol-class]{APcontrol}} or named list.
+    \code{\link[arules:APcontrol-class]{APcontrol}} or named list.
     Controls the performance of the mining algorithm (item sorting, etc.)}
 }
 \details{
@@ -33,8 +33,8 @@ apriori(data, parameter = NULL, appearance = NULL, control = NULL)
   Borgelt for mining frequent itemsets, rules or hyperedges.
 }
 \value{
-  Returns an object of class \code{\link[rules-class]{rules}} or
-  \code{\link[itemsets-class]{itemsets}}.
+  Returns an object of class \code{\link[arules:rules-class]{rules}} or
+  \code{\link[arules:itemsets-class]{itemsets}}.
 }
 \references{
   R. Agrawal, T. Imielinski, and A. Swami. Mining association rules
@@ -59,9 +59,6 @@ rules <- apriori(Adult_transactions,
                  parameter = list(supp = 0.5, conf = 0.9,
                                   target = "rules"))
 summary(rules)
-}
-\author{
-  Bettina Gruen and Michael Hahsler
 }
 \seealso{
   \code{\link{APparameter-class}},

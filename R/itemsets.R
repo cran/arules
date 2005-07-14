@@ -49,14 +49,14 @@ setReplaceMethod("items", signature(x = "itemsets"),
     })
 
 
-setMethod("tidList", signature(x = "itemsets"),
+setMethod("tidLists", signature(x = "itemsets"),
 	  function(x) {
-	  x@tidList
+	  x@tidLists
 	  })
 
 
 ###****************************************************
-### subset, sort
+### subset, combine
 
 setMethod("[", signature(x = "itemsets"),
     function(x, i, j, ..., drop)
@@ -64,7 +64,7 @@ setMethod("[", signature(x = "itemsets"),
     if (!missing(j)) stop("incorrect number of dimensions")
     if (missing(i)) return(x)
     y <- x
-    slots <- intersect(slotNames(x), c("items", "tidList"))
+    slots <- intersect(slotNames(x), c("items", "tidLists"))
     for (sl in slots) slot(y, sl) <- slot(x, sl)[i]
     y@quality <- x@quality[i,,drop=FALSE]
     return(y)
@@ -79,6 +79,27 @@ setMethod("subset", signature(x = "itemsets"),
     x[i,]
     })
 
+setMethod("combine", signature(first = "itemsets"),
+    function(first, ...){
+
+# build quality data.frame first.
+# todo: merge data.frames w/differernt quality measures
+    q <- first@quality
+    lapply(list(...), FUN = function(x)
+      q <<- rbind(q, x@quality))
+
+# create joint itemMatrix
+    z <- lapply(list(...), FUN = function(x) x@items)
+    new("itemsets", items = combine(first@items, as_list = z), 
+      quality = q) 
+    })
+
+setMethod("duplicated", signature(x = "itemsets"),
+   function(x, incomparables = FALSE, ...) {
+     duplicated(LIST(x@items, decode = FALSE), 
+     	incomparables = incomparables, ...)
+   })
+
 
 ###************************************************
 ### show / summary
@@ -91,7 +112,7 @@ setMethod("summary", signature(object = "itemsets"),
        length = length(object),
        items = summary(object@items,  ...),
        quality = summary(object@quality),
-       tidList = !is.null(object@tidList))
+       tidLists = !is.null(object@tidLists))
     })
 
 setMethod("show", signature(object = "summary.itemsets"), 
@@ -109,7 +130,7 @@ setMethod("show", signature(object = "summary.itemsets"),
 
     cat("\nsummary of quality measures:\n")
     print(object@quality)
-    cat("\nincludes transaction ID list:",object@tidList,"\n")
+    cat("\nincludes transaction ID lists:",object@tidLists,"\n")
     }
     })
 

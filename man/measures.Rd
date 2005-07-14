@@ -3,6 +3,8 @@
 \alias{all_confidence,itemsets-method}
 \alias{hyperlift}
 \alias{hyperlift,rules-method}
+\alias{hyperconfidence}
+\alias{hyperconfidence,rules-method}
 \title{Calculating additional Interest Measures for existing Associations}
 \description{
    Provides the generic functions and the needed S4 methods to
@@ -14,6 +16,8 @@ all_confidence(x, ...)
 \S4method{all_confidence}{itemsets}(x, transactions = NULL, itemSupport = NULL)
 hyperlift(x, ...)
 \S4method{hyperlift}{rules}(x, transactions, d = 0.99)
+hyperconfidence(x, ...)
+\S4method{hyperlift}{rules}(x, transactions = NULL,  complements = TRUE, significance = FALSE)
 }
 \arguments{
   \item{x}{ the set of associations. }
@@ -23,17 +27,68 @@ hyperlift(x, ...)
   \item{itemSupport}{ alternatively to transactions, for some measures 
   	a item support in the transaction data set is sufficient.}
   \item{d}{ the quantile used to calculate hyperlift. }  
+  \item{complements}{ calculate convidence/significance levels for
+   substitutes instead of complements. }  
+  \item{significance}{ report significance levels instead of confidence levels. }  
 }
 \details{
-  Currently the interest measures all-confidence and hyperlift are implemented.
+  Currently the following interest measures are implemented:
   
-  All-confidence is defined on itemsets as the minimum confidence of
+  \describe{
+  \item{All-confidence (see, Omiencinski, 2003)}{ 
+  is defined on itemsets as the minimum confidence of
   all possible rule
   generated from the itemset.
-
-  Hyperlift is an adaptation of the lift measure which is more robust 
-  for low counts.
+  }
   
+  \item{Hyperlift (see, Hahsler et al., 2005)}{
+  is an adaptation of the lift 
+  measure which is more robust 
+  for low counts. It is based on the idea that under independence 
+  the count \eqn{c_{XY}} of the transactions which contain 
+  all items in a rule
+  \eqn{X \Rightarrow Y}{X -> Y} follows a hypergeometric distribution 
+  (represented by the random variable \eqn{C_{XY}}) with
+  the parameters given by the counts  \eqn{c_X} and  \eqn{c_Y}.
+  
+  Lift is defined for the rule \eqn{X \Rightarrow Y}{X -> Y} 
+  as:
+  \deqn{\mathrm{lift}(X \Rightarrow Y) = \frac{P(X \cup Y)}{P(X)P(Y)} 
+  = \frac{c_{XY}}{E[C_{XY}]},}{lift(X -> Y) = P(X+Y)/(P(X)*P(Y)) = c_XY / E[C_XY],}
+  
+  where \eqn{E[C_{XY}] = c_X c_Y / m} with \eqn{m} being the number
+  of transactions in the datanase.
+
+  Hyperlift is defined as:
+  \deqn{\mathrm{hyperlift}(X \Rightarrow Y) = \frac{c_{XY}}{Q_{\delta}[C_{XY}]},}{hyperlift(X -> Y) = c_XY / Q_d[C_XY],}
+
+  where  \eqn{Q_{\delta}[C_{XY}]}{Q_d[C_XY]} is the
+  quantile of the hypergeometric distribution given by \eqn{\delta}{d}.
+  }
+  \item{Hyperconfidence (based on Hahsler et al., 2005)}{
+  calculates the confidence level that we observe too high/low counts 
+  for rules \eqn{X \Rightarrow Y}{X -> Y} using the hypergeometric model.
+  Since the counts are drawn from a hypergeometric distribution 
+  (represented by the random variable \eqn{C_{XY}}) with
+  known parameters given by the counts  \eqn{c_X} and  \eqn{c_Y},
+  we can calculate a confidence interval for the observed counts 
+  \eqn{c_{XY}} steming from the distribution. Hyperconfidence
+  reports the confidence level (significance level) for
+  \describe{
+  \item{complements -}{
+    \eqn{1 - P[C_{XY} >= c_{XY} | c_X, c_Y]}
+  }
+  \item{substitutes -}{
+    \eqn{1 - P[C_{XY} < c_{XY} | c_X, c_Y]}.
+  }
+  }
+  A confidence level of, e.g., \eqn{> 0.95} indicates that
+  there is only a  5\% chance that the count for the rule was generated
+  randomly.
+ 
+  
+  }
+}
 }
 \value{
    A vector containing the values of the interest measure for each association
@@ -50,7 +105,6 @@ hyperlift(x, ...)
   Mathematics, Wirschaftsuniversität Wien, Augasse 2-6, 1090 Wien, 
   Austria, March 2005.
 }
-\author{ Michael Hahsler }
 
 \seealso{ \code{\link{itemsets-class}}, \code{\link{rules-class}} }
 \examples{
@@ -67,6 +121,14 @@ rules <- apriori(Income_transactions)
 quality(rules) <- cbind(quality(rules), 
 	hyperlift = hyperlift(rules, Income_transactions, d = 0.9))
 inspect(SORT(rules, by = "hyperlift")[1:5])
+
+### calculate hyperconfidence and discard all rules with
+### a confidence level < 1\%
+quality(rules) <- cbind(quality(rules),
+ 	hyperconfidence = hyperconfidence(rules, Income_transactions))
+
+rules.conf <- rules[quality(rules)$hyperconfidence >= 0.99]
+inspect(rules.conf[1:10])
 
 }
 \keyword{methods}

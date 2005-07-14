@@ -26,6 +26,9 @@ eclat <-  function(data, parameter = NULL, control = NULL)
                  parameter, control,
                  PACKAGE = "arules")                  
     
+    ### validate sparse Matrix (this takes care of sorting vector i)
+    validObject(result@items@data)
+    
     ### copy itemInfo
     result@items@itemInfo <- data@itemInfo
     
@@ -34,9 +37,9 @@ eclat <-  function(data, parameter = NULL, control = NULL)
     result@quality <- as.data.frame(result@quality,)
     
     ### make sure tid list itemInfo is ok
-    if (!is.null(result@tidList)) {
-      result@tidList@itemInfo <- data.frame(labels = labels(result))
-      result@tidList@transactionInfo <- data@transactionInfo
+    if (!is.null(result@tidLists)) {
+      result@tidLists@itemInfo <- data.frame(labels = labels(result))
+      result@tidLists@transactionInfo <- data@transactionInfo
     }
     
 

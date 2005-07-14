@@ -17,8 +17,8 @@ SEXP csc_subset(SEXP x, SEXP i, SEXP j)
     xx = REAL(GET_SLOT(x, install("x")));	    
 
     /* get subscript vectors */
-    i = arraySubscript(0, i, dim_R, getAttrib, (STRING_ELT), x);
-    j = arraySubscript(1, j, dim_R, getAttrib, (STRING_ELT), x);
+    PROTECT(i = arraySubscript(0, i, dim_R, getAttrib, (STRING_ELT), x));
+    PROTECT(j = arraySubscript(1, j, dim_R, getAttrib, (STRING_ELT), x));
 
     /* calculate new dimensions */
     ndim = Calloc(2, int);
@@ -80,7 +80,7 @@ SEXP csc_subset(SEXP x, SEXP i, SEXP j)
     zp[nj] = nnz;
    
     /* create S4 object */
-    val = PROTECT(NEW_OBJECT(MAKE_CLASS("dgCMatrix")));
+     PROTECT(val = NEW_OBJECT(MAKE_CLASS("dgCMatrix")));
     
     /* set new dimensions */
     SET_SLOT(val, install("Dim"), allocVector(INTSXP, 2)); 
@@ -97,7 +97,7 @@ SEXP csc_subset(SEXP x, SEXP i, SEXP j)
     /* clean up */
     Free(zi); Free(zx); Free(zp);Free(ndim);
     
-    UNPROTECT(1);
+    UNPROTECT(3);
     return val;
 }
 

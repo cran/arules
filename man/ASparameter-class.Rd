@@ -90,7 +90,7 @@
   
   Additional slots for Eclat in \code{ECparameter}:
   \describe{
-    \item{\code{tidList}:}{\code{"logical"};
+    \item{\code{tidLists}:}{\code{"logical"};
       return also a list of supporting transactions (transaction IDs)
       (default: \code{FALSE})}
   }
@@ -109,9 +109,6 @@
   \emph{Apriori --- Finding Association Rules/Hyperedges with the Apriori
     Algorithm}.
   \url{http://fuzzy.cs.uni-magdeburg.de/~borgelt/apriori.html}
-}
-\author{
-  Bettina Gruen and Michael Hahsler
 }
 \seealso{
   \code{\link{apriori}},

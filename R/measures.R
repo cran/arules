@@ -32,7 +32,7 @@ function(x,  transactions = NULL, itemSupport = NULL) {
   }else if(is.null(itemSupport)) {
     # get item support from the transactions
 
-    itemSupport <- itemSupport(transactions, type = "relative")  
+    itemSupport <- itemFrequency(transactions, type = "relative")  
     if (length(itemSupport) != num_items) 
       stop("number of items in itemsets and transactions do not match.")
   
@@ -76,7 +76,7 @@ function(x,  transactions = NULL, itemSupport = NULL) {
 #
 # c_X,Y = supp(X,Y) * length(transactions)
 # c_X = supp(X,Y) / conf(X => Y) * length(transactions)
-# c_Y = itemSupport(transactions, type = "absolute") reordered for consequents
+# c_Y = itemFrequency(transactions, type = "absolute") reordered for consequents
 #
 # this implements only hyperlift for rules with a single item in the consequent
 
@@ -91,10 +91,60 @@ setMethod("hyperlift",  signature(x = "rules"),
     if (length(cons) != length(x)) stop("this implementation only works for
       rules with one item in the rhs.")
 
-    c_Y <- itemSupport(transactions, type = "absolute")[cons]
+    c_Y <- itemFrequency(transactions, type = "absolute")[cons]
 
-    Q <- qhyper(d, m = c_Y, n = length(transactions) - c_Y, k = c_X)
+    Q <- qhyper(d, m = c_Y, n = length(transactions) - c_Y, k = c_X, 
+      lower.tail = TRUE)
     hyperlift <- c_XY / Q
 
     hyperlift
     })
+
+
+# calculate hyperconfidence for existing rules.
+# (confidence level that we observe too high/low counts)
+# 
+# uses the model from:
+# Michael Hahsler, Kurt Hornik, and Thomas Reutterer. 
+# Implications of probabilistic data modeling for rule mining. 
+# Report 14, Research Report Series, Department of Statistics and 
+# Mathematics, Wirschaftsuniversität Wien, Augasse 2-6, 1090 Wien, 
+# Austria, March 2005.
+#
+# since the counts are drawn from a hypergeometric distribution with
+# known parameters (margials), we can calculate a confidence interval
+# for each cell and report the associated confidence level 
+# 1 - P[C_XY >= c_XY | c_X, c_Y] for complements, and
+# 1 - P[C_XY < c_XY | c_X, c_Y] for substitutes.
+
+
+setMethod("hyperconfidence",  signature(x = "rules"),
+    function(x, transactions, complements = TRUE, significance = FALSE) {
+    
+    # significance: return significance levels instead of
+    #   confidence levels
+    
+    t <- length(transactions)
+    c_XY <-  quality(x)$support * t 
+    c_X <- c_XY / quality(x)$confidence
+    cons <- unlist(LIST(rhs(x), decode = FALSE))
+
+### check that the consequents are all singletons
+    if (length(cons) != length(x)) stop("this implementation only works for
+      rules with one item in the rhs.")
+
+    c_Y <- itemFrequency(transactions, type = "absolute")[cons]
+    
+
+    if(complements == TRUE)
+    ### c_XY - 1 so we get P[C_XY >= c_XY] instead of P[C_XY > c_XY]
+      res <- phyper(c_XY - 1, m=c_Y, n=t-c_Y, k=c_X, lower.tail = !significance)
+    
+    else
+    ### substitutes; Pr[C_XY < c_XY]
+      res <- phyper(c_XY, m=c_Y, n=t-c_X, k=c_X, lower.tail = significance)
+ 
+    ### todo: check resulting NaN
+ 
+    res
+})

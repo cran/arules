@@ -54,9 +54,6 @@
     Algorithm}.
   \url{http://fuzzy.cs.uni-magdeburg.de/~borgelt/apriori.html}
 }
-\author{
-  Bettina Gruen and Michael Hahsler
-}
 \examples{
 data("Adult_transactions")
 ## Mine only rules with small or large income in the right-hand-side.

@@ -6,6 +6,7 @@
 \alias{[,rules-method}
 \alias{coerce,rules,data.frame-method}
 \alias{itemInfo,rules-method}
+\alias{items,rules-method}
 \alias{labels,rules-method}
 %\alias{length,rules-method}
 \alias{lhs<-,rules-method}
@@ -31,16 +32,16 @@
 \section{Slots}{
   \describe{
     \item{\code{lhs}:}{Object of class
-      \code{\link[itemMatrix-class]{itemMatrix}}; 
+      \code{\link[arules:itemMatrix-class]{itemMatrix}}; 
       the left-hand-sides of the rules (antecedents)}
     \item{\code{rhs}:}{Object of class
-      \code{\link[itemMatrix-class]{itemMatrix}};
+      \code{\link[arules:itemMatrix-class]{itemMatrix}};
       the right-hand-sides of the rules (consequents)} 
     \item{\code{quality}:}{Object of class \code{"data.frame"}}
   }
 }
 \section{Extends}{
-  Class \code{\link[associations-class]{associations}}, directly.
+  Class \code{\link[arules:associations-class]{associations}}, directly.
 }
 \section{Methods}{
   \describe{
@@ -51,31 +52,32 @@
     \item{itemInfo}{\code{signature(object = "rules")};  
       returns the whole item information data frame including item
       labels}
+    item{items}{\code{signature(x = "rules")};
+      returns for each rule the union of lhs and rhs (i.e. the itemsets
+      which generated the rule) as a 
+      the \code{\link[arules:itemMatrix-class]{itemMatrix}}}
     \item{labels}{\code{signature(object = "rules")};
       returns labels for the rules ("{lhs} => {rhs}") as a
       \code{character} vector} 
    \item{length}{\code{signature(x = "rules")};
       returns the number of rules stored in the the set}
     \item{lhs}{\code{signature(x = "rules")};
-      returns the \code{\link[itemMatrix-class]{itemMatrix}}
+      returns the \code{\link[arules:itemMatrix-class]{itemMatrix}}
       representing the left-hand-side of the rules (antecedents)}
     \item{lhs<-}{\code{signature(x = "rules")};
-      replaces the \code{\link[itemMatrix-class]{itemMatrix}}
+      replaces the \code{\link[arules:itemMatrix-class]{itemMatrix}}
       representing the left-hand-side of the rules (antecedents)}
     \item{rhs}{\code{signature(x = "rules")};
-      returns the \code{\link[itemMatrix-class]{itemMatrix}}
+      returns the \code{\link[arules:itemMatrix-class]{itemMatrix}}
       representing the right-hand-side of the rules (consequents)}
     \item{rhs<-}{\code{signature(x = "rules")};
-      replaces the \code{\link[itemMatrix-class]{itemMatrix}}
+      replaces the \code{\link[arules:itemMatrix-class]{itemMatrix}}
       representing the right-hand-side of the rules (consequents)}
     \item{subset}{\code{signature(x = "rules")};
       selects a subset using restrictions on the quality measures or on
       the items present in the rules (see examples).}
     \item{summary}{\code{signature(object = "rules")}}
   }
-}
-\author{
-  Michael Hahsler
 }
 \seealso{
   \code{\link{apriori}},

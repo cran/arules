@@ -13,8 +13,8 @@ names(data) <- paste("Tr",c(1:7), sep = "")
 
 t <- as(data, "transactions")
 
-### test tidList
-tl <- (as(t,"tidList"))
+### test tidLists
+tl <- (as(t,"tidLists"))
 tl
 as(tl, "list")
 as(tl, "matrix")

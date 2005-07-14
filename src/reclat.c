@@ -294,7 +294,7 @@ SEXP reclat(SEXP x, SEXP y, SEXP dim, SEXP parms, SEXP control)
             /* flag for item sorting and recoding 'q'*/	
   ext    = param.ext = *INTEGER(GET_SLOT(parms, install("ext")));
   sparse = *INTEGER(GET_SLOT(control, install("sparse")));
-  trans  = param.trans = *INTEGER(GET_SLOT(parms, install("tidList")));
+  trans  = param.trans = *INTEGER(GET_SLOT(parms, install("tidLists")));
 
   if (ext) flags |= OF_ABS;       
   if (trans) flags |= OF_LIST; 
