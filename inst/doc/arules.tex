@@ -542,21 +542,62 @@ Economics and Business Administration available via
 
 First, we load \pkg{arules} and the data set.
 
-<<epub1>>=
-library("arules")
-data("Epub")
-Epub
-@
+\begin{Schunk}
+\begin{Sinput}
+> library("arules")
+\end{Sinput}
+\begin{Soutput}
+Loading required package: stats4
+Loading required package: Matrix
+\end{Soutput}
+\begin{Sinput}
+> data("Epub")
+> Epub
+\end{Sinput}
+\begin{Soutput}
+transactions in sparse format with
+ 2771 transactions (rows) and
+ 419 items (columns)
+\end{Soutput}
+\end{Schunk}
 
-We see that the data set consists of \Sexpr{length(Epub)} transactions
-and is represented as a sparse matrix with \Sexpr{length(Epub)} rows
-and \Sexpr{dim(Epub)[2]} columns which represent the items. 
+We see that the data set consists of 2771 transactions
+and is represented as a sparse matrix with 2771 rows
+and 419 columns which represent the items. 
 Next, we use the summary method to get more information about the 
 data set.
 
-<<epub2>>=
-summary(Epub)
-@
+\begin{Schunk}
+\begin{Sinput}
+> summary(Epub)
+\end{Sinput}
+\begin{Soutput}
+transactions as itemMatrix in sparse format with
+ 2771 rows (elements/itemsets/transactions) and
+ 419 columns (items)
+
+most frequent items:
+epub-wu-01_11d epub-wu-01_4c6 epub-wu-01_2cd  epub-wu-01_71 epub-wu-01_364 
+           177            100             90             90             89 
+       (Other) 
+          4436 
+
+element (itemset/transaction) length distribution:
+   1    2    3    4    5    6    7    8    9   10   11   12   13   14   15   16 
+1976  411  164   78   43   20   13   12   10    5    7    4    4    2    1    3 
+  17   18   19   20   22   24   25   28   34   38   74 
+   2    2    5    2    1    1    1    1    1    1    1 
+
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  1.000   1.000   1.000   1.798   2.000  74.000 
+
+includes extended transaction information - examples:
+                     transactionIDs           TimeStamp
+1 epub-wu-01_session4795-1041447099 2003-01-01 19:59:00
+2 epub-wu-01_session4797-1041486295 2003-01-02 06:46:01
+3 epub-wu-01_session479a-1041497371 2003-01-02 09:50:38
+\end{Soutput}
+\end{Schunk}
 
 The summary method displays the most frequent items in the data set,
 information about the transaction length distribution and that the data
@@ -566,24 +607,37 @@ data set contains transaction IDs and in addition time stamps (using class
 transactions.  The additional information can be used for analyzing the
 data set.
 
-<<>>=
-year <- strftime(as.POSIXlt(transactionInfo(Epub)[["TimeStamp"]]), "%Y")
-table(year)
-@
+\begin{Schunk}
+\begin{Sinput}
+> year <- strftime(as.POSIXlt(transactionInfo(Epub)[["TimeStamp"]]), 
++     "%Y")
+> table(year)
+\end{Sinput}
+\begin{Soutput}
+year
+2003 2004 2005 
+ 988 1375  408 
+
+\end{Soutput}
+\end{Schunk}
 
 We selected only the year part of the time stamps. For 2003, the first year
-in the data set we have \Sexpr{table(year)[1]} transactions.
+in the data set we have 988 transactions.
 We can select the corresponding transactions and inspect the structure
 using a level-plot. 
 
-<<fig=false, include=FALSE>>=
-Epub_2003 <- Epub[year == "2003"]
-length(Epub_2003)
-image(Epub_2003)
-@
-<<echo=FALSE, fig=TRUE, include=FALSE, label=epub_image>>=
-print(image(Epub_2003))
-@
+\begin{Schunk}
+\begin{Sinput}
+> Epub_2003 <- Epub[year == "2003"]
+> length(Epub_2003)
+\end{Sinput}
+\begin{Soutput}
+[1] 988
+\end{Soutput}
+\begin{Sinput}
+> image(Epub_2003)
+\end{Sinput}
+\end{Schunk}
 \begin{center}
 \includegraphics[width=8cm]{arules-epub_image}
 \end{center}
@@ -602,9 +656,18 @@ documents from the publication site).  To find the very long
 transactions we can use the size method and select very long
 transactions (containing more than 20 items).
 
-<<>>=
-transactionInfo(Epub_2003[size(Epub_2003) > 20])
-@
+\begin{Schunk}
+\begin{Sinput}
+> transactionInfo(Epub_2003[size(Epub_2003) > 20])
+\end{Sinput}
+\begin{Soutput}
+                       transactionIDs           TimeStamp
+301 epub-wu-01_session56e2-1051611211 2003-04-29 12:30:38
+580 epub-wu-01_session6308-1061133365 2003-08-17 17:16:12
+896 epub-wu-01_session72dc-1072722731 2003-12-29 19:35:35
+
+\end{Soutput}
+\end{Schunk}
 
 We found three long transactions and printed the corresponding
 transaction information. Of course, size can also be used in a similar
@@ -615,32 +678,105 @@ Since the long transactions identified above would result in
 a very long printout, we will inspect 
 the first 5 transactions in the subset for 2003.
 
-<<>>=
-inspect(Epub_2003[1:5])
-@
+\begin{Schunk}
+\begin{Sinput}
+> inspect(Epub_2003[1:5])
+\end{Sinput}
+\begin{Soutput}
+  items                               transactionIDs           TimeStamp
+1 {epub-wu-01_154} epub-wu-01_session4795-1041447099 2003-01-01 19:59:00
+2 {epub-wu-01_3d6} epub-wu-01_session4797-1041486295 2003-01-02 06:46:01
+3 {epub-wu-01_16f} epub-wu-01_session479a-1041497371 2003-01-02 09:50:38
+4 {epub-wu-01_f4,                                                       
+   epub-wu-01_11d,                                                      
+   epub-wu-01_1a7} epub-wu-01_session47b7-1041526514 2003-01-02 17:55:50
+5 {epub-wu-01_83}  epub-wu-01_session47bb-1041535625 2003-01-02 20:27:44
+
+\end{Soutput}
+\end{Schunk}
 
 Most transactions contain one item. Only transaction 4 contains three items. 
 For further inspection transactions can be converted into a list with:
 
-<<>>=
-as(Epub_2003[1:5], "list")
-@
+\begin{Schunk}
+\begin{Sinput}
+> as(Epub_2003[1:5], "list")
+\end{Sinput}
+\begin{Soutput}
+$"epub-wu-01_session4795-1041447099"
+[1] "epub-wu-01_154"
+
+$"epub-wu-01_session4797-1041486295"
+[1] "epub-wu-01_3d6"
+
+$"epub-wu-01_session479a-1041497371"
+[1] "epub-wu-01_16f"
+
+$"epub-wu-01_session47b7-1041526514"
+[1] "epub-wu-01_f4"  "epub-wu-01_11d" "epub-wu-01_1a7"
+
+$"epub-wu-01_session47bb-1041535625"
+[1] "epub-wu-01_83"
+
+
+\end{Soutput}
+\end{Schunk}
 
 Finally, transaction data in horizontal layout can be converted to
 transaction ID list in vertical layout using coercion.
 
-<<>>=
-Epub_tidLists <- as(Epub, "tidLists")
-Epub_tidLists
-@
+\begin{Schunk}
+\begin{Sinput}
+> Epub_tidLists <- as(Epub, "tidLists")
+> Epub_tidLists
+\end{Sinput}
+\begin{Soutput}
+tidLists in sparse format for
+ 419 items/itemsets (rows) and
+ 2771 transactions (columns)
+
+\end{Soutput}
+\end{Schunk}
 
 For performance reasons the transaction ID list
 is also stored in a sparse matrix. To get a list, coercion to \class{list}
 can be used.
 
-<<>>=
-as(Epub_tidLists[1:3], "list") 
-@
+\begin{Schunk}
+\begin{Sinput}
+> as(Epub_tidLists[1:3], "list")
+\end{Sinput}
+\begin{Soutput}
+$"epub-wu-01_154"
+[1] "epub-wu-01_session4795-1041447099" "epub-wu-01_session6082-1058883924"
+[3] "epub-wu-01_session60dd-1059130239" "epub-wu-01_session67db-1065044430"
+[5] "epub-wu-01_session769c-1075191357" "epub-wu-01_session7ee3-1079450030"
+
+$"epub-wu-01_3d6"
+ [1] "epub-wu-01_session4797-1041486295" "epub-wu-01_session4893-1042136277"
+ [3] "epub-wu-01_session48f4-1042453749" "epub-wu-01_session4ca3-1044889013"
+ [5] "epub-wu-01_session52c6-1049273642" "epub-wu-01_session5712-1051701668"
+ [7] "epub-wu-01_session58e3-1052992410" "epub-wu-01_session5984-1053467491"
+ [9] "epub-wu-01_session5b20-1054675502" "epub-wu-01_session5c20-1055421043"
+[11] "epub-wu-01_session5dc0-1056639134" "epub-wu-01_session5eac-1057261298"
+[13] "epub-wu-01_session6599-1063473887" "epub-wu-01_session673d-1064583856"
+[15] "epub-wu-01_session683e-1065381126" "epub-wu-01_session6f2f-1069854482"
+[17] "epub-wu-01_session708a-1070754608" "epub-wu-01_session7a0c-1076882429"
+[19] "epub-wu-01_session7de5-1078926808" "epub-wu-01_session89db-1084827080"
+[21] "epub-wu-01_session9227-1089148583" "epub-wu-01_session9941-1094031566"
+[23] "epub-wu-01_sessiona4d7-1100508833" "epub-wu-01_sessiona8c0-1102612273"
+[25] "wu01_session4450a-1045050224"      "wu01_session4a129-1057762457"     
+[27] "wu01_session4d25a-1066490150"     
+
+$"epub-wu-01_16f"
+[1] "epub-wu-01_session479a-1041497371" "epub-wu-01_session56e2-1051611211"
+[3] "epub-wu-01_session630c-1061175093" "epub-wu-01_session72dc-1072722731"
+[5] "epub-wu-01_session8b3e-1085510896" "epub-wu-01_session91ab-1088878266"
+[7] "epub-wu-01_sessiona202-1098976943" "epub-wu-01_sessiona7b9-1101827029"
+
+
+\end{Soutput}
+\end{Schunk}
 
 In this representation each item has an entry
 which is a vector of all transactions it occurs in.
@@ -667,12 +803,30 @@ This data is included in \pkg{arules}
 as the data set \code{Adult}.
 
 
-<<data>>=
-library("arules")
-data("Adult")
-dim(Adult)
-Adult[1:2,]
-@
+\begin{Schunk}
+\begin{Sinput}
+> library("arules")
+> data("Adult")
+> dim(Adult)
+\end{Sinput}
+\begin{Soutput}
+[1] 48842    15
+\end{Soutput}
+\begin{Sinput}
+> Adult[1:2, ]
+\end{Sinput}
+\begin{Soutput}
+  age        workclass fnlwgt education education-num     marital-status
+1  39        State-gov  77516 Bachelors            13      Never-married
+2  50 Self-emp-not-inc  83311 Bachelors            13 Married-civ-spouse
+       occupation  relationship  race  sex capital-gain capital-loss
+1    Adm-clerical Not-in-family White Male         2174            0
+2 Exec-managerial       Husband White Male            0            0
+  hours-per-week native-country income
+1             40  United-States  small
+2             13  United-States  small
+\end{Soutput}
+\end{Schunk}
 
 
 \code{Adult} contains a mixture of categorical and metric attributes and
@@ -685,10 +839,12 @@ the Population Division of the U.S. census bureau.
 The second removed attribute is just a numeric representation of the
 attribute \code{education} which is also part of the data set.
 
-<<>>=
-Adult[["fnlwgt"]] <- NULL
-Adult[["education-num"]] <- NULL
-@
+\begin{Schunk}
+\begin{Sinput}
+> Adult[["fnlwgt"]] <- NULL
+> Adult[["education-num"]] <- NULL
+\end{Sinput}
+\end{Schunk}
 
 Next, we need to map the four remaining metric attributes (\code{age},
 \code{hours-per-week}, \code{capital-gain} and \code{capital-loss}) to ordinal
@@ -703,42 +859,74 @@ Then we further divide the group with gains/losses
 at their median into the two categories \code{Low} and \code{High}.
 
 
-<<>>=
-Adult[[ "age"]] <- ordered(cut(Adult[[ "age"]], c(15,25,45,65,100)),
-    labels = c("Young", "Middle-aged", "Senior", "Old"))
-
-Adult[[ "hours-per-week"]] <- ordered(cut(Adult[[ "hours-per-week"]],
-      c(0,25,40,60,168)),
-    labels = c("Part-time", "Full-time", "Over-time", "Workaholic"))
-			    
-Adult[[ "capital-gain"]] <- ordered(cut(Adult[[ "capital-gain"]],
-      c(-Inf,0,median(Adult[[ "capital-gain"]][Adult[[ "capital-gain"]]>0]),1000000)),
-    labels = c("None", "Low", "High"))
-
-Adult[[ "capital-loss"]] <- ordered(cut(Adult[[ "capital-loss"]],
-      c(-Inf,0,
-	median(Adult[[ "capital-loss"]][Adult[[ "capital-loss"]]>0]),1000000)),
-    labels = c("none", "low", "high"))
-@
+\begin{Schunk}
+\begin{Sinput}
+> Adult[["age"]] <- ordered(cut(Adult[["age"]], c(15, 25, 45, 65, 
++     100)), labels = c("Young", "Middle-aged", "Senior", "Old"))
+> Adult[["hours-per-week"]] <- ordered(cut(Adult[["hours-per-week"]], 
++     c(0, 25, 40, 60, 168)), labels = c("Part-time", "Full-time", 
++     "Over-time", "Workaholic"))
+> Adult[["capital-gain"]] <- ordered(cut(Adult[["capital-gain"]], 
++     c(-Inf, 0, median(Adult[["capital-gain"]][Adult[["capital-gain"]] > 
++         0]), 1e+06)), labels = c("None", "Low", "High"))
+> Adult[["capital-loss"]] <- ordered(cut(Adult[["capital-loss"]], 
++     c(-Inf, 0, median(Adult[["capital-loss"]][Adult[["capital-loss"]] > 
++         0]), 1e+06)), labels = c("none", "low", "high"))
+\end{Sinput}
+\end{Schunk}
 
 Now, the data can be automatically recoded as
 a binary incidence matrix by coercing the data set to
 \class{transactions}.
 
-<<coerce>>=
-Adult_transactions <- as(Adult, "transactions")
-Adult_transactions
-@
+\begin{Schunk}
+\begin{Sinput}
+> Adult_transactions <- as(Adult, "transactions")
+> Adult_transactions
+\end{Sinput}
+\begin{Soutput}
+transactions in sparse format with
+ 48842 transactions (rows) and
+ 115 items (columns)
+\end{Soutput}
+\end{Schunk}
 
-The remaining \Sexpr{dim(Adult)[2]} categorical attributes were
-automatically recoded into \Sexpr{dim(Adult_transactions)[2]}
+The remaining 13 categorical attributes were
+automatically recoded into 115
 binary items. During encoding the item labels were generated in the
 form of 
 \texttt{<\emph{variable name}> = <\emph{category label}>}.
 
-<<summary>>=
-summary(Adult_transactions)
-@
+\begin{Schunk}
+\begin{Sinput}
+> summary(Adult_transactions)
+\end{Sinput}
+\begin{Soutput}
+transactions as itemMatrix in sparse format with
+ 48842 rows (elements/itemsets/transactions) and
+ 115 columns (items)
+
+most frequent items:
+           capital-loss = none            capital-gain = None 
+                         46560                          44807 
+native-country = United-States                   race = White 
+                         43832                          41762 
+           workclass = Private                        (Other) 
+                         33906                         401333 
+
+element (itemset/transaction) length distribution:
+    9    10    11    12    13 
+   19   971  2067 15623 30162 
+
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+   9.00   12.00   13.00   12.53   13.00   13.00 
+
+includes extended item information - examples:
+             labels variables      levels
+1       age = Young       age       Young
+2 age = Middle-aged       age Middle-aged
+\end{Soutput}
+\end{Schunk}
 
 The summary of the transaction data set gives a rough overview showing
 the most frequent items, the length distribution of the transactions and
@@ -751,11 +939,39 @@ Next, we call the function
 \code{apriori} to find all rules (the default association type for
 \code{apriori}) with a minimum support of 0.5\% and a confidence of 0.7.
 
-<<apriori>>=
-rules <- apriori(Adult_transactions, 
-                 parameter = list(support = 0.005, confidence = 0.7))
-rules
-@
+\begin{Schunk}
+\begin{Sinput}
+> rules <- apriori(Adult_transactions, parameter = list(support = 0.005, 
++     confidence = 0.7))
+\end{Sinput}
+\begin{Soutput}
+parameter specification:
+ confidence minval smax arem  aval originalSupport support minlen maxlen target
+        0.7    0.1    1 none FALSE            TRUE   0.005      1      5  rules
+   ext
+ FALSE
+
+algorithmic control:
+ filter tree heap memopt load sort verbose
+    0.1 TRUE TRUE  FALSE TRUE    2    TRUE
+
+apriori - find association rules with the apriori algorithm
+version 4.21 (2004.05.09)        (c) 1996-2004   Christian Borgelt
+set item appearances ...[0 item(s)] done [0.00s].
+set transactions ...[115 item(s), 48842 transaction(s)] done [0.11s].
+sorting and recoding items ... [71 item(s)] done [0.01s].
+creating transaction tree ... done [0.13s].
+checking subsets of size 1 2 3 4 5 done [0.95s].
+writing ... [114922 rule(s)] done [0.06s].
+creating S4 object  ... done [0.59s].
+\end{Soutput}
+\begin{Sinput}
+> rules
+\end{Sinput}
+\begin{Soutput}
+set of 114922 rules 
+\end{Soutput}
+\end{Schunk}
 
 %The specified parameter values are validated and, for example,
 %a support $> 1$ gives:
@@ -774,16 +990,37 @@ default restricted to 5.  Longer association rules are only mined if
 the output of the \proglang{C} implementation of the algorithm with timing
 information is displayed.
 
-The result of the mining algorithm is a set of \Sexpr{length(rules)}
+The result of the mining algorithm is a set of 114922
 rules.  For an overview of the mined rules the function \code{summary}
 can be used.  It shows the number of rules, the most frequent items
 contained in the left-hand-side and the right-hand-side and their
 respective length distributions and summary statistics for the quality
 measures returned by the mining algorithm.
 
-<<summary>>=
-summary(rules)
-@
+\begin{Schunk}
+\begin{Sinput}
+> summary(rules)
+\end{Sinput}
+\begin{Soutput}
+set of 114922 rules
+
+rule length distribution (lhs + rhs):
+    1     2     3     4     5 
+    4   341  5198 28692 80687 
+
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  1.000   4.000   5.000   4.651   5.000   5.000 
+
+summary of quality measures:
+    support           confidence          lift        
+ Min.   :0.005016   Min.   :0.7000   Min.   : 0.7635  
+ 1st Qu.:0.007268   1st Qu.:0.8503   1st Qu.: 1.0025  
+ Median :0.011547   Median :0.9153   Median : 1.0371  
+ Mean   :0.024740   Mean   :0.8945   Mean   : 1.2506  
+ 3rd Qu.:0.023525   3rd Qu.:0.9542   3rd Qu.: 1.1616  
+ Max.   :0.953278   Max.   :1.0000   Max.   :30.4376  
+\end{Soutput}
+\end{Schunk}
 
 As typical for association rule mining, the number of found rules is
 huge.  To analyze these rules, for example, the function \code{subset}
@@ -791,17 +1028,37 @@ can be used to produce a subset of rules which contain items which
 resulted form the variable \code{income} in the right-hand-side of the
 rule and the \code{lift} measure exceeds $1.4$.
 
-<<rules>>=
-rules.sub <- subset(rules, subset = rhs %in% "income" & lift > 1.4)
-@
+\begin{Schunk}
+\begin{Sinput}
+> rules.sub <- subset(rules, subset = rhs %in% "income" & lift > 
++     1.4)
+\end{Sinput}
+\end{Schunk}
 
 We can then inspect the three rules with the highest lift value (using the
 \code{SORT} method).
 
 {\samepage\small
-<<subset>>=
-inspect(SORT(rules.sub, by = "lift")[1 : 3])
-@
+\begin{Schunk}
+\begin{Sinput}
+> inspect(SORT(rules.sub, by = "lift")[1:3])
+\end{Sinput}
+\begin{Soutput}
+  lhs                                      rhs                  support confidence     lift
+1 {occupation = Exec-managerial,                                                           
+    race = White,                                                                          
+    sex = Male,                                                                            
+    capital-gain = High}                => {income = large} 0.005568978  0.7101828 4.423766
+2 {marital-status = Married-civ-spouse,                                                    
+    occupation = Exec-managerial,                                                          
+    race = White,                                                                          
+    capital-gain = High}                => {income = large} 0.005057123  0.7077364 4.408527
+3 {education = Some-college,                                                               
+    occupation = Adm-clerical,                                                             
+    relationship = Unmarried,                                                              
+    capital-loss = none}                => {income = small} 0.005487081  0.7382920 1.458724
+\end{Soutput}
+\end{Schunk}
 }
 
 Using such subset selection and sorting a set of associations can be
@@ -831,49 +1088,104 @@ be simplified to $\max(\mathrm{supp}(i \in X))$.
 First, we use Eclat to mine frequent itemsets from the previously used
 Adult data set.
 
-<<>>=
-fsets <- eclat(Adult_transactions, parameter = list(support = 0.05), 
-	control = list(verbose=FALSE))
-@
+\begin{Schunk}
+\begin{Sinput}
+> fsets <- eclat(Adult_transactions, parameter = list(support = 0.05), 
++     control = list(verbose = FALSE))
+\end{Sinput}
+\end{Schunk}
 
 For the denominator of all-confidence we need to find all mined single
 items and their corresponding support values.
 
-<<>>=
-single_item_fsets <- fsets[size(items(fsets)) == 1]
-single_items <- data.frame(
-	item = unlist(LIST(items(single_item_fsets), decode = FALSE)),
- 	support = quality(single_item_fsets)) 
-#single_items[1:3,]
-head(single_items, n = 3)
-@
+\begin{Schunk}
+\begin{Sinput}
+> single_item_fsets <- fsets[size(items(fsets)) == 1]
+> single_items <- data.frame(item = unlist(LIST(items(single_item_fsets), 
++     decode = FALSE)), support = quality(single_item_fsets))
+> head(single_items, n = 3)
+\end{Sinput}
+\begin{Soutput}
+     item   support
+5873   66 0.9532779
+5874   63 0.9173867
+5875  111 0.8974243
+
+\end{Soutput}
+\end{Schunk}
 
 Next, we can calculate the all-confidence for all itemsets and add it to
 the set's quality data frame.
 
-<<>>=
-itemset_list <- LIST(items(fsets), decode = FALSE)
-
-all_conf <- sapply(1:length(itemset_list),
-  function(x) { quality(fsets)$support[x]/
-  max(single_items$support[ match(itemset_list[[x]], single_items$item) ])})
-quality(fsets) <- cbind(quality(fsets), all_conf)
-@
+\begin{Schunk}
+\begin{Sinput}
+> itemset_list <- LIST(items(fsets), decode = FALSE)
+> all_conf <- sapply(1:length(itemset_list), function(x) {
++     quality(fsets)$support[x]/max(single_items$support[match(itemset_list[[x]], 
++         single_items$item)])
++ })
+> quality(fsets) <- cbind(quality(fsets), all_conf)
+\end{Sinput}
+\end{Schunk}
 
 The new quality measure is now part of the set of itemsets.
 
-<<>>=
-summary(fsets)
-@
+\begin{Schunk}
+\begin{Sinput}
+> summary(fsets)
+\end{Sinput}
+\begin{Soutput}
+set of 5908 itemsets
+
+most frequent items:
+           capital-loss = none native-country = United-States 
+                          2301                           2245 
+           capital-gain = None                   race = White 
+                          2236                           2107 
+           workclass = Private                        (Other) 
+                          1784                          13555 
+
+element (itemset/transaction) length distribution:
+   1    2    3    4    5 
+  36  303 1078 2103 2388 
+
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  1.000   4.000   4.000   4.101   5.000   5.000 
+
+summary of quality measures:
+    support           all_conf      
+ Min.   :0.05004   Min.   :0.05249  
+ 1st Qu.:0.06230   1st Qu.:0.06986  
+ Median :0.08124   Median :0.09349  
+ Mean   :0.11114   Mean   :0.13111  
+ 3rd Qu.:0.12554   3rd Qu.:0.14326  
+ Max.   :0.95328   Max.   :1.00000  
+
+includes transaction ID lists: FALSE 
+
+\end{Soutput}
+\end{Schunk}
 
 The new measure 
 can now be used to manipulate the set.  For
 example the set can be sorted by all-confidence (we filter itemsets
 of length 1 first since they have per definition an all-confidence of~1).
 
-<<>>=
-inspect(SORT(fsets[size(fsets)>1], by = "all_conf")[1 : 3])
-@
+\begin{Schunk}
+\begin{Sinput}
+> inspect(SORT(fsets[size(fsets) > 1], by = "all_conf")[1:3])
+\end{Sinput}
+\begin{Soutput}
+  items                              support  all_conf
+1 {capital-gain = None,                               
+   capital-loss = none}            0.8706646 0.9133376
+2 {capital-loss = none,                               
+   native-country = United-States} 0.8548380 0.8967354
+3 {capital-gain = None,                               
+   native-country = United-States} 0.8219565 0.8959761
+
+\end{Soutput}
+\end{Schunk}
 
 %% ------------------------------------------------------------------
 %% ------------------------------------------------------------------

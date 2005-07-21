@@ -720,7 +720,7 @@ void createRules(ISTREE *istree, ARparameter *param) {
 SEXP returnObject(RULESET *set, SEXP dim, ARparameter *param)
 {
 	int i, len, j, k;
-	SEXP ans, tp, q, dmns, names, items, lhs, rhs, trans, tidList;
+	SEXP ans, tp, q, dmns, names, items, lhs, rhs, trans, tidLists;
 	
 	
 	if (param->target <= TT_CLSET)	{
@@ -746,34 +746,41 @@ SEXP returnObject(RULESET *set, SEXP dim, ARparameter *param)
 	tp = PROTECT(allocVector(STRSXP, set->ttotal));
 	for (i = 0; i < set->ttotal; i++) 
 	  SET_STRING_ELT(tp, i, mkChar(set->body[i]));
-	SET_SLOT(items, install("i"), AS_INTEGER(tp));
+	tp = AS_INTEGER(tp);
+	SET_SLOT(items, install("i"), tp);
 	UNPROTECT(1);
 	
 	tp = PROTECT(allocVector(INTSXP, set->rnb+1));
 	INTEGER(tp)[0] = 0;						     
 	for (i = 0; i < set->rnb; i++) INTEGER(tp)[i+1] = set->tnb[i];
- 	SET_SLOT(items, install("p"), duplicate(tp));
+ 	/* SET_SLOT(items, install("p"), duplicate(tp)); */
+ 	SET_SLOT(items, install("p"), tp);
 	UNPROTECT(1);
 	
 	tp = PROTECT(allocVector(REALSXP, set->ttotal));
 	for (i = 0; i < set->ttotal; i++) REAL(tp)[i] = 1;
-	SET_SLOT(items, install("x"), duplicate(tp));
+	/* SET_SLOT(items, install("x"), duplicate(tp)); */
+	SET_SLOT(items, install("x"), tp);
 	UNPROTECT(1);
 	
 	tp = PROTECT(allocVector(INTSXP, 2));
 	INTEGER(tp)[0] = INTEGER(dim)[0];
 	INTEGER(tp)[1] = set->rnb;
-	SET_SLOT(items, install("Dim"), duplicate(tp));
+	/* SET_SLOT(items, install("Dim"), duplicate(tp)); */
+	SET_SLOT(items, install("Dim"), tp);
 	UNPROTECT(1);
 	
 	lhs = PROTECT(NEW_OBJECT(MAKE_CLASS("itemMatrix")));
-        SET_SLOT(lhs , install("data"), duplicate(items));
+        /* SET_SLOT(lhs , install("data"), duplicate(items)); */
+        SET_SLOT(lhs , install("data"), items);
         UNPROTECT(1);
 
 	if (param->target == TT_RULE) 
-	  SET_SLOT(ans, install("lhs"), duplicate(lhs));
+	  /* SET_SLOT(ans, install("lhs"), duplicate(lhs)); */
+	  SET_SLOT(ans, install("lhs"), lhs);
 	else	
-	  SET_SLOT(ans, install("items"), duplicate(lhs));
+	  /* SET_SLOT(ans, install("items"), duplicate(lhs)); */
+	  SET_SLOT(ans, install("items"), lhs);
 	UNPROTECT(1);
 
 	
@@ -789,23 +796,28 @@ SEXP returnObject(RULESET *set, SEXP dim, ARparameter *param)
 	  
 	  tp = PROTECT(allocVector(INTSXP, set->rnb+1));
 	  for (i = 0; i < set->rnb+1; i++) INTEGER(tp)[i] = i;
-	  SET_SLOT(items, install("p"),  duplicate(tp));
+	  /* SET_SLOT(items, install("p"),  duplicate(tp)); */
+	  SET_SLOT(items, install("p"),  tp);
 	  UNPROTECT(1);
 	  
 	  tp = PROTECT(allocVector(REALSXP, set->rnb));
 	  for (i = 0; i < set->rnb; i++) REAL(tp)[i] = 1;
-	  SET_SLOT(items, install("x"),  duplicate(tp));
+	  /* SET_SLOT(items, install("x"),  duplicate(tp)); */
+	  SET_SLOT(items, install("x"),  tp);
 	  UNPROTECT(1);
 	
 	  tp = PROTECT(allocVector(INTSXP, 2));
 	  INTEGER(tp)[0] = INTEGER(dim)[0];
 	  INTEGER(tp)[1] = set->rnb;
-	  SET_SLOT(items, install("Dim"), duplicate(tp));
+	  /* SET_SLOT(items, install("Dim"), duplicate(tp)); */
+	  SET_SLOT(items, install("Dim"), tp);
 	  UNPROTECT(1); 
 	  
 	  rhs =  PROTECT(NEW_OBJECT(MAKE_CLASS("itemMatrix")));
-	  SET_SLOT(rhs, install("data"), duplicate(items));
-	  SET_SLOT(ans, install("rhs"), duplicate(rhs));
+	  /* SET_SLOT(rhs, install("data"), duplicate(items));
+	  SET_SLOT(ans, install("rhs"), duplicate(rhs)); */
+	  SET_SLOT(rhs, install("data"), items);
+	  SET_SLOT(ans, install("rhs"), rhs);
 	  UNPROTECT(2);
 	}
 	
@@ -848,7 +860,8 @@ SEXP returnObject(RULESET *set, SEXP dim, ARparameter *param)
 	dmns = PROTECT(allocVector(VECSXP, 2));
 	SET_VECTOR_ELT(dmns, 1, names);
 	setAttrib(q, R_DimNamesSymbol, dmns);
-  	SET_SLOT(ans, install("quality"), duplicate(q));
+  	/* SET_SLOT(ans, install("quality"), duplicate(q)); */
+  	SET_SLOT(ans, install("quality"), q);
 	UNPROTECT(3);
 	
 	
@@ -857,27 +870,33 @@ SEXP returnObject(RULESET *set, SEXP dim, ARparameter *param)
 	  trans = PROTECT(NEW_OBJECT(MAKE_CLASS("dgCMatrix")));
 	  tp = PROTECT(allocVector(INTSXP, set->trtotal));
 	  for (i = 0; i < set->trtotal; i++) INTEGER(tp)[i] = set->trans[i];
-	  SET_SLOT(trans, install("i"), duplicate(tp));
+	  /* SET_SLOT(trans, install("i"), duplicate(tp)); */
+	  SET_SLOT(trans, install("i"), tp); 
 	  UNPROTECT(1);
 	  tp = PROTECT(allocVector(INTSXP, set->rnb+1));
 	  for (i = 0; i < set->rnb+1; i++) INTEGER(tp)[i] = set->trnb[i];
-	  SET_SLOT(trans, install("p"),  duplicate(tp));
+	  /* SET_SLOT(trans, install("p"),  duplicate(tp)); */
+	  SET_SLOT(trans, install("p"),  tp);
 	  UNPROTECT(1);
 	  tp = PROTECT(allocVector(REALSXP, set->trtotal));
 	  for (i = 0; i < set->trtotal; i++) REAL(tp)[i] = 1;
-	  SET_SLOT(trans, install("x"),  duplicate(tp));
+	  /* SET_SLOT(trans, install("x"),  duplicate(tp)); */
+	  SET_SLOT(trans, install("x"),  tp); 
 	  UNPROTECT(1);
 	  tp = PROTECT(allocVector(INTSXP, 2));
 	  INTEGER(tp)[0] = set->tacnt;
 	  INTEGER(tp)[1] = set->rnb;
+	  /* SET_SLOT(trans, install("Dim"), duplicate(tp)); */
 	  SET_SLOT(trans, install("Dim"), duplicate(tp));
 	  UNPROTECT(1);
 	  
-	  tidList = PROTECT(NEW_OBJECT(MAKE_CLASS("tidList")));
-	  SET_SLOT(tidList, install("data"), duplicate(trans));
+	  tidLists = PROTECT(NEW_OBJECT(MAKE_CLASS("tidLists")));
+	  /* SET_SLOT(tidLists, install("data"), duplicate(trans)); */
+	  SET_SLOT(tidLists, install("data"), trans);
 	  UNPROTECT(1);
 	  
-	  SET_SLOT(ans, install("tidList"), duplicate(tidList));
+	  /* SET_SLOT(ans, install("tidLists"), duplicate(tidLists)); */
+	  SET_SLOT(ans, install("tidLists"), tidLists);
 	  UNPROTECT(1);
 	}
 	

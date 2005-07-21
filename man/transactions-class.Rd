@@ -7,7 +7,7 @@
 \alias{coerce,transactions,matrix-method}
 \alias{coerce,transactions,list-method}
 \alias{coerce,data.frame,transactions-method}
-\alias{image,transactions-method}
+%\alias{image,transactions-method}
 \alias{labels,transactions-method}
 \alias{transactionInfo<-,transactions-method}
 \alias{transactionInfo,transactions-method}
@@ -23,7 +23,7 @@
 \description{
   The \code{transactions} class represents transaction data used for
   mining itemsets or rules.  It is a direct extension of class
-  \code{\link[itemMatrix-class]{itemMatrix}} to store a binary incidence
+  \code{\link[arules:itemMatrix-class]{itemMatrix}} to store a binary incidence
   matrix, item labels, and optionally transaction IDs and user IDs.
 }
 \section{Objects from the Class}{
@@ -39,13 +39,13 @@
     \item{\code{data}:}{object of class
       \code{\link[Matrix:dgCMatrix-class]{dgCMatrix}} to store the
       binary incidence matrix (see
-      \code{\link[itemMatrix-class]{itemMatrix}} class)} 
+      \code{\link[arules:itemMatrix-class]{itemMatrix}} class)} 
     \item{\code{itemInfo}:}{object of class \code{"data.frame"} to store 
-      item labels (see \code{\link[itemMatrix-class]{itemMatrix}} class)}
+      item labels (see \code{\link[arules:itemMatrix-class]{itemMatrix}} class)}
   }
 }
 \section{Extends}{
-  Class \code{\link[itemMatrix-class]{itemMatrix}}, directly.
+  Class \code{\link[arules:itemMatrix-class]{itemMatrix}}, directly.
 }
 \section{Methods}{
   \describe{
@@ -73,8 +73,8 @@
       a \samp{"="}.   
       The variable names and levels are stored in the labels data frame
       as the components \code{variables} and \code{levels}.}
-    \item{image}{\code{signature(x = "transactions")};
-      plots an image of the transactions for visual inspection}
+%    \item{image}{\code{signature(x = "transactions")};
+%      plots an image of the transactions for visual inspection}
     \item{labels}{\code{signature(x = "transactions")};
       returns the labels (item labels and transaction IDs) 
       for the incidence matrix as a list of two vectors named \code{items}
@@ -86,9 +86,6 @@
     \item{show}{\code{signature(object = "transactions")}}
     \item{summary}{\code{signature(object = "transactions")}}
   }
-}
-\author{
-  Michael Hahsler
 }
 \seealso{
   \code{\link{itemMatrix-class}}

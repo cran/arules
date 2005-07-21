@@ -1,22 +1,22 @@
 ###*******************************************************
 ### show/summary
 
-setMethod("show", signature(object = "tidList"),
+setMethod("show", signature(object = "tidLists"),
     function(object) {
-    cat("tidList in sparse format for\n",
+    cat("tidLists in sparse format for\n",
       dim(object)[1],"items/itemsets (rows) and\n",
       dim(object)[2],"transactions (columns)\n")
     invisible(object)
     })
 
-setMethod("summary", signature(object = "tidList"),
+setMethod("summary", signature(object = "tidLists"),
     function(object, ...) {
-    new("summary.tidList", Dim = dim(object))
+    new("summary.tidLists", Dim = dim(object))
     })
 
-setMethod("show", signature(object = "summary.tidList"),
+setMethod("show", signature(object = "summary.tidLists"),
     function(object) {
-    cat("tidList in sparse format for\n",
+    cat("tidLists in sparse format for\n",
       object@Dim[1],"items/itemsets (rows) and\n",
       object@Dim[2],"transactions (columns)\n")
     })
@@ -25,7 +25,7 @@ setMethod("show", signature(object = "summary.tidList"),
 ###*****************************************************
 ### subset
 
-setMethod("[", signature(x = "tidList"),
+setMethod("[", signature(x = "tidLists"),
     function(x, i, j, ..., drop) {
     y <- x 
     y@data <- x@data[j,i,...,drop=drop]
@@ -40,12 +40,12 @@ setMethod("[", signature(x = "tidList"),
 
 ### coercions 
 
-setAs("tidList", "list",
+setAs("tidLists", "list",
     function(from) {
     LIST(from, decode = TRUE) 
     })
 
-setMethod("LIST", signature(from = "tidList"),
+setMethod("LIST", signature(from = "tidLists"),
     function(from, decode = TRUE) {
     l <- LIST(as(from, "itemMatrix"), decode = FALSE)
     if(decode == TRUE) {
@@ -57,7 +57,7 @@ setMethod("LIST", signature(from = "tidList"),
 
 
 
-setAs("tidList", "matrix",
+setAs("tidLists", "matrix",
     function(from) {
     m <- as(t(from@data), "matrix")
     if (!is.null(from@transactionInfo[["transactionIDs"]]))
@@ -66,19 +66,19 @@ setAs("tidList", "matrix",
     return(m)
     })
 
-setAs("tidList", "transactions",
+setAs("tidLists", "transactions",
     function(from) {
     new("transactions", data = t(from@data), 
       itemInfo = from@itemInfo, transactionInfo = from@transactionInfo) 
     })
 
-setAs("transactions", "tidList",
+setAs("transactions", "tidLists",
     function(from) {
-    new("tidList", data = t(from@data),
+    new("tidLists", data = t(from@data),
       itemInfo = from@itemInfo, transactionInfo = from@transactionInfo)
     })
 
-setAs("tidList", "dgCMatrix",
+setAs("tidLists", "dgCMatrix",
     function(from) {
     tmp <- from@data
     dimnames(tmp)[[2]] <- from@itemInfo[["labels"]]
@@ -87,21 +87,21 @@ setAs("tidList", "dgCMatrix",
 
 ### overwrite item support from itemMatrix
 ### return item support in a set
-    setMethod("itemSupport", signature(x = "tidList"),
-      function(x, type= c("relative", "absolute")) {
-      type <- match.arg(type)
-      
-      supports <-  size(x)
-      names(supports) <- itemLabels(x)
-       
-      switch(type,
-	relative =  supports/dim(x)[2],
-	absolute =  supports)
-      })
+setMethod("itemFrequency", signature(x = "tidLists"),
+    function(x, type= c("relative", "absolute")) {
+    type <- match.arg(type)
+
+    supports <-  size(x)
+    names(supports) <- itemLabels(x)
+
+    switch(type,
+      relative =  supports/dim(x)[2],
+      absolute =  supports)
+    })
 
 
 ### overwrite decode from itemMatrix
-setMethod("decode", signature(x = "tidList"),
+setMethod("decode", signature(x = "tidLists"),
     function(x, tids) {
 
 ### missing Transaction IDs
@@ -116,12 +116,12 @@ setMethod("decode", signature(x = "tidList"),
 ##########################################################################
 ### accessors
 
-setMethod("transactionInfo", signature(x = "tidList"),
+setMethod("transactionInfo", signature(x = "tidLists"),
     function(x) {
     x@transactionInfo
     })
 
-setMethod("labels", signature(object = "tidList"),
+setMethod("labels", signature(object = "tidLists"),
     function(object, ...) {
     list(items = itemLabels(object),
       transactionIDs = as(object@transactionInfo[["transactionIDs"]],

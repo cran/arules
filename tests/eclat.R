@@ -24,11 +24,11 @@ labels(f[1:2])
 f.sub <- subset(f, subset=items %in% "a")
 labels(f.sub)
 
-### test tidlist
-f <- eclat(t, parameter = list(tidList = TRUE))
+### test tidlists
+f <- eclat(t, parameter = list(tidLists = TRUE))
 f
 summary(f)
-tl <- tidList(f)
+tl <- tidLists(f)
 tl
 summary(tl)
 

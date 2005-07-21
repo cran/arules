@@ -29,7 +29,6 @@ ruleInduction(x, ...)
 \value{
    An object of class \code{rules}.
 }
-\author{ Michael Hahsler }
 
 \seealso{ \code{\link{itemsets-class}}, \code{\link{rules-class}}
 \code{\link{transactions-class}}}

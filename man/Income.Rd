@@ -14,7 +14,7 @@
   characteristic of data mining applications.
   The \code{Income_transactions} data set contains the data
   already prepared and coerced to
-  \code{\link[transactions-class]{transactions}}.
+  \code{\link[arules:transactions-class]{transactions}}.
 }
 \usage{
 data("Income")

@@ -10,7 +10,7 @@
   \pkg{arules}.  
   The \code{Adult_transactions} data set contains the data 
   already prepared and coerced to 
-  \code{\link[transactions-class]{transactions}}.
+  \code{\link[arules:transactions-class]{transactions}}.
 }
 \usage{
 data("Adult")

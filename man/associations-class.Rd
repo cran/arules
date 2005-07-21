@@ -42,11 +42,8 @@
     \item{show}{\code{signature(object = "associations")}}
   }
 }
-\author{
-  Michael Hahsler
-}
 \seealso{
   \code{\link{itemsets-class}},
-  \code{\link{rules-class}},
+  \code{\link{rules-class}}
 }
 \keyword{classes}

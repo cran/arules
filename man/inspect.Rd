@@ -19,7 +19,6 @@ inspect(x, ...)
   \item{x}{the object.}
   \item{\dots}{additional arguments (currently unused)}
 }
-\author{Kurt Hornik}
 \seealso{
   \code{\link{itemsets-class}},
   \code{\link{rules-class}},

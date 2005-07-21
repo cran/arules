@@ -20,7 +20,7 @@ setMethod("size", signature(x = "itemMatrix"),
     })
 
 ### return item support in a set
-setMethod("itemSupport", signature(x = "itemMatrix"),
+setMethod("itemFrequency", signature(x = "itemMatrix"),
     function(x, type= c("relative", "absolute")) {
       type <- match.arg(type)
       
@@ -59,6 +59,36 @@ setAs("itemMatrix", "list",
       LIST(from, decode = TRUE)
     })
 
+
+setMethod("LIST", signature(from = "itemMatrix"),
+    function(from, decode = TRUE) {
+      data <- from@data
+      z <- vector(length = (data@Dim[2]), mode = "list")
+      l <- which(diff(data@p) != 0)
+      sapply(l, function(i) 
+            z[[i]] <<- as.integer(data@i[(data@p[i]+1):data@p[i+1]]+1),
+            simplify=FALSE)
+            # +1 since i starts with index 0 instead of 1
+      if (decode == TRUE ) return(decode(from, z))
+      else return(z)
+   })
+
+
+# decode is used to decode item labels for list representation
+setMethod("decode", signature(x = "itemMatrix"),
+   function(x, items) {
+    
+     ### missing labels
+     if (is.null(x@itemInfo[["labels"]])) {
+       warning("no item labels available - cannot decode item IDs!")
+       return (items)
+     }
+
+     labs <- as(x@itemInfo[["labels"]], "character")
+     sapply(items, function(r) labs[r], simplify=FALSE)
+   })
+
+
 setAs("list","itemMatrix", function(from, to) {
     from_names <- unique(unlist(from))
     data <- c(0:(length(from_names)-1))
@@ -79,6 +109,7 @@ setAs("list","itemMatrix", function(from, to) {
     new("itemMatrix", data=z, itemInfo = data.frame(labels = from_names))
     })
 
+
 setAs("itemMatrix", "dgCMatrix",
     function(from) {
     tmp <- from@data
@@ -88,7 +119,7 @@ setAs("itemMatrix", "dgCMatrix",
  
 
 ###*******************************************************
-### subset
+### subset, combine, sample 
 
 ### remember the sparce matrix is tored in transposed form (i <-> j)
 setMethod("[", signature(x = "itemMatrix"),
@@ -110,31 +141,48 @@ setMethod("%in%", signature(x = "itemMatrix"),
       return(diff(x@data[pos]@p)==1)
     })
 
-setMethod("decode", signature(x = "itemMatrix"),
-   function(x, items) {
+
+setMethod("combine", signature(first = "itemMatrix"),
+    function(first, ..., as_list = NULL){
+     
+     ### in case we allready get a list
+     if(!is.null(as_list)) z <- as_list else z <- list(...)
+     
+     if(length(z) < 1) return(first) 
+   
+     num_items <- first@data@Dim[1]
+     num_trans <- first@data@Dim[2]
+     i <- first@data@i
+     p <- first@data@p
+     x <- first@data@x
+     ### pmax makes sure that the column counts for the added elements
+     # start with the number of the previous element
+     pmax <- p
     
-     ### missing labels
-     if (is.null(x@itemInfo[["labels"]])) {
-       warning("no item labels available - cannot decode item IDs!")
-       return (items)
+     for (elem in z) {
+        if(elem@data@Dim[1] != num_items) 
+	   stop ("Number of items mismatch")
+	pmax <-  p[length(p)]
+	
+	i <- c(i, elem@data@i)
+	p <- c(p, (elem@data@p[-1] + pmax))
+        x <- c(x, elem@data@x)
+	num_trans <- num_trans + elem@data@Dim[2]
      }
-
-     labs <- as(x@itemInfo[["labels"]], "character")
-     sapply(items, function(r) labs[r], simplify=FALSE)
+     
+     data <- new("dgCMatrix", i = i, p = p, x = x, 
+       Dim = c(num_items,num_trans) )
+     new("itemMatrix", data = data, 
+       itemInfo = z[[1]]@itemInfo)
    })
 
-setMethod("LIST", signature(from = "itemMatrix"),
-    function(from, decode = TRUE) {
-      data <- from@data
-      z <- vector(length = (data@Dim[2]), mode = "list")
-      l <- which(diff(data@p) != 0)
-      sapply(l, function(i) 
-            z[[i]] <<- as.integer(data@i[(data@p[i]+1):data@p[i+1]]+1),
-            simplify=FALSE)
-            # +1 since i starts with index 0 instead of 1
-      if (decode == TRUE ) return(decode(from, z))
-      else return(z)
-   })
+
+setMethod("sample", signature(x = "itemMatrix"),
+    function(x, size, replace = FALSE, prob = NULL) {
+    index <- sample(c(1:length(x)), size = size, replace = replace, prob = prob)
+    x[index]
+})
+
 
 
 ###*******************************************************
@@ -183,10 +231,12 @@ setMethod("show", signature(object = "itemMatrix"),
 
 
 setMethod("image", signature(x = "itemMatrix"),
-    function(x, colorkey=FALSE, ylab="Elements (Rows)",
-      xlab="Items (Columns)",...) {
+    function(x, colorkey=FALSE, 
+      ylab="Elements (Rows)", xlab="Items (Columns)", 
+      col.regions = gray(seq(from = 0, to = 1, length = 2)), ...) {
     i <- t(as(x@data, "dgTMatrix"))
-    image(i,colorkey=colorkey, ylab=ylab, xlab=xlab, ...)
+    image(i,colorkey=colorkey, ylab=ylab, xlab=xlab, 
+      col.regions = col.regions, ...)
     })
 
 
@@ -195,7 +245,7 @@ setMethod("itemFrequencyPlot", signature(x = "itemMatrix"),
     	cex.names =  par("cex.axis"), ...) {
       type <- match.arg(type)
      
-      itemFrequency <- itemSupport(x, type)
+      itemFrequency <- itemFrequency(x, type)
      
       # make enough space for item labels
       maxLabel <- max(strwidth(names(itemFrequency), units = "inches", 

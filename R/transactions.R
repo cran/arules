@@ -73,7 +73,7 @@ setAs("data.frame", "transactions", function(from) {
 
 
 ###*****************************************************
-### subset
+### subset + combine
 
 setMethod("[", signature(x = "transactions"),
     function(x, i, j, ..., drop = FALSE) {
@@ -85,6 +85,17 @@ setMethod("[", signature(x = "transactions"),
       new("transactions",as(x, "itemMatrix")[i,j,...,drop=drop],
     	transactionInfo = x@transactionInfo[i,,drop=FALSE])
     }
+    })
+
+setMethod("combine", signature(first = "transactions"),
+    function(first, ...){
+    
+    ti <- first@transactionInfo
+    lapply(list(...), FUN = function(x)
+      ti <<- rbind(ti, x@transactionInfo))
+    
+    new("transactions", combine(first = as(first, "itemMatrix"), ...), 
+      transactionInfo = ti)
     })
 
 

@@ -16,7 +16,7 @@ setReplaceMethod("quality", signature(x = "associations"),
 
 
 ###****************************************************
-### subset, sort
+### sort + unique
 
 
 setMethod("SORT", signature(x = "associations"),
@@ -25,6 +25,13 @@ setMethod("SORT", signature(x = "associations"),
    })
 
 
+# this needs a working implementation of duplicated for the 
+# type of associations
+setMethod("unique", signature(x = "associations"),
+    function(x,  incomparables = FALSE, ...) {
+    x[!duplicated(x, incomparables = incomparables, ...)]
+    })
+	    
 ###************************************************
 ### show / summary
 

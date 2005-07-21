@@ -15,7 +15,7 @@
 \alias{decode,itemMatrix-method}
 \alias{decode}
 \alias{dim,itemMatrix-method}
-\alias{image,itemMatrix-method}
+%\alias{image,itemMatrix-method}
 \alias{\%in\%,itemMatrix-method}
 \alias{itemLabels<-,itemMatrix-method}
 \alias{itemLabels,itemMatrix-method}
@@ -106,8 +106,8 @@
       \code{items} can be a vector or list.}
     \item{dim}{\code{signature(x = "itemMatrix")};
       returns the dimensions of the itemMatrix.}
-    \item{image}{\code{signature(x = "itemMatrix")};
-      plots an image of the itemMatrix for visual inspection.}
+%    \item{image}{\code{signature(x = "itemMatrix")};
+%      plots an image of the itemMatrix for visual inspection.}
     \item{\%in\%}{\code{signature(x = "itemMatrix")}: matches values 
       against the item labels (and the additional information) for 
       each element (row) in the itemMatrix.}
@@ -126,14 +126,11 @@
       returns the labels (item labels and element names) 
       for the matrix as a list of two vectors named \code{items}
       and \code{elements}.}
-    \item{length}{\code{signature(x = "itemMatrix")};
-      returns the number of elements (rows) in the itemMatrix.}
+%    \item{length}{\code{signature(x = "itemMatrix")};
+%      returns the number of elements (rows) in the itemMatrix.}
     \item{show}{\code{signature(object = "itemMatrix")}}
     \item{summary}{\code{signature(object = "itemMatrix")}}
   }
-}
-\author{
-  Michael Hahsler
 }
 \seealso{
   \code{\link{transactions-class}},

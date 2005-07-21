@@ -11,18 +11,18 @@
 setClass("itemMatrix",
     representation(data = "dgCMatrix", 
       itemInfo = "data.frame",
-      tidList = "logical"), 
-    prototype(tidList = FALSE),
+      tidLists = "logical"), 
+    prototype(tidLists = FALSE),
     validity = function(object) {
 
 ### check number of labels in itemInfoi
 ### no labels (empty data.frame)
     if(length(object@itemInfo) == 0) return(TRUE) 
 
-### tidList
-    if(object@tidList == TRUE) {
+### tidLists
+    if(object@tidLists == TRUE) {
     if(length(itemInfo(object)[["labels"]]) == dim(object)[1]) return(TRUE)
-    else return("number of item/itemset labels does not match number of rows in tidList")
+    else return("number of item/itemset labels does not match number of rows in tidLists")
     }
 
 ### regular itemMatrix
@@ -66,20 +66,20 @@ setClass("summary.transactions",
     )
 
 
-setClass("tidList",
+setClass("tidLists",
     representation(transactionInfo = "data.frame"),
     contains = c("itemMatrix"),
     prototype(transactionInfo = data.frame(),
       labels = data.frame(),
-      tidList = TRUE),
+      tidLists = TRUE),
     validity = function(object) { 
 ### fixme: length of transactionInfo missing
     return(TRUE) }
     )
 
-setClassUnion("tidList_or_NULL", c("tidList", "NULL"))
+setClassUnion("tidLists_or_NULL", c("tidLists", "NULL"))
 
-setClass("summary.tidList",
+setClass("summary.tidLists",
     representation(Dim = "integer")
     )
 
@@ -156,10 +156,10 @@ setClass("APparameter",
     })
 
 setClass("ECparameter",
-    representation(tidList = "logical"),
+    representation(tidLists = "logical"),
     contains = "ASparameter",
     prototype(new("ASparameter"),
-      tidList = FALSE),
+      tidLists = FALSE),
     validity = function(object) {
     if (object@target %in% .types(method = "eclat")) return(TRUE) 
     else return(paste(object@target, "not supported"))
@@ -217,16 +217,16 @@ setClass("ECcontrol",
 	"VIRTUAL"))
 
   setClass("itemsets",
-      representation(items = "itemMatrix", tidList = "tidList_or_NULL"),
+      representation(items = "itemMatrix", tidLists = "tidLists_or_NULL"),
       contains = "associations",
-      prototype(tidList = NULL),
+      prototype(tidLists = NULL),
       validity = function(object) {
-### if tidList exists, check dimensions
-### Note, we cannot check dim(object@tidList)[2] here since we
+### if tidLists exists, check dimensions
+### Note, we cannot check dim(object@tidLists)[2] here since we
 ### don't know the number of transactions in the used data set! 
-      if (!is.null(object@tidList) && 
-	length(object@tidList) != length(object@items))
-      return("mismatch between number of itemsets and length of tidList")
+      if (!is.null(object@tidLists) && 
+	length(object@tidLists) != length(object@items))
+      return("mismatch between number of itemsets and length of tidLists")
 
 ### if quality exists, check dimensions
       if (!length(object@quality) && 
@@ -269,7 +269,7 @@ setClass("summary.associations",
       "VIRTUAL"))
 
 setClass("summary.itemsets",
-    representation(tidList = "logical", items = "summary.itemMatrix"),
+    representation(tidLists = "logical", items = "summary.itemMatrix"),
     contains = "summary.associations")
 
 setClass("summary.rules",

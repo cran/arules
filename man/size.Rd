@@ -3,15 +3,15 @@
 \alias{size,itemMatrix-method}
 \alias{size,itemsets-method}
 \alias{size,rules-method}
-\title{Getting the Size of All Elements}
+\title{Getting the Size of Each Element}
 \description{
   Provides the generic function \code{size} and S4 methods to get the
-  size of all elements from objects based on
-  \code{\link[itemMatrix]{itemMatrix}}.
+  size of each element from objects based on
+  \code{\link[arules:itemMatrix]{itemMatrix}}.
   For example, it is used to get a vector of transaction sizes (i.e., 
   the number of present items (ones) per element (row) of the binary
   incidence matrix) from an object of class
-  \code{\link[transactions-class]{transactions}}).
+  \code{\link[arules:transactions-class]{transactions}}).
 }
 \usage{
 size(x)
@@ -27,9 +27,6 @@ size(x)
   Each element is the size of the corresponding element (row in the
   matrix; for rules it is the the sum of the elements in the RHS and the RHS) 
   in object \code{x}.
-}
-\author{
-  Michael Hahsler
 }
 \seealso{ 
   \code{\link{itemMatrix-class}},

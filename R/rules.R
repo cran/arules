@@ -61,9 +61,20 @@ setReplaceMethod("rhs", signature(x = "rules"),
     x
     })
 
+## get the union of rhs and lhs
+setMethod("items", signature(x = "rules"),
+    function(x) {
+    tmp <- lhs(x)
+    lhs<- as(as(tmp, "dgCMatrix"), "dgTMatrix")
+    rhs<- as(as(rhs(x), "dgCMatrix"), "dgTMatrix")
+## should be impossible to sum up to more than 1
+    tmp@data <- as(lhs + rhs, "dgCMatrix")
+    tmp
+    })
+
 
 ###****************************************************
-### subset, sort
+### subset, combine
 
 setMethod("[", signature(x = "rules"),
     function(x, i, j, ..., drop)
@@ -84,6 +95,35 @@ setMethod("subset", signature(x = "rules"),
     i <- eval(substitute(subset),c(x@quality, 
 	list(lhs=x@lhs,rhs=x@rhs))) 
     x[i,]
+    })
+
+
+setMethod("combine", signature(first = "rules"),
+    function(first, ...){
+
+# build quality data.frame first.
+# todo: merge data.frames w/differernt quality measures
+    q <- first@quality
+    lapply(list(...), FUN = function(x)
+      q <<- rbind(q, x@quality))
+
+# create joint itemMatrix
+    lhs <- lapply(list(...), FUN = function(x) x@lhs)
+    rhs <- lapply(list(...), FUN = function(x) x@rhs)
+    new("rules", lhs = combine(first@lhs, as_list = lhs),
+      rhs = combine(first@rhs, as_list = rhs),
+      quality = q)
+    })
+
+setMethod("duplicated", signature(x = "rules"),
+    function(x, incomparables = FALSE, ...) {
+    tmp <- LIST(x@lhs, decode = FALSE)
+    rhs <- LIST(x@rhs, decode = FALSE)
+    
+    for (i in 1:length(x)) 
+      tmp[[i]] <- c(tmp[[i]], rhs[[i]])
+    
+    duplicated(tmp, incomparables = incomparables, ...)
     })
 
 

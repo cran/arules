@@ -10,7 +10,7 @@
 }
 \usage{data(Epub)}
 \format{
-  Object of class \code{\link[transactions-class]{transactions}} with
+  Object of class \code{\link[arules:transactions-class]{transactions}} with
   2771 transactions and 419 items.
   Item labels are document IDs of the from \code{"epub-wu-01\_11d"}.
   IDs and time stamps for transactions are also provided.

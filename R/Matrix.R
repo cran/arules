@@ -17,4 +17,3 @@ setMethod("[", signature(x = "dgCMatrix"),
    })
 
 
-
