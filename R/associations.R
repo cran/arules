@@ -1,6 +1,7 @@
 ###************************************************
-### accessors
+### common methods
 
+### accessors for quality
 
 setMethod("quality", signature(x = "associations"),
     function(x) {
@@ -14,11 +15,7 @@ setReplaceMethod("quality", signature(x = "associations"),
     })
 
 
-
-###****************************************************
 ### sort + unique
-
-
 setMethod("SORT", signature(x = "associations"),
    function (x, by = "support", decreasing = TRUE) {
    x[order(x@quality[[by]], decreasing = decreasing)]
@@ -31,13 +28,29 @@ setMethod("unique", signature(x = "associations"),
     function(x,  incomparables = FALSE, ...) {
     x[!duplicated(x, incomparables = incomparables, ...)]
     })
-	    
-###************************************************
-### show / summary
 
+### show
 setMethod("show", signature(object = "associations"),
   function(object) {
   cat("set of",length(object),class(object),"\n")
+  })
+
+###************************************************
+### implementations of associations must provide minimal interface
+
+setMethod("items", signature(x = "associations"),
+  function(x) {
+  stop(paste("Method items not implemented for class", class(x),"\n"))
+  })
+
+setMethod("length", signature(x = "associations"),
+  function(x) {
+  stop(paste("Method length not implemented for class", class(x),"\n"))
+  })
+
+setMethod("labels", signature(object = "associations"),
+  function(object) {
+  stop(paste("Method duplicated not implemented for class", class(object),"\n"))
   })
 
 

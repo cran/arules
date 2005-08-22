@@ -5,7 +5,7 @@
 \alias{hyperlift,rules-method}
 \alias{hyperconfidence}
 \alias{hyperconfidence,rules-method}
-\title{Calculating additional Interest Measures for existing Associations}
+\title{Calculating Additional Interest Measures for Existing Associations}
 \description{
    Provides the generic functions and the needed S4 methods to
    calculate some additional interest measures for a set of 
@@ -14,14 +14,17 @@
 \usage{
 all_confidence(x, ...)
 \S4method{all_confidence}{itemsets}(x, transactions = NULL, itemSupport = NULL)
+
 hyperlift(x, ...)
 \S4method{hyperlift}{rules}(x, transactions, d = 0.99)
+
 hyperconfidence(x, ...)
-\S4method{hyperlift}{rules}(x, transactions = NULL,  complements = TRUE, significance = FALSE)
+\S4method{hyperconfidence}{rules}(x, transactions = NULL,  
+	complements = TRUE, significance = FALSE)
 }
 \arguments{
   \item{x}{ the set of associations. }
-  \item{\dots}{ further arguments are passed on. }
+  \item{\dots}{ further arguments. }
   \item{transactions}{ the transaction data set used to mine 
   	the associations. }
   \item{itemSupport}{ alternatively to transactions, for some measures 
@@ -91,7 +94,8 @@ hyperconfidence(x, ...)
 }
 }
 \value{
-   A vector containing the values of the interest measure for each association
+   A numeriv vector containing the values of the interest measure 
+   for each association
    in the set of associations \code{x}.
 }
 \references{
@@ -131,5 +135,4 @@ rules.conf <- rules[quality(rules)$hyperconfidence >= 0.99]
 inspect(rules.conf[1:10])
 
 }
-\keyword{methods}
 \keyword{models}

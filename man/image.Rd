@@ -2,27 +2,35 @@
 \alias{image}
 \alias{image,itemMatrix-method}
 \alias{image,transactions-method}
+\alias{image,tidLists-method}
 \title{Visual Inspection of an Object Based on ``itemMatrix''}
 \description{
-  Provides the generic function \code{image} and the S4 methods to
+  Provides the S4 methods \code{image} to
   generate level plots to
   visually inspect objects based on \code{\link[arules:itemMatrix-class]{itemMatrix}}
-  (e.g., transactions, items in itemsets or rhs/lhs in rules).
+  (e.g., transactions, tidLists, items in itemsets or rhs/lhs in rules).
   These plots can be used to identify problems in a data set 
   (e.g., recording problems with some transactions containing all items).
 }
 \usage{
-image(x, \dots)
+%image(x, \dots)
 \S4method{image}{itemMatrix}(x, ...)
+
 \S4method{image}{transactions}(x, ...)
+
+\S4method{image}{tidLists}(x, ...)
 }
 \arguments{
-  \item{x}{ the object. }
-  \item{\dots}{ further arguments passed on.}
+  \item{x}{ the object (\code{itemMatrix}, \code{transactions} or 
+	\code{tidLists}). }
+  \item{\dots}{ further arguments passed on to \code{image} in 
+	package \pkg{Matrix}.}
 }
 \seealso{
+  \code{\link[Matrix]{image}} (in \pkg{Matrix}),
   \code{\link{itemMatrix-class}},
-  \code{\link{transactions-class}}
+  \code{\link{transactions-class}},
+  \code{\link{tidLists-class}}
 }
 \examples{
 data("Epub")

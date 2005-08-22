@@ -6,24 +6,10 @@
 ###**********************************************************
 ### itemMatrix
 
-
-
 setClass("itemMatrix",
     representation(data = "dgCMatrix", 
-      itemInfo = "data.frame",
-      tidLists = "logical"), 
-    prototype(tidLists = FALSE),
+      itemInfo = "data.frame"), 
     validity = function(object) {
-
-### check number of labels in itemInfoi
-### no labels (empty data.frame)
-    if(length(object@itemInfo) == 0) return(TRUE) 
-
-### tidLists
-    if(object@tidLists == TRUE) {
-    if(length(itemInfo(object)[["labels"]]) == dim(object)[1]) return(TRUE)
-    else return("number of item/itemset labels does not match number of rows in tidLists")
-    }
 
 ### regular itemMatrix
     if(length(itemInfo(object)[["labels"]]) == dim(object)[2]) return(TRUE)
@@ -41,7 +27,7 @@ setClass("summary.itemMatrix",
 
 
 ###**********************************************************
-### transactions
+### transactions 
 
 setClass("transactions",
     representation(transactionInfo = "data.frame"),
@@ -66,16 +52,26 @@ setClass("summary.transactions",
     )
 
 
+###**********************************************************
+### transaction ID lists
+
 setClass("tidLists",
-    representation(transactionInfo = "data.frame"),
-    contains = c("itemMatrix"),
+    representation(data = "dgCMatrix",
+       itemInfo = "data.frame",
+       transactionInfo = "data.frame"),
     prototype(transactionInfo = data.frame(),
-      labels = data.frame(),
-      tidLists = TRUE),
+      itemInfo = data.frame()
+      ),
     validity = function(object) { 
+### check number of labels in itemInfo
+### no labels (empty data.frame)
+    if(length(object@itemInfo) == 0) return(TRUE) 
+
+    if(length(itemInfo(object)[["labels"]]) == dim(object)[1]) return(TRUE)
+    else return("number of item/itemset labels does not match number of rows in tidLists")
+
 ### fixme: length of transactionInfo missing
-    return(TRUE) }
-    )
+    })
 
 setClassUnion("tidLists_or_NULL", c("tidLists", "NULL"))
 
@@ -210,8 +206,6 @@ setClass("ECcontrol",
 ###****************************************************************
 ### associations
 
-
-
   setClass("associations",
       representation(quality = "data.frame",
 	"VIRTUAL"))
@@ -265,7 +259,7 @@ setClass("rules",
     })
 
 setClass("summary.associations",
-    representation(length ="integer",quality = "table",
+    representation(length ="integer", quality = "table",
       "VIRTUAL"))
 
 setClass("summary.itemsets",
@@ -276,5 +270,4 @@ setClass("summary.rules",
     representation(lengths = "table",
       lengthSummary = "table"),
     contains = "summary.associations")
-
 

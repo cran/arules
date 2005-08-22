@@ -24,7 +24,8 @@ data("Adult_transactions")
   based on census data. We added the attribute \code{income} with levels
   \code{small} and \code{large} (>50K).
  
-  To prepare the data set for association mining, we removed the
+  We prepared the data set for association mining as shown in the 
+  section Examples. We removed the
   continuous attribute \code{fnlwgt} (final weight).
   We also eliminated \code{education-num} because it is just a
   numeric representation of the attribute \code{education}.
@@ -130,20 +131,19 @@ Adult[["education-num"]] <- NULL
 
 ### map metric attributes
 Adult[[ "age"]] <- ordered(cut(Adult[[ "age"]], c(15,25,45,65,100)),
-    labels = c("Young", "Middle-aged", "Senior", "Old"))
+  labels = c("Young", "Middle-aged", "Senior", "Old"))
 
 Adult[[ "hours-per-week"]] <- ordered(cut(Adult[[ "hours-per-week"]],
-      c(0,25,40,60,168)),
-    labels = c("Part-time", "Full-time", "Over-time", "Workaholic"))
+  c(0,25,40,60,168)),
+  labels = c("Part-time", "Full-time", "Over-time", "Workaholic"))
 
 Adult[[ "capital-gain"]] <- ordered(cut(Adult[[ "capital-gain"]],
-      c(-Inf,0,median(Adult[[ "capital-gain"]][Adult[[ "capital-gain"]]>0]),1000000)),
-    labels = c("None", "Low", "High"))
+  c(-Inf,0,median(Adult[[ "capital-gain"]][Adult[[ "capital-gain"]]>0]),
+  1000000)), labels = c("None", "Low", "High"))
 
 Adult[[ "capital-loss"]] <- ordered(cut(Adult[[ "capital-loss"]],
-      c(-Inf,0,
-	median(Adult[[ "capital-loss"]][Adult[[ "capital-loss"]]>0]),1000000)),
-    labels = c("None", "Low", "High"))
+  c(-Inf,0, median(Adult[[ "capital-loss"]][Adult[[ "capital-loss"]]>0]),
+  1000000)), labels = c("None", "Low", "High"))
 
 ### create transactions
 Adult_transactions <- as(Adult, "transactions")

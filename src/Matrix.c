@@ -1,6 +1,6 @@
 #include "Matrix.h"
 
-SEXP csc_subset(SEXP x, SEXP i, SEXP j)
+SEXP dgC_subset(SEXP x, SEXP i, SEXP j)
 {
     SEXP val, dim_R, xi_R;
     int nj = 0, nnz = 0, 

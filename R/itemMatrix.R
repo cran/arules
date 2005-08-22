@@ -19,20 +19,6 @@ setMethod("size", signature(x = "itemMatrix"),
     diff(x@data@p)
     })
 
-### return item support in a set
-setMethod("itemFrequency", signature(x = "itemMatrix"),
-    function(x, type= c("relative", "absolute")) {
-      type <- match.arg(type)
-      
-      supports <- diff(t(x@data)@p)
-      names(supports) <- itemLabels(x)
-
-      switch(type,
-	relative =  supports/length(x),
-	absolute =  supports)
-      })
-
-
 ###*******************************************************
 ### Coercions
 
@@ -62,30 +48,9 @@ setAs("itemMatrix", "list",
 
 setMethod("LIST", signature(from = "itemMatrix"),
     function(from, decode = TRUE) {
-      data <- from@data
-      z <- vector(length = (data@Dim[2]), mode = "list")
-      l <- which(diff(data@p) != 0)
-      sapply(l, function(i) 
-            z[[i]] <<- as.integer(data@i[(data@p[i]+1):data@p[i+1]]+1),
-            simplify=FALSE)
-            # +1 since i starts with index 0 instead of 1
-      if (decode == TRUE ) return(decode(from, z))
+      z <- as(from@data, "list")
+      if (decode == TRUE ) return(decode(z, itemLabels(from)))
       else return(z)
-   })
-
-
-# decode is used to decode item labels for list representation
-setMethod("decode", signature(x = "itemMatrix"),
-   function(x, items) {
-    
-     ### missing labels
-     if (is.null(x@itemInfo[["labels"]])) {
-       warning("no item labels available - cannot decode item IDs!")
-       return (items)
-     }
-
-     labs <- as(x@itemInfo[["labels"]], "character")
-     sapply(items, function(r) labs[r], simplify=FALSE)
    })
 
 
@@ -117,29 +82,56 @@ setAs("itemMatrix", "dgCMatrix",
     return(tmp)
     })
  
-
 ###*******************************************************
-### subset, combine, sample 
-
-### remember the sparce matrix is tored in transposed form (i <-> j)
-setMethod("[", signature(x = "itemMatrix"),
-    function(x, i, j, ..., drop = FALSE) {
-    y <- x
-    if(!missing(j)) {
-      y@data <- x@data[j, i, ..., drop=drop]
-      y@itemInfo <- x@itemInfo[j, , drop=FALSE]
-    }else{
-      y@data <- x@data[ ,i, ..., drop=drop]
-    }
-    return(y)
-    })
-
+### match: find elements which contain some items (as 
+###        labels or in itemInfo)
 setMethod("%in%", signature(x = "itemMatrix"),
     function(x, table) {
-      pos <- which(apply(sapply(x@itemInfo, "%in%", table, 
+    pos <- which(apply(sapply(x@itemInfo, "%in%", table, 
         simplify = TRUE), 1, any))
+      if(length(pos) == 0) pos <- 0 
       return(diff(x@data[pos]@p)==1)
     })
+
+
+###*******************************************************
+### subset, combine, duplicated, unique 
+
+### remember the sparce matrix is tored in transposed form (i <-> j)
+setMethod("[", signature(x = "itemMatrix", i = "ANY", j = "ANY", drop = "ANY"),
+    function(x, i, j, ..., drop) {
+    
+    if(missing(j) && missing(i)) return(x)
+    
+    ### drop is always false
+    drop <- FALSE 
+    
+    y <- x
+    
+    ### i and j are reversed!
+    if (missing(j)) {
+        y@data <- x@data[ ,i, ..., drop=drop]
+        return(y)
+    }
+        
+    ### transalate item labels to column numbers, if j is character
+    if (is.character(j)) 
+      j <- sort(unique(unlist(sapply(j, 
+        function(e) grep(e, as.character(itemInfo(x)$labels))))))
+    
+    if(missing(i)) {
+        y@data <- x@data[j, ..., drop=drop]
+        y@itemInfo <- x@itemInfo[j, , drop=FALSE]
+        return(y)
+    }
+
+    ### so we have i and j
+    y@data <- x@data[j, i, ..., drop=drop]
+    y@itemInfo <- x@itemInfo[j, , drop=FALSE]
+    return(y)
+    
+})
+
 
 
 setMethod("combine", signature(first = "itemMatrix"),
@@ -176,12 +168,22 @@ setMethod("combine", signature(first = "itemMatrix"),
        itemInfo = z[[1]]@itemInfo)
    })
 
+setMethod("duplicated", signature(x = "itemMatrix"),
+    function(x, incomparables = FALSE, ...) {
+    duplicated(LIST(x, decode = FALSE),
+      incomparables = incomparables, ...)
+    })
 
-setMethod("sample", signature(x = "itemMatrix"),
-    function(x, size, replace = FALSE, prob = NULL) {
-    index <- sample(c(1:length(x)), size = size, replace = replace, prob = prob)
-    x[index]
-})
+setMethod("unique", signature(x = "itemMatrix"),
+    function(x,  incomparables = FALSE, ...) {
+    x[!duplicated(x, incomparables = incomparables, ...)]
+    })
+
+setMethod("match", signature(x = "itemMatrix"),
+    function(x,  table, nomatch = NA, incomparables = FALSE) {
+    match(LIST(x, decode = FALSE), LIST(table, decode = FALSE), 
+      nomatch = nomatch, incomparables = incomparables)
+    })
 
 
 
@@ -242,7 +244,8 @@ setMethod("image", signature(x = "itemMatrix"),
 
 setMethod("itemFrequencyPlot", signature(x = "itemMatrix"),
     function(x, type = c("relative", "absolute"),  
-    	cex.names =  par("cex.axis"), ...) {
+      population = NULL,
+      cex.names =  par("cex.axis"), ...) {
       type <- match.arg(type)
      
       itemFrequency <- itemFrequency(x, type)
@@ -258,6 +261,10 @@ setMethod("itemFrequencyPlot", signature(x = "itemMatrix"),
 	ylab = paste("item frequency (", type, ")", sep = ""), 
 	...)
       
+      # add population means
+      if(!is.null(population))
+      lines(midpoints, itemFrequency(population))
+      
       # reset image margins
       par(mai = mai)
       
@@ -265,6 +272,64 @@ setMethod("itemFrequencyPlot", signature(x = "itemMatrix"),
       invisible(midpoints)
       })
 
+
+setMethod("itemFrequencyPlot", signature(x = "itemMatrix"),
+    function(x, type = c("relative", "absolute"),  
+      population = NULL, deviation = FALSE, horiz = FALSE,
+      cex.names =  par("cex.axis"), xlab = NULL, ylab = NULL, ...) {
+      
+      type <- match.arg(type)
+      
+      # force relative for deviation
+      if(deviation == TRUE) type <- "relative"
+    
+      # get frequencies
+      itemFrequency <- itemFrequency(x, type)
+      if(!is.null(population))
+      	population.itemFrequency <- itemFrequency(population, type)
+
+      # regular plot
+      if(deviation == FALSE) {
+          label <- paste("item frequency (", type, ")", sep="")
+      }else{
+
+          # show relative deviations instead of frequencies
+	  if(is.null(population)) 
+	  	stop("population needed for plotting deviations!")
+	  itemFrequency <- (itemFrequency - population.itemFrequency) / 
+	     population.itemFrequency
+          label <- paste("relative deviation from population", sep="")
+      }
+
+    
+      # make enough space for item labels
+      maxLabel <- max(strwidth(names(itemFrequency), units = "inches", 
+      	cex = cex.names))
+      op.mai <- par("mai")
+      if (horiz == FALSE) {
+      	par(mai = c(maxLabel+0.5, op.mai[-1]))
+        if(is.null(ylab)) ylab <- label	
+      }else{
+        par(mai = c(op.mai[1], maxLabel+0.5, op.mai[-c(1,2)]))
+        if(is.null(xlab)) xlab <- label
+      }
+      
+      midpoints <- barplot(itemFrequency, 
+        las = 2, cex.name = cex.names, horiz = horiz,
+	xlab = xlab, ylab = ylab, ...)
+      
+      # add population means
+      if(!is.null(population) && deviation == FALSE)
+        if(horiz == FALSE) lines(midpoints, population.itemFrequency)
+        else lines(population.itemFrequency, midpoints)
+      
+      
+      # reset image margins
+      par(mai = op.mai)
+      
+      # return mitpoints
+      invisible(midpoints)
+      })
 
 
 setMethod("summary", signature(object = "itemMatrix"),

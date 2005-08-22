@@ -20,11 +20,11 @@ apriori(data, parameter = NULL, appearance = NULL, control = NULL)
     \code{\link[arules:APparameter-class]{APparameter}} or named list.
     The default behavior is to mine rules with support 0.1, confidence
     0.8, and maxlen 5.}
-  \item{appearance}{Object of class
+  \item{appearance}{object of class
     \code{\link[arules:APappearance-class]{APappearance}} or named list.
     With this argument item appearance can be restricted.
     By default all items can appear unrestricted.}
-  \item{control}{Object of class
+  \item{control}{object of class
     \code{\link[arules:APcontrol-class]{APcontrol}} or named list.
     Controls the performance of the mining algorithm (item sorting, etc.)}
 }

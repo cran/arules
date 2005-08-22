@@ -4,7 +4,7 @@
 \alias{summary.itemMatrix-class}
 \alias{show,summary.itemMatrix-method}
 \alias{print,summary.itemMatrix-method}
-\alias{[,itemMatrix-method}
+%\alias{[,itemMatrix-method}
 %\alias{LIST,itemMatrix-method}
 %\alias{LIST}
 \alias{coerce,matrix,itemMatrix-method}
@@ -12,8 +12,6 @@
 \alias{coerce,itemMatrix,matrix-method}
 \alias{coerce,itemMatrix,dgCMatrix-method}
 \alias{coerce,itemMatrix,list-method}
-\alias{decode,itemMatrix-method}
-\alias{decode}
 \alias{dim,itemMatrix-method}
 %\alias{image,itemMatrix-method}
 \alias{\%in\%,itemMatrix-method}
@@ -31,7 +29,8 @@
 \alias{show,itemMatrix-method}
 \alias{summary,itemMatrix-method}
 %%% some additional stuff for dgCMatrix
-\alias{[,dgCMatrix-method}
+%\alias{[}
+%\alias{[,dgCMatrix-method}
 
 \title{Class ``itemMatrix'' --- Sparse Binary Matrix to Represent Sets
   of Items}
@@ -49,7 +48,8 @@
 \section{Slots}{
   \describe{
     \item{\code{data}:}{Object of class
-      \code{\link[Matrix:dgCMatrix-class]{dgCMatrix}} which stores 
+      \code{\link[Matrix:dgCMatrix-class]{dgCMatrix}} 
+      (from package \pkg{Matrix}) which stores 
       item occurrences in sparse representation.  Note that the 
       \code{dgCMatrix} is column-oriented and \code{itemMatrix} is
       row-oriented with each row representing an element (an itemset, a
@@ -76,11 +76,11 @@
 }
 \section{Methods}{
   \describe{
-    \item{[}{\code{signature(x = "itemMatrix")};
-      extracts parts of the \code{itemMatrix}.  The first argument
-      selects rows (e.g., transactions or rules) and the second argument
-      selects columns (items). 
-      Either argument can be omitted to select all rows or columns.}
+%    \item{[}{\code{signature(x = "itemMatrix")};
+%      extracts parts of the \code{itemMatrix}.  The first argument
+%      selects rows (e.g., transactions or rules) and the second argument
+%      selects columns (items). 
+%      Either argument can be omitted to select all rows or columns.}
 %    \item{LIST}{\code{signature(from = "itemMatrix")}:
 %      the internal method used for the coercion to \code{list}.
 %      It returns the object \code{from} 
@@ -99,11 +99,11 @@
       contains a transposed from of the itemMatrix.
     \item{coerce}{\code{signature(from = "itemMatrix", to = "matrix")}}
     \item{coerce}{\code{signature(from = "itemMatrix", to = "list")}}
-    \item{decode}{\code{signature(x = "itemMatrix")};
-      decodes the numeric items codes (column numbers in the itemMatrix)
-      given in argument \code{items} to the item names using the labels
-      stored in \code{x}.
-      \code{items} can be a vector or list.}
+%    \item{decode}{\code{signature(x = "itemMatrix")};
+%      decodes the numeric items codes (column numbers in the itemMatrix)
+%      given in argument \code{items} to the item names using the labels
+%      stored in \code{x}.
+%      \code{items} can be a vector or list.}
     \item{dim}{\code{signature(x = "itemMatrix")};
       returns the dimensions of the itemMatrix.}
 %    \item{image}{\code{signature(x = "itemMatrix")};
@@ -112,9 +112,9 @@
       against the item labels (and the additional information) for 
       each element (row) in the itemMatrix.}
     \item{itemLabels}{\code{signature(object = "itemMatrix")};
-      returns the item labels as a \code{character} vector.}
+      returns the item labels used for encoding as a character vector.}
     \item{itemLabels<-}{\code{signature(object = "itemMatrix")};
-      replaces the item labels.}
+      replaces the item labels used for encoding.}
     \item{itemInfo}{\code{signature(object = "itemMatrix")};
       returns the whole item information \code{data.frame} including
       labels.}
@@ -133,6 +133,7 @@
   }
 }
 \seealso{
+  \code{\link[Matrix]{dgCMatrix-class}} (from \pkg{Matrix}),
   \code{\link{transactions-class}},
   \code{\link{itemsets-class}},
   \code{\link{rules-class}}
@@ -148,5 +149,12 @@ length(i)
 
 ## Get first 5 elements (rows) of the itemMatrix as list.
 as(i[1:5], "list")
+
+## Get first 5 elements (rows) of the itemMatrix as matrix.
+as(i[1:5], "matrix")
+
+## Get first 5 elements (rows) of the itemMatrix as sparse dgCMatrix.
+##  Warning: for efficiency reasons, the dgCMatrix you get is transposed!
+as(i[1:5], "dgCMatrix")
 }
 \keyword{classes}

@@ -18,11 +18,6 @@ if(!isGeneric("all_confidence")) {
                function(x, ...) standardGeneric("all_confidence"))
 }
 
-if(!isGeneric("affinity")) {
-    setGeneric("affinity",
-               function(x) standardGeneric("affinity"))
-}
-
 if(!isGeneric("combine")) {
     setGeneric("combine",
                function(first, ...) standardGeneric("combine"))
@@ -30,13 +25,7 @@ if(!isGeneric("combine")) {
 
 if(!isGeneric("decode")) {
     setGeneric("decode",
-               function(x, ...) standardGeneric("decode"))
-}
-
-if(!isGeneric("dissimilarity")) {
-    setGeneric("dissimilarity",
-               function(x, y = NULL, method = NULL, args = NULL) 
-	       standardGeneric("dissimilarity"))
+               function(x, code, ...) standardGeneric("decode"))
 }
 
 if(!isGeneric("duplicated")) {
@@ -45,9 +34,9 @@ if(!isGeneric("duplicated")) {
 	       standardGeneric("duplicated"))
 }
 
-if(!isGeneric("hmap")) {
-  setGeneric("hmap",
-	     function(x, ...) standardGeneric("hmap"))
+if(!isGeneric("encode")) {
+    setGeneric("encode",
+               function(x, code, ...) standardGeneric("encode"))
 }
 
 if(!isGeneric("hyperlift")) {
@@ -63,6 +52,10 @@ if(!isGeneric("hyperconfidence")) {
 if(!isGeneric("inspect"))
     setGeneric("inspect",
                function(x, ...) standardGeneric("inspect"))
+
+if(!isGeneric("intersect"))
+    setGeneric("intersect",
+               function(x, y) standardGeneric("intersect"))
 
 if(!isGeneric("itemInfo")) {
     setGeneric("itemInfo",
@@ -105,6 +98,7 @@ if(!isGeneric("itemFrequencyPlot")) {
                function(x, ...) standardGeneric("itemFrequencyPlot"))
 }
 
+
 if(!isGeneric("labels")) {
     setGeneric("labels",
                function(object, ...) standardGeneric("labels"))
@@ -120,6 +114,12 @@ if(!isGeneric("lhs<-")) {
                function(x, value) standardGeneric("lhs<-"))
 }
 
+if(!isGeneric("match")) {
+    setGeneric("match",
+               function(x,  table, nomatch = NA, incomparables = FALSE) 
+	       standardGeneric("match"))
+}
+
 if(!isGeneric("quality")) {
     setGeneric("quality",
                function(x) standardGeneric("quality"))
@@ -128,6 +128,11 @@ if(!isGeneric("quality")) {
 if(!isGeneric("quality<-")) {
     setGeneric("quality<-",
                function(x, value) standardGeneric("quality<-"))
+}
+
+if(!isGeneric("recode")) {
+    setGeneric("recode",
+               function(x, code, ...) standardGeneric("recode"))
 }
 
 if(!isGeneric("rhs")) {
@@ -146,9 +151,19 @@ if(!isGeneric("ruleInduction")) {
 }
 
 if(!isGeneric("sample")) {
-    setGeneric("sample",
-               function(x, size, replace = FALSE, prob = NULL) 
-	       standardGeneric("sample"))
+  setGeneric("sample",
+      function(x, size, replace = FALSE, prob = NULL)
+      standardGeneric("sample"))
+}
+
+if(!isGeneric("setequal"))
+    setGeneric("setequal",
+               function(x, y) standardGeneric("setequal"))
+
+if(!isGeneric("support")) {
+    setGeneric("support",
+               function(x, transactions, ...) 
+	       standardGeneric("support"))
 }
 
 if(!isGeneric("size")) {
@@ -180,6 +195,10 @@ if(!isGeneric("transactionInfo<-")) {
                function(x, value) standardGeneric("transactionInfo<-"))
 }
 
+if(!isGeneric("union")) {
+    setGeneric("union",
+               function(x, y) standardGeneric("union"))
+}
 
 if(!isGeneric("unique")) {
     setGeneric("unique",

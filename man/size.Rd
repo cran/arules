@@ -3,6 +3,7 @@
 \alias{size,itemMatrix-method}
 \alias{size,itemsets-method}
 \alias{size,rules-method}
+\alias{size,tidLists-method}
 \title{Getting the Size of Each Element}
 \description{
   Provides the generic function \code{size} and S4 methods to get the
@@ -15,9 +16,10 @@
 }
 \usage{
 size(x)
-\S4method{size}{itemMatrix}(x)
-\S4method{size}{itemsets}(x)
-\S4method{size}{rules}(x)
+%\S4method{size}{itemMatrix}(x)
+%\S4method{size}{itemsets}(x)
+%\S4method{size}{rules}(x)
+%\S4method{size}{tidLists}(x)
 }
 \arguments{
   \item{x}{an object.}
@@ -25,8 +27,8 @@ size(x)
 \value{
   \code{size} returns a numeric vector of length \code{length(x)}.
   Each element is the size of the corresponding element (row in the
-  matrix; for rules it is the the sum of the elements in the RHS and the RHS) 
-  in object \code{x}.
+  matrix) in object \code{x}. For rules, \code{size} returns 
+  the sum of the number of elements in the RHS and the RHS.
 }
 \seealso{ 
   \code{\link{itemMatrix-class}},
@@ -34,6 +36,6 @@ size(x)
 }
 \examples{
 data("Adult_transactions")
-size(Adult_transactions)
+summary(size(Adult_transactions))
 }
-\keyword{methods}
+\keyword{attribute}

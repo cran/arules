@@ -23,10 +23,18 @@ setAs("rules", "data.frame",
       data.frame(rules = labels(from), from@quality)
     })
 
+###***********************************************
+### labels
+
 setMethod("labels", signature(object = "rules"),
     function(object) {
     paste(labels(object@lhs)$elements, " => ",
       labels(object@rhs)$elements, sep="")
+})
+
+setMethod("itemLabels", signature(object = "rules"),
+    function(object) {
+      itemLabels(lhs(object))
 })
 
 
@@ -76,25 +84,16 @@ setMethod("items", signature(x = "rules"),
 ###****************************************************
 ### subset, combine
 
-setMethod("[", signature(x = "rules"),
+setMethod("[", signature(x = "rules", i = "ANY", j = "ANY", drop = "ANY"),
     function(x, i, j, ..., drop)
     {
-    if (!missing(j)) stop("incorrect number of dimensions")
+    if (!missing(j)) stop("incorrect number of dimensions (j not possible)")
     if (missing(i)) return(x)
     y <- x
     slots <- intersect(slotNames(x), c("lhs", "rhs"))
     for (sl in slots) slot(y, sl) <- slot(x, sl)[i]
     y@quality <- x@quality[i,,drop=FALSE]
     return(y)
-    })
-
-
-setMethod("subset", signature(x = "rules"),
-    function(x, subset, ...) {
-    if (missing(subset)) return(x)
-    i <- eval(substitute(subset),c(x@quality, 
-	list(lhs=x@lhs,rhs=x@rhs))) 
-    x[i,]
     })
 
 
@@ -114,18 +113,33 @@ setMethod("combine", signature(first = "rules"),
       rhs = combine(first@rhs, as_list = rhs),
       quality = q)
     })
-
-setMethod("duplicated", signature(x = "rules"),
-    function(x, incomparables = FALSE, ...) {
+    
+### this utility function joins the lhs and rhs so it can be
+### used for duplicated, unique, etc.
+ .joinedList <- function(x) {
+    if (class(x) != "rules") return(NA)
+    
     tmp <- LIST(x@lhs, decode = FALSE)
     rhs <- LIST(x@rhs, decode = FALSE)
     
     for (i in 1:length(x)) 
-      tmp[[i]] <- c(tmp[[i]], rhs[[i]])
-    
-    duplicated(tmp, incomparables = incomparables, ...)
+      ### -> is used to distinguish between lhs and rhs
+      tmp[[i]] <- c(tmp[[i]], "->" , rhs[[i]])
+      tmp
+    }
+
+
+setMethod("duplicated", signature(x = "rules"),
+    function(x, incomparables = FALSE, ...) {
+    duplicated(.joinedList(x), incomparables = incomparables, ...)
     })
 
+
+setMethod("match", signature(x = "rules"),
+    function(x,  table, nomatch = NA, incomparables = FALSE) {
+    match(.joinedList(x), .joinedList(table),
+      nomatch = nomatch, incomparables = incomparables)
+    })
 
 
 ###************************************************

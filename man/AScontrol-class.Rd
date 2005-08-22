@@ -1,4 +1,4 @@
-\name{AScontrol-class}
+\name{AScontrol-classes}
 \docType{class}
 \alias{AScontrol-class}
 \alias{APcontrol-class}

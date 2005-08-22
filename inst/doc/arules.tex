@@ -13,6 +13,7 @@
 \newcommand{\pkg}[1]{\strong{#1}}
 \newcommand{\samp}[1]{`\texttt{#1}'}
 \newcommand{\proglang}[1]{\textsf{#1}}
+\newcommand{\set}[1]{\mathcal{#1}}
 
 \usepackage{Sweave}
 %% \VignetteIndexEntry{Data structures for association rules}
@@ -21,8 +22,8 @@
 \begin{document}
 %% ------------------------------------------------------------------
 %% ------------------------------------------------------------------
-\title{A Computational Environment for Mining Association Rules and
-  Frequent Item Sets}
+\title{\pkg{arules} -  A Computational Environment for Mining 
+    Association Rules and Frequent Item Sets}
 \author{Michael Hahsler and Bettina Gr{\"u}n and Kurt Hornik}
 \maketitle
 \sloppy
@@ -55,15 +56,20 @@ rules, \cite{arules:Agrawal+Imielinski+Swami:1993} introduced the
 problem of mining association rules from transaction data as follows.
 
 Let $I=\{i_1, i_2,\ldots,i_n\}$ be a set of $n$ binary attributes called
-\emph{items}.  Let $\mathcal{D} = \{t_1, t_2, \ldots, t_m\}$ be a set of
+\emph{items}.  Let $\set{D} = \{t_1, t_2, \ldots, t_m\}$ be a set of
 transactions called the \emph{database}.  Each transaction
-in~$\mathcal{D}$ contains a subset of the items in~$I$.
+in~$\set{D}$ contains a subset of the items in~$I$.
 
 A \emph{rule} is defined as an implication of the form $X \Rightarrow Y$
 where $X, Y \subseteq I$ and $X \cap Y = \emptyset$.  The sets of items
 (for short \emph{itemsets}) $X$ and $Y$ are called \emph{antecedent}
 (left-hand-side or LHS) and \emph{consequent} (right-hand-side or RHS)
 of the rule.
+
+For convenience we introduce 
+$\set{X} = \{X_1, X_2, \ldots, X_l\}$
+for sets of itemsets with length $l$.
+Analogous, we define $\set{R}$ for sets of rules.
 
 To select interesting rules from the set of all possible rules,
 constraints on various measures of significance and interest can be
@@ -143,7 +149,8 @@ The algorithms can be used to mine frequent itemsets, maximal frequent
 itemsets and closed frequent itemsets.  The implementation of Apriori
 can additionally be used to generate association rules.
 
-The \proglang{R} package \pkg{arules} presented in this paper provides
+The \proglang{R}~\citep{arules:R:2005} 
+package \pkg{arules} presented in this paper provides
 the infrastructure needed to create and manipulate input data sets for
 the mining algorithms and for analyzing the resulting itemsets and
 rules.  Since it is common to work with large sets of rules and
@@ -155,13 +162,21 @@ associations.
 
 The rest of the paper is organized as follows: In the next section, we
 give an overview of the data structure implemented in the package
-\pkg{arules}.  In Sections~\ref{sec:transactions} and
-\ref{sec:associations} we introduce the functionality of the classes to
+\pkg{arules}.  
+%In Sections~\ref{sec:transactions} and \ref{sec:associations} 
+In Section~\ref{sec:overview}
+we introduce the functionality of the classes to
 handle transaction data and associations.  In
 Section~\ref{sec:interfaces} we describe the way mining algorithms are
 interfaced in \pkg{arules} using the already implemented interfaces for
-Apriori and Eclat as examples.  We provide several examples in
-Sections~\ref{sec:example-screen} to \ref{sec:example-allconf}.  The
+Apriori and Eclat as examples.  
+In Section~\ref{sec:auxiliary} we present some auxiliary methods 
+for support counting, rule induction and sampling
+available in \pkg{arules}.
+We provide several examples in
+%Sections~\ref{sec:example-screen} to \ref{sec:example-allconf}.
+Section~\ref{sec:examples}.
+The
 first two examples show typical \proglang{R} sessions for preparing, 
 analyzing and
 manipulating a transaction data set, and for mining association rules.
@@ -180,16 +195,19 @@ structure is necessary which can deal in an efficient way with large
 amounts of sparse binary data.  The \proglang{S4} class structure 
 implemented in
 the package \pkg{arules} is presented in
-figure~\ref{fig:arules-classes}.
+Figure~\ref{fig:arules-classes}.
 
 \begin{figure}[tp]
 \centering
-\includegraphics[width=14cm]{arules-classes}
+\includegraphics[width=12cm]{arules-classes}
 \caption{UML class diagram of the \pkg{arules}
 package.\label{fig:arules-classes}}
 \end{figure}
 
-For input data the class \class{transactions} is provided.
+For input data the classes \class{transactions}
+and \class{tidLists} (transaction ID lists, an alternative
+way to represent transaction data)
+are provided.
 The output of the mining algorithms comprises the classes
 \class{itemsets} and \class{rules} representing a set of itemsets or
 a set of rules, respectively.
@@ -203,13 +221,6 @@ Items in \class{associations} and \class{transactions} are implemented
 by the \class{itemMatrix} class which provides a facade for the sparse
 matrix implementation \class{dgCMatrix} from package \pkg{Matrix}
 \citep{arules:Bates+Maechler:2005}.
-Objects of the \class{itemMatrix} class are not intended to be directly
-accessed by the end user of \pkg{arules}.  The interfaces of
-\class{associations} and \class{transactions} can be used without
-knowledge of how the internal representation of the data works.
-However, the data structure in \class{itemMatrix} or even the
-\class{dgCMatrix} can be directly accessed if necessary (e.g., to
-efficiently compute a distance matrix between itemsets for clustering).
 
 To control the behavior of the mining algorithms, the two classes
 \class{ASparameter} and \class{AScontrol} are used.  Since each
@@ -219,10 +230,167 @@ classes.  We used the prefix \class{AP} for Apriori and \class{EC} for
 Eclat.  In this way, it is easy to extend the control classes when
 interfacing a new algorithm.
 
+
+\subsection{Set representation\label{sec:setrepresentation}}
+From the definition of the association rule mining problem we saw that
+transactions are a set $\set{D}$ containing transactions, each
+transaction being an itemset.
+Very similar are sets of associations. A set of itemsets $\set{X}$ 
+contains itemsets and a set of rules $\set{R}$ contains tuples of itemsets,
+one for the LHS and on for the RHS of each rule.
+
+\begin{figure}[tp]
+\centering
+\includegraphics[width=6cm]{itemsetMatrix}
+\caption{Example of a set of itemsets represented as a 
+    binary incidence matrix.\label{fig:itemsetMatrix}}
+\end{figure}
+
+Sets of itemsets (including transactions) 
+can be represented as binary incidence matrices
+with columns equal to the number of different
+items and rows equal to the number of different itemsets. 
+The matrix entries represent the presence (1) or absence (0) of an item in a
+particular itemset.
+An example of a binary incidence matrix is shown in 
+Figure~\ref{fig:itemsetMatrix}.
+
+Since a typical frequent itemsets and transaction data 
+(e.g., supermarket transactions) only contains a small number of
+items compared to the total number of available items, the
+binary incidence matrix will
+in general be very sparse with many items and a very large number of
+rows.  A natural representation for such data is a sparse matrix
+format.  For our implementation we chose the \class{dgCMatrix} which is
+defined in the \proglang{R} package \pkg{Matrix} 
+implemented by~\cite{arules:Bates+Maechler:2005}. The \class{dgCMatrix}
+is a compressed, sparse, column-oriented matrix which contains the
+indices of the rows unequal to zero, the pointers to the initial indices
+of elements in each column and the non-zero elements of the matrix.
+Since the package \pkg{Matrix} does not provide efficient subset selection
+functionality which directly works on the \class{dgCMatrix} data structure, 
+we implemented a suitable function
+in \proglang{C} and interfaced it as the subset selection method (\code{[}).
+Despite the column orientation of the \class{dgCMatrix}, it is more
+convenient to work with incidence matrices which are row-oriented.  This
+makes the most important manipulation, e.g., selecting a subset of transactions
+from a data set for mining, more comfortable and efficient.  Therefore,
+we implemented the class \class{itemMatrix} providing a row-oriented
+facade to the \class{dgCMatrix} which stores a transposed incidence
+matrix.  At this level also the constraint that the incidence matrix is
+binary (and not real valued as the \class{dgCMatrix}) is enforced.
+The data structure of the \class{dgCMatrix} class is not intended to 
+be directly accessed by the end user of \pkg{arules}. The interfaces of
+\class{itemMatrix} can be used without
+knowledge of how the internal representation of the data works.
+However, if necessary, the \class{dgCMatrix} can be directly accessed 
+by developers to add functionality to \pkg{arules} 
+(e.g., to develop new types of associations or interest measures or to
+efficiently compute a distance matrix between itemsets for clustering).
+In this case, the \class{dgCMatrix} should be accessed using the 
+coercion mechanism from \class{itemMatrix} to \class{dgCMatrix} with \code{as}.
+
+In addition to the sparse matrix,
+\class{itemMatrix} stores item labels (e.g., name
+of the items) and handles the necessary mapping between the item label and the
+corresponding column number in the incidence matrix.  Optionally,
+\class{itemMatrix} can also store additional information on items. For
+example, the category hierarchy in a supermarket setting can be stored which
+enables the analyst to select only transactions (or as we later see also rules
+and itemsets) which contain items from a certain category (e.g., all dairy
+products). 
+
+For \class{itemMatrix}, basic matrix operations
+including \code{dim} and subset
+selection (\code{[}) are implemented.
+The first element of \code{dim} and \code{[} represents itemsets or 
+transactions and the second elements represents items. For example,
+on a transaction data set in variable \code{data} the subset selection 
+\samp{data[1:10, 16:20]} selects a matrix containing the 
+first 10 transactions and items 16 to 20.
+
+Since \class{itemMatrix} represents sets of itemsets,
+a \code{length} method is provided to get the number of
+itemsets in the set. Technically, \code{length} returns the number of
+rows in the matrix which is equal to the first element returned by \code{dim}.
+\pkg{arules} also provides set operations 
+including \code{union}, \code{intersect}
+and \code{setequal}. These and many other methods are only possible 
+if the used \class{itemMatrix} objects 
+are compatible, i.e., if matrices have the same number of 
+columns and the items are in the same order.
+
+With \code{combine}, several (compatible) \class{itemMatrix} objects
+can be combined. \code{duplicated},
+\code{unique} and \code{match} are also available.
+To get the actual number of items in the itemsets stored in
+the \class{itemMatrix}, the \code{size} method is used. 
+It returns a vector with
+the number of items (ones) for each element in the set 
+(row sum in the matrix).  
+Obtaining the sizes from the sparse representation is a very efficient 
+operation, since it can be calculated directly from the vector of column
+pointers in the \class{dgCMatrix}.
+For a purchase incidence matrix, \code{size} will produce 
+a vector of length of the
+number of transactions in the matrix and each element of the vector
+contains the number of items in the corresponding transaction.
+This information can be used, e.g., 
+to select or filter unusually long or short
+transactions. 
+
+The \code{itemFrequency} method calculates the frequency for each 
+item in a \class{itemMatrix}. Conceptually, the item frequencies
+are the column sums of the binary matrix. Technically, 
+column sums can be implemented
+for sparse representation efficiently by just
+tabulating the vector of row numbers of the non-zero elements in
+the \class{dgCMatrix}.
+Item frequencies can be used for many purposes. 
+For example, they are needed to compute interest measures.
+\code{itemFrequency} is also used by the method \code{itemFrequencyPlot} 
+to produce a bar plot of item count frequencies or support. 
+Such a plot gives a quick overview of a set of itemsets 
+and shows which are the most important 
+items in terms of occurrence frequency.
+
+
+Coercion from and to \class{matrix} and
+\class{list} primitives is provided where names and dimnames are
+used as item labels. 
+For the coercion form \class{itemMatrix} to \class{list} there 
+exist two possibilities.
+The usual coercion to \class{list} with the keyword \code{as} results in a
+list of vectors of character strings, each containing the item labels of the
+items in the corresponding row of the \class{itemMatrix}. The actual
+conversion is done by the method \code{LIST} with its default behavior
+(argument \code{decode} set to \code{TRUE}).
+If \code{LIST} is called with the argument \code{decode} set to \code{FALSE},
+the result is a list of integer vectors with column numbers 
+for items instead of the
+item labels. For many computations it is often useful to work with 
+such a list and later use the item column numbers to go back to the 
+original \class{itemMatrix} for,
+e.g., subsetting columns.
+For decoding items later, a \code{decode} method is also available.
+
+
+Finally, the \code{image} method can be used to produce a
+level plot of an \class{itemMatrix} which is useful for quick 
+visual inspection.  
+For transaction data sets (e.g., point-of-sale data) such a plot can be very
+helpful for checking if the data set contains structural changes (e.g.,
+items were not offered or out-of-stock during part of the observation
+period) or to find abnormal transactions (e.g., transactions which
+contain almost all items may point to recording problems).
+Spotting such problems in the data can be very helpful for data preparation.
+
+
+
 %% ------------------------------------------------------------------
 %% ------------------------------------------------------------------
 
-\section{Transaction data\label{sec:transactions}}
+\subsection{Transaction data\label{sec:transactions}}
 
 The main application of association rules is for market basket analysis
 where large transaction data sets are mined.  In this setting each
@@ -243,112 +411,50 @@ Further information on transactions (e.g., time, location), on the items
 (e.g., category, price) or on the customer (socio-demographic variables
 as age, gender, etc.)  might be available.
 
-For mining, the transaction data is first transformed into a binary
-purchase incidence matrix with columns equal to the number of different
-items and rows equal to the number of different transactions.  The
-matrix entries represent the presence (1) or absence (0) of an item in a
-particular transaction.  An example of a binary incidence matrix is
-depicted in Figure~\ref{fig:incidenceMatrix}.
-This format is often called the \emph{horizontal} database 
-layout~\citep{arules:Zaki:2000}.
-Alternatively, transaction data can be represented in a
-\emph{vertical} database
-layout in the form of \emph{transaction ID lists}~\citep{arules:Zaki:2000}.
-In this format for each item a list of IDs of the
-transactions the item is contained in is stored.
-Depending on the algorithm, one of the layouts is used for mining.
-In \pkg{arules} both layouts are implemented as the
-classes~\class{transactions} and \class{tidLists} and the data can be
-directly transformed from one format to the other.
-
-
 \begin{figure}[tp]
 \centering
-\includegraphics[width=5cm]{incidenceMatrix}
-\caption{Example of a transaction data set represented as a binary incidence matrix.\label{fig:incidenceMatrix}}
+\includegraphics[width=12cm]{transactionMatrix}
+\caption{Example of a set of transaction represented in 
+    (a) horizontal layout and (b) vertical layout.\label{fig:transactionMatrix}}
 \end{figure}
 
+For mining, the transaction data is first transformed into a binary purchase
+incidence matrix with columns equal to the number of different items and rows
+equal to the number of different transactions.  The matrix entries represent
+the presence (1) or absence (0) of an item in a particular transaction.  This
+format is often called the \emph{horizontal} database
+layout~\citep{arules:Zaki:2000}.  Alternatively, transaction data can be
+represented in a \emph{vertical} database layout in the form of
+\emph{transaction ID lists}~\citep{arules:Zaki:2000}.  In this format for each
+item a list of IDs of the transactions the item is contained in is stored.  An
+example of a transaction data set in horizontal and vertical layout is
+depicted in Figure~\ref{fig:transactionMatrix}.  Depending on the algorithm,
+one of the layouts is used for mining.  In \pkg{arules} both layouts are
+implemented as the classes~\class{transactions} and \class{tidLists}.
+Similar to \class{transactions} also \class{tidLists} uses a
+sparse representation to store its lists. 
+Objects of classes~\class{transactions} and \class{tidLists}
+can be directly converted into each other by coercion.
 
-Since a typical supermarket transaction only contains a small number of
-items compared to the total number of available items, the
-binary incidence matrix will
-in general be very sparse with many items and a very large number of
-transactions.  A natural representation for such data is a sparse matrix
-format.  For our implementation we chose the \class{dgCMatrix} which is
-defined in the \proglang{R} package \pkg{Matrix} 
-implemented by~\cite{arules:Bates+Maechler:2005}. The \class{dgCMatrix}
-is a compressed, sparse, column-oriented matrix which contains the
-indices of the rows unequal to zero, the pointers to the initial indices
-of elements in each column and the non-zero elements of the matrix.
-Since the package \pkg{Matrix} does not provide subset selection
-functionality for \class{dgCMatrix}, we implemented a suitable function
-in \proglang{C} and interfaced it as the subset selection method (\code{[}).
-Despite the column orientation of the \class{dgCMatrix}, it is more
-convenient to work with incidence matrices which are row-oriented.  This
-makes the most important manipulation, selecting a set of transactions
-from a data set for mining, more comfortable and efficient.  Therefore,
-we implemented the class \class{itemMatrix} providing a row-oriented
-facade to the \class{dgCMatrix} which stores a transposed incidence
-matrix.  At this level also the constraint that the incidence matrix is
-binary (and not real valued as the \class{dgCMatrix}) is enforced.
-Additionally, \class{itemMatrix} stores item labels (e.g., name
-of the items) and handles the necessary mapping between the item label and the
-corresponding column number in the incidence matrix.  Optionally,
-\class{itemMatrix} can also store additional information on items. For
-example, the category hierarchy in a supermarket setting can be stored which
-enables the analyst to select only transactions (or as we later see also rules
-and itemsets) which contain items from a certain category (e.g., all dairy
-products). 
+The class \class{transactions} directly extends \class{itemMatrix} and inherits
+its basic matrix and set functionality (e.g., subset selection, combine,
+union).  In addition, \class{transactions} has a slot to store further
+information for each transaction in form of a \class{data.frame}.  The slot can
+hold arbitrary named vectors with length equal to the number of stored
+transactions.  In \pkg{arules} the slot is currently used to store transaction
+IDs, however, it can also be used to store user IDs, revenue or profit, or
+other information on each transaction.  With this information subsets of
+transactions (e.g., only transactions of a certain user or exceeding a set
+profit) can be selected.
 
-For \class{itemMatrix}, basic methods including \code{dim}, subset
-selection (\code{[}) and coercion from and to \class{matrix} and
-\class{list} primitives are provided.  Additionally, methods specific to
-the needs for \pkg{arules} are implemented. Since \class{itemMatrix} is
-used to store a set of transactions or, more general, a set of itemsets,
-we implemented a \code{length} method which returns the number of
-elements in the set (i.e., the number of transactions or the number of
-itemsets in the set).  Technically, \code{length} returns the number of
-rows of the sparse matrix.  The \code{size} method returns a vector with
-the sizes of each element in the set (row in the matrix).  For example,
-for a purchase incidence matrix we will get a vector of length of the
-number of transactions in the matrix and each element of the vector
-contains the size (number of items) of the corresponding transaction.
-This information can be used to select or filter unusually long or short
-transactions.  Finally, an \code{image} method can be used to produce a
-level plot of the binary matrix useful for quick visual inspection.  For
-transaction data sets (e.g., point-of-sale data) a plot can be very
-helpful for checking if the data set contains structural changes (e.g.,
-items were not offered or out-of-stock during part of the observation
-period) or to find abnormal transactions (e.g., transactions which
-contain almost all items may point to recording problems).  Spotting
-such problems can be very helpful for data preparation.
-
-The class \class{transactions} directly extends \class{itemMatrix}
-and inherits its basic matrix functionality (e.g., subset selection).
-In addition, \class{transactions} has 
-a slot to store additional information for each
-transaction in form of a \class{data.frame}.
-The slot can hold arbitrary named vectors with length equal to the
-number of stored transactions.
-In \pkg{arules} the slot is currently used to store transaction IDs,
-however, it can easily be used to store user IDs, revenue or profit,
-or other information on each transaction.
-With this information subsets of transactions
-(e.g., only transactions of a certain user or exceeding a set profit)
-can be selected.
-Objects of class \class{transactions} can be easily 
-created by coercion from \class{matrix} or \class{list}.
-If names are available in these data structures,
-they are used as item labels or transaction IDs accordingly. 
-To import data from a file, the \code{read.transactions} function is
-provided. This function 
-reads files structured as shown above and also the
-very common format with 
-one line per transaction
-and the items separated by a predefined character.
-Finally, the method \code{inspect} can be used to 
-inspect transactions (e.g., an interesting transaction selected
-with subset selection).
+Objects of class \class{transactions} can be easily created by coercion from
+\class{matrix} or \class{list}.  If names or dimnames are available in these
+data structures, they are used as item labels or transaction IDs accordingly.
+To import data from a file, the \code{read.transactions} function is provided.
+This function reads files structured as shown above and also the very common
+format with one line per transaction and the items separated by a predefined
+character.  Finally, the method \code{inspect} can be used to inspect
+transactions (e.g., an interesting transaction selected with subset selection).
 
 Another important application of mining association rules has been proposed by
 \cite{arules:Piatetsky-Shapiro:1991} and \cite{arules:Srikant+Agrawal:1996} for
@@ -382,43 +488,49 @@ Section~\ref{sec:example-screen}.
 
 %% ------------------------------------------------------------------
 %% ------------------------------------------------------------------
-\section{Sets of itemsets and sets of rules\label{sec:associations}}
+\subsection{Associations: itemsets and sets of rules\label{sec:associations}}
 
 The result of mining transaction data in \pkg{arules} are
 \class{associations.} 
 Conceptually, associations are sets of 
-objects. Each object describes the relationship between some items (e.g., 
-an itemset or a rule) and
+objects denoted by $\set{X} = \{X_1, X_2, \ldots, X_l\}$. 
+Each object in the set describes the relationship between some items (e.g., 
+as an itemset or a rule) and
 has values for different measures of quality assigned.
 Such quality measures can be measures of significance (e.g., support) 
 or measures of interest (e.g., confidence, lift)
 or other measures (e.g., revenue covered by the association).
 
-All association types have a common interface suitable for set operations.
-Methods for subset extraction (\code{[} and the \code{subset} method), 
-getting the number of elements in the set with \code{length}, 
-and sorting the set using the values of different quality measures 
-(method \code{SORT}) are available.
-A \code{summary} method produces a short overview of the set
-and with \code{inspect} individual associations can be inspected.
+All types of association have a common interface in \pkg{arules} comprising
+the following methods:
+\begin{itemize}
+\item A \code{summary} method to produces a short overview of the set and
+\code{inspect} method to display individual associations,
+\item a \code{length} method for getting the number of elements in the set,
+\item sorting the set using the values of different quality measures
+	(\code{SORT}), 
+\item subset extraction (\code{[} and the \code{subset} method),
+\item set operations (\code{union}, \code{intersect} and \code{setequal})
+\item handling of duplicated elements and matching
+	(\code{duplicated}, \code{unique} and \code{match}).
+\end{itemize}
 
-
-In \pkg{arules} currently
+Currently implemented association in \pkg{arules} are
 sets of itemsets (e.g., used for frequent itemsets of their 
 closed or maximal subset) and
-sets of rules (e.g., association rules) are implemented as associations.  
-Both itemsets and rules directly extend the
-virtual class \class{associations}.
+sets of rules (e.g., association rules).
+Both classes, \class{itemsets} and \class{rules}, directly extend the
+virtual class \class{associations} and provide the interface described above.
+
 Class \class{itemsets} contains one \class{itemMatrix} object to store
 the items as a binary matrix where each row in the matrix represents an
 itemset. In addition, it may contain
-transaction ID lists as an object of class \class{tidLists} 
-which is implemented as a
-sparse matrix (reusing \class{itemMatrix}).  
-When representing transactions, \class{tidLists}
-stores for each item a transaciton list. Here
+transaction ID lists as an object of class \class{tidLists}. 
+Note that when representing transactions, \class{tidLists}
+stores for each item a transaction list, but here
 it stores for each itemset a list of transaction IDs in which the itemset
 appears. Such lists are currently only returned by \code{eclat}.
+
 Class \class{rules} consists of two \class{itemMatrix} objects
 representing the left-hand-side (LHS) and the right-hand-side (RHS) of
 the rules, respectively.  
@@ -436,7 +548,8 @@ columns with new quality measures can be added.  These new measures can
 then be used to sort or select associations using the \code{SORT} or the
 \code{subset} methods.  Adding a new type of associations to
 \pkg{arules} is easy as well.  One has only to implement a new class
-extending the virtual \class{associations} class.
+extending the virtual \class{associations} class and provide the
+interface described above.
 
 %% ------------------------------------------------------------------
 %% ------------------------------------------------------------------
@@ -451,13 +564,6 @@ called directly from \proglang{R} by the functions \code{apriori} and
 the \proglang{C} code and back without writing to external files.
 The implementations can mine association rules, frequent itemsets,
 and closed and maximal frequent itemsets. 
-
-
-%% <<apriori>>=
-%% library(arules)
-%% args(apriori)
-%% args(eclat)
-%% @
 
 The input format of the data for the \code{apriori} and
 \code{eclat} functions is
@@ -521,11 +627,212 @@ The source code is available on the internet and can be interfaced
 in the future for \pkg{arules}. 
 
 
+\section{Auxiliary methods \label{sec:auxiliary}}
+
+In \pkg{arules} several helpful methods are implemented for
+support counting, rule induction, sampling, etc.
+In the following we will discuss some of these methods.
+
+\subsection{Counting support for itemsets\label{sec:counting}}
+Normally, itemset support is counted during mining the database
+with a set minimum support.
+During this process all frequent itemsets plus some infrequent candidate
+itemsets are counted (or support is determined by other means.
+This procedure might take 
+some time, especially for low minimum support values. 
+
+If only the support information for a single or a few itemsets is needed,
+we might not want to mine the database for all frequent itemsets. 
+We also do not know in advance how high (or low) to set the minimum support to
+still get the support information for the itemset in question.
+
+For this problem, \pkg{arules} contains the method \code{support}
+which determines the support for a set of given sets of items
+(as an \class{itemMatrix}) by means of transaction ID set 
+intersection (using \class{tidLists}).
+Transaction ID set intersection is used by several fast mining algorithms 
+(e.g., by Eclat~\citep{arules:Zaki+Parthasarathy+Ogihara+Li:1997}). 
+The support of an itemset is determined by intersecting
+the transaction ID sets of its subsets. In the simplest case 
+the transaction IDs for all items which occur in an itemset are intersected.
+The support count is then the size of the intersection set.
+
+In addition to determining the support of a few itemsets without mining all
+frequent itemsets, \code{support} is also useful for finding 
+the support of infrequent itemsets with a support so low that mining
+is infeasible due to combinatorial explosion.
+
+
+\subsection{Rule induction\label{sec:induction}}
+A part of the association rule mining problem is the generation (or induction)
+of a set of rules~$\set{R}$ from a set of frequent itemsets~$\set{X}$. 
+The implementation of the
+Apriori algorithm used in \pkg{arules} already contains a rule induction engine
+and returns per default the set of association rules 
+of the form $X \Rightarrow Y$ which satisfy given minimum support and
+minimum confidence.
+Following the definition of \cite{arules:Agrawal+Imielinski+Swami:1993} 
+$Y$ is restricted to single items. 
+
+In some cases it is necessary to separate mining itemsets and 
+generating rules from itemsets. For example, if only rules stemming 
+from a subset of all frequent itemsets are interesting for the user.
+The Apriori implementation efficiently generates rules by 
+reusing the data structures built during mining the frequent itemsets.
+However, if Apriori is used to only return itemsets or Eclat or
+some other algorithm is used to mine itemsets, 
+the data structure needed for rule induction is lost.
+The complete set of frequent itemsets contains all information needed to
+induce association rules, since the support information for all
+frequent itemsets and its subsets (which are also frequent) is available.
+However, for efficient induction, a suitable data structure which allows fast 
+look-ups of support values, has to be rebuilt. 
+
+If rules need to be induced from an arbitrary set of itemsets, 
+not all needed support information to calculate
+confidence is available.
+For example, if all available information is 
+a itemset containing  five items and we want to induce rules,
+we need the support of the itemset (which we might know), but 
+also the support of
+all subsets of length four.
+The missing support information has to be counted from the 
+database. If we want to induce rules efficiently for 
+a given set of itemsets, we also have to store support values in
+a suitable data structure to avoid counting itemsets more than once.
+
+The method \code{ruleInduction} provided in \pkg{arules}
+reuses the 
+counting mechanism, the data structure of the 
+rule induction engine of the 
+\proglang{C} implementation of Apriori to induce
+rules for a given confidence from an arbitrary
+set of itemsets $\set{X}$ in 
+the following way:
+\begin{enumerate}
+\item Reduce the database to only the items which occur in $\set{X}$,
+\item determine the lowest support of an itemset in $\set{X}$,
+\item reuse the implementation of Apriori to
+    mine the set of all rules $\set{R}$ from the reduced database 
+    using the given confidence 
+    and the lowest itemset support found above,
+\item remove the rules from $\set{R}$ which can not be generated from the 
+    itemsets in $\set{X}$.
+\end{enumerate}
+
+Most time is spent on the rule filtering step since here 
+the set of items in each mined rule in $\set{R}$ has to be matched 
+against the items in each itemset in $\set{X}$. 
+However, if only a small number of distinct items occurs in $\set{X}$,
+\code{ruleInduction} is reasonably fast.
+
+Alternatively, the appearance of items in rules can be directly controlled
+with the argument \code{appearance} for 
+Apriori~\citep[see][]{arules:Borgelt:2004} which might be faster in some cases. 
+
+
+%\subsection{Other interest measures}
+
+\subsection{Sampling from transactions\label{sec:sample}}
+Taking samples from large databases for mining is a
+powerful technique. This technique is especially useful if the 
+original database does not fit into main memory, but the sample does.
+However, even if the database fists into main memory, sampling can provide
+an enormous speed-up for mining at the cost of only little 
+degradation of accuracy.
+
+\cite{arules:Mannila+Toivonen+Verkamo:1994}
+proposed sampling with replacement for association rule mining
+and quantify the estimation error due to sampling.
+Using Chernov bounds on the binomial distribution (the number of
+transactions which contains a given itemset in a sample),
+the authors argue that in theory even relatively small samples 
+should provide good estimates for support.
+
+\cite{arules:Zaki+Parthasarathy+Li+Ogihara:1997} 
+built upon the theoretic work by \cite{arules:Mannila+Toivonen+Verkamo:1994}
+and show that for an itemset $X$ 
+with support $\tau = \mathrm{supp}(X)$
+and for an acceptable relative error of support $\epsilon$
+(an accuracy of $1 - \epsilon$)
+at a given confidence level $1-c$,
+the needed sample size $n$ can 
+be computed by
+
+\begin{equation}
+n = \frac{-2\mathrm{ln}(c)}{\tau\epsilon^2}.
+\label{equ:samplesize}
+\end{equation}
+
+Depending on its support, for each 
+itemset a different sample size
+is appropriate.  
+As a heuristic, the authors suggest to use the user specified minimum
+support threshold for $\tau$.
+This means that for itemsets close to minimum support, the given
+error and confidence level hold while for more frequent itemsets the
+error rate will be less. However, with this heuristic the error rate for
+itemsets below minimum support can exceed $\epsilon$ at the given 
+confidence level and thus some infrequent itemset might appear 
+as frequent in the sample.
+
+\cite{arules:Zaki+Parthasarathy+Li+Ogihara:1997} 
+also evaluated 
+sampling in practice on several data sets and conclude that 
+sampling not only speeds mining up considerably, but also
+the errors are considerably smaller than theoretically obtained by 
+Chernov bounds and thus samples smaller than obtained by
+formula~\ref{equ:samplesize} are often sufficient.
+
+Another way to obtain the required sample size 
+for association rule mining is progressive 
+sampling~\citep{arules:Parthasarathy:2002}.
+This approach starts with a small sample and uses progressively larger 
+samples until model accuracy does not improve significantly anymore. 
+\cite{arules:Parthasarathy:2002} defines a proxy for 
+model accuracy improvement by using a similarity measure between two
+sets of associations. The idea is that 
+since larger samples will produce more accurate results, the
+similarity between two sets of associations of two consecutive samples
+is low if accuracy improvements are high and increases with
+decreasing accuracy improvements.
+Thus increasing sample size can be stopped if the similarity
+between consecutive samples reaches a ``plateau.'' 
+
+\cite{arules:Toivonen:1996} presents an application of sampling to reduce
+the needed I/O overhead for very large databases which do not fit into 
+main memory.
+The idea is to use a random sample from the data base to mine
+frequent itemsets at a support threshold below the set minimum support.
+The support of these itemsets is then counted in the whole database 
+and the infrequent itemsets are discarded. 
+If the support threshold to mine the sample is picked low enough, 
+almost all frequent itemsets and their support will be found
+in one pass over the large database.
+
+In \pkg{arules} sampling is implemented by the method \code{sample}
+which provides all capabilities of the standard sampling method in \proglang{R}
+(e.g., sampling with or without replacement and probability weights).
+
+
+%\subsection{Random transactions}
+%The function \code{random.transactions} can be used to create a random 
+%transaction data set of given size and with given marginal probabilities 
+%for the items.
+%Each transaction is the result of one independent Bernoulli trial for each 
+%item resulting in a data set 
+%which only contains noise and no structure.
+%Such data sets can be
+%used to test how well interest measures are able to suppress noise.
+
 %% ------------------------------------------------------------------
 %% ------------------------------------------------------------------
 
+\section{Examples\label{sec:examples}}
+In this section we show the basic functionality of arules with some examples.
 
-\section{Example 1: Analyzing and preparing a data set \label{sec:example-screen}}
+\subsection{Example 1: Analyzing and preparing a transaction 
+data set \label{sec:example-screen}}
 
 In this example, 
 we show how a data set can be analyzed and manipulated
@@ -538,7 +845,7 @@ we look at the \code{Epub} transaction data contained in
 package \pkg{arules}.  This data set contains downloads of documents
 from the Electronic Publication platform of the Vienna University of
 Economics and Business Administration available via
-\url{http://epub.wu-wien.ac.at} from January 2003 to April 2005.
+\url{http://epub.wu-wien.ac.at} from January 2003 to August 2005.
 
 First, we load \pkg{arules} and the data set.
 
@@ -549,21 +856,25 @@ First, we load \pkg{arules} and the data set.
 \begin{Soutput}
 Loading required package: stats4
 Loading required package: Matrix
+
 \end{Soutput}
+\end{Schunk}
+
+\begin{Schunk}
 \begin{Sinput}
 > data("Epub")
 > Epub
 \end{Sinput}
 \begin{Soutput}
 transactions in sparse format with
- 2771 transactions (rows) and
- 419 items (columns)
+ 3307 transactions (rows) and
+ 436 items (columns)
 \end{Soutput}
 \end{Schunk}
 
-We see that the data set consists of 2771 transactions
-and is represented as a sparse matrix with 2771 rows
-and 419 columns which represent the items. 
+We see that the data set consists of 3307 transactions
+and is represented as a sparse matrix with 3307 rows
+and 436 columns which represent the items. 
 Next, we use the summary method to get more information about the 
 data set.
 
@@ -573,29 +884,27 @@ data set.
 \end{Sinput}
 \begin{Soutput}
 transactions as itemMatrix in sparse format with
- 2771 rows (elements/itemsets/transactions) and
- 419 columns (items)
+ 3307 rows (elements/itemsets/transactions) and
+ 436 columns (items)
 
 most frequent items:
-epub-wu-01_11d epub-wu-01_4c6 epub-wu-01_2cd  epub-wu-01_71 epub-wu-01_364 
-           177            100             90             90             89 
-       (Other) 
-          4436 
+doc_11d doc_4c6 doc_2cd  doc_71 doc_24e (Other) 
+    194     115     106     102      93    5323 
 
 element (itemset/transaction) length distribution:
    1    2    3    4    5    6    7    8    9   10   11   12   13   14   15   16 
-1976  411  164   78   43   20   13   12   10    5    7    4    4    2    1    3 
-  17   18   19   20   22   24   25   28   34   38   74 
-   2    2    5    2    1    1    1    1    1    1    1 
+2359  491  201   95   46   24   17   12   11    7    9    4    4    3    1    3 
+  17   18   19   20   22   24   25   28   34   38   74   79 
+   2    3    5    2    1    1    1    1    1    1    1    1 
 
    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-  1.000   1.000   1.000   1.798   2.000  74.000 
+  1.000   1.000   1.000   1.794   2.000  79.000 
 
 includes extended transaction information - examples:
-                     transactionIDs           TimeStamp
-1 epub-wu-01_session4795-1041447099 2003-01-01 19:59:00
-2 epub-wu-01_session4797-1041486295 2003-01-02 06:46:01
-3 epub-wu-01_session479a-1041497371 2003-01-02 09:50:38
+  transactionIDs           TimeStamp
+1   session_4795 2003-01-01 19:59:00
+2   session_4797 2003-01-02 06:46:01
+3   session_479a 2003-01-02 09:50:38
 \end{Soutput}
 \end{Schunk}
 
@@ -616,7 +925,7 @@ data set.
 \begin{Soutput}
 year
 2003 2004 2005 
- 988 1375  408 
+ 988 1375  944 
 
 \end{Soutput}
 \end{Schunk}
@@ -626,6 +935,7 @@ in the data set we have 988 transactions.
 We can select the corresponding transactions and inspect the structure
 using a level-plot. 
 
+%%% lattice image returnes an object of class "trellis"
 \begin{Schunk}
 \begin{Sinput}
 > Epub_2003 <- Epub[year == "2003"]
@@ -638,9 +948,7 @@ using a level-plot.
 > image(Epub_2003)
 \end{Sinput}
 \end{Schunk}
-\begin{center}
-\includegraphics[width=8cm]{arules-epub_image}
-\end{center}
+\includegraphics{arules-006}
 
 The plot is a direct visualization of the binary incidence matrix where
 the the dark dots represent the ones in the matrix.  From the plot we
@@ -661,10 +969,10 @@ transactions (containing more than 20 items).
 > transactionInfo(Epub_2003[size(Epub_2003) > 20])
 \end{Sinput}
 \begin{Soutput}
-                       transactionIDs           TimeStamp
-301 epub-wu-01_session56e2-1051611211 2003-04-29 12:30:38
-580 epub-wu-01_session6308-1061133365 2003-08-17 17:16:12
-896 epub-wu-01_session72dc-1072722731 2003-12-29 19:35:35
+    transactionIDs           TimeStamp
+301   session_56e2 2003-04-29 12:30:38
+580   session_6308 2003-08-17 17:16:12
+896   session_72dc 2003-12-29 19:35:35
 
 \end{Soutput}
 \end{Schunk}
@@ -683,14 +991,14 @@ the first 5 transactions in the subset for 2003.
 > inspect(Epub_2003[1:5])
 \end{Sinput}
 \begin{Soutput}
-  items                               transactionIDs           TimeStamp
-1 {epub-wu-01_154} epub-wu-01_session4795-1041447099 2003-01-01 19:59:00
-2 {epub-wu-01_3d6} epub-wu-01_session4797-1041486295 2003-01-02 06:46:01
-3 {epub-wu-01_16f} epub-wu-01_session479a-1041497371 2003-01-02 09:50:38
-4 {epub-wu-01_f4,                                                       
-   epub-wu-01_11d,                                                      
-   epub-wu-01_1a7} epub-wu-01_session47b7-1041526514 2003-01-02 17:55:50
-5 {epub-wu-01_83}  epub-wu-01_session47bb-1041535625 2003-01-02 20:27:44
+  items     transactionIDs           TimeStamp
+1 {doc_154}   session_4795 2003-01-01 19:59:00
+2 {doc_3d6}   session_4797 2003-01-02 06:46:01
+3 {doc_16f}   session_479a 2003-01-02 09:50:38
+4 {doc_f4,                                    
+   doc_11d,                                   
+   doc_1a7}   session_47b7 2003-01-02 17:55:50
+5 {doc_83}    session_47bb 2003-01-02 20:27:44
 
 \end{Soutput}
 \end{Schunk}
@@ -703,20 +1011,20 @@ For further inspection transactions can be converted into a list with:
 > as(Epub_2003[1:5], "list")
 \end{Sinput}
 \begin{Soutput}
-$"epub-wu-01_session4795-1041447099"
-[1] "epub-wu-01_154"
+$session_4795
+[1] "doc_154"
 
-$"epub-wu-01_session4797-1041486295"
-[1] "epub-wu-01_3d6"
+$session_4797
+[1] "doc_3d6"
 
-$"epub-wu-01_session479a-1041497371"
-[1] "epub-wu-01_16f"
+$session_479a
+[1] "doc_16f"
 
-$"epub-wu-01_session47b7-1041526514"
-[1] "epub-wu-01_f4"  "epub-wu-01_11d" "epub-wu-01_1a7"
+$session_47b7
+[1] "doc_f4"  "doc_11d" "doc_1a7"
 
-$"epub-wu-01_session47bb-1041535625"
-[1] "epub-wu-01_83"
+$session_47bb
+[1] "doc_83"
 
 
 \end{Soutput}
@@ -732,8 +1040,8 @@ transaction ID list in vertical layout using coercion.
 \end{Sinput}
 \begin{Soutput}
 tidLists in sparse format for
- 419 items/itemsets (rows) and
- 2771 transactions (columns)
+ 436 items/itemsets (rows) and
+ 3307 transactions (columns)
 
 \end{Soutput}
 \end{Schunk}
@@ -747,32 +1055,23 @@ can be used.
 > as(Epub_tidLists[1:3], "list")
 \end{Sinput}
 \begin{Soutput}
-$"epub-wu-01_154"
-[1] "epub-wu-01_session4795-1041447099" "epub-wu-01_session6082-1058883924"
-[3] "epub-wu-01_session60dd-1059130239" "epub-wu-01_session67db-1065044430"
-[5] "epub-wu-01_session769c-1075191357" "epub-wu-01_session7ee3-1079450030"
+$doc_154
+[1] "session_4795" "session_6082" "session_60dd" "session_67db" "session_769c"
+[6] "session_7ee3" "session_bd9d" "session_c591" "session_ce9f"
 
-$"epub-wu-01_3d6"
- [1] "epub-wu-01_session4797-1041486295" "epub-wu-01_session4893-1042136277"
- [3] "epub-wu-01_session48f4-1042453749" "epub-wu-01_session4ca3-1044889013"
- [5] "epub-wu-01_session52c6-1049273642" "epub-wu-01_session5712-1051701668"
- [7] "epub-wu-01_session58e3-1052992410" "epub-wu-01_session5984-1053467491"
- [9] "epub-wu-01_session5b20-1054675502" "epub-wu-01_session5c20-1055421043"
-[11] "epub-wu-01_session5dc0-1056639134" "epub-wu-01_session5eac-1057261298"
-[13] "epub-wu-01_session6599-1063473887" "epub-wu-01_session673d-1064583856"
-[15] "epub-wu-01_session683e-1065381126" "epub-wu-01_session6f2f-1069854482"
-[17] "epub-wu-01_session708a-1070754608" "epub-wu-01_session7a0c-1076882429"
-[19] "epub-wu-01_session7de5-1078926808" "epub-wu-01_session89db-1084827080"
-[21] "epub-wu-01_session9227-1089148583" "epub-wu-01_session9941-1094031566"
-[23] "epub-wu-01_sessiona4d7-1100508833" "epub-wu-01_sessiona8c0-1102612273"
-[25] "wu01_session4450a-1045050224"      "wu01_session4a129-1057762457"     
-[27] "wu01_session4d25a-1066490150"     
+$doc_3d6
+ [1] "session_4797"    "session_4893"    "session_48f4"    "session_4ca3"   
+ [5] "session_wu4450a" "session_52c6"    "session_5712"    "session_58e3"   
+ [9] "session_5984"    "session_5b20"    "session_5c20"    "session_5dc0"   
+[13] "session_5eac"    "session_wu4a129" "session_6599"    "session_673d"   
+[17] "session_683e"    "session_wu4d25a" "session_6f2f"    "session_708a"   
+[21] "session_7a0c"    "session_7de5"    "session_89db"    "session_9227"   
+[25] "session_9941"    "session_a4d7"    "session_a8c0"    "session_c3c4"   
+[29] "session_c546"    "session_ca44"   
 
-$"epub-wu-01_16f"
-[1] "epub-wu-01_session479a-1041497371" "epub-wu-01_session56e2-1051611211"
-[3] "epub-wu-01_session630c-1061175093" "epub-wu-01_session72dc-1072722731"
-[5] "epub-wu-01_session8b3e-1085510896" "epub-wu-01_session91ab-1088878266"
-[7] "epub-wu-01_sessiona202-1098976943" "epub-wu-01_sessiona7b9-1101827029"
+$doc_16f
+[1] "session_479a" "session_56e2" "session_630c" "session_72dc" "session_8b3e"
+[6] "session_91ab" "session_a202" "session_a7b9"
 
 
 \end{Soutput}
@@ -783,8 +1082,10 @@ which is a vector of all transactions it occurs in.
 Transaction ID list can be directly used as input for mining algorithms which 
 use such a vertical database layout to mine associations.
 
+In the next example, we will see how a data set is created and
+rules are mined.
 
-\section{Example 2: Preparing and mining a 
+\subsection{Example 2: Preparing and mining a 
 questionnaire data set\label{sec:example-adult}}
 
 As a second example, 
@@ -797,7 +1098,7 @@ the U.S. census bureau database and contains 48842 instances with 14
 attributes like age, work class, education, etc. 
 In the original applications of the data, the
 attributes were used to predict the income level of individuals.
-We added the attribute income with levels \code{Low} and \code{High},
+We added the attribute income with levels \code{small} and \code{large},
 representing an income of $\le \$50,000$ and $> \$50,000$, respectively.
 This data is included in \pkg{arules} 
 as the data set \code{Adult}.
@@ -805,7 +1106,6 @@ as the data set \code{Adult}.
 
 \begin{Schunk}
 \begin{Sinput}
-> library("arules")
 > data("Adult")
 > dim(Adult)
 \end{Sinput}
@@ -935,6 +1235,18 @@ were used to create each binary item. In the first example we see that
 the item with label \texttt{age = middle-aged} was generated by variable
 \texttt{age} and level \texttt{middle-aged}.  
 
+To see which items are important in the data set we can use the 
+\code{itemFrequencyPlot}. To reduce the number of items, we only plot
+the item frequency for items with a support greater than 10\%.
+
+\begin{Schunk}
+\begin{Sinput}
+> itemFrequencyPlot(Adult_transactions[, itemFrequency(Adult_transactions) > 
++     0.1])
+\end{Sinput}
+\end{Schunk}
+\includegraphics{arules-itemFrequencyPlot}
+
 Next, we call the function
 \code{apriori} to find all rules (the default association type for
 \code{apriori}) with a minimum support of 0.5\% and a confidence of 0.7.
@@ -960,10 +1272,10 @@ version 4.21 (2004.05.09)        (c) 1996-2004   Christian Borgelt
 set item appearances ...[0 item(s)] done [0.00s].
 set transactions ...[115 item(s), 48842 transaction(s)] done [0.11s].
 sorting and recoding items ... [71 item(s)] done [0.01s].
-creating transaction tree ... done [0.13s].
+creating transaction tree ... done [0.14s].
 checking subsets of size 1 2 3 4 5 done [0.95s].
-writing ... [114922 rule(s)] done [0.06s].
-creating S4 object  ... done [0.59s].
+writing ... [114922 rule(s)] done [0.04s].
+creating S4 object  ... done [0.29s].
 \end{Soutput}
 \begin{Sinput}
 > rules
@@ -991,7 +1303,7 @@ the output of the \proglang{C} implementation of the algorithm with timing
 information is displayed.
 
 The result of the mining algorithm is a set of 114922
-rules.  For an overview of the mined rules the function \code{summary}
+rules.  For an overview of the mined rules the method \code{summary}
 can be used.  It shows the number of rules, the most frequent items
 contained in the left-hand-side and the right-hand-side and their
 respective length distributions and summary statistics for the quality
@@ -1023,7 +1335,7 @@ summary of quality measures:
 \end{Schunk}
 
 As typical for association rule mining, the number of found rules is
-huge.  To analyze these rules, for example, the function \code{subset}
+huge.  To analyze these rules, for example, the method \code{subset}
 can be used to produce a subset of rules which contain items which
 resulted form the variable \code{income} in the right-hand-side of the
 rule and the \code{lift} measure exceeds $1.4$.
@@ -1064,7 +1376,7 @@ We can then inspect the three rules with the highest lift value (using the
 Using such subset selection and sorting a set of associations can be
 analyzed even if it is huge.
 
-\section{Example 3: Extending arules with a new interest measure\label{sec:example-allconf}}
+\subsection{Example 3: Extending arules with a new interest measure\label{sec:example-allconf}}
 
 In this example, we show how easy it is to add a new interest measure.
 As the interest measure we chose \emph{all-confidence}
@@ -1085,51 +1397,52 @@ confidence given by the itemset's all-confidence value.
 of equation~\ref{equ:all_conf} must stem from a single item and thus can
 be simplified to $\max(\mathrm{supp}(i \in X))$.
 
-First, we use Eclat to mine frequent itemsets from the previously used
-Adult data set.
+To obtain an itemset to calculate all-confidence for, 
+we mine frequent itemsets from the previously used
+Adult data set using the Eclat algorithm.
 
 \begin{Schunk}
 \begin{Sinput}
+> data("Adult_transactions")
 > fsets <- eclat(Adult_transactions, parameter = list(support = 0.05), 
 +     control = list(verbose = FALSE))
 \end{Sinput}
 \end{Schunk}
 
 For the denominator of all-confidence we need to find all mined single
-items and their corresponding support values.
+items and their corresponding support values. In the following we 
+create a named vector where the names are the column numbers of the 
+items and the values are their support.
 
 \begin{Schunk}
 \begin{Sinput}
-> single_item_fsets <- fsets[size(items(fsets)) == 1]
-> single_items <- data.frame(item = unlist(LIST(items(single_item_fsets), 
-+     decode = FALSE)), support = quality(single_item_fsets))
-> head(single_items, n = 3)
+> single_items <- fsets[size(items(fsets)) == 1]
+> single_support <- quality(single_items)$support
+> names(single_support) <- unlist(LIST(items(single_items), decode = FALSE))
+> head(single_support, n = 5)
 \end{Sinput}
 \begin{Soutput}
-     item   support
-5873   66 0.9532779
-5874   63 0.9173867
-5875  111 0.8974243
+       66        63       111        60         8 
+0.9532779 0.9173867 0.8974243 0.8550428 0.6941976 
 
 \end{Soutput}
 \end{Schunk}
 
-Next, we can calculate the all-confidence for all itemsets and add it to
-the set's quality data frame.
+Next, we can calculate the all-confidence 
+using formula~\ref{equ:all_conf} for all itemsets.
+The single item support needed for the denomination is looked up from the
+named vector \code{single\_support} 
+and the resulting measure is added to the set's quality data frame.
 
 \begin{Schunk}
 \begin{Sinput}
 > itemset_list <- LIST(items(fsets), decode = FALSE)
-> all_conf <- sapply(1:length(itemset_list), function(x) {
-+     quality(fsets)$support[x]/max(single_items$support[match(itemset_list[[x]], 
-+         single_items$item)])
-+ })
+> all_conf <- quality(fsets)$support/sapply(itemset_list, function(x) max(single_support[as.character(x)]))
 > quality(fsets) <- cbind(quality(fsets), all_conf)
 \end{Sinput}
 \end{Schunk}
 
 The new quality measure is now part of the set of itemsets.
-
 \begin{Schunk}
 \begin{Sinput}
 > summary(fsets)
@@ -1138,7 +1451,7 @@ The new quality measure is now part of the set of itemsets.
 set of 5908 itemsets
 
 most frequent items:
-           capital-loss = none native-country = United-States 
+           capital-loss = None native-country = United-States 
                           2301                           2245 
            capital-gain = None                   race = White 
                           2236                           2107 
@@ -1166,26 +1479,221 @@ includes transaction ID lists: FALSE
 \end{Soutput}
 \end{Schunk}
 
-The new measure 
-can now be used to manipulate the set.  For
-example the set can be sorted by all-confidence (we filter itemsets
-of length 1 first since they have per definition an all-confidence of~1).
+It can be used to
+manipulate the set. For example, we can look at the itemsets which contain an
+item related to education and sort them by all-confidence (we filter itemsets
+of length 1 first, since they have per definition a all-confidence of~1).
 
 \begin{Schunk}
 \begin{Sinput}
-> inspect(SORT(fsets[size(fsets) > 1], by = "all_conf")[1:3])
+> fsets.sub <- subset(fsets, subset = items %in% "education")
+> inspect(SORT(fsets.sub[size(fsets.sub) > 1], by = "all_conf")[1:3])
 \end{Sinput}
 \begin{Soutput}
-  items                              support  all_conf
-1 {capital-gain = None,                               
-   capital-loss = none}            0.8706646 0.9133376
-2 {capital-loss = none,                               
-   native-country = United-States} 0.8548380 0.8967354
-3 {capital-gain = None,                               
-   native-country = United-States} 0.8219565 0.8959761
+  items                          support  all_conf
+1 {education = HS-grad,                           
+   hours-per-week = Full-time} 0.2090209 0.3572453
+2 {education = HS-grad,                           
+   income = small}             0.1807051 0.3570388
+3 {workclass = Private,                           
+   education = HS-grad}        0.2391794 0.3445408
 
 \end{Soutput}
 \end{Schunk}
+
+All-confidence is implemented in \pkg{arules} as the method 
+\code{all\_confidence}.
+
+\subsection{Example 4: Sampling}
+In this example, we show how sampling
+can be used in \pkg{arules}. We use again the Adult data set.
+
+\begin{Schunk}
+\begin{Sinput}
+> data("Adult_transactions")
+> Adult_transactions
+\end{Sinput}
+\begin{Soutput}
+transactions in sparse format with
+ 48842 transactions (rows) and
+ 115 items (columns)
+
+\end{Soutput}
+\end{Schunk}
+
+To calculate a reasonable sample size $n$, we use the formula developed
+by \cite{arules:Zaki+Parthasarathy+Li+Ogihara:1997} and presented in 
+Section~\ref{sec:sample}. We choose a minimum support of 5\%.
+As an acceptable error rate for support $\epsilon$ of we choose 10\% and
+as the confidence level ($1-c$) we choose 90\%. 
+
+\begin{Schunk}
+\begin{Sinput}
+> supp <- 0.05
+> epsilon <- 0.1
+> c <- 0.1
+> n <- -2 * log(c)/(supp * epsilon^2)
+> n
+\end{Sinput}
+\begin{Soutput}
+[1] 9210.34
+
+\end{Soutput}
+\end{Schunk}
+
+The resulting sample size is considerably smaller than the original data base.
+With \code{sample} we produce a sample of size $n$ with replacement from
+the database.
+
+
+\begin{Schunk}
+\begin{Sinput}
+> Adult.sample <- sample(Adult_transactions, n, replace = TRUE)
+\end{Sinput}
+\end{Schunk}
+
+The resulting sample can be compared with the 
+database (the population) using an item frequency plot.
+The item frequencies in the sample are displayed as bars and the
+item frequencies in the original database are represented by 
+the line. For better readability of the labels, we
+only display frequent items in the plot and reduce
+the label size with the parameter \code{cex.names}.
+
+\begin{Schunk}
+\begin{Sinput}
+> items.frequent <- itemFrequency(Adult_transactions) > supp
+> itemFrequencyPlot(Adult.sample[, items.frequent], population = Adult_transactions[, 
++     items.frequent], cex.names = 0.8)
+\end{Sinput}
+\end{Schunk}
+\includegraphics{arules-030}
+
+To compare the speed-up reached by sampling we use the Eclat algorithm
+to mine frequent itemsets on both, the database and the sample
+and compare the system time (in seconds) used for mining.
+
+\begin{Schunk}
+\begin{Sinput}
+> t <- system.time(itemsets <- eclat(Adult_transactions, parameter = list(support = supp), 
++     control = list(verbose = FALSE)))
+> t
+\end{Sinput}
+\begin{Soutput}
+[1] 1.41 0.01 1.42 0.00 0.00
+
+\end{Soutput}
+\begin{Sinput}
+> t.sample <- system.time(itemsets.sample <- eclat(Adult.sample, 
++     parameter = list(support = supp), control = list(verbose = FALSE)))
+> t.sample
+\end{Sinput}
+\begin{Soutput}
+[1] 0.33 0.00 0.34 0.00 0.00
+
+\end{Soutput}
+\end{Schunk}
+
+
+Mining the sample instead of the whole data base results in a speed-up
+factor of:
+\begin{Schunk}
+\begin{Sinput}
+> t[1]/t.sample[1]
+\end{Sinput}
+\begin{Soutput}
+[1] 4.272727
+
+\end{Soutput}
+\end{Schunk}
+
+
+To evaluate the accuracy for the itemsets mined from the sample, we
+analyze the difference between the two sets.
+
+\begin{Schunk}
+\begin{Sinput}
+> itemsets
+\end{Sinput}
+\begin{Soutput}
+set of 5908 itemsets 
+
+\end{Soutput}
+\begin{Sinput}
+> itemsets.sample
+\end{Sinput}
+\begin{Soutput}
+set of 5948 itemsets 
+
+\end{Soutput}
+\end{Schunk}
+
+The two sets have roughly the same size. To check if the sets contain
+similar itemsets, we match the sets and see what fraction of
+frequent itemsets found in the database were also found in the sample. 
+
+
+\begin{Schunk}
+\begin{Sinput}
+> match <- match(itemsets, itemsets.sample)
+> length(match[!is.na(match)])/length(itemsets)
+\end{Sinput}
+\begin{Soutput}
+[1] 0.9807041
+
+\end{Soutput}
+\end{Schunk}
+
+Almost all frequent itemsets were found using the sample.
+The summaries of the support of the frequent itemsets 
+which were not found in the sample and the itemsets
+which were frequent in the sample although they
+were infrequent in the database give:
+
+\begin{Schunk}
+\begin{Sinput}
+> summary(quality(itemsets[which(is.na(match))])$support)
+\end{Sinput}
+\begin{Soutput}
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+0.05004 0.05049 0.05105 0.05133 0.05178 0.05460 
+
+\end{Soutput}
+\begin{Sinput}
+> summary(quality(itemsets.sample[-match[!is.na(match)]])$support)
+\end{Sinput}
+\begin{Soutput}
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+0.05005 0.05060 0.05114 0.05150 0.05212 0.05527 
+
+\end{Soutput}
+\end{Schunk}
+
+This shows that only itemsets with support very close to the minimum support
+were falsely missed or found.
+
+For the frequent itemsets which were found in the database and in the
+sample, we can calculate accuracy from the the error rate.
+
+\begin{Schunk}
+\begin{Sinput}
+> supp.itemsets <- quality(itemsets[!is.na(match)])$support
+> supp.itemsets.sample <- quality(itemsets.sample[match[!is.na(match)]])$support
+> accuracy <- 1 - abs(supp.itemsets.sample - supp.itemsets)/supp.itemsets
+> summary(accuracy)
+\end{Sinput}
+\begin{Soutput}
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+ 0.8706  0.9653  0.9800  0.9755  0.9906  1.0000 
+
+\end{Soutput}
+\end{Schunk}
+
+The summary shows that sampling resulted in finding the support of itemsets
+with high accuracy. Thus for extremely large databases or
+for application where mining time is important, sampling provides
+a powerful technique.
+
 
 %% ------------------------------------------------------------------
 %% ------------------------------------------------------------------
@@ -1232,7 +1740,7 @@ as done by
 \cite{arules:Hahsler+Hornik+Reutterer:2005}.
 
 Finally, similarity measures between itemsets and rules can be
-implemented in \pkg{arules}. With such measures distance based
+implemented for \pkg{arules}. With such measures distance based
 clustering and visualization of associations is possible 
 \citep[see e.g.,][]{arules:Strehl+Gosh:2003}).
 
@@ -1245,7 +1753,7 @@ implementation of Apriori and Eclat.
 
 
 \bibliographystyle{plainnat}
-\bibliography{arules}
+\bibliography{arules,arules_clustering}
 
 \end{document}
 

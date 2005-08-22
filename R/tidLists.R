@@ -1,3 +1,25 @@
+
+###*********************************************************
+### dimensions of the binary matrix
+setMethod("dim", signature(x = "tidLists"),
+    function(x) {
+    rev(dim(x@data))
+    })
+
+### number of elements (rows)
+setMethod("length", signature(x = "tidLists"),
+    function(x) {
+    dim(x)[1]
+    })
+
+### produces a vector of element sizes
+setMethod("size", signature(x = "tidLists"),
+    function(x) {
+    diff(x@data@p)
+    })
+
+
+
 ###*******************************************************
 ### show/summary
 
@@ -21,23 +43,49 @@ setMethod("show", signature(object = "summary.tidLists"),
       object@Dim[2],"transactions (columns)\n")
     })
 
-
-###*****************************************************
-### subset
-
-setMethod("[", signature(x = "tidLists"),
-    function(x, i, j, ..., drop) {
-    y <- x 
-    y@data <- x@data[j,i,...,drop=drop]
-    y@itemInfo = x@itemInfo[i,,drop=FALSE]
-    if(!missing(j)) {
-    y@transactionInfo = x@transactionInfo[j,,drop=FALSE]
-    }
-    return(y)	
+setMethod("image", signature(x = "tidLists"),
+    function(x, colorkey=FALSE,
+      ylab="Items/itemsets (Rows)", xlab="Transactions (Columns)",
+      col.regions = gray(seq(from = 0, to = 1, length = 2)), ...) {
+    i <- t(as(x@data, "dgTMatrix"))
+    image(i,colorkey=colorkey, ylab=ylab, xlab=xlab,
+      col.regions = col.regions, ...)
     })
 
 
 
+###*****************************************************
+### subset
+
+setMethod("[", signature(x = "tidLists", i = "ANY", j = "ANY", drop = "ANY"),
+    function(x, i, j, ..., drop) {
+      
+    if(missing(j) && missing(i)) return(x)
+
+    ### drop is always false
+    drop <- FALSE
+
+    y <- x 
+    
+    ### reverse i and j
+    if(missing(i)) {
+      y@data <- x@data[j, ..., drop=drop]
+      y@transactionInfo <- x@transactionInfo[j,,drop=FALSE]
+    }else if (missing(j)) {
+      y@data <- x@data[,i,...,drop=drop]
+      y@itemInfo = x@itemInfo[i,,drop=FALSE]
+    }else{
+      y@data <- x@data[j,i,...,drop=drop]
+      y@itemInfo = x@itemInfo[i,,drop=FALSE]
+      y@transactionInfo <- x@transactionInfo[j,,drop=FALSE]
+    }
+
+    return(y)
+    })
+
+
+
+###*****************************************************
 ### coercions 
 
 setAs("tidLists", "list",
@@ -47,14 +95,14 @@ setAs("tidLists", "list",
 
 setMethod("LIST", signature(from = "tidLists"),
     function(from, decode = TRUE) {
-    l <- LIST(as(from, "itemMatrix"), decode = FALSE)
-    if(decode == TRUE) {
-    l <- decode(from, l)
-    names(l) <- itemLabels(from)
+    z <- as(from@data, "list")
+    if (decode == TRUE ) {
+      z <- decode(z, labels(from)$transactionIDs)
+      names(z) <- itemLabels(from)
     }
-    return(l)
+    
+    return(z)
     })
-
 
 
 setAs("tidLists", "matrix",
@@ -65,6 +113,15 @@ setAs("tidLists", "matrix",
       from@transactionInfo[["transactionIDs"]])
     return(m)
     })
+
+
+setAs("tidLists", "dgCMatrix",
+    function(from) {
+    tmp <- from@data
+    dimnames(tmp)[[2]] <- from@itemInfo[["labels"]]
+    return(tmp)
+    })
+
 
 setAs("tidLists", "transactions",
     function(from) {
@@ -78,42 +135,20 @@ setAs("transactions", "tidLists",
       itemInfo = from@itemInfo, transactionInfo = from@transactionInfo)
     })
 
-setAs("tidLists", "dgCMatrix",
+setAs("tidLists", "itemMatrix",
     function(from) {
-    tmp <- from@data
-    dimnames(tmp)[[2]] <- from@itemInfo[["labels"]]
-    return(tmp)
+    new("transactions", data = t(from@data), 
+      itemInfo = from@itemInfo) 
     })
 
-### overwrite item support from itemMatrix
-### return item support in a set
-setMethod("itemFrequency", signature(x = "tidLists"),
-    function(x, type= c("relative", "absolute")) {
-    type <- match.arg(type)
-
-    supports <-  size(x)
-    names(supports) <- itemLabels(x)
-
-    switch(type,
-      relative =  supports/dim(x)[2],
-      absolute =  supports)
+setAs("itemMatrix", "tidLists",
+    function(from) {
+    new("tidLists", data = t(from@data),
+      itemInfo = from@itemInfo)
     })
 
 
-### overwrite decode from itemMatrix
-setMethod("decode", signature(x = "tidLists"),
-    function(x, tids) {
-
-### missing Transaction IDs
-    if (is.null(x@transactionInfo[["transactionIDs"]])) {
-    return (tids)
-    }
-
-    labs <- as(x@transactionInfo[["transactionIDs"]], "character")
-    sapply(tids, function(r) labs[r], simplify=FALSE)
-    })
-
-##########################################################################
+###*****************************************************
 ### accessors
 
 setMethod("transactionInfo", signature(x = "tidLists"),
@@ -121,10 +156,25 @@ setMethod("transactionInfo", signature(x = "tidLists"),
     x@transactionInfo
     })
 
+setMethod("itemInfo", signature(object = "tidLists"),
+    function(object) {
+     object@itemInfo
+    })
+
 setMethod("labels", signature(object = "tidLists"),
     function(object, ...) {
+        transactionIDs <- as(object@transactionInfo[["transactionIDs"]],
+            "character")
+    if(length(transactionIDs) == 0) 
+    transactionIDs <- as(1 : dim(object)[2],"character")   
+
     list(items = itemLabels(object),
-      transactionIDs = as(object@transactionInfo[["transactionIDs"]],
-	"character"))
+        transactionIDs = transactionIDs) 
+})
+
+setMethod("itemLabels", signature(object = "tidLists"),
+    function(object, ...) {
+    as(object@itemInfo[["labels"]], "character")
     })
+
 

@@ -1,4 +1,4 @@
-\name{ASparameter-class}
+\name{ASparameter-classes}
 \docType{class}
 \alias{ASparameter-class}
 \alias{APparameter-class}
