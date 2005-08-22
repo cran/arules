@@ -179,3 +179,48 @@ setMethod("inspect", signature(x = "transactions"),
 
 
     })
+
+setMethod("inspect", signature(x = "itemMatrix"),
+    function(x, ...) {
+
+	n_of_itemsets <- length(x)
+
+        if(length(n_of_itemsets) == 0) return()
+        ## Nothing to inspect here ...
+
+	items <- unlist(as(x, "list"))
+
+	### number of rows + fix empty itemsets
+	n_of_items <- size(x)
+	items[n_of_items == 0] <- ""
+	n_of_items[n_of_items == 0] <- 1
+	
+        ## calculate begin and end positions
+	entry_beg_pos <- cumsum(c(1, n_of_items[-n_of_itemsets]))
+	entry_end_pos <- entry_beg_pos+n_of_items-1
+
+        ### prepare output
+	n_of_rows <- sum(n_of_items)
+        ## Output.
+	out <- matrix("", nr = n_of_rows+1, nc = 2)
+
+        ### Column 1: itemset nr.
+        tmp <- rep.int("", n_of_rows + 1)
+	tmp[entry_beg_pos+1] <- c(1:n_of_itemsets) 
+	out[,1] <- format(tmp)
+
+        ## Column 2: items in the item sets, one per line.
+	pre <- rep.int(" ", n_of_rows)
+	pre[entry_beg_pos] <- rep.int("{", length(entry_beg_pos))
+	post <- rep.int(",", n_of_rows)
+	post[entry_end_pos] <- rep.int("}", length(entry_end_pos))
+	out[, 2] <- format(c("items",
+	      paste(pre, unlist(items), post, sep = "")))
+
+        
+        
+        ## Output.
+        cat(t(out), sep = c(rep.int(" ", NCOL(out) - 1), "\n"))
+
+
+    })

@@ -2,12 +2,16 @@
 \docType{class}
 \alias{associations-class}
 \alias{summary.associations-class}
-%\alias{SORT,associations-method}
-\alias{quality<-,associations-method}
-\alias{quality,associations-method}
-\alias{quality<-}
-\alias{quality}
 \alias{show,associations-method}
+%\alias{SORT,associations-method}
+\alias{quality<-}
+\alias{quality<-,associations-method}
+\alias{quality}
+\alias{quality,associations-method}
+\alias{items,associations-method}
+\alias{labels,associations-method}
+\alias{length,associations-method}
+
 
 \title{Class ``associations'' - A Set of Associations}
 \description{
@@ -29,10 +33,24 @@
 }
 \section{Methods}{
   \describe{
-    \item{SORT}{\code{signature(x = "associations")};
-      sorts the associations by a quality measure specified as the
-      argument \code{by} (default: \code{by = "support", decreasing =
-	TRUE}).}
+    \item{items}{\code{signature(x = "associations")};
+      dummy method. This method has to be implemented by all subclasses
+      of \code{associations} and return the items which make up each
+      association as an object of class 
+      \code{itemMatrix}.}
+    \item{labels}{\code{signature(object = "associations")};
+      dummy method. This method has to be implemented by all subclasses
+      of \code{associations} and return a vector
+      of \code{length(object)} of labels
+      for the elements in the association.}
+    \item{length}{\code{signature(x = "associations")};
+      dummy method. This method has to be implemented by all subclasses
+      of \code{associations} and return the number of elements in the 
+      association.}
+%    \item{SORT}{\code{signature(x = "associations")};
+%      sorts the associations by a quality measure specified as the
+%      argument \code{by} (default: \code{by = "support", decreasing =
+%	TRUE}).}
     \item{quality<-}{\code{signature(x = "associations")};
       replaces the quality \code{data.frame}.  The length of the vectors
       in the \code{data.frame} has to equal the number of associations
@@ -42,8 +60,11 @@
     \item{show}{\code{signature(object = "associations")}}
   }
 }
-\seealso{
+\section{Subclasses}{
   \code{\link{itemsets-class}},
   \code{\link{rules-class}}
+}
+\seealso{
+  \code{\link{itemMatrix-class}}
 }
 \keyword{classes}

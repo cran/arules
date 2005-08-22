@@ -5,7 +5,8 @@
 \description{
   Provides the generic function \code{SORT} and the S4 method to sort 
   elements in class \code{\link[arules:associations-class]{associations}}
-  (e.g., itemsets or rules).
+  (e.g., itemsets or rules) according to the value of measures stored in
+  the association's slot \code{quality} (e.g., support).
 }
 \usage{
 SORT(x, \dots)
@@ -13,11 +14,11 @@ SORT(x, \dots)
 }
 \arguments{
   \item{x}{ an object to be sorted.}
-  \item{\dots}{ further arguments are passed on.}
-  \item{by}{ a character specifying the quality measure stored in
+  \item{\dots}{ further arguments.}
+  \item{by}{ a character string specifying the quality measure stored in
     \code{x} to be used to sort \code{x}.}
-  \item{decreasing}{logical.  Should the sort be increasing or
-    decreasing?}
+  \item{decreasing}{\code{"logical"}; should the sort be increasing or
+    decreasing? (default is decreasing)}
 }
 \value{
   An object of the same class as \code{x}.
@@ -36,3 +37,4 @@ fsets <- eclat(Adult_transactions, parameter = list(supp = 0.5))
 as(SORT(fsets)[1:5], "list")
 }
 \keyword{manip}
+\keyword{arith}

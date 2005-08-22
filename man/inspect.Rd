@@ -1,5 +1,6 @@
 \name{inspect}
 \alias{inspect}
+\alias{inspect,itemMatrix-method}
 \alias{inspect,itemsets-method}
 \alias{inspect,rules-method}
 \alias{inspect,transactions-method}
@@ -11,15 +12,16 @@
 }
 \usage{
 inspect(x, ...)
-\S4method{inspect}{itemsets}(x, ...)
-\S4method{inspect}{rules}(x, ...)
-\S4method{inspect}{transactions}(x, ...)
+%\S4method{inspect}{itemsets}(x, ...)
+%\S4method{inspect}{rules}(x, ...)
+%\S4method{inspect}{transactions}(x, ...)
 }
 \arguments{
-  \item{x}{the object.}
+  \item{x}{ a set of associations or transactions or an itemMatrix.}
   \item{\dots}{additional arguments (currently unused)}
 }
 \seealso{
+  \code{\link{itemMatrix-class}},
   \code{\link{itemsets-class}},
   \code{\link{rules-class}},
   \code{\link{transactions-class}}
@@ -29,4 +31,4 @@ data("Adult_transactions")
 rules <- apriori(Adult_transactions)
 inspect(rules[1000])
 }
-\keyword{methods}
+\keyword{print}

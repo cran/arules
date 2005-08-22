@@ -68,25 +68,25 @@ Income <- Income[complete.cases(Income), ]
 
 ### preparing the data set
 Income[["income"]] <- factor((as.numeric(Income[["income"]]) > 6) +1,
-      levels = 1 : 2 , labels = c("$0-$40,000", "$40,000+"))
+  levels = 1 : 2 , labels = c("$0-$40,000", "$40,000+"))
 	  
 Income[["age"]] <- factor((as.numeric(Income[["age"]]) > 3) +1,
-    levels = 1 : 2 , labels = c("14-34", "35+"))
+  levels = 1 : 2 , labels = c("14-34", "35+"))
 
 Income[["education"]] <- factor((as.numeric(Income[["education"]]) > 4) +1,
-    levels = 1 : 2 , labels = c("no college graduate", "college graduate"))
+  levels = 1 : 2 , labels = c("no college graduate", "college graduate"))
 
 Income[["years in bay area"]] <- factor(
-	(as.numeric(Income[["years in bay area"]]) > 4) +1,
-	levels = 1 : 2 , labels = c("1-9", "10+"))
+  (as.numeric(Income[["years in bay area"]]) > 4) +1,
+  levels = 1 : 2 , labels = c("1-9", "10+"))
 
 Income[["number in household"]] <- factor(
-	(as.numeric(Income[["number in household"]]) > 3) +1,
-    levels = 1 : 2 , labels = c("1", "2+"))
+  (as.numeric(Income[["number in household"]]) > 3) +1,
+  levels = 1 : 2 , labels = c("1", "2+"))
 
 Income[["number of children"]] <- factor(
-     (as.numeric(Income[["number of children"]]) > 1) +0,
-     levels = 0 : 1 , labels = c("0", "1+"))
+  (as.numeric(Income[["number of children"]]) > 1) +0,
+  levels = 0 : 1 , labels = c("0", "1+"))
 	
 ##  creating transactions
 Income_transactions <- as(Income, "transactions")

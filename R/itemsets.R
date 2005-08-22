@@ -23,10 +23,20 @@ setAs("itemsets", "data.frame",
     return(data.frame(items = labels(from), from@quality))
     })
 
+
+###***********************************************
+### labels
+
 setMethod("labels", signature(object = "itemsets"),
    function(object) {
      labels(object@items)$elements
 })
+
+setMethod("itemLabels", signature(object = "itemsets"),
+    function(object) {
+        itemLabels(items(object))
+    })
+
 
 ###************************************************
 ### accessors
@@ -56,12 +66,12 @@ setMethod("tidLists", signature(x = "itemsets"),
 
 
 ###****************************************************
-### subset, combine
+### subset, combine, duplicated, match
 
-setMethod("[", signature(x = "itemsets"),
+setMethod("[", signature(x = "itemsets", i = "ANY", j = "ANY", drop = "ANY"),
     function(x, i, j, ..., drop)
     {
-    if (!missing(j)) stop("incorrect number of dimensions")
+    if (!missing(j)) stop("incorrect number of dimensions (j not possible)")
     if (missing(i)) return(x)
     y <- x
     slots <- intersect(slotNames(x), c("items", "tidLists"))
@@ -70,14 +80,6 @@ setMethod("[", signature(x = "itemsets"),
     return(y)
     })
 
-
-setMethod("subset", signature(x = "itemsets"),
-    function(x, subset, ...) {
-    if (missing(subset)) return(x)
-    i <- eval(substitute(subset),c(x@quality, 
-	list(items=x@items))) 
-    x[i,]
-    })
 
 setMethod("combine", signature(first = "itemsets"),
     function(first, ...){
@@ -96,9 +98,17 @@ setMethod("combine", signature(first = "itemsets"),
 
 setMethod("duplicated", signature(x = "itemsets"),
    function(x, incomparables = FALSE, ...) {
-     duplicated(LIST(x@items, decode = FALSE), 
+     duplicated(x@items, 
      	incomparables = incomparables, ...)
    })
+
+setMethod("match", signature(x = "itemsets"),
+    function(x,  table, nomatch = NA, incomparables = FALSE) {
+    match(x@items, table@items,
+      nomatch = nomatch, incomparables = incomparables)
+    })
+		  
+
 
 
 ###************************************************

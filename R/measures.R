@@ -18,14 +18,12 @@ function(x,  transactions = NULL, itemSupport = NULL) {
     
     # get the col numbers we have support for
     single_support <- quality(single_items)$support
-    names(single_support) <- unlist(LIST(items(single_items), 
+    single_itemIDs <- unlist(LIST(items(single_items), 
     	decode = FALSE))
 
-    itemSupport <- c()
-    # generate a item support vector of length number of items
-    for (i in 1:num_items) {
-      itemSupport[i] <- single_support[as.character(i)]
-    }
+    itemSupport <- numeric(length = length(single_itemIDs))
+    itemSupport[single_itemIDs] <- single_support 
+    
     # we have to check for NA later to see if we really got all
     # needed item supports
   
@@ -49,11 +47,9 @@ function(x,  transactions = NULL, itemSupport = NULL) {
   # singleton support of the most frequent item in the itemset
   # all-confidence(Z) = supp(Z) / max(supp(i elem Z))
  
+  all_conf <-  quality(x)$support /
+  sapply(itemset_list, function(i) max(itemSupport[i]))
 
-  all_conf <- sapply(1:length(itemset_list),
-      function(i) { quality(x)$support[i]/
-      max(itemSupport[itemset_list[[i]]])})
-  
   # check for insufficient item support (NAs) 
   if(any(is.na(all_conf))) warning("some values are missing because the itemset does not contain all needed item supports. provide itemSupport or transactions.")
   

@@ -1,0 +1,254 @@
+%!PS-Adobe-3.0
+%%DocumentNeededResources: font Helvetica
+%%+ font Helvetica-Bold
+%%+ font Helvetica-Oblique
+%%+ font Helvetica-BoldOblique
+%%+ font Symbol
+%%DocumentMedia: special 432 432 0 () ()
+%%Title: R Graphics Output
+%%Creator: R Software
+%%Pages: (atend)
+%%BoundingBox: 0 0 432 432
+%%EndComments
+%%BeginProlog
+/bp  { gs gs } def
+% begin .ps.prolog
+/gs  { gsave } def
+/gr  { grestore } def
+/ep  { showpage gr gr } def
+/m   { moveto } def
+/l  { rlineto } def
+/np  { newpath } def
+/cp  { closepath } def
+/f   { fill } def
+/o   { stroke } def
+/c   { newpath 0 360 arc } def
+/r   { 4 2 roll moveto 1 copy 3 -1 roll exch 0 exch rlineto 0 rlineto -1 mul 0 exch rlineto closepath } def
+/p1  { stroke } def
+/p2  { gsave bg setrgbcolor fill grestore newpath } def
+/p3  { gsave bg setrgbcolor fill grestore stroke } def
+/t   { 6 -2 roll moveto gsave rotate
+       ps mul neg 0 2 1 roll rmoveto
+       1 index stringwidth pop
+       mul neg 0 rmoveto show grestore } def
+/cl  { grestore gsave newpath 3 index 3 index moveto 1 index
+       4 -1 roll lineto  exch 1 index lineto lineto
+       closepath clip newpath } def
+/rgb { setrgbcolor } def
+/s   { scalefont setfont } def
+% end   .ps.prolog
+%%IncludeResource: font Helvetica
+/Helvetica findfont
+dup length dict begin
+  {1 index /FID ne {def} {pop pop} ifelse} forall
+  /Encoding ISOLatin1Encoding def
+  currentdict
+  end
+/Font1 exch definefont pop
+%%IncludeResource: font Helvetica-Bold
+/Helvetica-Bold findfont
+dup length dict begin
+  {1 index /FID ne {def} {pop pop} ifelse} forall
+  /Encoding ISOLatin1Encoding def
+  currentdict
+  end
+/Font2 exch definefont pop
+%%IncludeResource: font Helvetica-Oblique
+/Helvetica-Oblique findfont
+dup length dict begin
+  {1 index /FID ne {def} {pop pop} ifelse} forall
+  /Encoding ISOLatin1Encoding def
+  currentdict
+  end
+/Font3 exch definefont pop
+%%IncludeResource: font Helvetica-BoldOblique
+/Helvetica-BoldOblique findfont
+dup length dict begin
+  {1 index /FID ne {def} {pop pop} ifelse} forall
+  /Encoding ISOLatin1Encoding def
+  currentdict
+  end
+/Font4 exch definefont pop
+%%IncludeResource: font Symbol
+/Symbol findfont
+dup length dict begin
+  {1 index /FID ne {def} {pop pop} ifelse} forall
+  currentdict
+  end
+/Font5 exch definefont pop
+%%EndProlog
+%%Page: 1 1
+bp
+0.00 0.00 432.00 432.00 cl
+/bg { 0.7451 0.7451 0.7451 } def
+0 0 0 rgb
+0.75 setlinewidth
+[] 0 setdash
+1 setlinecap
+1 setlinejoin
+10.00 setmiterlimit
+71.73 234.48 7.38 29.42 r p3
+80.59 234.48 7.38 72.52 r p3
+89.44 234.48 7.38 38.27 r p3
+98.30 234.48 7.38 8.74 r p3
+107.16 234.48 7.38 101.52 r p3
+116.01 234.48 7.38 12.22 r p3
+124.87 234.48 7.38 46.72 r p3
+133.72 234.48 7.38 32.87 r p3
+142.58 234.48 7.38 24.30 r p3
+151.44 234.48 7.38 7.83 r p3
+160.29 234.48 7.38 20.02 r p3
+169.15 234.48 7.38 67.19 r p3
+178.00 234.48 7.38 47.99 r p3
+186.86 234.48 7.38 16.37 r p3
+195.71 234.48 7.38 17.41 r p3
+204.57 234.48 7.38 19.09 r p3
+213.43 234.48 7.38 8.83 r p3
+222.28 234.48 7.38 14.74 r p3
+231.14 234.48 7.38 18.23 r p3
+239.99 234.48 7.38 15.72 r p3
+248.85 234.48 7.38 59.72 r p3
+257.71 234.48 7.38 37.83 r p3
+266.56 234.48 7.38 22.48 r p3
+275.42 234.48 7.38 14.56 r p3
+284.27 234.48 7.38 13.91 r p3
+293.13 234.48 7.38 124.90 r p3
+301.98 234.48 7.38 47.04 r p3
+310.84 234.48 7.38 98.73 r p3
+319.70 234.48 7.38 133.73 r p3
+328.55 234.48 7.38 138.48 r p3
+337.41 234.48 7.38 18.36 r p3
+346.26 234.48 7.38 84.17 r p3
+355.12 234.48 7.38 38.05 r p3
+363.98 234.48 7.38 131.51 r p3
+372.83 234.48 7.38 71.98 r p3
+381.69 234.48 7.38 24.42 r p3
+0.00 0.00 432.00 432.00 cl
+/ps 12 def /Font1 findfont 12 s
+0 0 0 rgb
+79.73 218.70 (age = Young) 1 0 90 t
+88.59 218.70 (age = Middle-aged) 1 0 90 t
+97.44 218.70 (age = Senior) 1 0 90 t
+106.30 218.70 (workclass = Local-gov) 1 0 90 t
+115.15 218.70 (workclass = Private) 1 0 90 t
+124.01 218.70 (workclass = Self-emp-not-inc) 1 0 90 t
+132.87 218.70 (education = HS-grad) 1 0 90 t
+141.72 218.70 (education = Some-college) 1 0 90 t
+150.58 218.70 (education = Bachelors) 1 0 90 t
+159.43 218.70 (education = Masters) 1 0 90 t
+168.29 218.70 (marital-status = Divorced) 1 0 90 t
+177.15 218.70 (marital-status = Married-civ-spouse) 1 0 90 t
+186.00 218.70 (marital-status = Never-married) 1 0 90 t
+194.86 218.70 (occupation = Adm-clerical) 1 0 90 t
+203.71 218.70 (occupation = Craft-repair) 1 0 90 t
+212.57 218.70 (occupation = Exec-managerial) 1 0 90 t
+221.42 218.70 (occupation = Machine-op-inspct) 1 0 90 t
+230.28 218.70 (occupation = Other-service) 1 0 90 t
+239.14 218.70 (occupation = Prof-specialty) 1 0 90 t
+247.99 218.70 (occupation = Sales) 1 0 90 t
+256.85 218.70 (relationship = Husband) 1 0 90 t
+265.70 218.70 (relationship = Not-in-family) 1 0 90 t
+274.56 218.70 (relationship = Own-child) 1 0 90 t
+283.41 218.70 (relationship = Unmarried) 1 0 90 t
+292.27 218.70 (race = Black) 1 0 90 t
+301.13 218.70 (race = White) 1 0 90 t
+309.98 218.70 (sex = Female) 1 0 90 t
+318.84 218.70 (sex = Male) 1 0 90 t
+327.69 218.70 (capital-gain = None) 1 0 90 t
+336.55 218.70 (capital-loss = None) 1 0 90 t
+345.41 218.70 (hours-per-week = Part-time) 1 0 90 t
+354.26 218.70 (hours-per-week = Full-time) 1 0 90 t
+363.12 218.70 (hours-per-week = Over-time) 1 0 90 t
+371.97 218.70 (native-country = United-States) 1 0 90 t
+380.83 218.70 (income = small) 1 0 90 t
+389.68 218.70 (income = large) 1 0 90 t
+0.00 0.00 432.00 432.00 cl
+/ps 12 def /Font1 findfont 12 s
+0 0 0 rgb
+12.96 303.03 (item frequency \(relative\)) .5 0 90 t
+0.00 0.00 432.00 432.00 cl
+0 0 0 rgb
+0.75 setlinewidth
+[] 0 setdash
+1 setlinecap
+1 setlinejoin
+10.00 setmiterlimit
+np
+59.04 234.48 m
+0 116.62 l
+o
+np
+59.04 234.48 m
+-7.20 0 l
+o
+np
+59.04 263.64 m
+-7.20 0 l
+o
+np
+59.04 292.79 m
+-7.20 0 l
+o
+np
+59.04 321.95 m
+-7.20 0 l
+o
+np
+59.04 351.10 m
+-7.20 0 l
+o
+/ps 12 def /Font1 findfont 12 s
+44.64 230.18 (0.0) 1 0 0 t
+44.64 259.33 (0.2) 1 0 0 t
+44.64 288.49 (0.4) 1 0 0 t
+44.64 317.64 (0.6) 1 0 0 t
+44.64 346.79 (0.8) 1 0 0 t
+59.04 233.10 401.76 372.96 cl
+0 0 0 rgb
+0.75 setlinewidth
+[] 0 setdash
+1 setlinecap
+1 setlinejoin
+10.00 setmiterlimit
+np
+75.42 263.22 m
+8.86 44.90 l
+8.85 -35.61 l
+8.86 -28.67 l
+8.86 91.84 l
+8.85 -89.67 l
+8.86 35.58 l
+8.85 -14.64 l
+8.86 -8.51 l
+8.86 -16.03 l
+8.85 11.87 l
+8.86 47.00 l
+8.85 -18.69 l
+8.86 -31.36 l
+8.85 1.50 l
+8.86 -0.08 l
+8.86 -9.15 l
+8.85 5.68 l
+8.86 3.73 l
+8.85 -2.00 l
+8.86 42.42 l
+8.86 -21.29 l
+8.85 -14.93 l
+8.86 -7.33 l
+8.85 -1.31 l
+8.86 110.66 l
+8.85 -76.32 l
+8.86 49.12 l
+8.86 36.28 l
+8.85 5.24 l
+8.86 -121.32 l
+8.85 67.64 l
+8.86 -47.45 l
+8.86 92.98 l
+8.85 -57.04 l
+8.86 -50.37 l
+o
+ep
+%%Trailer
+%%Pages: 1
+%%EOF

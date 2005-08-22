@@ -21,7 +21,7 @@
 
   \describe{
     \item{\code{default}:}{one of \code{"both"}, \code{"lhs"},
-      \code{"rhs"}, \code{"none"} (the default is \code{"both"}).  Tis
+      \code{"rhs"}, \code{"none"} (the default is \code{"both"}).  This
       element specified the default appearance for all items not 
       explicitly mentioned in the other elements of the list.}
     \item{\code{lhs}, \code{rhs}, \code{both}, \code{none},

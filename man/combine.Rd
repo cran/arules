@@ -14,15 +14,15 @@
 }
 \usage{
 combine(first, \dots)
-\S4method{combine}{itemMatrix}(first, ..., as_list)
-\S4method{combine}{transactions}(first, ...)
-\S4method{combine}{rules}(first, ...)
-\S4method{combine}{itemsets}(first, ...)
+%\S4method{combine}{itemMatrix}(first, ..., as_list)
+%\S4method{combine}{transactions}(first, ...)
+%\S4method{combine}{rules}(first, ...)
+%\S4method{combine}{itemsets}(first, ...)
 }
 \arguments{
   \item{first}{ first object.}
   \item{\dots}{ further objects to be combined.}
-  \item{as_list}{ used internally.}
+%  \item{as_list}{ used internally.}
 }
 \value{
   An object of the same class as \code{first}.

@@ -1,7 +1,14 @@
 useDynLib(arules)
 
-import(Matrix)
-export("read.transactions", "apriori", "eclat")
+import("Matrix")
+
+export(
+    "read.transactions", 
+    "random.transactions", 
+    "apriori", 
+    "eclat"
+    )
+
 exportClasses(
     "itemMatrix", "summary.itemMatrix",
     "transactions", "summary.transactions",
@@ -11,22 +18,49 @@ exportClasses(
     "rules", "summary.rules",
     "ASparameter", "AScontrol",
     "APparameter", "APcontrol", "APappearance",
-    "ECparameter", "ECcontrol")
-exportMethods("%in%",
-              "LIST",
-              "SORT",
-              "[",
-              "all_confidence", "affinity",
-	      "coerce", "combine",
-              "decode", "dim", "dissimilarity", "duplicated",
-	      "hmap", "hyperlift", "hyperconfidence",
-              "image", "initialize", "inspect", "itemInfo", 
-              "itemInfo<-", "items", "items<-",
-	      "itemLabels", "itemLabels<-", 
-	      "itemFrequency", "itemFrequencyPlot",
-              "labels", "length", "lhs", "lhs<-",
-              "quality", "quality<-",
-              "rhs", "rhs<-", "ruleInduction",
-              "sample", "show", "size", "subset", "summary", 
-              "tidLists", "transactionInfo", "transactionInfo<-",
-	      "unique")
+    "ECparameter", "ECcontrol"
+    )
+
+exportMethods(
+    "%in%",
+    "LIST",
+    "SORT",
+    "[",
+    "all_confidence",
+    "coerce", 
+    "combine", 
+    "decode", 
+    "dim", 
+    "duplicated",
+    "encode",
+    "hyperlift", 
+    "hyperconfidence",
+    "image", 
+    "initialize", 
+    "inspect", 
+    "intersect", 
+    "itemInfo", "itemInfo<-", 
+    "items", "items<-",
+    "itemLabels", "itemLabels<-", 
+    "itemFrequency", 
+    "itemFrequencyPlot",
+    "labels", 
+    "length", 
+    "lhs", "lhs<-",
+    "match",
+    "quality", "quality<-",
+    "recode",
+    "rhs", "rhs<-", 
+    "ruleInduction",
+    "sample",
+    "setequal",
+    "show", 
+    "size", 
+    "subset", 
+    "summary", 
+    "support", 
+    "tidLists", 
+    "transactionInfo", "transactionInfo<-",
+    "union",
+    "unique"
+    )

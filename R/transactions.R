@@ -4,7 +4,7 @@
 setAs("matrix", "transactions",
     function(from) {
     new("transactions", as(from, "itemMatrix"), 
-     transactionInfo = data.frame(transactionIDs = labels(from)[[1]]))
+     transactionInfo = data.frame(transactionIDs = dimnames(from)[[1]]))
     })
 
 setAs("transactions", "matrix",
@@ -19,7 +19,7 @@ setAs("transactions", "matrix",
 setAs("list", "transactions",
 	  function(from) {
 	  new("transactions", as(from, "itemMatrix"), 
-	       transactionInfo = data.frame(transactionIDs = labels(from)))
+	       transactionInfo = data.frame(transactionIDs = names(from)))
 	  })
 
 setAs("transactions", "list",
@@ -75,13 +75,22 @@ setAs("data.frame", "transactions", function(from) {
 ###*****************************************************
 ### subset + combine
 
-setMethod("[", signature(x = "transactions"),
-    function(x, i, j, ..., drop = FALSE) {
+setMethod("[", signature(x = "transactions", 
+	i = "ANY", j = "ANY", drop = "ANY"),
+    function(x, i, j, ..., drop) {
+    
+    if(missing(j) && missing(i)) return(x)
+   
+    ### drop is always false
+    drop <- FALSE
+	 
     if(missing(i)) {
       new("transactions",as(x, "itemMatrix")[,j,...,drop=drop],
             transactionInfo = x@transactionInfo)
-    }
-    else {
+    }else if(missing(j)) {
+      new("transactions",as(x, "itemMatrix")[i,,...,drop=drop],
+    	transactionInfo = x@transactionInfo[i,,drop=FALSE])
+    }else{
       new("transactions",as(x, "itemMatrix")[i,j,...,drop=drop],
     	transactionInfo = x@transactionInfo[i,,drop=FALSE])
     }
@@ -152,9 +161,15 @@ setReplaceMethod("transactionInfo", signature(x = "transactions"),
 
 setMethod("labels", signature(object = "transactions"),
     function(object, ...) {
-    list(items = itemLabels(object),
-      transactionIDs = as(object@transactionInfo[["transactionIDs"]], 
-      "character"))
+    
+    ### check if transaction labels exist
+    transactionIDs <-  
+      if(length(object@transactionInfo) != 0)   
+        as(object@transactionInfo[["transactionIDs"]], "character")
+      else
+        as(1 : length(object), "character")
+
+    list(items = itemLabels(object), transactionIDs = transactionIDs)
     })
 			      
 

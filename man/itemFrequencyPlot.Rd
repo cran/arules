@@ -17,15 +17,28 @@
 }
 \usage{
 itemFrequencyPlot(x, \dots)
-\S4method{itemFrequencyPlot}{itemMatrix}(x, type = "relative", cex.names =  par("cex.axis"), \dots)
+\S4method{itemFrequencyPlot}{itemMatrix}(x, type = "relative", 
+    population = NULL, deviation = FALSE, horiz = FALSE, 
+    cex.names =  par("cex.axis"), xlab = NULL, ylab = NULL, \dots)
 }
 \arguments{
   \item{x}{the object to be plotted.}
   \item{\dots}{further arguments are passed on (see  
   	\code{\link[graphics]{barplot}} from possible arguments).}
-  \item{type}{ indicates whether item frequencies should be displayed 
+  \item{type}{ a character string indicating whether 
+	item frequencies should be displayed 
   relative of absolute.}
-  \item{cex.names}{expansion factor for axis names (bar labels).}
+  \item{population}{ object of same class  as \code{x}; if \code{x}
+    is a segment of a population, the population mean frequency for
+    each item can be shown as a line in the plot.}
+  \item{deviation}{\code{"logical"}; plot the relative deviation from the
+    population mean instead of frequencies.}
+  \item{horiz}{\code{"logical"}; If \code{FALSE} (default), 
+    the bars are drawn vertically. If \code{TRUE}, the bars are
+    drawn horizontally.}
+  \item{cex.names}{\code{"numeric"}; expansion factor for axis names (bar labels).}
+  \item{xlab}{a character string with the label for the x axis (use an empty string to force no label).}
+  \item{ylab}{a character string with the label for the y axis (see xlab).}
   }
 }
 \value{
@@ -39,13 +52,21 @@ adding to the graph.
 data(Adult_transactions)
 
 # the following example compares the item frequencies
-# of people with a rage income (boxes) with the average in the data set
+# of people with a large income (boxes) with the average in the data set
+Adult.largeIncome <- Adult_transactions[Adult_transactions \%in\% 
+	"income = large"]
 
-# box plot for young people (first 72 items)
-midpoints <- itemFrequencyPlot(
-  Adult_transactions[Adult_transactions \%in\% "income = large", 1:72])
+# simple plot
+itemFrequencyPlot(Adult.largeIncome)
 
-# add the item frequency over all transactions (first 72 items)
-lines(midpoints, itemFrequency(Adult_transactions[, 1:72]))
+# plot with the averages of the population plotted as a line 
+# (first 72 variables/items)
+itemFrequencyPlot(Adult.largeIncome[, 1:72], 
+	population = Adult_transactions[, 1:72])
+
+# plot of deviations from population mean (horizontal bars)
+itemFrequencyPlot(Adult.largeIncome[, 1:72], 
+        population = Adult_transactions[, 1:72], 
+	deviation = TRUE, horiz = TRUE)
 }
 \keyword{hplot}
