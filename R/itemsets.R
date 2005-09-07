@@ -81,18 +81,18 @@ setMethod("[", signature(x = "itemsets", i = "ANY", j = "ANY", drop = "ANY"),
     })
 
 
-setMethod("combine", signature(first = "itemsets"),
-    function(first, ...){
+setMethod("c", signature(x = "itemsets"),
+    function(x, ..., recursive = TRUE){
 
 # build quality data.frame first.
 # todo: merge data.frames w/differernt quality measures
-    q <- first@quality
-    lapply(list(...), FUN = function(x)
-      q <<- rbind(q, x@quality))
+    q <- x@quality
+    lapply(list(...), FUN = function(i)
+      q <<- rbind(q, i@quality))
 
 # create joint itemMatrix
-    z <- lapply(list(...), FUN = function(x) x@items)
-    new("itemsets", items = combine(first@items, as_list = z), 
+    z <- lapply(list(...), FUN = function(i) i@items)
+    new("itemsets", items = c(x@items, z, recursive = TRUE), 
       quality = q) 
     })
 

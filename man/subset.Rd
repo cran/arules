@@ -1,14 +1,14 @@
 \name{subset}
 \alias{subset}
+\alias{subset,itemMatrix-method}
 \alias{subset,itemsets-method}
 \alias{subset,itemMatrix-method}
 \alias{subset,rules-method}
-\alias{subset,transactions-method}
 \title{Subsetting Itemsets, Rules and Transactions}
 \description{
   Provides the generic function \code{subset} and S4 methods to 
   subset associations or 
-  transactions 
+  transactions (itemMatrix)
   which meet certain conditions (e.g., contains certain items or 
   satisfies a minimum lift).
 }
@@ -21,7 +21,7 @@ subset(x, ...)
 
 \S4method{subset}{rules}(x, subset, ...)
 
-\S4method{subset}{transactions}(x, subset, ...)
+\S4method{subset}{itemMatrix}(x, subset, ...)
 }
 \arguments{
   \item{x}{object to be subsetted.}
@@ -33,6 +33,7 @@ An object of the same class as \code{x} containing only the
 elements which satisfy the conditions.
 }
 \seealso{
+  \code{\link{itemMatrix-class}},
   \code{\link{itemsets-class}},
   \code{\link{rules-class}},
   \code{\link{transactions-class}}

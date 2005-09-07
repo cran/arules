@@ -2,7 +2,7 @@
 \alias{itemFrequencyPlot}
 \alias{itemFrequencyPlot,itemMatrix-method}
 \title{
-  Plotting the Item Frequencies for Objects Based on ``itemMatrix''
+  Creating a Item Frequencies/Support Bar Plot
 }
 \description{
   Provides the generic function \code{itemFrequencyPlot} and the S4 method 
@@ -19,7 +19,8 @@
 itemFrequencyPlot(x, \dots)
 \S4method{itemFrequencyPlot}{itemMatrix}(x, type = "relative", 
     population = NULL, deviation = FALSE, horiz = FALSE, 
-    cex.names =  par("cex.axis"), xlab = NULL, ylab = NULL, \dots)
+    cex.names =  par("cex.axis"), xlab = NULL, ylab = NULL, 
+    mai = NULL, \dots)
 }
 \arguments{
   \item{x}{the object to be plotted.}
@@ -39,6 +40,7 @@ itemFrequencyPlot(x, \dots)
   \item{cex.names}{\code{"numeric"}; expansion factor for axis names (bar labels).}
   \item{xlab}{a character string with the label for the x axis (use an empty string to force no label).}
   \item{ylab}{a character string with the label for the y axis (see xlab).}
+  \item{mai}{a numerical vector giving the plots margin sizes in inches (see `? par').}
   }
 }
 \value{
@@ -54,7 +56,7 @@ data(Adult_transactions)
 # the following example compares the item frequencies
 # of people with a large income (boxes) with the average in the data set
 Adult.largeIncome <- Adult_transactions[Adult_transactions \%in\% 
-	"income = large"]
+	"income=large"]
 
 # simple plot
 itemFrequencyPlot(Adult.largeIncome)

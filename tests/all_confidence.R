@@ -17,7 +17,7 @@ data <- list(
 trans <- as(data, "transactions")
 fsets <- eclat(trans, parameter = list(supp = 0))
 
-quality(fsets) <- cbind(quality(fsets), all_confidence(fsets))
+quality(fsets) <- cbind(quality(fsets), allConfidence(fsets))
 
 inspect(fsets[order(size(fsets))])
 

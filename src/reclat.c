@@ -122,13 +122,17 @@ void _cleanup(void)
 const char* msg(int code)
 {                               /* --- print an error message */
   const char *msg = NULL;              /* error message */
+   char* buff = NULL;            /* for work around with sprintf */   
 
   if (code < E_UNKNOWN) code = E_UNKNOWN;
   if (code < 0) {               /* if to report an error, */
     msg = errmsgs[-code];       /* get the error message */
     if (!msg) msg = errmsgs[-E_UNKNOWN];
   }
-  if (code > 0) msg = (const char*)code;
+  /* if (code > 0) msg = (const char*)code; */
+  if (code > 0) sprintf(buff, "%i",code);
+  msg = buff;
+  
   return msg;
 }  /* msg() */
 
@@ -303,7 +307,8 @@ SEXP reclat(SEXP x, SEXP y, SEXP dim, SEXP parms, SEXP control)
   case 0: param.target = BM_NORMAL;            break;
   case 1: param.target = BM_CLOSED;            break;
   case 2: param.target = BM_MAXIMAL;           break;
-  default : _cleanup(); error(msg(E_TARGET), (char *)target); break;
+  /* default : _cleanup(); error(msg(E_TARGET), (char *)target); break; */
+  default : _cleanup(); error(msg(E_TARGET), (char)target); break;
   }
   if (supp > 1)                 /* check the minimal support */
   {_cleanup(); error(msg(E_SUPP), supp);}        /* (< 0: absolute number) */

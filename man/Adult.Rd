@@ -139,11 +139,11 @@ Adult[[ "hours-per-week"]] <- ordered(cut(Adult[[ "hours-per-week"]],
 
 Adult[[ "capital-gain"]] <- ordered(cut(Adult[[ "capital-gain"]],
   c(-Inf,0,median(Adult[[ "capital-gain"]][Adult[[ "capital-gain"]]>0]),
-  1000000)), labels = c("None", "Low", "High"))
+  Inf)), labels = c("None", "Low", "High"))
 
 Adult[[ "capital-loss"]] <- ordered(cut(Adult[[ "capital-loss"]],
   c(-Inf,0, median(Adult[[ "capital-loss"]][Adult[[ "capital-loss"]]>0]),
-  1000000)), labels = c("None", "Low", "High"))
+  Inf)), labels = c("None", "Low", "High"))
 
 ### create transactions
 Adult_transactions <- as(Adult, "transactions")

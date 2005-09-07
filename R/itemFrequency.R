@@ -33,7 +33,7 @@ setMethod("itemFrequency", signature(x = "tidLists"),
 setMethod("itemFrequencyPlot", signature(x = "itemMatrix"),
     function(x, type = c("relative", "absolute"),  
       population = NULL, deviation = FALSE, horiz = FALSE,
-      cex.names =  par("cex.axis"), xlab = NULL, ylab = NULL, ...) {
+      cex.names =  par("cex.axis"), xlab = NULL, ylab = NULL, mai = NULL, ...) {
       
       type <- match.arg(type)
       
@@ -48,6 +48,7 @@ setMethod("itemFrequencyPlot", signature(x = "itemMatrix"),
       # regular plot
       if(deviation == FALSE) {
           label <- paste("item frequency (", type, ")", sep="")
+     
       }else{
 
           # show relative deviations instead of frequencies
@@ -58,22 +59,12 @@ setMethod("itemFrequencyPlot", signature(x = "itemMatrix"),
           label <- paste("relative deviation from population", sep="")
       }
 
-    
-      # make enough space for item labels
-      maxLabel <- max(strwidth(names(itemFrequency), units = "inches", 
-      	cex = cex.names))
-      op.mai <- par("mai")
-      if (horiz == FALSE) {
-      	par(mai = c(maxLabel+0.5, op.mai[-1]))
-        if(is.null(ylab)) ylab <- label	
-      }else{
-        par(mai = c(op.mai[1], maxLabel+0.5, op.mai[-c(1,2)]))
-        if(is.null(xlab)) xlab <- label
-      }
+      if(horiz == FALSE) midpoints <- .barplot_vert(itemFrequency, ...,
+	  cex.names = cex.names, xlab = xlab, ylab = label, mai = mai) 
       
-      midpoints <- barplot(itemFrequency, 
-        las = 2, cex.name = cex.names, horiz = horiz,
-	xlab = xlab, ylab = ylab, ...)
+      else  midpoints <- .barplot_horiz(itemFrequency, ...,
+          cex.names = cex.names, xlab = label, ylab = ylab, mai = mai)
+   
       
       # add population means
       if(!is.null(population) && deviation == FALSE)
@@ -81,11 +72,72 @@ setMethod("itemFrequencyPlot", signature(x = "itemMatrix"),
         else lines(population.itemFrequency, midpoints)
       
       
-      # reset image margins
-      par(mai = op.mai)
       
       # return mitpoints
       invisible(midpoints)
       })
+
+
+### helper functions for barplot
+.barplot_vert <- function(height, ..., 
+  cex.names = par("cex.axis"), xlab = NULL, ylab = NULL, mai = NULL){
+
+  labels <- names(height)
+
+  ## for neg. heights we use straight labels
+  if(min(height) < 0) straight <- TRUE
+  else straight <- FALSE
+  
+  op.mai <- par("mai")
+  if(is.null(mai)) {
+    mai <- op.mai
+    if (straight == TRUE) mai[1] <- max(strwidth(labels, units = "inches",
+	    cex = cex.names)) + 0.5
+    else mai[1] <- max(strwidth(labels, units = "inches",
+	    cex = cex.names)) / 2^.5 + 0.5
+  } 
+  par(mai = mai) 
+  on.exit(par(mai = op.mai))
+
+  ## Create plot with no x axis and no x axis label
+  
+  if(straight == TRUE)
+      bp <- barplot(height, ...,  las=2, xlab = xlab, ylab = ylab)
+  
+  else {
+      bp <- barplot(height, ..., xaxt = "n",  xlab = "", ylab = ylab)
+
+      ## move down from the lower end of the plot by 1/20 of the plotting
+      ## area for labels
+      text(bp, par("usr")[3] - (par("usr")[4] - par("usr")[3]) / 20, 
+	  srt = 45, adj = 1,
+	  labels = labels, xpd = TRUE, cex = cex.names)
+
+      ## Plot x axis label
+      mtext(1, text = xlab, line = par("mar")[1]-1)
+  }
+  invisible(bp)
+}
+
+.barplot_horiz <- function(height, ..., 
+  cex.names = par("cex.axis"), xlab = NULL, ylab = NULL, mai = NULL){
+
+  # make enough space for item labels
+  op.mai <- par("mai")
+  if(is.null(mai)) {
+    mai <- op.mai
+    mai[2] <- max(strwidth(names(height), units = "inches", 
+	cex = cex.names)) + 0.5
+
+  }
+  par(mai = mai) 
+  on.exit(par(mai = op.mai))
+
+  midpoints <- barplot(height, 
+    las = 2, cex.name = cex.names, horiz = TRUE,
+    xlab = xlab, ylab = ylab, ...)
+
+  invisible(midpoints)
+}
 
 

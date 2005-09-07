@@ -32,7 +32,7 @@
 %\alias{[}
 %\alias{[,dgCMatrix-method}
 
-\title{Class ``itemMatrix'' --- Sparse Binary Matrix to Represent Sets
+\title{Class ``itemMatrix'' --- Sparse Binary Incidence Matrix to Represent Sets
   of Items}
 \description{The \code{itemMatrix} class is the basic building block
   for transactions, itemsets and rules in package \pkg{arules}. 

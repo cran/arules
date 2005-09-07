@@ -4,35 +4,37 @@
 ### accessors for quality
 
 setMethod("quality", signature(x = "associations"),
-    function(x) {
+  function(x) {
     x@quality
-    })
+  })
 
 setReplaceMethod("quality", signature(x = "associations"),
-    function(x, value) {
+  function(x, value) {
     x@quality <- value
     x
-    })
+  })
 
 
 ### sort + unique
 setMethod("SORT", signature(x = "associations"),
-   function (x, by = "support", decreasing = TRUE) {
-   x[order(x@quality[[by]], decreasing = decreasing)]
-   })
+  function (x, by = "support", decreasing = TRUE) {
+    if(length(x) == 0) return(x)
+    x[order(x@quality[[by]], decreasing = decreasing)]
+  
+  })
 
 
 # this needs a working implementation of duplicated for the 
 # type of associations
 setMethod("unique", signature(x = "associations"),
-    function(x,  incomparables = FALSE, ...) {
+  function(x,  incomparables = FALSE, ...) {
     x[!duplicated(x, incomparables = incomparables, ...)]
-    })
+  })
 
 ### show
 setMethod("show", signature(object = "associations"),
   function(object) {
-  cat("set of",length(object),class(object),"\n")
+    cat("set of",length(object),class(object),"\n")
   })
 
 ###************************************************
@@ -40,17 +42,17 @@ setMethod("show", signature(object = "associations"),
 
 setMethod("items", signature(x = "associations"),
   function(x) {
-  stop(paste("Method items not implemented for class", class(x),"\n"))
+    stop(paste("Method items not implemented for class", class(x),"\n"))
   })
 
 setMethod("length", signature(x = "associations"),
   function(x) {
-  stop(paste("Method length not implemented for class", class(x),"\n"))
+    stop(paste("Method length not implemented for class", class(x),"\n"))
   })
 
 setMethod("labels", signature(object = "associations"),
   function(object) {
-  stop(paste("Method duplicated not implemented for class", class(object),"\n"))
+    stop(paste("Method duplicated not implemented for class", class(object),"\n"))
   })
 
 

@@ -97,22 +97,22 @@ setMethod("[", signature(x = "rules", i = "ANY", j = "ANY", drop = "ANY"),
     })
 
 
-setMethod("combine", signature(first = "rules"),
-    function(first, ...){
-
+setMethod("c", signature(x = "rules"),
+  function(x, ..., recursive = FALSE) {
 # build quality data.frame first.
 # todo: merge data.frames w/differernt quality measures
-    q <- first@quality
-    lapply(list(...), FUN = function(x)
-      q <<- rbind(q, x@quality))
+    q <- x@quality
+    lapply(list(...), FUN = function(i)
+      q <<- rbind(q, i@quality))
 
 # create joint itemMatrix
-    lhs <- lapply(list(...), FUN = function(x) x@lhs)
-    rhs <- lapply(list(...), FUN = function(x) x@rhs)
-    new("rules", lhs = combine(first@lhs, as_list = lhs),
-      rhs = combine(first@rhs, as_list = rhs),
+    lhs <- lapply(list(...), FUN = function(i) i@lhs)
+    rhs <- lapply(list(...), FUN = function(i) i@rhs)
+    new("rules", lhs = c(x@lhs, lhs, recursive = TRUE),
+      rhs = c(x@rhs, rhs, recursive = TRUE),
       quality = q)
-    })
+  })
+
     
 ### this utility function joins the lhs and rhs so it can be
 ### used for duplicated, unique, etc.

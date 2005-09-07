@@ -5,7 +5,7 @@
 # Data Engineering, 15(1):57-69, Jan/Feb 2003.
 #
 
-setMethod("all_confidence",  signature(x = "itemsets"),
+setMethod("allConfidence",  signature(x = "itemsets"),
 function(x,  transactions = NULL, itemSupport = NULL) {
 
   num_items <- dim(items(x))[2]
@@ -77,7 +77,7 @@ function(x,  transactions = NULL, itemSupport = NULL) {
 # this implements only hyperlift for rules with a single item in the consequent
 
 
-setMethod("hyperlift",  signature(x = "rules"),
+setMethod("hyperLift",  signature(x = "rules"),
     function(x, transactions, d = 0.99) {
     c_XY <-  quality(x)$support * length(transactions)
     c_X <- c_XY / quality(x)$confidence
@@ -114,7 +114,7 @@ setMethod("hyperlift",  signature(x = "rules"),
 # 1 - P[C_XY < c_XY | c_X, c_Y] for substitutes.
 
 
-setMethod("hyperconfidence",  signature(x = "rules"),
+setMethod("hyperConfidence",  signature(x = "rules"),
     function(x, transactions, complements = TRUE, significance = FALSE) {
     
     # significance: return significance levels instead of

@@ -1,3 +1,4 @@
+
 if(!isGeneric("%in%")) {
     setGeneric("%in%",
                function(x, table) standardGeneric("%in%"))
@@ -13,14 +14,9 @@ if(!isGeneric("LIST")) {
                function(from, ...) standardGeneric("LIST"))
 }
 
-if(!isGeneric("all_confidence")) {
-    setGeneric("all_confidence",
-               function(x, ...) standardGeneric("all_confidence"))
-}
-
-if(!isGeneric("combine")) {
-    setGeneric("combine",
-               function(first, ...) standardGeneric("combine"))
+if(!isGeneric("allConfidence")) {
+    setGeneric("allConfidence",
+               function(x, ...) standardGeneric("allConfidence"))
 }
 
 if(!isGeneric("decode")) {
@@ -39,14 +35,14 @@ if(!isGeneric("encode")) {
                function(x, code, ...) standardGeneric("encode"))
 }
 
-if(!isGeneric("hyperlift")) {
-  setGeneric("hyperlift",
-	     function(x, ...) standardGeneric("hyperlift"))
+if(!isGeneric("hyperLift")) {
+  setGeneric("hyperLift",
+	     function(x, ...) standardGeneric("hyperLift"))
 }
 
-if(!isGeneric("hyperconfidence")) {
-  setGeneric("hyperconfidence",
-	     function(x, ...) standardGeneric("hyperconfidence"))
+if(!isGeneric("hyperConfidence")) {
+  setGeneric("hyperConfidence",
+	     function(x, ...) standardGeneric("hyperConfidence"))
 }
 
 if(!isGeneric("inspect"))
@@ -114,11 +110,13 @@ if(!isGeneric("lhs<-")) {
                function(x, value) standardGeneric("lhs<-"))
 }
 
+
 if(!isGeneric("match")) {
     setGeneric("match",
                function(x,  table, nomatch = NA, incomparables = FALSE) 
 	       standardGeneric("match"))
 }
+
 
 if(!isGeneric("quality")) {
     setGeneric("quality",

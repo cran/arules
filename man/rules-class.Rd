@@ -9,6 +9,7 @@
 \alias{itemLabels,rules-method}
 \alias{items,rules-method}
 \alias{labels,rules-method}
+\alias{itemLabels,rules-method}
 %\alias{length,rules-method}
 \alias{lhs<-,rules-method}
 \alias{lhs,rules-method}
@@ -23,7 +24,12 @@
 
 \title{Class ``rules'' --- A Set of Rules}
 \description{
-  The \code{rules} class represents a set of rules.
+The \code{rules} class represents a set of rules.
+
+Note that the class can also contain
+a collection of rules with duplicated elements. Duplicated elements can be
+removed with \code{\link{unique}}.
+
 }
 \section{Objects from the Class}{
   Objects are the result of calling the function \code{\link{apriori}}.
@@ -63,6 +69,10 @@
     \item{labels}{\code{signature(object = "rules")};
       returns labels for the rules ("{lhs} => {rhs}") as a
       \code{character} vector} 
+   \item{itemLabels}{\code{signature(object = "rules")};
+      returns the item labels as a character vector.
+      The index for each lable is the column index of the item in the
+      binary matrix.}
 %   \item{length}{\code{signature(x = "rules")};
 %      returns the number of rules stored in the the set}
     \item{lhs}{\code{signature(x = "rules")};
