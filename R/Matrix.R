@@ -5,13 +5,13 @@ setMethod("[", signature(x = "dgCMatrix", i = "ANY", j = "ANY", drop = "ANY"),
    ### drop argument is not implemented, we dont need it
    if(missing(j) && missing(i)) return(x)
 
-   if (missing(i)) i <- 1:x@Dim[1]
-   if (missing(j)) j <- 1:x@Dim[2]
+   ### this should take care of everything "[" can do:
+   ### neg. indices, 0, etc.
+   if (missing(i)) i <- 1 : x@Dim[1]
+   else i <- c(1 : x@Dim[1])[i]
 
-   ### handle negative indices
-   if (i[1] <0) i <- c(1:x@Dim[1])[i]
-   if (j[1] <0) j <- c(1:x@Dim[2])[j]
-   
+   if (missing(j)) j <- 1 : x@Dim[2]
+   else j <- c(1 : x@Dim[2])[j]
 
    z <- .Call("dgC_subset", x, i, j, PACKAGE = "arules")
 

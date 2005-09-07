@@ -120,9 +120,15 @@ static int _asccmp (const void *p1, const void *p2, void *data)
   if (((const ITEM*)p1)->app == APP_NONE)
     return (((const ITEM*)p2)->app == APP_NONE) ? 0 : 1;
   if (((const ITEM*)p2)->app == APP_NONE) return -1;
+  /* 64-bit fix 
   if (((const ITEM*)p1)->frq < (int)data)
     return (((const ITEM*)p2)->frq < (int)data) ? 0 : 1;
   if (((const ITEM*)p2)->frq < (int)data) return -1;
+  */
+  if (((const ITEM*)p1)->frq < *(int *)data)
+    return (((const ITEM*)p2)->frq < *(int *)data) ? 0 : 1;
+  if (((const ITEM*)p2)->frq < *(int *)data) return -1;
+  
   if (((const ITEM*)p1)->frq > ((const ITEM*)p2)->frq) return  1;
   if (((const ITEM*)p1)->frq < ((const ITEM*)p2)->frq) return -1;
   return 0;                     /* return sign of frequency diff. */
@@ -147,9 +153,15 @@ static int _asccmpx (const void *p1, const void *p2, void *data)
   if (((const ITEM*)p1)->app == APP_NONE)
     return (((const ITEM*)p2)->app == APP_NONE) ? 0 : 1;
   if (((const ITEM*)p2)->app == APP_NONE) return -1;
+  /* 64-bit fix
   if (((const ITEM*)p1)->frq < (int)data)
     return (((const ITEM*)p2)->frq < (int)data) ? 0 : 1;
   if (((const ITEM*)p2)->frq < (int)data) return -1;
+  */
+  if (((const ITEM*)p1)->frq < *(int*)data)
+    return (((const ITEM*)p2)->frq < *(int*)data) ? 0 : 1;
+  if (((const ITEM*)p2)->frq < *(int*)data) return -1;
+  
   if (((const ITEM*)p1)->xfq > ((const ITEM*)p2)->xfq) return  1;
   if (((const ITEM*)p1)->xfq < ((const ITEM*)p2)->xfq) return -1;
   return 0;                     /* return sign of frequency diff. */
@@ -162,9 +174,15 @@ static int _descmpx (const void *p1, const void *p2, void *data)
   if (((const ITEM*)p1)->app == APP_NONE)
     return (((const ITEM*)p2)->app == APP_NONE) ? 0 : 1;
   if (((const ITEM*)p2)->app == APP_NONE) return -1;
+  /* 64-bit fix
   if (((const ITEM*)p1)->frq < (int)data)
     return (((const ITEM*)p2)->frq < (int)data) ? 0 : 1;
   if (((const ITEM*)p2)->frq < (int)data) return -1;
+  */  
+  if (((const ITEM*)p1)->frq < *(int*)data)
+    return (((const ITEM*)p2)->frq < *(int*)data) ? 0 : 1;
+  if (((const ITEM*)p2)->frq < *(int*)data) return -1;
+  
   if (((const ITEM*)p1)->xfq > ((const ITEM*)p2)->xfq) return -1;
   if (((const ITEM*)p1)->xfq < ((const ITEM*)p2)->xfq) return  1;
   return 0;                     /* return sign of frequency diff. */
@@ -314,7 +332,16 @@ int is_recode (ITEMSET *iset, int minfrq, int dir, int *map)
   else if (dir >= 0) cmp = _asccmp;   /* comparison function */
   else if (dir > -2) cmp = _descmp;   /* and sort the items */
   else               cmp = _descmpx;  /* w.r.t. their frequency */
-  nim_sort(iset->nimap, cmp, (void*)minfrq, map, 1);
+
+/* 29.9.2005: problems with casting void *data to int on 64-bit architectures
+ * reported by Brian Ripley.
+ * We pass a reference now instead of casting the pointer directly to int
+ * required changes in _asccmp, _asccmpx and _descmpx
+ */
+  
+  /* nim_sort(iset->nimap, cmp, (void*)minfrq, map, 1); */
+  nim_sort(iset->nimap, cmp, &minfrq, map, 1);
+
   for (n = nim_cnt(iset->nimap); --n >= 0; ) {
     item = (ITEM*)nim_byid(iset->nimap, n);
     if (item->frq < minfrq)     /* determine frequent items and */

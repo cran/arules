@@ -57,10 +57,9 @@
 \examples{
 data("Adult_transactions")
 ## Mine only rules with small or large income in the right-hand-side.
-rules <- apriori(Adult_transactions, 
-	         appearance = list(rhs = c("income = small",
-                                           "income = large"),
-                                   default="lhs"))
+rules <- apriori(Adult_transactions, parameter = list(confidence = 0.5), 
+  appearance = list(rhs = c("income=small", "income=large"),
+  default="lhs"))
 }
 \seealso{
   \code{\link{apriori}},

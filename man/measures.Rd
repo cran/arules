@@ -1,10 +1,10 @@
 \name{measures}
-\alias{all_confidence}
-\alias{all_confidence,itemsets-method}
-\alias{hyperlift}
-\alias{hyperlift,rules-method}
-\alias{hyperconfidence}
-\alias{hyperconfidence,rules-method}
+\alias{allConfidence}
+\alias{allConfidence,itemsets-method}
+\alias{hyperLift}
+\alias{hyperLift,rules-method}
+\alias{hyperConfidence}
+\alias{hyperConfidence,rules-method}
 \title{Calculating Additional Interest Measures for Existing Associations}
 \description{
    Provides the generic functions and the needed S4 methods to
@@ -12,14 +12,14 @@
    existing associations.
 }
 \usage{
-all_confidence(x, ...)
-\S4method{all_confidence}{itemsets}(x, transactions = NULL, itemSupport = NULL)
+allConfidence(x, ...)
+\S4method{allConfidence}{itemsets}(x, transactions = NULL, itemSupport = NULL)
 
-hyperlift(x, ...)
-\S4method{hyperlift}{rules}(x, transactions, d = 0.99)
+hyperLift(x, ...)
+\S4method{hyperLift}{rules}(x, transactions, d = 0.99)
 
-hyperconfidence(x, ...)
-\S4method{hyperconfidence}{rules}(x, transactions = NULL,  
+hyperConfidence(x, ...)
+\S4method{hyperConfidence}{rules}(x, transactions = NULL,  
 	complements = TRUE, significance = FALSE)
 }
 \arguments{
@@ -44,7 +44,7 @@ hyperconfidence(x, ...)
   generated from the itemset.
   }
   
-  \item{Hyperlift (see, Hahsler et al., 2005)}{
+  \item{Hyper-lift (see, Hahsler et al., 2005)}{
   is an adaptation of the lift 
   measure which is more robust 
   for low counts. It is based on the idea that under independence 
@@ -62,13 +62,13 @@ hyperconfidence(x, ...)
   where \eqn{E[C_{XY}] = c_X c_Y / m} with \eqn{m} being the number
   of transactions in the datanase.
 
-  Hyperlift is defined as:
+  Hyper-lift is defined as:
   \deqn{\mathrm{hyperlift}(X \Rightarrow Y) = \frac{c_{XY}}{Q_{\delta}[C_{XY}]},}{hyperlift(X -> Y) = c_XY / Q_d[C_XY],}
 
   where  \eqn{Q_{\delta}[C_{XY}]}{Q_d[C_XY]} is the
   quantile of the hypergeometric distribution given by \eqn{\delta}{d}.
   }
-  \item{Hyperconfidence (based on Hahsler et al., 2005)}{
+  \item{Hyper-confidence (based on Hahsler et al., 2005)}{
   calculates the confidence level that we observe too high/low counts 
   for rules \eqn{X \Rightarrow Y}{X -> Y} using the hypergeometric model.
   Since the counts are drawn from a hypergeometric distribution 
@@ -117,22 +117,25 @@ data("Income_transactions")
 ### calculate all-confidence
 itemsets <- apriori(Income_transactions, parameter = list(target = "freq")) 
 quality(itemsets) <- cbind(quality(itemsets), 
-	all_confonfidence = all_confidence(itemsets))
+	allConfonfidence = allConfidence(itemsets))
+
 summary(itemsets)
 
 ### calculate hyperlift for the 0.9 quantile
 rules <- apriori(Income_transactions)
 quality(rules) <- cbind(quality(rules), 
-	hyperlift = hyperlift(rules, Income_transactions, d = 0.9))
-inspect(SORT(rules, by = "hyperlift")[1:5])
+	hyperLift = hyperLift(rules, Income_transactions, d = 0.9))
 
-### calculate hyperconfidence and discard all rules with
+inspect(SORT(rules, by = "hyperLift")[1:5])
+
+### calculate hyper-confidence and discard all rules with
 ### a confidence level < 1\%
 quality(rules) <- cbind(quality(rules),
- 	hyperconfidence = hyperconfidence(rules, Income_transactions))
+ 	hyperConfidence = hyperConfidence(rules, Income_transactions))
 
-rules.conf <- rules[quality(rules)$hyperconfidence >= 0.99]
-inspect(rules.conf[1:10])
+rulesHConf <- rules[quality(rules)$hyperConfidence >= 0.99]
+
+inspect(rulesHConf[1:10])
 
 }
 \keyword{models}

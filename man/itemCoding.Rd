@@ -40,7 +40,8 @@ recode(x, code, \ldots)
 }
 \arguments{
     \item{x}{ a vector or a list of vectors of character strings 
-	(for \code{encode}) or of numeric (for \code{decode}).}
+	(for \code{encode}) or of numeric (for \code{decode}), or
+	an object of class \code{itemMatrix} (for \code{recode}).}
     \item{code}{a vector of character strings used for coding where 
     the position of an item label in the vector gives the item's column ID.  
     The used \code{code} can be obtained from \code{itemMatrix},  
@@ -81,8 +82,8 @@ decode(list, code = code)
 
 ### Example 2: Manually create an itemMatrix 
 data <- list(
-    c("income = small", "age = Young"),
-    c("income = large", "age = Middle-aged")
+    c("income=small", "age=Young"),
+    c("income=large", "age=Middle-aged")
     )
 
 iM <- encode(data, code)

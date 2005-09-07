@@ -3,7 +3,7 @@
 \alias{match,itemsets-method}
 \alias{match,rules-method}
 \alias{match,itemMatrix-method}
-\title{Value Matching for Associations and Transactions}
+\title{Value Matching}
 \description{
   Provides the generic function \code{match}  
   and the S4 methods for associations and transactions. 
@@ -17,7 +17,7 @@ match(x,  table, nomatch = NA, incomparables = FALSE)
 %\S4method{match}{itemMatrix}(x,  table, nomatch = NA, incomparables = FALSE)
 }
 \arguments{
-  \item{x}{ a set of associations or transactions to be matched. }
+    \item{x}{ an object of class \code{itemMatrix}, \code{transactions} or \code{associations}.}
   \item{table}{ a set of associations or transactions to be matched against. }
   \item{nomatch}{ the value to be returned in the case when no match is found. }
   \item{incomparables}{ not implemented. }

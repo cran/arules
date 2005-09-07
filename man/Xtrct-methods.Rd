@@ -62,8 +62,8 @@ Adult_transactions[1:10]
 Adult_transactions[1:100, 1:10]
 
 ### select the first 100 transactions for the items containing
-### "income" or "age = Young" in their labels 
-Adult_transactions[1:100, c("income","age = Young")]
+### "income" or "age=Young" in their labels 
+Adult_transactions[1:100, c("income","age=Young")]
 }
 %\keyword{methods}
 \keyword{array}

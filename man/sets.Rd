@@ -1,12 +1,12 @@
 \name{sets}
 \alias{union}
-\alias{union,itemMatrix,itemMatrix-method}
+%\alias{union,itemMatrix,itemMatrix-method}
 \alias{union,associations,associations-method}
 \alias{intersect}
-\alias{intersect,itemMatrix,itemMatrix-method}
+%\alias{intersect,itemMatrix,itemMatrix-method}
 \alias{intersect,associations,associations-method}
 \alias{setequal}
-\alias{setequal,itemMatrix,itemMatrix-method}
+%\alias{setequal,itemMatrix,itemMatrix-method}
 \alias{setequal,associations,associations-method}
 \title{Set Operations for Associations}
 \description{
@@ -28,14 +28,15 @@ setequal(x, y)
 %\S4method{setequal}{itemMatrix,itemMatrix}(x, y)
 }
 \arguments{
-  \item{x,y}{ a set of associations or an \code{itemMatrix} object.}
+  \item{x,y}{ sets of associations.}
+%  \item{x,y}{ a set of associations or an \code{itemMatrix} object.}
 }
 \value{
    An object of the same class as \code{x} and \code{y}.
 }
 \seealso{
-  \code{\link{associations-class}},
-  \code{\link{itemMatrix-class}}
+  \code{\link{associations-class}}
+%  \code{\link{itemMatrix-class}}
 }
 \examples{
 data("Adult_transactions")

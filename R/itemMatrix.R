@@ -134,19 +134,36 @@ setMethod("[", signature(x = "itemMatrix", i = "ANY", j = "ANY", drop = "ANY"),
 
 
 
-setMethod("combine", signature(first = "itemMatrix"),
-    function(first, ..., as_list = NULL){
+setMethod("c", signature(x = "itemMatrix"),
+    function(x, ..., recursive = FALSE){
      
-     ### in case we allready get a list
-     if(!is.null(as_list)) z <- as_list else z <- list(...)
+     z <- list(...)
+    
+    
+     if(recursive == TRUE) {
+
+	 flatten <- function(x) {
+	     res <- list()
+
+	     for (i in 1 : length(x)) {
+		 if(class(x[[i]]) == "list") 
+		 res <- c(res, Recall(x[[i]]))
+		 else res <- c(res, list(x[[i]]))
+	     }
+
+	     return(res)
+	 }
+	 
+	z <- flatten(list(...)) 
+     } 
      
-     if(length(z) < 1) return(first) 
+     if(length(z) < 1) return(x) 
    
-     num_items <- first@data@Dim[1]
-     num_trans <- first@data@Dim[2]
-     i <- first@data@i
-     p <- first@data@p
-     x <- first@data@x
+     num_items <- x@data@Dim[1]
+     num_trans <- x@data@Dim[2]
+     i <- x@data@i
+     p <- x@data@p
+     x <- x@data@x
      ### pmax makes sure that the column counts for the added elements
      # start with the number of the previous element
      pmax <- p
@@ -238,98 +255,8 @@ setMethod("image", signature(x = "itemMatrix"),
       col.regions = gray(seq(from = 0, to = 1, length = 2)), ...) {
     i <- t(as(x@data, "dgTMatrix"))
     image(i,colorkey=colorkey, ylab=ylab, xlab=xlab, 
-      col.regions = col.regions, ...)
+      col.regions = col.regions, sub=NULL, ...)
     })
-
-
-setMethod("itemFrequencyPlot", signature(x = "itemMatrix"),
-    function(x, type = c("relative", "absolute"),  
-      population = NULL,
-      cex.names =  par("cex.axis"), ...) {
-      type <- match.arg(type)
-     
-      itemFrequency <- itemFrequency(x, type)
-     
-      # make enough space for item labels
-      maxLabel <- max(strwidth(names(itemFrequency), units = "inches", 
-      	cex = cex.names))
-      mai <- par("mai")
-      par(mai = c(maxLabel+0.5, mai[-1]))
-     
-      midpoints <- barplot(itemFrequency, 
-        las = 2, cex.name = cex.names,
-	ylab = paste("item frequency (", type, ")", sep = ""), 
-	...)
-      
-      # add population means
-      if(!is.null(population))
-      lines(midpoints, itemFrequency(population))
-      
-      # reset image margins
-      par(mai = mai)
-      
-      # return mitpoints
-      invisible(midpoints)
-      })
-
-
-setMethod("itemFrequencyPlot", signature(x = "itemMatrix"),
-    function(x, type = c("relative", "absolute"),  
-      population = NULL, deviation = FALSE, horiz = FALSE,
-      cex.names =  par("cex.axis"), xlab = NULL, ylab = NULL, ...) {
-      
-      type <- match.arg(type)
-      
-      # force relative for deviation
-      if(deviation == TRUE) type <- "relative"
-    
-      # get frequencies
-      itemFrequency <- itemFrequency(x, type)
-      if(!is.null(population))
-      	population.itemFrequency <- itemFrequency(population, type)
-
-      # regular plot
-      if(deviation == FALSE) {
-          label <- paste("item frequency (", type, ")", sep="")
-      }else{
-
-          # show relative deviations instead of frequencies
-	  if(is.null(population)) 
-	  	stop("population needed for plotting deviations!")
-	  itemFrequency <- (itemFrequency - population.itemFrequency) / 
-	     population.itemFrequency
-          label <- paste("relative deviation from population", sep="")
-      }
-
-    
-      # make enough space for item labels
-      maxLabel <- max(strwidth(names(itemFrequency), units = "inches", 
-      	cex = cex.names))
-      op.mai <- par("mai")
-      if (horiz == FALSE) {
-      	par(mai = c(maxLabel+0.5, op.mai[-1]))
-        if(is.null(ylab)) ylab <- label	
-      }else{
-        par(mai = c(op.mai[1], maxLabel+0.5, op.mai[-c(1,2)]))
-        if(is.null(xlab)) xlab <- label
-      }
-      
-      midpoints <- barplot(itemFrequency, 
-        las = 2, cex.name = cex.names, horiz = horiz,
-	xlab = xlab, ylab = ylab, ...)
-      
-      # add population means
-      if(!is.null(population) && deviation == FALSE)
-        if(horiz == FALSE) lines(midpoints, population.itemFrequency)
-        else lines(population.itemFrequency, midpoints)
-      
-      
-      # reset image margins
-      par(mai = op.mai)
-      
-      # return mitpoints
-      invisible(midpoints)
-      })
 
 
 setMethod("summary", signature(object = "itemMatrix"),

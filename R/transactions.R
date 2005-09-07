@@ -44,7 +44,7 @@ setAs("data.frame", "transactions", function(from) {
     assign <- sapply(from_levels, length, USE.NAMES = FALSE)
     to_levels <- unlist(from_levels, use.names = FALSE)
     to_vars <- rep(names(from), assign)
-    to_labels <- paste(to_vars, to_levels, sep = " = ")
+    to_labels <- paste(to_vars, to_levels, sep = "=")
     
     lev <- c(0, cumsum(assign))
     to_dim <- c(length(to_labels),dim(from)[1])
@@ -96,14 +96,14 @@ setMethod("[", signature(x = "transactions",
     }
     })
 
-setMethod("combine", signature(first = "transactions"),
-    function(first, ...){
+setMethod("c", signature(x = "transactions"),
+    function(x, ..., recursive = FALSE){
     
-    ti <- first@transactionInfo
-    lapply(list(...), FUN = function(x)
-      ti <<- rbind(ti, x@transactionInfo))
+    ti <- x@transactionInfo
+    lapply(list(...), FUN = function(i)
+      ti <<- rbind(ti, i@transactionInfo))
     
-    new("transactions", combine(first = as(first, "itemMatrix"), ...), 
+    new("transactions", c(x = as(x, "itemMatrix"), ...), 
       transactionInfo = ti)
     })
 

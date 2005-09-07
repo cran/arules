@@ -3,11 +3,13 @@
 \alias{image,itemMatrix-method}
 \alias{image,transactions-method}
 \alias{image,tidLists-method}
-\title{Visual Inspection of an Object Based on ``itemMatrix''}
+\title{Visual Inspection of Binary Incidence Matrices}
 \description{
   Provides the S4 methods \code{image} to
   generate level plots to
-  visually inspect objects based on \code{\link[arules:itemMatrix-class]{itemMatrix}}
+  visually inspect 
+  binary incidence matrices, i.e.,
+  objects based on \code{\link[arules:itemMatrix-class]{itemMatrix}}
   (e.g., transactions, tidLists, items in itemsets or rhs/lhs in rules).
   These plots can be used to identify problems in a data set 
   (e.g., recording problems with some transactions containing all items).

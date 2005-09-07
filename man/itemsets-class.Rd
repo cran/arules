@@ -12,6 +12,7 @@
 \alias{itemInfo,itemsets-method}
 \alias{itemLabels,itemsets-method}
 \alias{labels,itemsets-method}
+\alias{itemLabels,itemsets-method}
 %\alias{length,itemsets-method}
 %\alias{subset,itemsets-method}
 \alias{summary,itemsets-method}
@@ -21,7 +22,11 @@
 \title{Class ``itemsets'' --- A Set of Itemsets}
 \description{
   The \code{itemsets} class represents a set of itemsets and the
-  associated quality measures.
+  associated quality measures. 
+  
+  Note that the class can also contain
+  a collection of itemsets with duplicated elements. Duplicated elements can be
+  removed with \code{\link{unique}}.
 }
 \section{Objects from the Class}{
   Objects are the result of calling the functions \code{\link{apriori}}
@@ -75,6 +80,10 @@
     %\item{subset}{\code{signature(x = "itemsets")};
     %  select a subset of itemsets using restrictions on the quality
     %  measures or on the items present in the itemsets}
+   \item{itemLabels}{\code{signature(object = "itemsets")};
+      returns the item labels as a character vector.
+      The index for each lable is the column index of the item in the
+      binary matrix.}
     \item{summary}{\code{signature(object = "itemsets")}}
     \item{tidLists}{\code{signature(object = "itemsets")};
       returns the transaction ID list}

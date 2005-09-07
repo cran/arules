@@ -1,31 +1,42 @@
 \name{combine}
-\alias{combine}
-\alias{combine,itemMatrix-method}
-\alias{combine,transactions-method}
-\alias{combine,rules-method}
-\alias{combine,itemsets-method}
+%\alias{c}
+\alias{c,itemMatrix-method}
+\alias{c,transactions-method}
+\alias{c,rules-method}
+\alias{c,itemsets-method}
 \title{Combining Objects}
 \description{
-  Provides the generic function \code{combine} and the S4 methods to 
-  combine several objects based on \code{\link[arules:itemMatrix-class]{itemMatrix}}
+  Provides the 
+  S4 methods to 
+  combine several objects based on 
+  \code{\link[arules:itemMatrix-class]{itemMatrix}}
   into a single object.
-  For example, to combine several mined \code{\link[arules:itemsets-class]{itemsets}} 
+  
+  Note, use \code{\link{union}} rather than \code{c}
+  to combine several mined 
+  \code{\link[arules:itemsets-class]{itemsets}} 
   (or \code{\link[arules:rules-class]{rules}}) into a single set.
 }
 \usage{
-combine(first, \dots)
-%\S4method{combine}{itemMatrix}(first, ..., as_list)
-%\S4method{combine}{transactions}(first, ...)
-%\S4method{combine}{rules}(first, ...)
-%\S4method{combine}{itemsets}(first, ...)
+%c(x, \ldots, recursive = FALSE)
+\S4method{c}{itemMatrix}(x, ..., recursive = FALSE)
+
+\S4method{c}{transactions}(x, ..., recursive = FALSE)
+
+\S4method{c}{rules}(x, ..., recursive = FALSE)
+
+\S4method{c}{itemsets}(x, ..., recursive = FALSE)
 }
 \arguments{
-  \item{first}{ first object.}
-  \item{\dots}{ further objects to be combined.}
-%  \item{as_list}{ used internally.}
+  \item{x}{ first object.}
+  \item{\dots}{ further objects of the same class as \code{x} to be combined.}
+  \item{recursive}{ \code{"logical"};  If \code{recursive=TRUE}, 
+    the function recursively
+    descends through lists combining all their elements into a
+    vector.}
 }
 \value{
-  An object of the same class as \code{first}.
+  An object of the same class as \code{x}.
 }
 \seealso{
   \code{\link{itemMatrix-class}},
@@ -40,14 +51,14 @@ data("Adult_transactions")
 a1 <- Adult_transactions[1:10]
 a2 <- Adult_transactions[101:110]
 
-a_comb <- combine(a1, a2)
-summary(a_comb)
+aComb <- c(a1, a2)
+summary(aComb)
 
 ### combine rules
 r1 <- apriori(Adult_transactions[1:1000])
 r2 <- apriori(Adult_transactions[1001:2000])
-r_comb <- unique(combine(r1, r2)) 
-r_comb
+rComb <- unique(c(r1, r2)) 
+rComb
 
 }
 \keyword{manip}

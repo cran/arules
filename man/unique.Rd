@@ -2,23 +2,25 @@
 \alias{unique}
 \alias{unique,associations-method}
 \alias{unique,itemMatrix-method}
-\title{Remove Duplicated Associations and Transactions}
+\title{Remove Duplicated Elements from a Collection} 
 \description{
   Provides the generic function \code{unique}   
-  and the S4 methods for associations and transactions. 
+  and the S4 methods for \code{itemMatrix}.
   \code{unique} uses 
   \code{\link{duplicated}}
-  to return a set of \code{\link[arules:associations-class]{associations}}
-  or  \code{\link[arules:transactions-class]{transactions}}
+  to return an \code{itemMatrix} 
   with the duplicate elements removed.
-}
+  
+  Note that \code{unique} can also be used on collections of 
+  \code{associations}.
+  }
 \usage{
 unique(x, incomparables = FALSE, ...)
 %\S4method{unique}{associations}(x, incomparables = FALSE, ...)
 %\S4method{unique}{itemMatrix}(x, incomparables = FALSE, ...)
 }
 \arguments{
-  \item{x}{ a set of associations. }
+  \item{x}{ an object of class \code{itemMatrix} or associations. }
   \item{\dots}{ further arguments (currently unused). }
   \item{incomparables}{ currently unused.}
 }
@@ -35,7 +37,9 @@ data("Adult_transactions")
 
 r1 <- apriori(Adult_transactions[1:1000])
 r2 <- apriori(Adult_transactions[1001:2000])
-r_comb <- combine(r1, r2)
+
+### Note that this produces a collection of rules from two sets
+r_comb <- c(r1, r2)
 r_comb <- unique(r_comb)
 r_comb
 
