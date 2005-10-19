@@ -39,11 +39,11 @@ setequal(x, y)
 %  \code{\link{itemMatrix-class}}
 }
 \examples{
-data("Adult_transactions")
+data("Adult")
 
 
 ### mine some rules
-r <- apriori(Adult_transactions)
+r <- apriori(Adult)
 
 ### take 2 subsets
 r1 <- r[1:10]

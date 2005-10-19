@@ -27,8 +27,8 @@ inspect(x, ...)
   \code{\link{transactions-class}}
 }
 \examples{
-data("Adult_transactions")
-rules <- apriori(Adult_transactions)
+data("Adult")
+rules <- apriori(Adult)
 inspect(rules[1000])
 }
 \keyword{print}

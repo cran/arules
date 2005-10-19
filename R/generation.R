@@ -1,7 +1,9 @@
-
+###*******************************************************
+### Function random.transactions
+###
 ### Generate a random transaction data set. Each item 
-#   has the same success probability (prob) to be part 
-#   of a transactions.
+###   has the same success probability (prob) to be part 
+###   of a transactions.
 
 random.transactions <- function(nitems, ntrans, prob = 0.1) {
 
@@ -33,7 +35,7 @@ random.transactions <- function(nitems, ntrans, prob = 0.1) {
 
   new("transactions", data = data,
       itemInfo = data.frame(labels = paste("item", c(1:nitems), sep="" )),
-      transactionInfo = data.frame(transactionIDs = 
+      transactionInfo = data.frame(transactionID = 
         paste("trans", c(1:ntrans), sep="" ))
      )
 }

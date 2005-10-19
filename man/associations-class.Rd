@@ -1,6 +1,7 @@
 \name{associations-class}
 \docType{class}
 \alias{associations-class}
+%
 \alias{summary.associations-class}
 \alias{show,associations-method}
 %\alias{SORT,associations-method}
@@ -11,6 +12,7 @@
 \alias{items,associations-method}
 \alias{labels,associations-method}
 \alias{length,associations-method}
+\alias{t,associations-method}
 
 
 \title{Class ``associations'' - A Set of Associations}

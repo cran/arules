@@ -1,20 +1,21 @@
 \name{Adult}
 \alias{Adult}
-\alias{Adult_transactions}
+\alias{AdultUCI}
 \docType{data}
 \title{Adult Data Set}
 \description{
-  The \code{Adult} data set contains the questionnaire data of the
+  The \code{AdultUCI} data set contains the questionnaire data of the
   \dQuote{Adult} database (originally called the \dQuote{Census Income}
-  Database) formatted as a \code{data.frame} prepared for use with
-  \pkg{arules}.  
-  The \code{Adult_transactions} data set contains the data 
+  Database) formatted as a \code{data.frame}.
+  The \code{Adult} data set contains the data 
   already prepared and coerced to 
-  \code{\link[arules:transactions-class]{transactions}}.
+  \code{\link[arules:transactions-class]{transactions}}
+  for use with
+  \pkg{arules}.  
 }
 \usage{
 data("Adult")
-data("Adult_transactions")
+data("AdultUCI")
 }
 \details{
   The \dQuote{Adult} database was extracted from the census bureau database
@@ -50,7 +51,7 @@ data("Adult_transactions")
     }
 }
 \format{
-  The \code{Adult} data set contains a data frame with 48842
+  The \code{AdultUCI} data set contains a data frame with 48842
   observations on the following 15 variables.
   \describe{
     \item{age}{a numeric vector.}
@@ -121,33 +122,33 @@ data("Adult_transactions")
     Discovery and Data Mining}. 
 }
 \examples{
-data("Adult")
-dim(Adult)
-Adult[1:2,]
+data("AdultUCI")
+dim(AdultUCI)
+AdultUCI[1:2,]
 
 ### remove attributes
-Adult[["fnlwgt"]] <- NULL
-Adult[["education-num"]] <- NULL
+AdultUCI[["fnlwgt"]] <- NULL
+AdultUCI[["education-num"]] <- NULL
 
 ### map metric attributes
-Adult[[ "age"]] <- ordered(cut(Adult[[ "age"]], c(15,25,45,65,100)),
+AdultUCI[[ "age"]] <- ordered(cut(AdultUCI[[ "age"]], c(15,25,45,65,100)),
   labels = c("Young", "Middle-aged", "Senior", "Old"))
 
-Adult[[ "hours-per-week"]] <- ordered(cut(Adult[[ "hours-per-week"]],
+AdultUCI[[ "hours-per-week"]] <- ordered(cut(AdultUCI[[ "hours-per-week"]],
   c(0,25,40,60,168)),
   labels = c("Part-time", "Full-time", "Over-time", "Workaholic"))
 
-Adult[[ "capital-gain"]] <- ordered(cut(Adult[[ "capital-gain"]],
-  c(-Inf,0,median(Adult[[ "capital-gain"]][Adult[[ "capital-gain"]]>0]),
+AdultUCI[[ "capital-gain"]] <- ordered(cut(AdultUCI[[ "capital-gain"]],
+  c(-Inf,0,median(AdultUCI[[ "capital-gain"]][AdultUCI[[ "capital-gain"]]>0]),
   Inf)), labels = c("None", "Low", "High"))
 
-Adult[[ "capital-loss"]] <- ordered(cut(Adult[[ "capital-loss"]],
-  c(-Inf,0, median(Adult[[ "capital-loss"]][Adult[[ "capital-loss"]]>0]),
+AdultUCI[[ "capital-loss"]] <- ordered(cut(AdultUCI[[ "capital-loss"]],
+  c(-Inf,0, median(AdultUCI[[ "capital-loss"]][AdultUCI[[ "capital-loss"]]>0]),
   Inf)), labels = c("None", "Low", "High"))
 
 ### create transactions
-Adult_transactions <- as(Adult, "transactions")
-Adult_transactions
+Adult <- as(AdultUCI, "transactions")
+Adult
 
 }
 \keyword{datasets}

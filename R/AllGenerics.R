@@ -14,6 +14,12 @@ if(!isGeneric("LIST")) {
                function(from, ...) standardGeneric("LIST"))
 }
 
+if(!isGeneric("WRITE")) {
+  setGeneric("WRITE",
+    function(x, ...) standardGeneric("WRITE"))
+}
+
+
 if(!isGeneric("allConfidence")) {
     setGeneric("allConfidence",
                function(x, ...) standardGeneric("allConfidence"))

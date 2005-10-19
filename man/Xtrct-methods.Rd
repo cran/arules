@@ -14,10 +14,6 @@
 \alias{[,itemMatrix-method}
 \alias{[,dgCMatrix-method}  % internal method
 \alias{[,tidLists-method}
-%
-\alias{[,Matrix,ANY,ANY,ANY-method} % Namespace import problem
-\alias{[<-,Matrix,ANY,ANY,ANY-method} % Namespace import problem
-%
 \title{Methods for "[": Extraction or Subsetting in Package 'arules'}
 \description{
   Methods for \code{"["}, i.e., extraction or subsetting in package
@@ -55,18 +51,18 @@
 
 }
 \examples{
-data(Adult_transactions)
-Adult_transactions
+data(Adult)
+Adult
 
 ### select first 10 transactions
-Adult_transactions[1:10]
+Adult[1:10]
 
 ### select first 10 items for first 100 transactions
-Adult_transactions[1:100, 1:10]
+Adult[1:100, 1:10]
 
 ### select the first 100 transactions for the items containing
 ### "income" or "age=Young" in their labels 
-Adult_transactions[1:100, c("income","age=Young")]
+Adult[1:100, c("income","age=Young")]
 }
 %\keyword{methods}
 \keyword{array}

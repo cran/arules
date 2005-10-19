@@ -112,26 +112,26 @@ hyperConfidence(x, ...)
 
 \seealso{ \code{\link{itemsets-class}}, \code{\link{rules-class}} }
 \examples{
-data("Income_transactions")
+data("Income")
 
 ### calculate all-confidence
-itemsets <- apriori(Income_transactions, parameter = list(target = "freq")) 
+itemsets <- apriori(Income, parameter = list(target = "freq")) 
 quality(itemsets) <- cbind(quality(itemsets), 
 	allConfonfidence = allConfidence(itemsets))
 
 summary(itemsets)
 
 ### calculate hyperlift for the 0.9 quantile
-rules <- apriori(Income_transactions)
+rules <- apriori(Income)
 quality(rules) <- cbind(quality(rules), 
-	hyperLift = hyperLift(rules, Income_transactions, d = 0.9))
+	hyperLift = hyperLift(rules, Income, d = 0.9))
 
 inspect(SORT(rules, by = "hyperLift")[1:5])
 
 ### calculate hyper-confidence and discard all rules with
 ### a confidence level < 1\%
 quality(rules) <- cbind(quality(rules),
- 	hyperConfidence = hyperConfidence(rules, Income_transactions))
+ 	hyperConfidence = hyperConfidence(rules, Income))
 
 rulesHConf <- rules[quality(rules)$hyperConfidence >= 0.99]
 

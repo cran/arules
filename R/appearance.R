@@ -1,3 +1,9 @@
+###*******************************************************
+### Class APappearance
+###
+### parameters for item appearance in APRIORI
+
+
 setAs("NULL", "APappearance",
 function(from, to) { new(to) })
 

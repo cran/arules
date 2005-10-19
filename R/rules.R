@@ -1,6 +1,11 @@
+###*******************************************************
+### Class rules
+###
+### a set of rules, subclass of associations
+
+
 ###************************************************
 ### dimensions
-
 setMethod("length", signature(x = "rules"),
     function(x) {
     length(x@lhs)
@@ -14,7 +19,6 @@ setMethod("size", signature(x = "rules"),
 
 ###***********************************************
 ### coercion
-
 setAs("rules", "data.frame",
     function(from) {
     if(!length(from)) return (data.frame())

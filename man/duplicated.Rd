@@ -38,10 +38,10 @@ duplicated(x, incomparables = FALSE, ...)
   \code{\link{itemMatrix-class}}
 }
 \examples{
-data("Adult_transactions")
+data("Adult")
 
-r1 <- apriori(Adult_transactions[1:1000])
-r2 <- apriori(Adult_transactions[1001:2000])
+r1 <- apriori(Adult[1:1000])
+r2 <- apriori(Adult[1001:2000])
 
 ### Note this creates a collection of rules from two sets of rules
 r_comb <- c(r1, r2)

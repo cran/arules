@@ -1,4 +1,6 @@
 ###*****************************************************************
+### Functions union, intersect, setequal 
+###
 ### set operations
 
 ### makes no sense for itemMatrix

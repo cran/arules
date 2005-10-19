@@ -1,3 +1,7 @@
+###*******************************************************
+### Function sample
+###
+### sample from transactions or associations
 
 setMethod("sample", signature(x = "itemMatrix"),
     function(x, size, replace = FALSE, prob = NULL) {

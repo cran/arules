@@ -1,17 +1,22 @@
 ###*****************************************************
+### Class transactions
+###
+### transaction data
+
+###*****************************************************
 ### coercions
 
 setAs("matrix", "transactions",
     function(from) {
     new("transactions", as(from, "itemMatrix"), 
-     transactionInfo = data.frame(transactionIDs = dimnames(from)[[1]]))
+     transactionInfo = data.frame(transactionID = dimnames(from)[[1]]))
     })
 
 setAs("transactions", "matrix",
     function(from) {
     m <- as(as(from, "itemMatrix"), "matrix")
-    if (!is.null(from@transactionInfo[["transactionIDs"]])) 
-    	dimnames(m)[[1]] <- from@transactionInfo[["transactionIDs"]]
+    if (!is.null(from@transactionInfo[["transactionID"]])) 
+    	dimnames(m)[[1]] <- from@transactionInfo[["transactionID"]]
     return(m)
     })
 		      
@@ -19,7 +24,7 @@ setAs("transactions", "matrix",
 setAs("list", "transactions",
 	  function(from) {
 	  new("transactions", as(from, "itemMatrix"), 
-	       transactionInfo = data.frame(transactionIDs = names(from)))
+	       transactionInfo = data.frame(transactionID = names(from)))
 	  })
 
 setAs("transactions", "list",
@@ -31,7 +36,7 @@ setMethod("LIST", signature(from = "transactions"),
 	  function(from, decode = TRUE) {
 	  l <- LIST(as(from, "itemMatrix"), decode)
 	  if(decode == TRUE) 
-	    names(l) <- from@transactionInfo[["transactionIDs"]]
+	    names(l) <- from@transactionInfo[["transactionID"]]
 	  return(l)
 	  })
 
@@ -71,6 +76,26 @@ setAs("data.frame", "transactions", function(from) {
       levels=to_levels)))
 })
 
+
+### this does not reverse coercion data.frame -> transactions
+### it is just used for output formating!
+setAs( "transactions", "data.frame", function(from) {
+    if(!length(from)) return (data.frame())
+    
+    items <- paste("{",sapply(as(from, "list"),
+	  function(x) paste(x, collapse =", ")),"}", sep="")
+    
+    if(!length(from@transactionInfo)) return(data.frame(items = items))
+    data.frame(items = items, from@transactionInfo)
+
+  
+})
+
+### no t for associations
+setMethod("t", signature(x = "transactions"),
+  function(x) {
+    stop("Object not transposable! Use as() for coercion to tidLists.")
+  })
 
 ###*****************************************************
 ### subset + combine
@@ -163,13 +188,13 @@ setMethod("labels", signature(object = "transactions"),
     function(object, ...) {
     
     ### check if transaction labels exist
-    transactionIDs <-  
+    transactionID <-  
       if(length(object@transactionInfo) != 0)   
-        as(object@transactionInfo[["transactionIDs"]], "character")
+        as(object@transactionInfo[["transactionID"]], "character")
       else
         as(1 : length(object), "character")
 
-    list(items = itemLabels(object), transactionIDs = transactionIDs)
+    list(items = itemLabels(object), transactionID = transactionID)
     })
 			      
 
@@ -198,3 +223,11 @@ function(file, format = c("basket", "single"), sep = NULL, cols = NULL)
                     quiet = TRUE)
     as(split(entries[[cols[2]]], entries[[cols[1]]]), "transactions")
 }
+
+### write
+
+setMethod("WRITE", signature(x = "transactions"),
+  function(x, ...) {
+    write.table(as(x, "data.frame"), ...)
+  })
+

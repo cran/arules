@@ -36,7 +36,7 @@ itemFrequency(x, ...)
   \code{\link{transactions-class}}
 }
 \examples{
-data("Adult_transactions")
-itemFrequency(Adult_transactions, type = "relative")
+data("Adult")
+itemFrequency(Adult, type = "relative")
 }
 \keyword{models}

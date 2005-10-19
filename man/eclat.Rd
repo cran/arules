@@ -48,9 +48,9 @@ eclat(data, parameter = NULL, control = NULL)
   \code{\link{apriori}}
 }
 \examples{
-data("Adult_transactions")
+data("Adult")
 ## Mine itemsets with minimum support of 0.1.
-itemsets <- eclat(Adult_transactions,
+itemsets <- eclat(Adult,
                   parameter = list(supp = 0.1, maxlen = 15))
 }
 \keyword{models}

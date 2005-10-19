@@ -1,3 +1,9 @@
+###*******************************************************
+### Function [ for dgCMatrix
+###
+### additional subset functionality for dgCMatrix
+
+
 ### subset method directly on a dgCMatrix
 setMethod("[", signature(x = "dgCMatrix", i = "ANY", j = "ANY", drop = "ANY"), 
    function(x, i, j, ..., drop) {

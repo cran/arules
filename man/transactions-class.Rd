@@ -1,19 +1,23 @@
 \name{transactions-class}
 \docType{class}
 \alias{transactions-class}
+%
 %\alias{[,transactions-method}
 \alias{coerce,matrix,transactions-method}
 \alias{coerce,list,transactions-method}
 \alias{coerce,transactions,matrix-method}
 \alias{coerce,transactions,list-method}
 \alias{coerce,data.frame,transactions-method}
+\alias{coerce,transactions,data.frame-method}
 %\alias{image,transactions-method}
 \alias{labels,transactions-method}
+\alias{show,transactions-method}
 \alias{transactionInfo<-,transactions-method}
 \alias{transactionInfo,transactions-method}
 \alias{transactionInfo<-}
 \alias{transactionInfo}
-\alias{show,transactions-method}
+\alias{t,transactions-method}
+%
 \alias{summary,transactions-method}
 \alias{summary.transactions-class}
 \alias{show,summary.transactions-method}
@@ -75,10 +79,15 @@
       as the components \code{variables} and \code{levels}.}
 %    \item{image}{\code{signature(x = "transactions")};
 %      plots an image of the transactions for visual inspection}
+    \item{coerce}{\code{signature(from = "transactions", to = "data.frame")}; 
+      represents the set of transactions in a printable form 
+      as a \code{data.frame}. 
+      Note that this does not reverse coercion from \code{data.frame} 
+      to \code{transactions}.}
     \item{labels}{\code{signature(x = "transactions")};
       returns the labels (item labels and transaction IDs) 
       for the incidence matrix as a list of two vectors named \code{items}
-      and \code{transactionIDs}.}
+      and \code{transactionID}.}
     \item{transactionInfo<-}{\code{signature(x = "transactions")};
       replaces the transactionInfo data frame}
     \item{transactionInfo}{\code{signature(x = "transactions")};

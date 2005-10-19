@@ -1,5 +1,8 @@
-# This is a poor mans implementation which mines all rules and
-# then filters the rules which do not stam from the itemsets
+###*******************************************************
+### Function ruleInduction
+###
+### This is a poor man's implementation which mines all rules and
+### then filters the rules which do not stam from the itemsets
   
 
 setMethod("ruleInduction",  signature(x = "itemsets"),

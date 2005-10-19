@@ -1,6 +1,7 @@
 \name{tidLists-class}
 \docType{class}
 \alias{tidLists-class}
+%
 \alias{tidLists_or_NULL-class}
 %\alias{[,tidLists-method}
 \alias{coerce,tidLists,matrix-method}
@@ -13,10 +14,12 @@
 \alias{dim,tidLists-method}
 \alias{labels,tidLists-method}
 \alias{itemLabels,tidLists-method}
+\alias{itemInfo,tidLists-method}
+\alias{transactionInfo,tidLists-method}
+\alias{t,tidLists-method}
 \alias{show,tidLists-method}
 \alias{summary,tidLists-method}
-\alias{transactionInfo,tidLists-method}
-\alias{itemInfo,tidLists-method}
+%
 \alias{summary.tidLists-class}
 \alias{show,summary.tidLists-method}
 
@@ -91,7 +94,7 @@
   \item{labels}{\code{signature(x = "transactions")};
     returns the labels (item labels and transaction IDs)
     for the incidence matrix as a list of two vectors named \code{items}
-    and \code{transactionIDs}.}
+    and \code{transactionID}.}
    \item{itemInfo}{ returns the slot \code{itemInfo}.}
   \item{itemLabels}{\code{signature(object = "tidLists")};
     returns the item labels as a character vector.}

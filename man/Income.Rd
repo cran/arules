@@ -1,10 +1,10 @@
 \name{Income}
 \alias{Income}
-\alias{Income_transactions}
+\alias{IncomeESL}
 \docType{data}
 \title{Income Data Set}
 \description{
-  The \code{Income} data set originates from an example in the book
+  The \code{IncomeESL} data set originates from an example in the book
   \sQuote{The Elements of Statistical Learning} (see Section source). 
   The data set is an extract from this survey.  It consists of 8993
   instances (obtained from the original data set with 9409 instances, by
@@ -12,16 +12,16 @@
   demographic attributes.  The data set is a good mixture of categorical
   and continuous variables with a lot of missing data.  This is
   characteristic of data mining applications.
-  The \code{Income_transactions} data set contains the data
+  The \code{Income} data set contains the data
   already prepared and coerced to
   \code{\link[arules:transactions-class]{transactions}}.
 }
 \usage{
 data("Income")
-data("Income_transactions")
+data("IncomeESL")
 }
 \format{
-  \code{Adult} is a data frame with 8993 observations on the 
+  \code{IncomeESL} is a data frame with 8993 observations on the 
   following 14 variables.
   \describe{
     \item{income}{an ordered factor with levels \code{[0,10)} < \code{[10,15)} < \code{[15,20)} < \code{[20,25)} < \code{[25,30)} < \code{[30,40)} < \code{[40,50)} < \code{[50,75)} < \code{75+}}
@@ -41,8 +41,9 @@ data("Income_transactions")
   }
 }
 \details{
-  To create \code{Income_transactions}, the original data frame in
-  \code{Income} prepared in a similar way as described in \sQuote{The Elements
+  To create \code{Income} (the transactions object), the original data frame in
+  \code{IncomeESL} is prepared in a similar way as 
+  described in \sQuote{The Elements
   of Statistical Learning.} We 
   removed cases with missing values and
   cut each ordinal variable (age, education,
@@ -60,36 +61,36 @@ data("Income_transactions")
   called \sQuote{Marketing})
 }
 \examples{
-data("Income")
-Income[1:3, ]
+data("IncomeESL")
+IncomeESL[1:3, ]
 
 ### remove incomplete cases
-Income <- Income[complete.cases(Income), ]
+IncomeESL <- IncomeESL[complete.cases(IncomeESL), ]
 
 ### preparing the data set
-Income[["income"]] <- factor((as.numeric(Income[["income"]]) > 6) +1,
+IncomeESL[["income"]] <- factor((as.numeric(IncomeESL[["income"]]) > 6) +1,
   levels = 1 : 2 , labels = c("$0-$40,000", "$40,000+"))
 	  
-Income[["age"]] <- factor((as.numeric(Income[["age"]]) > 3) +1,
+IncomeESL[["age"]] <- factor((as.numeric(IncomeESL[["age"]]) > 3) +1,
   levels = 1 : 2 , labels = c("14-34", "35+"))
 
-Income[["education"]] <- factor((as.numeric(Income[["education"]]) > 4) +1,
+IncomeESL[["education"]] <- factor((as.numeric(IncomeESL[["education"]]) > 4) +1,
   levels = 1 : 2 , labels = c("no college graduate", "college graduate"))
 
-Income[["years in bay area"]] <- factor(
-  (as.numeric(Income[["years in bay area"]]) > 4) +1,
+IncomeESL[["years in bay area"]] <- factor(
+  (as.numeric(IncomeESL[["years in bay area"]]) > 4) +1,
   levels = 1 : 2 , labels = c("1-9", "10+"))
 
-Income[["number in household"]] <- factor(
-  (as.numeric(Income[["number in household"]]) > 3) +1,
+IncomeESL[["number in household"]] <- factor(
+  (as.numeric(IncomeESL[["number in household"]]) > 3) +1,
   levels = 1 : 2 , labels = c("1", "2+"))
 
-Income[["number of children"]] <- factor(
-  (as.numeric(Income[["number of children"]]) > 1) +0,
+IncomeESL[["number of children"]] <- factor(
+  (as.numeric(IncomeESL[["number of children"]]) > 1) +0,
   levels = 0 : 1 , labels = c("0", "1+"))
 	
 ##  creating transactions
-Income_transactions <- as(Income, "transactions")
-Income_transactions
+Income <- as(IncomeESL, "transactions")
+Income
 }
 \keyword{datasets}

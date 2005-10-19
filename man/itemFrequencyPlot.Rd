@@ -51,11 +51,11 @@ adding to the graph.
   \code{\link{itemMatrix-class}}
 }
 \examples{
-data(Adult_transactions)
+data(Adult)
 
 # the following example compares the item frequencies
 # of people with a large income (boxes) with the average in the data set
-Adult.largeIncome <- Adult_transactions[Adult_transactions \%in\% 
+Adult.largeIncome <- Adult[Adult \%in\% 
 	"income=large"]
 
 # simple plot
@@ -64,11 +64,11 @@ itemFrequencyPlot(Adult.largeIncome)
 # plot with the averages of the population plotted as a line 
 # (first 72 variables/items)
 itemFrequencyPlot(Adult.largeIncome[, 1:72], 
-	population = Adult_transactions[, 1:72])
+	population = Adult[, 1:72])
 
 # plot of deviations from population mean (horizontal bars)
 itemFrequencyPlot(Adult.largeIncome[, 1:72], 
-        population = Adult_transactions[, 1:72], 
+        population = Adult[, 1:72], 
 	deviation = TRUE, horiz = TRUE)
 }
 \keyword{hplot}

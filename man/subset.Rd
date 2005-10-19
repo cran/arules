@@ -39,8 +39,8 @@ elements which satisfy the conditions.
   \code{\link{transactions-class}}
 }
 \examples{
-data("Adult_transactions")
-rules <- apriori(Adult_transactions)
+data("Adult")
+rules <- apriori(Adult)
 
 ### subset the rules
 rules.sub <- subset(rules, subset = rhs \%in\% "Never-married" & lift > 2)

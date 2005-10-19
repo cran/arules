@@ -1,3 +1,6 @@
+###*******************************************************
+### common definitions for arules
+
 .types <- function(method = "apriori") {
   targets <- c("frequent itemsets", "maximally frequent itemsets", "closed frequent itemsets", "rules", "hyperedgesets")
     methods <- c("apriori", "eclat")

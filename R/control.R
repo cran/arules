@@ -1,7 +1,12 @@
+###*******************************************************
+### Classes AScontrol, APcontrol, ECcontrol
+###
+### control parameters for the apriori and eclat functions
+### + superclass (AScontol)
+
+
 ###**********************************************************
 ### coercion
-
-
 setAs("NULL", "APcontrol",
 function(from, to) { new(to) })
 
@@ -14,7 +19,6 @@ setAs("list", "ECcontrol", function(from, to) .list2object(from, to))
 
 ###**********************************************************
 ### initialize
-
 setMethod("initialize", "AScontrol",
    function(.Object, sort, ...) {
      if (!missing(sort)) {

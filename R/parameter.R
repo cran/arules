@@ -1,3 +1,9 @@
+###*******************************************************
+### Classes ASparameter, APparameter, ECparameter
+###
+### algorithm parameters for the apriori and eclat functions
+### + superclass (ASparameter)
+
 ###********************************************************
 ### coercion
 
