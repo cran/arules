@@ -1,3 +1,6 @@
+###*******************************************************
+### Function support
+###
 ### return  support of itemsets in transactions usind tid-list intersections
 
 setMethod("support", signature(x = "itemMatrix"),

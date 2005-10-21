@@ -35,7 +35,7 @@ size(x)
   \code{\link{transactions-class}}
 }
 \examples{
-data("Adult_transactions")
-summary(size(Adult_transactions))
+data("Adult")
+summary(size(Adult))
 }
 \keyword{attribute}

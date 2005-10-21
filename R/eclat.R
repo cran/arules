@@ -1,3 +1,10 @@
+###*******************************************************
+### Function eclat
+###
+### Call the ECLAT algorithm
+
+
+
 eclat <-  function(data, parameter = NULL, control = NULL)
   {
     

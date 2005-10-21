@@ -48,15 +48,15 @@ support(x, transactions, ...)
 \code{\link{transactions-class}}
 }
 \examples{
-data("Income_transactions")
+data("Income")
 
 ### find and some frequent itemsets
-itemsets <- eclat(Income_transactions)[1:5]
+itemsets <- eclat(Income)[1:5]
 
 ### inspect the support returned by eclat
 inspect(itemsets)
 
 ### count support in the database
-support(items(itemsets), Income_transactions)
+support(items(itemsets), Income)
 }
 \keyword{models}

@@ -96,10 +96,10 @@
   \code{\link{tidLists-class}} 
 }
 \examples{
-data("Adult_transactions")
+data("Adult")
 
 ## Mine frequent itemsets with Eclat.
-fsets <- eclat(Adult_transactions, parameter = list(supp = 0.5))
+fsets <- eclat(Adult, parameter = list(supp = 0.5))
 
 ## Display the 5 itemsets with the highest support.
 fsets.top5 <- SORT(fsets)[1:5]

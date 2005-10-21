@@ -49,9 +49,9 @@ LIST(from, \dots)
   \code{\link{itemMatrix-class}}
 }
 \examples{
-data(Adult_transactions)
+data(Adult)
 
-LIST(Adult_transactions[1:5])
-LIST(Adult_transactions[1:5], decode = FALSE)
+LIST(Adult[1:5])
+LIST(Adult[1:5], decode = FALSE)
 }
 \keyword{manip}

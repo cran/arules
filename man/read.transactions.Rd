@@ -36,4 +36,31 @@ read.transactions(file, format = c("basket", "single"), sep = NULL,
 \seealso{
   \code{\link{transactions-class}}
 }
+\examples{
+### create a demo file using basket format for the example
+data <- paste("item1,item2","item1","item2,item3", sep="\n")
+cat(data)
+write(data, file = "demo_basket")
+
+### read demo data
+tr <- read.transactions("demo_basket", format = "basket", sep=",")
+inspect(tr)
+
+
+### create a demo file using single format for the example
+### column 1 contains the transaction ID and column 2 contains one item
+data <- paste("trans1 item1", "trans2 item1","trans2 item2", sep ="\n")
+cat(data)
+write(data, file = "demo_single")
+
+### read demo data
+tr <- read.transactions("demo_single", format = "single", cols = c(1,2))
+inspect(tr)
+
+
+### tidy up
+unlink("demo_basket")
+unlink("demo_single")
+
+}
 \keyword{file}

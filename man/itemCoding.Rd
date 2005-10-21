@@ -67,15 +67,15 @@ recode(x, code, \ldots)
   \code{\link{itemMatrix-class}}
 }
 \examples{
-data("Adult_transactions")
+data("Adult")
 
 ### Example 1: Manual decoding
 ### get code
-code <- itemLabels(Adult_transactions)
+code <- itemLabels(Adult)
 head(code)
 
 ### get undecoded list and decode in a second step
-list <- LIST(Adult_transactions[1:5], decode = FALSE)
+list <- LIST(Adult[1:5], decode = FALSE)
 list
 
 decode(list, code = code)
@@ -97,12 +97,12 @@ as(iM, "transactions")
 
 ### Example 3: use recode
 ### select first 100 transactions and all education-related items
-sub <- Adult_transactions[1:100, "education"]
+sub <- Adult[1:100, "education"]
 itemLabels(sub)
 image(sub)
 
-### recode to match Adult_transactions again
-sub.recoded <- recode(sub, match = Adult_transactions)
+### recode to match Adult again
+sub.recoded <- recode(sub, match = Adult)
 image(sub.recoded)
 }
 \keyword{manip}

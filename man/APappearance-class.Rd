@@ -55,9 +55,9 @@
   \url{http://fuzzy.cs.uni-magdeburg.de/~borgelt/apriori.html}
 }
 \examples{
-data("Adult_transactions")
+data("Adult")
 ## Mine only rules with small or large income in the right-hand-side.
-rules <- apriori(Adult_transactions, parameter = list(confidence = 0.5), 
+rules <- apriori(Adult, parameter = list(confidence = 0.5), 
   appearance = list(rhs = c("income=small", "income=large"),
   default="lhs"))
 }

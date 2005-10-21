@@ -28,10 +28,10 @@ SORT(x, \dots)
   \code{\link{associations-class}}
 }
 \examples{
-data("Adult_transactions")
+data("Adult")
 
 ## Mine frequent itemsets with Eclat.
-fsets <- eclat(Adult_transactions, parameter = list(supp = 0.5))
+fsets <- eclat(Adult, parameter = list(supp = 0.5))
 
 ## Print the 5 itemsets with the highest support as a list.
 as(SORT(fsets)[1:5], "list")

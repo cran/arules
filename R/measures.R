@@ -1,3 +1,8 @@
+###*******************************************************
+### Functions for additional interest measures
+###
+
+
 # calculate all-confidence for existing (frequent) itemsets.
 #
 # Edward R. Omiecinski. Alternative interest measures for mining 

@@ -1,4 +1,11 @@
 ###*******************************************************
+### Class itemMatrix
+###
+### Basic class for sparse representation of sets or collections
+### of itemsets
+
+
+###*******************************************************
 ### dimensions
 
 ### dimensions of the binary matrix

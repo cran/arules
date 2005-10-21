@@ -1,3 +1,9 @@
+###*******************************************************
+### Function inspect
+###
+### print informations for associations and transactions
+
+
 setMethod("inspect", signature(x = "itemsets"),
     function(x, ...) {
 

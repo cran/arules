@@ -1,7 +1,12 @@
+###*******************************************************
+### Class itemsets
+###
+### a set of itemsets, subclass of associations
+
+
+
 ###************************************************
 ### dimensions
-
-
 setMethod("length", signature(x = "itemsets"),
    function(x) {
    length(x@items)
@@ -14,7 +19,6 @@ setMethod("size", signature(x = "itemsets"),
 
 ###***********************************************
 ### coercion
-
 setAs("itemsets", "data.frame", 
     function(from) {
     if(!length(from)) return (data.frame())

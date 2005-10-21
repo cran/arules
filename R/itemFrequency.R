@@ -1,3 +1,7 @@
+###*******************************************************
+### Functions itemFrequency and itemFrequencyPlot
+###
+### to calculate item frequencies (item support) and plot item frequencies
 
 ###*****************************************************
 ### return item frequency in a set
@@ -102,7 +106,8 @@ setMethod("itemFrequencyPlot", signature(x = "itemMatrix"),
   ## Create plot with no x axis and no x axis label
   
   if(straight == TRUE)
-      bp <- barplot(height, ...,  las=2, xlab = xlab, ylab = ylab)
+      bp <- barplot(height, ...,  las=2, cex.names = cex.names, 
+	  xlab = xlab, ylab = ylab)
   
   else {
       bp <- barplot(height, ..., xaxt = "n",  xlab = "", ylab = ylab)

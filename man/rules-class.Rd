@@ -99,10 +99,10 @@ removed with \code{\link{unique}}.
   \code{\link{itemMatrix-class}},
 }
 \examples{
-data("Adult_transactions")
+data("Adult")
 
 ## Mine rules.
-rules <- apriori(Adult_transactions, parameter = list(support = 0.4))
+rules <- apriori(Adult, parameter = list(support = 0.4))
 
 ## Select a subset using an item in the right-hand-side
 ## and a quality measure

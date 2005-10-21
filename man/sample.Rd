@@ -31,10 +31,10 @@ sample(x, size, replace = FALSE, prob = NULL)
   \code{\link{itemMatrix-class}}.
 }
 \examples{
-data("Adult_transactions")
+data("Adult")
 
 ## sample with replacement
-s <- sample(Adult_transactions, 500, replace = TRUE)
+s <- sample(Adult, 500, replace = TRUE)
 s
 }
 \keyword{manip}

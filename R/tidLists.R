@@ -1,3 +1,8 @@
+###*******************************************************
+### Class tidLists
+###
+### transaction ID lists
+
 
 ###*********************************************************
 ### dimensions of the binary matrix
@@ -53,6 +58,12 @@ setMethod("image", signature(x = "tidLists"),
     })
 
 
+### no t for associations
+setMethod("t", signature(x = "tidLists"),
+  function(x) {
+    stop("Object not transposable! Use as() for coercion to transactions.")
+  })
+
 
 ###*****************************************************
 ### subset
@@ -97,7 +108,7 @@ setMethod("LIST", signature(from = "tidLists"),
     function(from, decode = TRUE) {
     z <- as(from@data, "list")
     if (decode == TRUE ) {
-      z <- decode(z, labels(from)$transactionIDs)
+      z <- decode(z, labels(from)$transactionID)
       names(z) <- itemLabels(from)
     }
     
@@ -108,9 +119,9 @@ setMethod("LIST", signature(from = "tidLists"),
 setAs("tidLists", "matrix",
     function(from) {
     m <- as(t(from@data), "matrix")
-    if (!is.null(from@transactionInfo[["transactionIDs"]]))
+    if (!is.null(from@transactionInfo[["transactionID"]]))
     dimnames(m) <- list(from@itemInfo[["labels"]],
-      from@transactionInfo[["transactionIDs"]])
+      from@transactionInfo[["transactionID"]])
     return(m)
     })
 
@@ -163,13 +174,13 @@ setMethod("itemInfo", signature(object = "tidLists"),
 
 setMethod("labels", signature(object = "tidLists"),
     function(object, ...) {
-        transactionIDs <- as(object@transactionInfo[["transactionIDs"]],
+        transactionID <- as(object@transactionInfo[["transactionID"]],
             "character")
-    if(length(transactionIDs) == 0) 
-    transactionIDs <- as(1 : dim(object)[2],"character")   
+    if(length(transactionID) == 0) 
+    transactionID <- as(1 : dim(object)[2],"character")   
 
     list(items = itemLabels(object),
-        transactionIDs = transactionIDs) 
+        transactionID = transactionID) 
 })
 
 setMethod("itemLabels", signature(object = "tidLists"),

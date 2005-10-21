@@ -1,3 +1,9 @@
+###*******************************************************
+### Function subset
+###
+### subset associations using constraints on interest measures 
+### or items.
+
 ###****************************************************************
 ### subset for itemMatrix
 

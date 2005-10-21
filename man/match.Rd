@@ -35,13 +35,13 @@ match(x,  table, nomatch = NA, incomparables = FALSE)
   \code{\link{itemMatrix-class}}
 }
 \examples{
-data("Adult_transactions")
+data("Adult")
 
 ### get unique transactions
-vals <- unique(Adult_transactions)
+vals <- unique(Adult)
 
 ### count frequency
-cnts <- tabulate(match(Adult_transactions, vals))
+cnts <- tabulate(match(Adult, vals))
 
 ### plot frequency counts
 plot(sort(cnts, decreasing=TRUE))

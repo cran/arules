@@ -53,9 +53,9 @@ apriori(data, parameter = NULL, appearance = NULL, control = NULL)
   (FIMI 2003, Melbourne, FL, USA).
 }
 \examples{
-data("Adult_transactions")
+data("Adult")
 ## Mine association rules.
-rules <- apriori(Adult_transactions, 
+rules <- apriori(Adult, 
                  parameter = list(supp = 0.5, conf = 0.9,
                                   target = "rules"))
 summary(rules)

@@ -1,8 +1,14 @@
+###*******************************************************
+### Virtual class associations
+###
+### vitual class which defines the (and implements some) common 
+### functionality for associations (e.g., rules, itemsets)
+
+
 ###************************************************
 ### common methods
 
 ### accessors for quality
-
 setMethod("quality", signature(x = "associations"),
   function(x) {
     x@quality
@@ -37,6 +43,13 @@ setMethod("show", signature(object = "associations"),
     cat("set of",length(object),class(object),"\n")
   })
 
+### no t for associations
+setMethod("t", signature(x = "associations"),
+  function(x) {
+    stop("Object not transposable!")  
+})
+
+
 ###************************************************
 ### implementations of associations must provide minimal interface
 
@@ -55,5 +68,14 @@ setMethod("labels", signature(object = "associations"),
     stop(paste("Method duplicated not implemented for class", class(object),"\n"))
   })
 
+
+###****************************************************
+### writing associations to disk
+
+		   
+setMethod("WRITE", signature(x = "associations"),
+  function(x, ...) {
+    write.table(as(x, "data.frame"), ...)
+  })
 
 

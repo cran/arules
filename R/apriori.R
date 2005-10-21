@@ -1,3 +1,9 @@
+###*******************************************************
+### Function apriori
+###
+### Call the APRIORI algorithm
+
+
 apriori <-  function(data, parameter = NULL, appearance = NULL, control = NULL)
   {
     ### prepare data

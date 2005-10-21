@@ -34,14 +34,14 @@ ruleInduction(x, ...)
 \seealso{ \code{\link{itemsets-class}}, \code{\link{rules-class}}
 \code{\link{transactions-class}}}
 \examples{
-data("Adult_transactions")
+data("Adult")
 
 ### find all closed frequent itemsets
-closed <- apriori(Adult_transactions, 
+closed <- apriori(Adult, 
 	parameter = list(target = "closed", support = 0.4))
 
 ### rule induction
-rules <- ruleInduction(closed, Adult_transactions, verbose = TRUE)
+rules <- ruleInduction(closed, Adult, verbose = TRUE)
 
 ### inspect the resulting rules
 inspect(SORT(rules, by = "lift")[1:5])
