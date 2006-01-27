@@ -18,7 +18,8 @@ exportClasses(
     "rules", "summary.rules",
     "ASparameter", "AScontrol",
     "APparameter", "APcontrol", "APappearance",
-    "ECparameter", "ECcontrol"
+    "ECparameter", "ECcontrol",
+    "ar_similarity", "ar_cross_dissimilarity", "dist"
     )
 
 exportMethods(
@@ -64,5 +65,8 @@ exportMethods(
     "tidLists", 
     "transactionInfo", "transactionInfo<-",
     "union",
-    "unique"
+    "unique",
+    "affinity", 
+    "predict",
+    "dissimilarity"
     )

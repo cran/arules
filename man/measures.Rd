@@ -94,7 +94,7 @@ hyperConfidence(x, ...)
 }
 }
 \value{
-   A numeriv vector containing the values of the interest measure 
+   A numeric vector containing the values of the interest measure 
    for each association
    in the set of associations \code{x}.
 }

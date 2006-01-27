@@ -14,6 +14,10 @@
 \alias{[,itemMatrix-method}
 \alias{[,dgCMatrix-method}  % internal method
 \alias{[,tidLists-method}
+%
+\alias{[,Matrix,ANY,ANY,ANY-method} % Namespace import problem
+\alias{[<-,Matrix,ANY,ANY,ANY-method} % Namespace import problem
+%
 \title{Methods for "[": Extraction or Subsetting in Package 'arules'}
 \description{
   Methods for \code{"["}, i.e., extraction or subsetting in package

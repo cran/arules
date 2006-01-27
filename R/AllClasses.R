@@ -271,3 +271,22 @@ setClass("summary.rules",
       lengthSummary = "table"),
     contains = "summary.associations")
 
+
+###**********************************************************
+### proximities for clustering
+
+### we reuse S3 dist for compatibility reasons
+setOldClass("dist")
+
+### similarity
+setClass("ar_similarity",
+  contains = "matrix",
+  representation(method = "character")
+)
+
+### distances between x and y
+setClass("ar_cross_dissimilarity",
+  contains = "matrix",
+  representation(method = "character")
+)
+
