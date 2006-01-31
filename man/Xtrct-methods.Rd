@@ -17,6 +17,7 @@
 %
 \alias{[,Matrix,ANY,ANY,ANY-method} % Namespace import problem
 \alias{[<-,Matrix,ANY,ANY,ANY-method} % Namespace import problem
+\alias{[<-,Matrix,missing,missing,ANY-method} % Namespace import problem
 %
 \title{Methods for "[": Extraction or Subsetting in Package 'arules'}
 \description{
@@ -66,7 +67,7 @@ Adult[1:100, 1:10]
 
 ### select the first 100 transactions for the items containing
 ### "income" or "age=Young" in their labels 
-Adult[1:100, c("income","age=Young")]
+Adult[1:100, c("income=small", "income=large" ,"age=Young")]
 }
 %\keyword{methods}
 \keyword{array}

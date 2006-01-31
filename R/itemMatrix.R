@@ -123,8 +123,8 @@ setMethod("[", signature(x = "itemMatrix", i = "ANY", j = "ANY", drop = "ANY"),
         
     ### transalate item labels to column numbers, if j is character
     if (is.character(j)) 
-      j <- sort(unique(unlist(sapply(j, 
-        function(e) grep(e, as.character(itemInfo(x)$labels))))))
+    # fixed thanks to a bug report by Seth Falcon (06/31/01)
+    j <- itemLabels(x) %in% j
     
     if(missing(i)) {
         y@data <- x@data[j, ..., drop=drop]

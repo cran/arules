@@ -97,7 +97,7 @@ as(iM, "transactions")
 
 ### Example 3: use recode
 ### select first 100 transactions and all education-related items
-sub <- Adult[1:100, "education"]
+sub <- Adult[1:100, itemInfo(Adult)$variables ==  "education"]
 itemLabels(sub)
 image(sub)
 

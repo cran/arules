@@ -60,7 +60,11 @@ setMethod("itemFrequencyPlot", signature(x = "itemMatrix"),
 	  	stop("population needed for plotting deviations!")
 	  itemFrequency <- (itemFrequency - population.itemFrequency) / 
 	     population.itemFrequency
-          label <- paste("relative deviation from population", sep="")
+          
+	  # take care of div by zero
+	  itemFrequency[is.infinite(itemFrequency)] <- NaN   
+	     
+	  label <- paste("relative deviation from population", sep="")
       }
 
       if(horiz == FALSE) midpoints <- .barplot_vert(itemFrequency, ...,
