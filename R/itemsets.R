@@ -32,8 +32,8 @@ setAs("itemsets", "data.frame",
 ### labels
 
 setMethod("labels", signature(object = "itemsets"),
-   function(object) {
-     labels(object@items)$elements
+   function(object, ...) {
+     labels(object@items, ...)$elements
 })
 
 setMethod("itemLabels", signature(object = "itemsets"),

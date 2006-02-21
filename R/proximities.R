@@ -1,6 +1,8 @@
 ###*******************************************************************
 ### general dissimilarity method
 
+#####*****************************************************************
+### dissimilarity between transactions or items
 setMethod("dissimilarity", signature(x = "matrix"),
     function(x, y = NULL, method = NULL, args = NULL) {
        ## Compute dissimilarities on binary data
@@ -11,10 +13,12 @@ setMethod("dissimilarity", signature(x = "matrix"),
          stop("x is not a binary matrix!")
 
        ## cross dissimilarities?
-       cross <- FALSE
        if (!is.null(y)) cross <- TRUE
-
-       builtin_methods <- c("Affinity", "Jaccard", "Matching", "Dice")
+       else cross <- FALSE
+      
+       
+       builtin_methods <- c("Affinity", "Jaccard", "Matching", "Dice", 
+	 "Euclidean")
        
        if(is.null(method)) ind <- 2      # Jaccard is standard
        else if(is.na(ind <- pmatch(tolower(method),
@@ -42,6 +46,12 @@ setMethod("dissimilarity", signature(x = "matrix"),
 	     	1 - x %*% affinities %*% t(y))
 	  }
 	  
+      ## Euclidean is special too
+      } else if(ind == 5) {
+        if(cross == TRUE) stop("Euclidean cross-distance not implemented.")
+         
+        dist <- dist(x, method = "euclidean")
+	
       } else {
        
 	if(cross != TRUE) y <- x
@@ -107,23 +117,37 @@ setMethod("dissimilarity", signature(x = "matrix"),
     })
 
 
+###*******************************************************************
 ### wrapper for itemMatrix (transactions)
 setMethod("dissimilarity", signature(x = "itemMatrix"),
-   function(x, y = NULL, method = NULL, args = NULL) {
-      
-     if(!is.null(y)) y <- as(y, "matrix")
+   function(x, y = NULL, method = NULL, args = NULL, 
+     which = "transactions") {
      
-     dissimilarity(as(x, "matrix"), y = y, method = method, args = args)
+     ## items instead of transactions
+     if (pmatch(which, c("transactions", "items")) == 2) items <- TRUE
+     else items <- FALSE
+     
+     x <- as(x, "matrix")
+     if(items) x <- t(x) 
+       
+     if(!is.null(y)) { 
+       y <- as(y, "matrix")
+       if(items) y <- t(y) 
+     }
+     
+     dissimilarity(x = x, y = y, method = method, args = args)
    })
 
+###*******************************************************************
 ### wrapper for associations
 setMethod("dissimilarity", signature(x = "associations"),
-    function(x, y = NULL, method = NULL, args = NULL) {
-      
-      if(!is.null(y)) y <- as(items(y), "matrix")
-      
-      dissimilarity(as(items(x), "matrix"), y = y, method = method, args = args)
-    })
+    function(x, y = NULL, method = NULL, args = NULL, 
+      which = "transactions") {
+
+      if(!is.null(y)) y <- items(y)
+
+      dissimilarity(items(x), y, method = method, args = args, which = which)
+    })   
     
 
 ###*******************************************************************
@@ -135,7 +159,8 @@ setMethod("dissimilarity", signature(x = "associations"),
 setMethod("affinity", signature(x = "matrix"),
     function(x) {
       ## Affinity is basically the Jaccard similarity between items
-      new("ar_similarity", as.matrix(1 - dissimilarity(t(x), method = "Jaccard")),
+      new("ar_similarity", 
+	as.matrix(1 - dissimilarity(t(x), method = "Jaccard")),
       method = "Affinity")
       ## Fix: S4 as(..., "matrix") does not work
     })

@@ -93,12 +93,17 @@ setAs("itemMatrix", "dgCMatrix",
 ### match: find elements which contain some items (as 
 ###        labels or in itemInfo)
 setMethod("%in%", signature(x = "itemMatrix"),
-    function(x, table) {
-    pos <- which(apply(sapply(x@itemInfo, "%in%", table, 
-        simplify = TRUE), 1, any))
-      if(length(pos) == 0) pos <- 0 
-      return(diff(x@data[pos]@p)==1)
-    })
+  function(x, table) {
+    pos <- match(table, itemInfo(x)$labels)
+    return(diff(x@data[pos]@p)==1)
+  })
+
+### partial in  
+setMethod("%pin%", signature(x = "itemMatrix"),
+  function(x, table) {
+    pos <- grep(table, as.character(itemInfo(x)$labels))
+    return(diff(x@data[pos]@p)==1)
+  })
 
 
 ###*******************************************************
@@ -215,10 +220,10 @@ setMethod("match", signature(x = "itemMatrix"),
 ### accessors
 
 setMethod("labels", signature(object = "itemMatrix"),
-    function(object, ...) {
+    function(object, itemSep = ", ", setStart = "{", setEnd = "}", ...) {
     list(items = as(object@itemInfo[["labels"]], "character"),
-    	elements = paste("{",sapply(as(object, "list"),
-          function(x) paste(x, collapse =", ")),"}", sep=""))
+    	elements = paste(setStart, sapply(as(object, "list"),
+          function(x) paste(x, collapse =itemSep)), setEnd, sep=""))
     })
 
 setMethod("itemLabels", signature(object = "itemMatrix"),

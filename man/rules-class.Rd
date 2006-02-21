@@ -8,6 +8,8 @@
 \alias{itemInfo,rules-method}
 \alias{itemLabels,rules-method}
 \alias{items,rules-method}
+\alias{itemsets}
+\alias{itemsets,rules-method}
 \alias{labels,rules-method}
 \alias{itemLabels,rules-method}
 %\alias{length,rules-method}
@@ -66,9 +68,16 @@ removed with \code{\link{unique}}.
       lhs and rhs (i.e., the itemsets
       which generated the rule) as a 
       the \code{\link[arules:itemMatrix-class]{itemMatrix}}}
+    \item{itemsets}{\code{signature(x = "rules")};
+      returns a collection of the itemsets which generated the rules (one 
+      itemset for each rule). Note that the collection can contain duplicated
+      elements. Use \code{unique} to remove duplicates and obtain a 
+      proper set.}  
     \item{labels}{\code{signature(object = "rules")};
       returns labels for the rules ("{lhs} => {rhs}") as a
-      \code{character} vector} 
+      \code{character} vector. The representation can be customized using 
+      the additional parameter \code{ruleSep} and parameters for \code{label}
+      defined in \code{\link[arules:itemMatrix-class]{itemMatrix.}}} 
    \item{itemLabels}{\code{signature(object = "rules")};
       returns the item labels as a character vector.
       The index for each lable is the column index of the item in the
@@ -104,9 +113,9 @@ data("Adult")
 ## Mine rules.
 rules <- apriori(Adult, parameter = list(support = 0.4))
 
-## Select a subset using an item in the right-hand-side
-## and a quality measure
-rules.sub <- subset(rules, subset = rhs \%in\% "sex" & lift > 1.3)
+## Select a subset of rules using partial matching on the items 
+## in the right-hand-side and a quality measure
+rules.sub <- subset(rules, subset = rhs \%pin\% "sex" & lift > 1.3)
 
 ## Display rules.
 inspect(SORT(rules.sub)[1:3])

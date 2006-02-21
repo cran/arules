@@ -14,9 +14,11 @@
   \code{\link[arules:associations-class]{associations}}.
 }
 \usage{
-dissimilarity(x, y = NULL, method = NULL, args = NULL)
-\S4method{dissimilarity}{itemMatrix}(x, y = NULL, method = NULL, args = NULL)
-\S4method{dissimilarity}{associations}(x, y = NULL, method = NULL, args = NULL)
+dissimilarity(x, y = NULL, method = NULL, args = NULL, \ldots)
+\S4method{dissimilarity}{itemMatrix}(x, y = NULL, method = NULL, args = NULL,
+	which = "transactions")
+\S4method{dissimilarity}{associations}(x, y = NULL, method = NULL, args = NULL,
+	which = "transactions")
 \S4method{dissimilarity}{matrix}(x, y = NULL, method = NULL, args = NULL)
 }
 \arguments{
@@ -49,6 +51,9 @@ dissimilarity(x, y = NULL, method = NULL, args = NULL)
      \code{"Affinity"} for associations, the affinities between the items in 
      the transactions are needed and passed to the method as the first 
      element in \code{args}.}
+   \item{which}{a string indicating if the dissimilarity should be 
+     calculated between transavtions (default) or items (use \code{"items"}). }
+   \item{\ldots}{further arguments.}
 }
 \value{
   returns an object of class \code{dist}.

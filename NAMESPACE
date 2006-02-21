@@ -24,11 +24,14 @@ exportClasses(
 
 exportMethods(
     "%in%",
+    "%pin%",
     "LIST",
     "SORT",
     "WRITE",
     "[",
     "allConfidence",
+    "crossSupportRatio",
+    "crossTable",
     "c", 
     "coerce", 
     "decode", 
@@ -43,6 +46,7 @@ exportMethods(
     "intersect", 
     "itemInfo", "itemInfo<-", 
     "items", "items<-",
+    "itemsets",
     "itemLabels", "itemLabels<-", 
     "itemFrequency", 
     "itemFrequencyPlot",

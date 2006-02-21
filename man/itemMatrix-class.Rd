@@ -15,6 +15,8 @@
 \alias{dim,itemMatrix-method}
 %\alias{image,itemMatrix-method}
 \alias{\%in\%,itemMatrix-method}
+\alias{\%pin\%}
+\alias{\%pin\%,itemMatrix-method}
 \alias{itemLabels<-,itemMatrix-method}
 \alias{itemLabels,itemMatrix-method}
 \alias{itemLabels<-}
@@ -66,11 +68,12 @@
       labels, the \code{data.frame} can contain arbitrary named vectors
       (of the same length) to represent, e.g., variable names and values
       which were used to create the binary items or hierarchical
-      category information associated with each item label.  This
-      information is used for the \code{\%in\%} method in this
-      class.  The subset method in associations can use this method to
-      select subsets of associations containing items with matching
-      variable or category names.
+      category information associated with each item label.  
+      %This
+      %information is used for the \code{\%in\%} method in this
+      %class.  The subset method in associations can use this method to
+      %select subsets of associations containing items with matching
+      %variable or category names.
     }
   }
 }
@@ -109,8 +112,11 @@
 %    \item{image}{\code{signature(x = "itemMatrix")};
 %      plots an image of the itemMatrix for visual inspection.}
     \item{\%in\%}{\code{signature(x = "itemMatrix")}: matches values 
-      against the item labels (and the additional information) for 
+      against the item labels for 
       each element (row) in the itemMatrix.}
+    \item{\%pin\%}{\code{signature(x = "itemMatrix")}: matches values 
+      against the item labels for 
+      each element (row) in the itemMatrix using partial matching.}
     \item{itemLabels}{\code{signature(object = "itemMatrix")};
       returns the item labels used for encoding as a character vector.}
     \item{itemLabels<-}{\code{signature(object = "itemMatrix")};
@@ -125,7 +131,12 @@
     \item{labels}{\code{signature(x = "transactions")};
       returns the labels (item labels and element names) 
       for the matrix as a list of two vectors named \code{items}
-      and \code{elements}.}
+      and \code{elements}. The following arguments can be used to customize
+      the representation of the elements: 
+      \code{itemSep}, 
+      \code{setStart} and 
+      \code{setEnd}. 
+      }
 %    \item{length}{\code{signature(x = "itemMatrix")};
 %      returns the number of elements (rows) in the itemMatrix.}
     \item{show}{\code{signature(object = "itemMatrix")}}

@@ -25,11 +25,6 @@
 
 
 \begin{document}
-<<echo=FALSE>>=
-options(width = 75)
-### for sampling
-set.seed <- 1234
-@
 %% ------------------------------------------------------------------
 %% ------------------------------------------------------------------
 \title{\pkg{arules} ---  A Computational Environment for Mining 
@@ -986,24 +981,63 @@ Economics and Business Administration available via
 
 First, we load \pkg{arules} and the data set.
 
-<<>>=
-library("arules")
-@
+\begin{Schunk}
+\begin{Sinput}
+> library("arules")
+\end{Sinput}
+\begin{Soutput}
+Loading required package: stats4
+Loading required package: Matrix
+\end{Soutput}
+\end{Schunk}
 
-<<epub1>>=
-data("Epub")
-Epub
-@
+\begin{Schunk}
+\begin{Sinput}
+> data("Epub")
+> Epub
+\end{Sinput}
+\begin{Soutput}
+transactions in sparse format with
+ 3307 transactions (rows) and
+ 436 items (columns)
+\end{Soutput}
+\end{Schunk}
 
-We see that the data set consists of \Sexpr{length(Epub)} transactions
-and is represented as a sparse matrix with \Sexpr{length(Epub)} rows
-and \Sexpr{dim(Epub)[2]} columns which represent the items. 
+We see that the data set consists of 3307 transactions
+and is represented as a sparse matrix with 3307 rows
+and 436 columns which represent the items. 
 Next, we use the \func{summary} to get more information about the 
 data set.
 
-<<epub2>>=
-summary(Epub)
-@
+\begin{Schunk}
+\begin{Sinput}
+> summary(Epub)
+\end{Sinput}
+\begin{Soutput}
+transactions as itemMatrix in sparse format with
+ 3307 rows (elements/itemsets/transactions) and
+ 436 columns (items)
+
+most frequent items:
+doc_11d doc_4c6 doc_2cd  doc_71 doc_24e (Other) 
+    194     115     106     102      93    5323 
+
+element (itemset/transaction) length distribution:
+   1    2    3    4    5    6    7    8    9   10   11   12   13   14   15 
+2359  491  201   95   46   24   17   12   11    7    9    4    4    3    1 
+  16   17   18   19   20   22   24   25   28   34   38   74   79 
+   3    2    3    5    2    1    1    1    1    1    1    1    1 
+
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  1.000   1.000   1.000   1.794   2.000  79.000 
+
+includes extended transaction information - examples:
+  transactionID           TimeStamp
+1  session_4795 2003-01-01 19:59:00
+2  session_4797 2003-01-02 06:46:01
+3  session_479a 2003-01-02 09:50:38
+\end{Soutput}
+\end{Schunk}
 
 \func{summary} displays the most frequent items in the data set,
 information about the transaction length distribution and that the data
@@ -1012,26 +1046,38 @@ data set contains transaction IDs and in addition time stamps (using
 class \class{POSIXct}) for the transactions.  This additional
 information can be used for analyzing the data set.
 
-<<>>=
-year <- strftime(as.POSIXlt(transactionInfo(Epub)[["TimeStamp"]]), "%Y")
-table(year)
-@
+\begin{Schunk}
+\begin{Sinput}
+> year <- strftime(as.POSIXlt(transactionInfo(Epub)[["TimeStamp"]]), 
++     "%Y")
+> table(year)
+\end{Sinput}
+\begin{Soutput}
+year
+2003 2004 2005 
+ 988 1375  944 
+\end{Soutput}
+\end{Schunk}
 
-For 2003, the first year in the data set, we have \Sexpr{table(year)[1]}
+For 2003, the first year in the data set, we have 988
 transactions.  We can select the corresponding transactions and inspect
 the structure using a level-plot (see Figure~\ref{fig:imageEpub}).
 
 %%% lattice image returns an object of class "trellis"
-<<fig=FALSE>>=
-Epub2003 <- Epub[year == "2003"]
-length(Epub2003)
-image(Epub2003)
-@ %
+\begin{Schunk}
+\begin{Sinput}
+> Epub2003 <- Epub[year == "2003"]
+> length(Epub2003)
+\end{Sinput}
+\begin{Soutput}
+[1] 988
+\end{Soutput}
+\begin{Sinput}
+> image(Epub2003)
+\end{Sinput}
+\end{Schunk}
 \begin{figure}
 \centering
-<<echo=FALSE, fig=TRUE, include=FALSE, label=epub>>=
-print(image(Epub2003))
-@ %
 \includegraphics[width=10cm]{arules-epub}
 \caption{The Epub data set (year 2003).}
 \label{fig:imageEpub}
@@ -1051,9 +1097,17 @@ documents from the publication site).  To find the very long
 transactions we can use the \func{size} and select very long
 transactions (containing more than 20 items).
 
-<<>>=
-transactionInfo(Epub2003[size(Epub2003) > 20])
-@
+\begin{Schunk}
+\begin{Sinput}
+> transactionInfo(Epub2003[size(Epub2003) > 20])
+\end{Sinput}
+\begin{Soutput}
+    transactionID           TimeStamp
+301  session_56e2 2003-04-29 12:30:38
+580  session_6308 2003-08-17 17:16:12
+896  session_72dc 2003-12-29 19:35:35
+\end{Soutput}
+\end{Schunk}
 
 We found three long transactions and printed the corresponding
 transaction information. Of course, size can be used in a similar
@@ -1064,32 +1118,93 @@ Since the long transactions identified above would result in
 a very long printout, we will inspect 
 the first 5 transactions in the subset for 2003.
 
-<<>>=
-inspect(Epub2003[1:5])
-@
+\begin{Schunk}
+\begin{Sinput}
+> inspect(Epub2003[1:5])
+\end{Sinput}
+\begin{Soutput}
+  items     transactionID           TimeStamp
+1 {doc_154}  session_4795 2003-01-01 19:59:00
+2 {doc_3d6}  session_4797 2003-01-02 06:46:01
+3 {doc_16f}  session_479a 2003-01-02 09:50:38
+4 {doc_f4,                                   
+   doc_11d,                                  
+   doc_1a7}  session_47b7 2003-01-02 17:55:50
+5 {doc_83}   session_47bb 2003-01-02 20:27:44
+\end{Soutput}
+\end{Schunk}
 
 Most transactions contain one item. Only transaction 4 contains three items. 
 For further inspection transactions can be converted into a list with:
 
-<<>>=
-as(Epub2003[1:5], "list")
-@
+\begin{Schunk}
+\begin{Sinput}
+> as(Epub2003[1:5], "list")
+\end{Sinput}
+\begin{Soutput}
+$session_4795
+[1] "doc_154"
+
+$session_4797
+[1] "doc_3d6"
+
+$session_479a
+[1] "doc_16f"
+
+$session_47b7
+[1] "doc_f4"  "doc_11d" "doc_1a7"
+
+$session_47bb
+[1] "doc_83"
+\end{Soutput}
+\end{Schunk}
 
 Finally, transaction data in horizontal layout can be converted to
 transaction ID lists in vertical layout using coercion.
 
-<<>>=
-EpubTidLists <- as(Epub, "tidLists")
-EpubTidLists
-@
+\begin{Schunk}
+\begin{Sinput}
+> EpubTidLists <- as(Epub, "tidLists")
+> EpubTidLists
+\end{Sinput}
+\begin{Soutput}
+tidLists in sparse format for
+ 436 items/itemsets (rows) and
+ 3307 transactions (columns)
+\end{Soutput}
+\end{Schunk}
 
 For performance reasons the transaction ID list
 is also stored in a sparse matrix. To get a list, coercion to \class{list}
 can be used.
 
-<<>>=
-as(EpubTidLists[1:3], "list") 
-@
+\begin{Schunk}
+\begin{Sinput}
+> as(EpubTidLists[1:3], "list")
+\end{Sinput}
+\begin{Soutput}
+$doc_154
+[1] "session_4795" "session_6082" "session_60dd" "session_67db"
+[5] "session_769c" "session_7ee3" "session_bd9d" "session_c591"
+[9] "session_ce9f"
+
+$doc_3d6
+ [1] "session_4797"    "session_4893"    "session_48f4"   
+ [4] "session_4ca3"    "session_wu4450a" "session_52c6"   
+ [7] "session_5712"    "session_58e3"    "session_5984"   
+[10] "session_5b20"    "session_5c20"    "session_5dc0"   
+[13] "session_5eac"    "session_wu4a129" "session_6599"   
+[16] "session_673d"    "session_683e"    "session_wu4d25a"
+[19] "session_6f2f"    "session_708a"    "session_7a0c"   
+[22] "session_7de5"    "session_89db"    "session_9227"   
+[25] "session_9941"    "session_a4d7"    "session_a8c0"   
+[28] "session_c3c4"    "session_c546"    "session_ca44"   
+
+$doc_16f
+[1] "session_479a" "session_56e2" "session_630c" "session_72dc"
+[5] "session_8b3e" "session_91ab" "session_a202" "session_a7b9"
+\end{Soutput}
+\end{Schunk}
 
 In this representation each item has an entry
 which is a vector of all transactions it occurs in.
@@ -1117,11 +1232,29 @@ $\le$~USD~50,000 and $>$~USD~50,000, respectively.  This data is
 included in \pkg{arules} as the data set \code{AdultUCI}.
 
 
-<<data>>=
-data("AdultUCI")
-dim(AdultUCI)
-AdultUCI[1:2,]
-@
+\begin{Schunk}
+\begin{Sinput}
+> data("AdultUCI")
+> dim(AdultUCI)
+\end{Sinput}
+\begin{Soutput}
+[1] 48842    15
+\end{Soutput}
+\begin{Sinput}
+> AdultUCI[1:2, ]
+\end{Sinput}
+\begin{Soutput}
+  age        workclass fnlwgt education education-num     marital-status
+1  39        State-gov  77516 Bachelors            13      Never-married
+2  50 Self-emp-not-inc  83311 Bachelors            13 Married-civ-spouse
+       occupation  relationship  race  sex capital-gain capital-loss
+1    Adm-clerical Not-in-family White Male         2174            0
+2 Exec-managerial       Husband White Male            0            0
+  hours-per-week native-country income
+1             40  United-States  small
+2             13  United-States  small
+\end{Soutput}
+\end{Schunk}
 
 
 \code{AdultUCI} contains a mixture of categorical and metric attributes and
@@ -1134,10 +1267,12 @@ the Population Division of the U.S. census bureau.
 The second removed attribute is just a numeric representation of the
 attribute \code{education} which is also part of the data set.
 
-<<>>=
-AdultUCI[["fnlwgt"]] <- NULL
-AdultUCI[["education-num"]] <- NULL
-@
+\begin{Schunk}
+\begin{Sinput}
+> AdultUCI[["fnlwgt"]] <- NULL
+> AdultUCI[["education-num"]] <- NULL
+\end{Sinput}
+\end{Schunk}
 
 Next, we need to map the four remaining metric attributes (\code{age},
 \code{hours-per-week}, \code{capital-gain} and \code{capital-loss}) to ordinal
@@ -1152,44 +1287,77 @@ Then we further divide the group with gains/losses
 at their median into the two categories \code{Low} and \code{High}.
 
 
-<<>>=
-AdultUCI[[ "age"]] <- ordered(cut(AdultUCI[[ "age"]], c(15,25,45,65,100)),
-    labels = c("Young", "Middle-aged", "Senior", "Old"))
-
-AdultUCI[[ "hours-per-week"]] <- ordered(cut(AdultUCI[[ "hours-per-week"]],
-      c(0,25,40,60,168)),
-    labels = c("Part-time", "Full-time", "Over-time", "Workaholic"))
-			    
-AdultUCI[[ "capital-gain"]] <- ordered(cut(AdultUCI[[ "capital-gain"]],
-      c(-Inf,0,median(AdultUCI[[ "capital-gain"]][AdultUCI[[ "capital-gain"]]>0]),Inf)),
-    labels = c("None", "Low", "High"))
-
-AdultUCI[[ "capital-loss"]] <- ordered(cut(AdultUCI[[ "capital-loss"]],
-      c(-Inf,0,
-	median(AdultUCI[[ "capital-loss"]][AdultUCI[[ "capital-loss"]]>0]),Inf)),
-    labels = c("none", "low", "high"))
-@
+\begin{Schunk}
+\begin{Sinput}
+> AdultUCI[["age"]] <- ordered(cut(AdultUCI[["age"]], c(15, 
++     25, 45, 65, 100)), labels = c("Young", "Middle-aged", 
++     "Senior", "Old"))
+> AdultUCI[["hours-per-week"]] <- ordered(cut(AdultUCI[["hours-per-week"]], 
++     c(0, 25, 40, 60, 168)), labels = c("Part-time", "Full-time", 
++     "Over-time", "Workaholic"))
+> AdultUCI[["capital-gain"]] <- ordered(cut(AdultUCI[["capital-gain"]], 
++     c(-Inf, 0, median(AdultUCI[["capital-gain"]][AdultUCI[["capital-gain"]] > 
++         0]), Inf)), labels = c("None", "Low", "High"))
+> AdultUCI[["capital-loss"]] <- ordered(cut(AdultUCI[["capital-loss"]], 
++     c(-Inf, 0, median(AdultUCI[["capital-loss"]][AdultUCI[["capital-loss"]] > 
++         0]), Inf)), labels = c("none", "low", "high"))
+\end{Sinput}
+\end{Schunk}
 
 Now, the data can be automatically recoded as
 a binary incidence matrix by coercing the data set to
 \class{transactions}.
 
-<<coerce>>=
-Adult <- as(AdultUCI, "transactions")
-Adult
-@
+\begin{Schunk}
+\begin{Sinput}
+> Adult <- as(AdultUCI, "transactions")
+> Adult
+\end{Sinput}
+\begin{Soutput}
+transactions in sparse format with
+ 48842 transactions (rows) and
+ 115 items (columns)
+\end{Soutput}
+\end{Schunk}
 
-The remaining \Sexpr{dim(Adult)[2]} categorical attributes were
-automatically recoded into \Sexpr{dim(Adult)[2]}
+The remaining 115 categorical attributes were
+automatically recoded into 115
 binary items. During encoding the item labels were generated in the
 form of 
 \texttt{<\emph{variable name}>=<\emph{category label}>}. 
 Note that for cases with missing values all items corresponding to the 
 attributes with the missing values were set to zero.
 
-<<summary>>=
-summary(Adult)
-@
+\begin{Schunk}
+\begin{Sinput}
+> summary(Adult)
+\end{Sinput}
+\begin{Soutput}
+transactions as itemMatrix in sparse format with
+ 48842 rows (elements/itemsets/transactions) and
+ 115 columns (items)
+
+most frequent items:
+           capital-loss=none            capital-gain=None 
+                       46560                        44807 
+native-country=United-States                   race=White 
+                       43832                        41762 
+           workclass=Private                      (Other) 
+                       33906                       401333 
+
+element (itemset/transaction) length distribution:
+    9    10    11    12    13 
+   19   971  2067 15623 30162 
+
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+   9.00   12.00   13.00   12.53   13.00   13.00 
+
+includes extended item information - examples:
+           labels variables      levels
+1       age=Young       age       Young
+2 age=Middle-aged       age Middle-aged
+\end{Soutput}
+\end{Schunk}
 
 The summary of the transaction data set gives a rough overview showing
 the most frequent items, the length distribution of the transactions and
@@ -1204,14 +1372,14 @@ the item frequency for items with a support greater than 10\% (using the paramet
 better readability of the labels, we reduce the label size with the
 parameter \code{cex.names}. The plot is shown in Figure~\ref{fig:itemFrequencyPlot}.
 
-<<itemFrequencyPlot, eval=FALSE>>=
-itemFrequencyPlot(Adult, support = 0.1, cex.names=0.8)
-@
+\begin{Schunk}
+\begin{Sinput}
+> itemFrequencyPlot(Adult, support = 0.1, cex.names = 0.8)
+\end{Sinput}
+\end{Schunk}
 \begin{figure}
 \centering
-<<echo=FALSE, fig=TRUE, width=8>>=
-<<itemFrequencyPlot>>
-@ %
+\includegraphics{arules-019}
 \caption{Item frequencies of items in the Adult data set with support greater than 10\%.}
 \label{fig:itemFrequencyPlot}
 \end{figure}
@@ -1220,11 +1388,39 @@ Next, we call the function
 \func{apriori} to find all rules (the default association type for
 \func{apriori}) with a minimum support of 1\% and a confidence of 0.6.
 
-<<apriori>>=
-rules <- apriori(Adult, 
-                 parameter = list(support = 0.01, confidence = 0.6))
-rules
-@
+\begin{Schunk}
+\begin{Sinput}
+> rules <- apriori(Adult, parameter = list(support = 0.01, 
++     confidence = 0.6))
+\end{Sinput}
+\begin{Soutput}
+parameter specification:
+ confidence minval smax arem  aval originalSupport support minlen maxlen
+        0.6    0.1    1 none FALSE            TRUE    0.01      1      5
+ target   ext
+  rules FALSE
+
+algorithmic control:
+ filter tree heap memopt load sort verbose
+    0.1 TRUE TRUE  FALSE TRUE    2    TRUE
+
+apriori - find association rules with the apriori algorithm
+version 4.21 (2004.05.09)        (c) 1996-2004   Christian Borgelt
+set item appearances ...[0 item(s)] done [0.00s].
+set transactions ...[115 item(s), 48842 transaction(s)] done [0.09s].
+sorting and recoding items ... [67 item(s)] done [0.02s].
+creating transaction tree ... done [0.08s].
+checking subsets of size 1 2 3 4 5 done [0.73s].
+writing ... [80215 rule(s)] done [0.03s].
+creating S4 object  ... done [0.32s].
+\end{Soutput}
+\begin{Sinput}
+> rules
+\end{Sinput}
+\begin{Soutput}
+set of 80215 rules 
+\end{Soutput}
+\end{Schunk}
 
 %The specified parameter values are validated and, for example,
 %a support $> 1$ gives:
@@ -1243,16 +1439,37 @@ default restricted to 5.  Longer association rules are only mined if
 the output of the \proglang{C} implementation of the algorithm with timing
 information is displayed.
 
-The result of the mining algorithm is a set of \Sexpr{length(rules)}
+The result of the mining algorithm is a set of 80215
 rules.  For an overview of the mined rules \func{summary}
 can be used.   It shows the number of rules, the most frequent items
 contained in the left-hand-side and the right-hand-side and their
 respective length distributions and summary statistics for the quality
 measures returned by the mining algorithm.
 
-<<summary>>=
-summary(rules)
-@
+\begin{Schunk}
+\begin{Sinput}
+> summary(rules)
+\end{Sinput}
+\begin{Soutput}
+set of 80215 rules
+
+rule length distribution (lhs + rhs):
+    1     2     3     4     5 
+    6   432  4981 22127 52669 
+
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  1.000   4.000   5.000   4.584   5.000   5.000 
+
+summary of quality measures:
+    support          confidence          lift        
+ Min.   :0.01001   Min.   :0.6000   Min.   : 0.7201  
+ 1st Qu.:0.01364   1st Qu.:0.7542   1st Qu.: 1.0027  
+ Median :0.02090   Median :0.8944   Median : 1.0433  
+ Mean   :0.03770   Mean   :0.8501   Mean   : 1.2476  
+ 3rd Qu.:0.03966   3rd Qu.:0.9457   3rd Qu.: 1.2355  
+ Max.   :0.95328   Max.   :1.0000   Max.   :20.6075  
+\end{Soutput}
+\end{Schunk}
 
 As typical for association rule mining, the number of rules found is
 huge.  To analyze these rules, for example, \func{subset} can be used to
@@ -1260,20 +1477,57 @@ produce separate subsets of rules for each item which resulted form the
 variable \code{income} in the right-hand-side of the rule. At the same
 time we require that the \code{lift} measure exceeds $1.2$.
 
-<<rules>>=
-rulesIncomeSmall <- subset(rules, subset = rhs %in% "income=small" & lift > 1.2)
-rulesIncomeLarge <- subset(rules, subset = rhs %in% "income=large" & lift > 1.2)
-@
+\begin{Schunk}
+\begin{Sinput}
+> rulesIncomeSmall <- subset(rules, subset = rhs %in% "income=small" & 
++     lift > 1.2)
+> rulesIncomeLarge <- subset(rules, subset = rhs %in% "income=large" & 
++     lift > 1.2)
+\end{Sinput}
+\end{Schunk}
 
 We now have a set with rules for persons with a small income and a set
 for persons with a large income.  For comparison, we inspect for both
 sets the three rules with the highest confidence (using \func{SORT}).
 
 {\samepage\small
-<<subset>>=
-inspect(SORT(rulesIncomeSmall, by = "confidence")[1:3])
-inspect(SORT(rulesIncomeLarge, by = "confidence")[1:3])
-@
+\begin{Schunk}
+\begin{Sinput}
+> inspect(SORT(rulesIncomeSmall, by = "confidence")[1:3])
+\end{Sinput}
+\begin{Soutput}
+  lhs                                rhs               support confidence     lift
+1 {workclass=Private,                                                             
+    relationship=Own-child,                                                       
+    sex=Male,                                                                     
+    hours-per-week=Part-time}     => {income=small} 0.01154744  0.7058824 1.394689
+2 {workclass=Private,                                                             
+    marital-status=Never-married,                                                 
+    sex=Male,                                                                     
+    hours-per-week=Part-time}     => {income=small} 0.01517137  0.6951220 1.373428
+3 {workclass=Private,                                                             
+    occupation=Other-service,                                                     
+    relationship=Own-child,                                                       
+    capital-gain=None}            => {income=small} 0.01617460  0.6942004 1.371607
+\end{Soutput}
+\begin{Sinput}
+> inspect(SORT(rulesIncomeLarge, by = "confidence")[1:3])
+\end{Sinput}
+\begin{Soutput}
+  lhs                                    rhs               support confidence     lift
+1 {marital-status=Married-civ-spouse,                                                 
+    capital-gain=High,                                                                
+    native-country=United-States}     => {income=large} 0.01562180  0.6849192 4.266398
+2 {marital-status=Married-civ-spouse,                                                 
+    capital-gain=High,                                                                
+    capital-loss=none,                                                                
+    native-country=United-States}     => {income=large} 0.01562180  0.6849192 4.266398
+3 {relationship=Husband,                                                              
+    race=White,                                                                       
+    capital-gain=High,                                                                
+    native-country=United-States}     => {income=large} 0.01302158  0.6846071 4.264454
+\end{Soutput}
+\end{Schunk}
 }
 
 From the rules we see that workers in the private sector working part-time or
@@ -1309,26 +1563,30 @@ To obtain an itemset to calculate all-confidence for, we mine frequent
 itemsets from the previously used Adult data set using the Eclat
 algorithm.
 
-<<>>=
-data("Adult")
-fsets <- eclat(Adult, parameter = list(support = 0.05), 
-	control = list(verbose=FALSE))
-@
+\begin{Schunk}
+\begin{Sinput}
+> data("Adult")
+> fsets <- eclat(Adult, parameter = list(support = 0.05), control = list(verbose = FALSE))
+\end{Sinput}
+\end{Schunk}
 
 For the denominator of all-confidence we need to find all mined single
 items and their corresponding support values. In the following we 
 create a named vector where the names are the column numbers of the 
 items and the values are their support.
 
-<<>>=
-singleItems <- fsets[size(items(fsets)) == 1]
-
-## Get the col numbers we have support for
-singleSupport <- quality(singleItems)$support
-names(singleSupport) <- unlist(LIST(items(singleItems),
-	    decode = FALSE))
-head(singleSupport, n = 5)
-@
+\begin{Schunk}
+\begin{Sinput}
+> singleItems <- fsets[size(items(fsets)) == 1]
+> singleSupport <- quality(singleItems)$support
+> names(singleSupport) <- unlist(LIST(items(singleItems), decode = FALSE))
+> head(singleSupport, n = 5)
+\end{Sinput}
+\begin{Soutput}
+       66        63       111        60         8 
+0.9532779 0.9173867 0.8974243 0.8550428 0.6941976 
+\end{Soutput}
+\end{Schunk}
 
 Next, we can calculate the all-confidence using
 Equation~\ref{equ:all_conf} for all itemsets.  The single item support
@@ -1336,31 +1594,71 @@ needed for the denomination is looked up from the named vector
 \code{singleSupport} and the resulting measure is added to the set's
 quality data frame.
 
-<<>>=
-itemsetList <- LIST(items(fsets), decode = FALSE)
-
-allConfidence <- quality(fsets)$support / 
-    sapply(itemsetList, function(x) 
-    max(singleSupport[as.character(x)]))
-
-quality(fsets) <- cbind(quality(fsets), allConfidence)
-@
+\begin{Schunk}
+\begin{Sinput}
+> itemsetList <- LIST(items(fsets), decode = FALSE)
+> allConfidence <- quality(fsets)$support/sapply(itemsetList, 
++     function(x) max(singleSupport[as.character(x)]))
+> quality(fsets) <- cbind(quality(fsets), allConfidence)
+\end{Sinput}
+\end{Schunk}
 
 The new quality measure is now part of the set of itemsets.
-<<>>=
-summary(fsets)
-@
+\begin{Schunk}
+\begin{Sinput}
+> summary(fsets)
+\end{Sinput}
+\begin{Soutput}
+set of 5908 itemsets
+
+most frequent items:
+           capital-loss=None native-country=United-States 
+                        2301                         2245 
+           capital-gain=None                   race=White 
+                        2236                         2107 
+           workclass=Private                      (Other) 
+                        1784                        13555 
+
+element (itemset/transaction) length distribution:
+   1    2    3    4    5 
+  36  303 1078 2103 2388 
+
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  1.000   4.000   4.000   4.101   5.000   5.000 
+
+summary of quality measures:
+    support        allConfidence    
+ Min.   :0.05004   Min.   :0.05249  
+ 1st Qu.:0.06230   1st Qu.:0.06986  
+ Median :0.08124   Median :0.09349  
+ Mean   :0.11114   Mean   :0.13111  
+ 3rd Qu.:0.12554   3rd Qu.:0.14326  
+ Max.   :0.95328   Max.   :1.00000  
+
+includes transaction ID lists: FALSE 
+\end{Soutput}
+\end{Schunk}
 
 It can be used to manipulate the set. For example, we can look at the
 itemsets which contain an item related to education (using partial match with \code{\%pin\%}) and sort them by
 all-confidence (we filter itemsets of length 1 first, since they have
 per definition an all-confidence of~1).
 
-<<>>=
-fsetsEducation <- subset(fsets, subset = items %pin% "education")
-inspect(SORT(fsetsEducation[size(fsetsEducation)>1], 
-	by = "allConfidence")[1 : 3])
-@
+\begin{Schunk}
+\begin{Sinput}
+> fsetsEducation <- subset(fsets, subset = items %pin% "education")
+> inspect(SORT(fsetsEducation[size(fsetsEducation) > 1], by = "allConfidence")[1:3])
+\end{Sinput}
+\begin{Soutput}
+  items                        support allConfidence
+1 {education=HS-grad,                               
+   hours-per-week=Full-time} 0.2090209     0.3572453
+2 {education=HS-grad,                               
+   income=small}             0.1807051     0.3570388
+3 {workclass=Private,                               
+   education=HS-grad}        0.2391794     0.3445408
+\end{Soutput}
+\end{Schunk}
 
 The resulting itemsets show that the item high school graduate (but no
 higher education) is highly associated with working full-time, a small
@@ -1371,10 +1669,17 @@ implemented in \pkg{arules} as the function \func{allConfidence}.
 In this example, we show how sampling
 can be used in \pkg{arules}. We use again the Adult data set.
 
-<<>>=
-data("Adult")
-Adult
-@
+\begin{Schunk}
+\begin{Sinput}
+> data("Adult")
+> Adult
+\end{Sinput}
+\begin{Soutput}
+transactions in sparse format with
+ 48842 transactions (rows) and
+ 115 items (columns)
+\end{Soutput}
+\end{Schunk}
 
 To calculate a reasonable sample size $n$, we use the formula developed
 by \cite{arules:Zaki+Parthasarathy+Li+Ogihara:1997} and presented in 
@@ -1382,14 +1687,18 @@ Section~\ref{sec:sample}. We choose a minimum support of 5\%.
 As an acceptable error rate for support $\epsilon$ we choose 10\% and
 as the confidence level ($1-c$) we choose 90\%. 
 
-<<>>=
-supp <- 0.05
-epsilon <- 0.1
-c <- 0.1
-
-n <- -2 * log(c)/ (supp * epsilon^2)
-n
-@
+\begin{Schunk}
+\begin{Sinput}
+> supp <- 0.05
+> epsilon <- 0.1
+> c <- 0.1
+> n <- -2 * log(c)/(supp * epsilon^2)
+> n
+\end{Sinput}
+\begin{Soutput}
+[1] 9210.34
+\end{Soutput}
+\end{Schunk}
 
 The resulting sample size is considerably smaller than the size of the
 original database.
@@ -1397,9 +1706,11 @@ With \func{sample} we produce a sample of size $n$ with replacement from
 the database.
 
 
-<<>>=
-AdultSample <- sample(Adult, n, replace = TRUE)
-@
+\begin{Schunk}
+\begin{Sinput}
+> AdultSample <- sample(Adult, n, replace = TRUE)
+\end{Sinput}
+\end{Schunk}
 
 The sample can be compared with the 
 database (the population) using an item frequency plot.
@@ -1410,15 +1721,15 @@ only display frequent items in the plot and reduce
 the label size with the parameter \code{cex.names}.
 The plot is shown in Figure~\ref{fig:itemFrequencyPlot2}.
 
-<<itemFrequencyPlot2, eval=FALSE>>=
-itemFrequencyPlot(AdultSample, population = Adult, support = supp,
-    cex.names = 0.7)
-@ %
+\begin{Schunk}
+\begin{Sinput}
+> itemFrequencyPlot(AdultSample, population = Adult, support = supp, 
++     cex.names = 0.7)
+\end{Sinput}
+\end{Schunk}
 \begin{figure}
 \centering
-<<echo=FALSE, fig=TRUE, width=8>>=
-<<itemFrequencyPlot2>>
-@ %
+\includegraphics{arules-033}
 \caption{Item frequencies in a sample of the Adult data set (bars) compared to 
 the complete data set (line).}
 \label{fig:itemFrequencyPlot2}
@@ -1438,16 +1749,15 @@ large relative deviations for less frequent items can be identified
 visually
 (see Figure~\ref{fig:itemFrequencyPlot3}). 
 
-<<itemFrequencyPlot3, eval=FALSE>>=
-itemFrequencyPlot(AdultSample, population = Adult, 
-    support = supp, lift = TRUE, 
-    cex.names = 0.9)
-@
+\begin{Schunk}
+\begin{Sinput}
+> itemFrequencyPlot(AdultSample, population = Adult, support = supp, 
++     lift = TRUE, cex.names = 0.9)
+\end{Sinput}
+\end{Schunk}
 \begin{figure}
 \centering
-<<echo=FALSE, fig=TRUE, width=8>>=
-<<itemFrequencyPlot3>>
-@ %
+\includegraphics{arules-035}
 \caption{Deviations of the item frequencies in the sample from 
 the complete Adult data set.}
 \label{fig:itemFrequencyPlot3}
@@ -1457,15 +1767,24 @@ To compare the speed-up reached by sampling we use the Eclat algorithm
 to mine frequent itemsets on both, the database and the sample
 and compare the system time (in seconds) used for mining.
 
-<<>>=
-time <- system.time(itemsets <- eclat(Adult, 
-    parameter = list(support = supp), control = list(verbose = FALSE)))
-time
-
-timeSample <- system.time(itemsetsSample <- eclat(AdultSample, 
-    parameter = list(support = supp), control = list(verbose = FALSE)))
-timeSample
-@
+\begin{Schunk}
+\begin{Sinput}
+> time <- system.time(itemsets <- eclat(Adult, parameter = list(support = supp), 
++     control = list(verbose = FALSE)))
+> time
+\end{Sinput}
+\begin{Soutput}
+[1] 1.17 0.00 1.18 0.00 0.00
+\end{Soutput}
+\begin{Sinput}
+> timeSample <- system.time(itemsetsSample <- eclat(AdultSample, 
++     parameter = list(support = supp), control = list(verbose = FALSE)))
+> timeSample
+\end{Sinput}
+\begin{Soutput}
+[1] 0.25 0.00 0.25 0.00 0.00
+\end{Soutput}
+\end{Schunk}
 
 The first element of the vector returned by \func{system.time}
 gives the (user) CPU time 
@@ -1473,31 +1792,49 @@ needed for the execution of the statement in its argument.
 Therefore,
 mining the sample instead of the whole data base results in a speed-up
 factor of:
-<<>>=
-# speed up
-time[1] / timeSample[1]
-@
+\begin{Schunk}
+\begin{Sinput}
+> time[1]/timeSample[1]
+\end{Sinput}
+\begin{Soutput}
+[1] 4.68
+\end{Soutput}
+\end{Schunk}
 
 
 
 To evaluate the accuracy for the itemsets mined from the sample, we
 analyze the difference between the two sets.
 
-<<>>=
-itemsets
-itemsetsSample
-@
+\begin{Schunk}
+\begin{Sinput}
+> itemsets
+\end{Sinput}
+\begin{Soutput}
+set of 5908 itemsets 
+\end{Soutput}
+\begin{Sinput}
+> itemsetsSample
+\end{Sinput}
+\begin{Soutput}
+set of 5951 itemsets 
+\end{Soutput}
+\end{Schunk}
 
 The two sets have roughly the same size. To check if the sets contain
 similar itemsets, we match the sets and see what fraction of
 frequent itemsets found in the database were also found in the sample. 
 
 
-<<>>=
-match <- match(itemsets, itemsetsSample, nomatch = 0)
-## remove no matches
-sum(match>0) / length(itemsets)
-@
+\begin{Schunk}
+\begin{Sinput}
+> match <- match(itemsets, itemsetsSample, nomatch = 0)
+> sum(match > 0)/length(itemsets)
+\end{Sinput}
+\begin{Soutput}
+[1] 0.9778267
+\end{Soutput}
+\end{Schunk}
 
 Almost all frequent itemsets were found using the sample.
 The summaries of the support of the frequent itemsets 
@@ -1505,10 +1842,22 @@ which were not found in the sample and the itemsets
 which were frequent in the sample although they
 were infrequent in the database give:
 
-<<>>=
-summary(quality(itemsets[which(!match)])$support)
-summary(quality(itemsetsSample[-match])$support)
-@
+\begin{Schunk}
+\begin{Sinput}
+> summary(quality(itemsets[which(!match)])$support)
+\end{Sinput}
+\begin{Soutput}
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+0.05004 0.05069 0.05135 0.05167 0.05252 0.05653 
+\end{Soutput}
+\begin{Sinput}
+> summary(quality(itemsetsSample[-match])$support)
+\end{Sinput}
+\begin{Soutput}
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+0.05005 0.05038 0.05125 0.05151 0.05212 0.05831 
+\end{Soutput}
+\end{Schunk}
 
 This shows that only itemsets with support very close to the minimum support
 were falsely missed or found.
@@ -1516,14 +1865,18 @@ were falsely missed or found.
 For the frequent itemsets which were found in the database and in the
 sample, we can calculate accuracy from the the error rate.
 
-<<>>=
-supportItemsets <- quality(itemsets[which(match > 0)])$support
-supportSample <- quality(itemsetsSample[match])$support
-
-accuracy <- 1 - abs(supportSample - supportItemsets) / supportItemsets
-
-summary(accuracy)
-@
+\begin{Schunk}
+\begin{Sinput}
+> supportItemsets <- quality(itemsets[which(match > 0)])$support
+> supportSample <- quality(itemsetsSample[match])$support
+> accuracy <- 1 - abs(supportSample - supportItemsets)/supportItemsets
+> summary(accuracy)
+\end{Sinput}
+\begin{Soutput}
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+ 0.8245  0.9560  0.9729  0.9678  0.9867  1.0000 
+\end{Soutput}
+\end{Schunk}
 
 The summary shows that sampling resulted in finding the support of itemsets
 with high accuracy. This small example illustrates 

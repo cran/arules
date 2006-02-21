@@ -18,9 +18,11 @@
 \usage{
 itemFrequencyPlot(x, \dots)
 \S4method{itemFrequencyPlot}{itemMatrix}(x, type = "relative", 
-    population = NULL, deviation = FALSE, horiz = FALSE, 
-    cex.names =  par("cex.axis"), xlab = NULL, ylab = NULL, 
-    mai = NULL, \dots)
+    support = NULL,
+    population = NULL, popCol = "black", popLwd = 1,
+    lift = FALSE, horiz = FALSE, 
+    names = TRUE, cex.names =  par("cex.axis"), 
+    xlab = NULL, ylab = NULL, mai = NULL, \dots)
 }
 \arguments{
   \item{x}{the object to be plotted.}
@@ -29,14 +31,22 @@ itemFrequencyPlot(x, \dots)
   \item{type}{ a character string indicating whether 
 	item frequencies should be displayed 
   relative of absolute.}
+  \item{support}{\code{"numeric"}; only display items which have a support of 
+    at least \code{support}. If no population is given, support is calculated 
+    from \code{x} otherwise from the population. Support is interpreted relative
+    or absolute according to the setting of \code{type}.}
   \item{population}{ object of same class  as \code{x}; if \code{x}
     is a segment of a population, the population mean frequency for
     each item can be shown as a line in the plot.}
-  \item{deviation}{\code{"logical"}; plot the relative deviation from the
-    population mean instead of frequencies.}
+  \item{popCol}{plotting color for population.}
+  \item{popLwd}{line width for population.}
+  \item{lift}{\code{"logical"}; plot the lift ratio between instead 
+    of frequencies. The lift ratio is gives how many times an item is 
+    more frequent in \code{x} than in \code{population}.}
   \item{horiz}{\code{"logical"}; If \code{FALSE} (default), 
     the bars are drawn vertically. If \code{TRUE}, the bars are
     drawn horizontally.}
+  \item{names}{\code{"logical"}; should the names (bar labels) displayed?}
   \item{cex.names}{\code{"numeric"}; expansion factor for axis names (bar labels).}
   \item{xlab}{a character string with the label for the x axis (use an empty string to force no label).}
   \item{ylab}{a character string with the label for the y axis (see xlab).}
@@ -66,9 +76,9 @@ itemFrequencyPlot(Adult.largeIncome)
 itemFrequencyPlot(Adult.largeIncome[, 1:72], 
 	population = Adult[, 1:72])
 
-# plot of deviations from population mean (horizontal bars)
+# plot lift ratio (frequency in x / frequency in population)
 itemFrequencyPlot(Adult.largeIncome[, 1:72], 
         population = Adult[, 1:72], 
-	deviation = TRUE, horiz = TRUE)
+	lift = TRUE, horiz = TRUE)
 }
 \keyword{hplot}
