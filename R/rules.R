@@ -31,9 +31,9 @@ setAs("rules", "data.frame",
 ### labels
 
 setMethod("labels", signature(object = "rules"),
-    function(object) {
-    paste(labels(object@lhs)$elements, " => ",
-      labels(object@rhs)$elements, sep="")
+    function(object, ruleSep = " => ",...) {
+    paste(labels(object@lhs, ...)$elements, ruleSep,
+      labels(object@rhs, ...)$elements, sep="")
 })
 
 setMethod("itemLabels", signature(object = "rules"),
@@ -84,6 +84,14 @@ setMethod("items", signature(x = "rules"),
     tmp
     })
 
+# get the generating itemsets
+setMethod("itemsets", signature(x = "rules"),
+  function(x) {
+    new("itemsets", items = items(x), 
+      quality = data.frame(support = quality(x)$support))
+  })
+
+  
 
 ###****************************************************
 ### subset, combine

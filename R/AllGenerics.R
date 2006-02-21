@@ -4,6 +4,11 @@ if(!isGeneric("%in%")) {
                function(x, table) standardGeneric("%in%"))
 }
 
+if(!isGeneric("%pin%")) {
+    setGeneric("%pin%",
+               function(x, table) standardGeneric("%pin%"))
+}
+
 if(!isGeneric("SORT")) {
     setGeneric("SORT",
                function(x, ...) standardGeneric("SORT"))
@@ -23,6 +28,16 @@ if(!isGeneric("WRITE")) {
 if(!isGeneric("allConfidence")) {
     setGeneric("allConfidence",
                function(x, ...) standardGeneric("allConfidence"))
+}
+
+if(!isGeneric("crossSupportRatio")) {
+    setGeneric("crossSupportRatio",
+               function(x, ...) standardGeneric("crossSupportRatio"))
+}
+
+if(!isGeneric("crossTable")) {
+    setGeneric("crossTable",
+               function(x, ...) standardGeneric("crossTable"))
 }
 
 if(!isGeneric("decode")) {
@@ -82,6 +97,11 @@ if(!isGeneric("itemLabels<-")) {
 if(!isGeneric("items")) {
     setGeneric("items",
                function(x) standardGeneric("items"))
+}
+
+if(!isGeneric("itemsets")) {
+    setGeneric("itemsets",
+               function(x) standardGeneric("itemsets"))
 }
 
 if(!isGeneric("items<-")) {
@@ -220,7 +240,7 @@ if(!isGeneric("affinity")) {
 
 if(!isGeneric("dissimilarity")) {
   setGeneric("dissimilarity",
-    function(x, y = NULL, method = NULL, args = NULL)
+    function(x, y = NULL, method = NULL, args = NULL, ...)
     standardGeneric("dissimilarity"))
 }
 

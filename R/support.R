@@ -1,7 +1,7 @@
 ###*******************************************************
 ### Function support
 ###
-### return  support of itemsets in transactions usind tid-list intersections
+### return  support of itemsets in transactions using tid-list intersections
 
 setMethod("support", signature(x = "itemMatrix"),
     function(x, transactions, type= c("relative", "absolute")) {

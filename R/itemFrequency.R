@@ -35,51 +35,76 @@ setMethod("itemFrequency", signature(x = "tidLists"),
 ###*****************************************************
 ### plot item frequency
 setMethod("itemFrequencyPlot", signature(x = "itemMatrix"),
-    function(x, type = c("relative", "absolute"),  
-      population = NULL, deviation = FALSE, horiz = FALSE,
-      cex.names =  par("cex.axis"), xlab = NULL, ylab = NULL, mai = NULL, ...) {
+    function(x, type = c("relative", "absolute"), support = NULL, 
+      population = NULL, popCol = "black", popLwd = 1, 
+      lift = FALSE, horiz = FALSE,
+      names = TRUE, cex.names =  par("cex.axis"), 
+      xlab = NULL, ylab = NULL, mai = NULL, ...) {
       
       type <- match.arg(type)
       
-      # force relative for deviation
-      if(deviation == TRUE) type <- "relative"
+      # force relative for lift
+      if(lift == TRUE) type <- "relative"
     
+      # do support
+      if(!is.null(support)) {
+	if(!is.null(population)) {
+	  frequentItems <- itemFrequency(population, type) >= support
+	  population <- population[, frequentItems]
+	} else frequentItems <- itemFrequency(x, type) >= support
+	x <- x[, frequentItems]
+      }
+      
       # get frequencies
       itemFrequency <- itemFrequency(x, type)
       if(!is.null(population))
       	population.itemFrequency <- itemFrequency(population, type)
 
       # regular plot
-      if(deviation == FALSE) {
+      if(lift == FALSE) {
           label <- paste("item frequency (", type, ")", sep="")
-     
+          offset <- 0
+	  
       }else{
 
-          # show relative deviations instead of frequencies
+          # show lift instead of frequencies
 	  if(is.null(population)) 
-	  	stop("population needed for plotting deviations!")
-	  itemFrequency <- (itemFrequency - population.itemFrequency) / 
-	     population.itemFrequency
+	  	stop("population needed for plotting lift!")
+	  
+	  # -1 and offset are used to draw bars smaller than one
+	  # upside down
+	  itemFrequency <- (itemFrequency / population.itemFrequency) -1
+	  offset <- 1
           
+	  
 	  # take care of div by zero
 	  itemFrequency[is.infinite(itemFrequency)] <- NaN   
 	     
-	  label <- paste("relative deviation from population", sep="")
+	  label <- "lift ratio"
       }
 
-      if(horiz == FALSE) midpoints <- .barplot_vert(itemFrequency, ...,
-	  cex.names = cex.names, xlab = xlab, ylab = label, mai = mai) 
+      # kill names
+      if(names == FALSE) names(itemFrequency) <- NA
+      
+      if(horiz == FALSE) midpoints <- .barplot_vert(itemFrequency, ..., 
+	offset = offset,
+	cex.names = cex.names, xlab = xlab, 
+	ylab = if(is.null(ylab)) label else ylab, 
+	mai = mai) 
       
       else  midpoints <- .barplot_horiz(itemFrequency, ...,
-          cex.names = cex.names, xlab = label, ylab = ylab, mai = mai)
+	offset = offset,  
+	cex.names = cex.names, xlab = if(is.null(xlab)) label else xlab, 
+	ylab = ylab, mai = mai)
    
       
-      # add population means
-      if(!is.null(population) && deviation == FALSE)
-        if(horiz == FALSE) lines(midpoints, population.itemFrequency)
-        else lines(population.itemFrequency, midpoints)
       
-      
+      # add population means (we switch off clipping first!)
+      if(!is.null(population) && lift == FALSE)
+        if(horiz == FALSE) lines(midpoints, population.itemFrequency, 
+	    lwd = popLwd, col = popCol, xpd = TRUE)
+        else lines(population.itemFrequency, midpoints, 
+	    lwd = popLwd, col = popCol, xpd = TRUE)
       
       # return mitpoints
       invisible(midpoints)
@@ -93,17 +118,18 @@ setMethod("itemFrequencyPlot", signature(x = "itemMatrix"),
   labels <- names(height)
 
   ## for neg. heights we use straight labels
-  if(min(height) < 0) straight <- TRUE
+  if(min(height, na.rm = TRUE) < 0) straight <- TRUE
   else straight <- FALSE
   
   op.mai <- par("mai")
   if(is.null(mai)) {
     mai <- op.mai
     if (straight == TRUE) mai[1] <- max(strwidth(labels, units = "inches",
-	    cex = cex.names)) + 0.5
+	    cex = cex.names)) + min(par("fin")[2]*0.1, 0.5)
     else mai[1] <- max(strwidth(labels, units = "inches",
-	    cex = cex.names)) / 2^.5 + 0.5
+	    cex = cex.names)) / 2^.5 + min(par("fin")[2]*0.1, 0.5)
   } 
+  
   par(mai = mai) 
   on.exit(par(mai = op.mai))
 
@@ -136,7 +162,7 @@ setMethod("itemFrequencyPlot", signature(x = "itemMatrix"),
   if(is.null(mai)) {
     mai <- op.mai
     mai[2] <- max(strwidth(names(height), units = "inches", 
-	cex = cex.names)) + 0.5
+	cex = cex.names)) + min(par("fin")[1]*0.1, 0.5)
 
   }
   par(mai = mai) 

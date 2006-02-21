@@ -1,6 +1,8 @@
 \name{measures}
 \alias{allConfidence}
 \alias{allConfidence,itemsets-method}
+\alias{crossSupportRatio}
+\alias{crossSupportRatio,itemsets-method}
 \alias{hyperLift}
 \alias{hyperLift,rules-method}
 \alias{hyperConfidence}
@@ -14,6 +16,9 @@
 \usage{
 allConfidence(x, ...)
 \S4method{allConfidence}{itemsets}(x, transactions = NULL, itemSupport = NULL)
+
+crossSupportRatio(x, ...)
+\S4method{crossSupportRatio}{itemsets}(x,  transactions = NULL, itemSupport = NULL)
 
 hyperLift(x, ...)
 \S4method{hyperLift}{rules}(x, transactions, d = 0.99)
@@ -30,7 +35,7 @@ hyperConfidence(x, ...)
   \item{itemSupport}{ alternatively to transactions, for some measures 
   	a item support in the transaction data set is sufficient.}
   \item{d}{ the quantile used to calculate hyperlift. }  
-  \item{complements}{ calculate convidence/significance levels for
+  \item{complements}{ calculate confidence/significance levels for
    substitutes instead of complements. }  
   \item{significance}{ report significance levels instead of confidence levels. }  
 }
@@ -43,6 +48,15 @@ hyperConfidence(x, ...)
   all possible rule
   generated from the itemset.
   }
+  
+  \item{The cross-support ratio (see, Xiong et al., 2003)}{ 
+  is defined on itemsets as the ratio of the support of
+  the least frequent item to the support of the most frequent item.
+  Cross-support patterns have a ratio
+  smaller than a set threshold. Normally many found patterns are cross-support
+  patterns which contain frequent 
+  as well as rare items. Such patterns often tend to be spurious.
+}
   
   \item{Hyper-lift (see, Hahsler et al., 2005)}{
   is an adaptation of the lift 
@@ -60,7 +74,7 @@ hyperConfidence(x, ...)
   = \frac{c_{XY}}{E[C_{XY}]},}{lift(X -> Y) = P(X+Y)/(P(X)*P(Y)) = c_XY / E[C_XY],}
   
   where \eqn{E[C_{XY}] = c_X c_Y / m} with \eqn{m} being the number
-  of transactions in the datanase.
+  of transactions in the database.
 
   Hyper-lift is defined as:
   \deqn{\mathrm{hyperlift}(X \Rightarrow Y) = \frac{c_{XY}}{Q_{\delta}[C_{XY}]},}{hyperlift(X -> Y) = c_XY / Q_d[C_XY],}
@@ -75,7 +89,7 @@ hyperConfidence(x, ...)
   (represented by the random variable \eqn{C_{XY}}) with
   known parameters given by the counts  \eqn{c_X} and  \eqn{c_Y},
   we can calculate a confidence interval for the observed counts 
-  \eqn{c_{XY}} steming from the distribution. Hyperconfidence
+  \eqn{c_{XY}} stemming from the distribution. Hyperconfidence
   reports the confidence level (significance level) for
   \describe{
   \item{complements -}{
@@ -114,11 +128,12 @@ hyperConfidence(x, ...)
 \examples{
 data("Income")
 
-### calculate all-confidence
+### calculate all-confidence and the cross-support ratio
 itemsets <- apriori(Income, parameter = list(target = "freq")) 
 quality(itemsets) <- cbind(quality(itemsets), 
-	allConfonfidence = allConfidence(itemsets))
-
+	allConfonfidence = allConfidence(itemsets),
+	crossSupportRatio = crossSupportRatio(itemsets))
+	
 summary(itemsets)
 
 ### calculate hyperlift for the 0.9 quantile

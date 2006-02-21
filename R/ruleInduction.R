@@ -63,5 +63,3 @@ function(x, transactions, confidence = 0.8, method = "once", verbose = FALSE) {
 })
 
 
-
-
