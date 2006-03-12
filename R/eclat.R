@@ -48,6 +48,9 @@ eclat <-  function(data, parameter = NULL, control = NULL)
     
     ## make sure quality is a data.frame
     result@quality <- as.data.frame(result@quality,)
+## 
+    attr(result@quality, "size.data") <- length(data)
+
     
     ## make sure tid list itemInfo is ok
     if (!is.null(result@tidLists)) {

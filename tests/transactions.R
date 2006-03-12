@@ -39,8 +39,8 @@ LIST(t, decode = FALSE)
 t <- as(data, "transactions")[2:6]
 t_comp <- as(data[2:6], "transactions")
 
-as(t, "dgCMatrix")
-as(t_comp, "dgCMatrix")
+as(t, "ngCMatrix")
+as(t_comp, "ngCMatrix")
 
 
 ### test apriori and eclat
@@ -49,11 +49,11 @@ esets <- eclat(t, parameter = list(target = "frequ", supp = 0.2, tidList = TRUE)
 fsets_comp <- apriori(t_comp, parameter = list(target = "frequ", supp = 0.2))
 esets_comp <- eclat(t_comp, parameter = list(target = "frequ", supp = 0.2))
 
-as(items(fsets), "dgCMatrix")
-as(items(fsets_comp), "dgCMatrix")
+as(items(fsets), "ngCMatrix")
+as(items(fsets_comp), "ngCMatrix")
 
-as(items(esets), "dgCMatrix")
-as(items(esets_comp), "dgCMatrix")
+as(items(esets), "ngCMatrix")
+as(items(esets_comp), "ngCMatrix")
 
 
 

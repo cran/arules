@@ -7,20 +7,21 @@
 ##*********************************************************
 ## dimensions of the binary matrix
 setMethod("dim", signature(x = "tidLists"),
-    function(x) {
-        rev(dim(x@data))
-    })
+    function(x) rev(dim(x@data))
+)
 
 ## number of elements (rows)
 setMethod("length", signature(x = "tidLists"),
-    function(x) {
-        dim(x)[1]
-    })
+    function(x) dim(x)[1]
+)
 
 ## produces a vector of element sizes
 setMethod("size", signature(x = "tidLists"),
     function(x) {
-        diff(x@data@p)
+        ##diff(x@data@p)
+        
+        ## for now we use our own C code
+        .Call("R_colSums_ngCMatrix", x@data)
     })
 
 
@@ -37,23 +38,24 @@ setMethod("show", signature(object = "tidLists"),
     })
 
 setMethod("summary", signature(object = "tidLists"),
-    function(object, ...) {
-        new("summary.tidLists", Dim = dim(object))
-    })
+    function(object, ...) new("summary.tidLists", Dim = dim(object))
+)
 
 setMethod("show", signature(object = "summary.tidLists"),
     function(object) {
         cat("tidLists in sparse format for\n",
-            object@Dim[1],"items/itemsets (rows) and\n",
-            object@Dim[2],"transactions (columns)\n")
+            object@Dim[1], "items/itemsets (rows) and\n",
+            object@Dim[2], "transactions (columns)\n")
     })
 
 setMethod("image", signature(x = "tidLists"),
-    function(x, colorkey=FALSE,
-        ylab="Items/itemsets (Rows)", xlab="Transactions (Columns)",
-        col.regions = gray(seq(from = 0, to = 1, length = 2)), ...) {
-        i <- t(as(x@data, "dgTMatrix"))
-        image(i,colorkey=colorkey, ylab=ylab, xlab=xlab,
+    function(x,
+        xlab="Transactions (Columns)", 
+        ylab="Items/itemsets (Rows)", ...) {
+        ##i <- t(as(x@data, "dgTMatrix"))
+        i <- t(x@data)
+        image(i,colorkey = FALSE, 
+            ylab = ylab, xlab = xlab,
             col.regions = col.regions, ...)
     })
 
@@ -122,55 +124,57 @@ setAs("tidLists", "matrix",
         if (!is.null(from@transactionInfo[["transactionID"]]))
         dimnames(m) <- list(from@itemInfo[["labels"]],
             from@transactionInfo[["transactionID"]])
-        return(m)
+        m
     })
 
 
 setAs("tidLists", "dgCMatrix",
     function(from) {
+        tmp <- as(from@data, "dgCMatrix")
+        dimnames(tmp)[[2]] <- from@itemInfo[["labels"]]
+        tmp
+    })
+
+
+setAs("tidLists", "ngCMatrix",
+    function(from) {
         tmp <- from@data
         dimnames(tmp)[[2]] <- from@itemInfo[["labels"]]
-        return(tmp)
+        tmp
     })
 
 
 setAs("tidLists", "transactions",
-    function(from) {
-        new("transactions", data = t(from@data), 
-            itemInfo = from@itemInfo, transactionInfo = from@transactionInfo) 
-    })
+    function(from) new("transactions", data = t(from@data), 
+        itemInfo = from@itemInfo, transactionInfo = from@transactionInfo) 
+)
 
 setAs("transactions", "tidLists",
-    function(from) {
-        new("tidLists", data = t(from@data),
-            itemInfo = from@itemInfo, transactionInfo = from@transactionInfo)
-    })
+    function(from) new("tidLists", data = t(from@data),
+        itemInfo = from@itemInfo, transactionInfo = from@transactionInfo)
+)
 
 setAs("tidLists", "itemMatrix",
-    function(from) {
-        new("transactions", data = t(from@data), 
-            itemInfo = from@itemInfo) 
-    })
+    function(from) new("transactions", data = t(from@data), 
+        itemInfo = from@itemInfo) 
+)
 
 setAs("itemMatrix", "tidLists",
-    function(from) {
-        new("tidLists", data = t(from@data),
-            itemInfo = from@itemInfo)
-    })
+    function(from) new("tidLists", data = t(from@data),
+        itemInfo = from@itemInfo)
+)
 
 
 ##*****************************************************
 ## accessors
 
 setMethod("transactionInfo", signature(x = "tidLists"),
-    function(x) {
-        x@transactionInfo
-    })
+    function(x) x@transactionInfo
+)
 
 setMethod("itemInfo", signature(object = "tidLists"),
-    function(object) {
-        object@itemInfo
-    })
+    function(object) object@itemInfo
+)
 
 setMethod("labels", signature(object = "tidLists"),
     function(object, ...) {
@@ -184,8 +188,7 @@ setMethod("labels", signature(object = "tidLists"),
     })
 
 setMethod("itemLabels", signature(object = "tidLists"),
-    function(object, ...) {
-        as(object@itemInfo[["labels"]], "character")
-    })
+    function(object, ...) as(object@itemInfo[["labels"]], "character")
+)
 
 

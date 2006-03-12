@@ -14,15 +14,20 @@
 }
 \usage{
 %image(x, \dots)
-\S4method{image}{itemMatrix}(x, ...)
+\S4method{image}{itemMatrix}(x, 
+    xlab = "Items (Columns)",
+    ylab = "Elements (Rows)", ...)
 
 \S4method{image}{transactions}(x, ...)
 
-\S4method{image}{tidLists}(x, ...)
+\S4method{image}{tidLists}(x,
+    xlab="Transactions (Columns)",
+    ylab="Items/itemsets (Rows)", ...)
 }
 \arguments{
   \item{x}{ the object (\code{itemMatrix}, \code{transactions} or 
 	\code{tidLists}). }
+  \item{xlab, ylab}{labels for the plot.}
   \item{\dots}{ further arguments passed on to \code{image} in 
     package \pkg{Matrix} which in turn are passed on to
     \code{levelplot} in \pkg{lattice}.}

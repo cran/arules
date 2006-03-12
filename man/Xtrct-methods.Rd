@@ -6,13 +6,13 @@
 \alias{[,itemsets,ANY,ANY,ANY-method}
 \alias{[,transactions,ANY,ANY,ANY-method}
 \alias{[,itemMatrix,ANY,ANY,ANY-method}
-\alias{[,dgCMatrix,ANY,ANY,ANY-method}  % internal method
+%\alias{[,ngCMatrix,ANY,ANY,ANY-method}  % internal method
 \alias{[,tidLists,ANY,ANY,ANY-method}
 \alias{[,rules-method}
 \alias{[,itemsets-method}
 \alias{[,transactions-method}
 \alias{[,itemMatrix-method}
-\alias{[,dgCMatrix-method}  % internal method
+%\alias{[,ngCMatrix-method}  % internal method
 \alias{[,tidLists-method}
 %
 \alias{[,Matrix,ANY,ANY,ANY-method} % Namespace import problem

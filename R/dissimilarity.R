@@ -104,7 +104,7 @@ setMethod("dissimilarity", signature(x = "matrix"),
             } else if(ind == 4) {
                 ## Dice Coefficient (Dice, 1945)
                 #dist <- 1 - 2 * a / (2*a + b + c)
-                dist <- 1 - (2 * a / (2*a_b_c))
+                dist <- 1 - 2 * a / (a + a_b_c)
 
             }
         }

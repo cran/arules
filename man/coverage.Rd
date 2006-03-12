@@ -1,7 +1,7 @@
 \name{coverage}
 \alias{coverage}
 \alias{coverage,rules-method}
-\title{Calculate coerage for rules}
+\title{Calculate coverage for rules}
 \description{
    Provides the generic function and the needed S4 method to
    calculate the coverage (support of the left-hand-side) of rules.

@@ -96,7 +96,7 @@ setMethod("[", signature(x = "itemsets", i = "ANY", j = "ANY", drop = "ANY"),
 }
 
 setMethod("c", signature(x = "itemsets"),
-    function(x, ..., recursive = TRUE){
+    function(x, ..., recursive = FALSE){
 
         args <- list(...)  
         if(length(args) == 0) return(x)  
@@ -139,7 +139,8 @@ setMethod("summary", signature(object = "itemsets"),
         new("summary.itemsets", 
             length = length(object),
             items = summary(object@items,  ...),
-            quality = summary(object@quality),
+            quality = if(length(object@quality) > 0) summary(object@quality)
+            else summary(NULL),
             tidLists = !is.null(object@tidLists))
     })
 

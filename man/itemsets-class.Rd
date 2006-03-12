@@ -113,9 +113,9 @@ as(items(fsets.top5), "list")
 ## Get the itemsets as a binary matrix
 as(items(fsets.top5), "matrix")
 
-## Get the itemsets as a sparse matrix, a dgCMatrix from package Matrix.
-## Warning: for efficiency reasons, the dgCMatrix you get is transposed 
-as(items(fsets.top5), "dgCMatrix")
+## Get the itemsets as a sparse matrix, a ngCMatrix from package Matrix.
+## Warning: for efficiency reasons, the ngCMatrix you get is transposed 
+as(items(fsets.top5), "ngCMatrix")
 
 }
 \keyword{classes}

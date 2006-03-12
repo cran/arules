@@ -28,16 +28,15 @@ setAs("list", "transactions",
     })
 
 setAs("transactions", "list",
-    function(from) {
-        LIST(from, decode = TRUE)
-    })
+    function(from) LIST(from, decode = TRUE)
+)
 
 setMethod("LIST", signature(from = "transactions"),
     function(from, decode = TRUE) {
         l <- LIST(as(from, "itemMatrix"), decode)
         if(decode == TRUE) 
         names(l) <- from@transactionInfo[["transactionID"]]
-        return(l)
+        l
     })
 
 setAs("data.frame", "transactions", function(from) {
@@ -68,9 +67,8 @@ setAs("data.frame", "transactions", function(from) {
         }
 
         p <- as.integer(c(0, cumsum(len)))
-        z <- new("dgCMatrix", x = rep(as.numeric(1), length(i)),
-            i = i, p = p, Dim = to_dim)
-        #cat("Recoded",dim(from)[2],"variables to",to_dim[1],"binary items\n")
+        z <- new("ngCMatrix", i = i, p = p, Dim = to_dim)
+        ##cat("Recoded",dim(from)[2],"variables to",to_dim[1],"binary items\n")
         new("transactions", new("itemMatrix", data = z,
                 itemInfo=data.frame(labels = to_labels, variables = to_vars, 
                     levels=to_levels)))
@@ -93,9 +91,9 @@ setAs( "transactions", "data.frame", function(from) {
 
 ## no t for associations
 setMethod("t", signature(x = "transactions"),
-    function(x) {
+    function(x)
         stop("Object not transposable! Use as() for coercion to tidLists.")
-    })
+    )
 
 ##*****************************************************
 ## subset + combine
@@ -106,18 +104,15 @@ setMethod("[", signature(x = "transactions",            # ]
 
         if(missing(j) && missing(i)) return(x)
 
-        ## drop is always false
-        drop <- FALSE
-
         if(missing(i)) {
-            new("transactions",as(x, "itemMatrix")[,j,...,drop=drop],
+            new("transactions", as(x, "itemMatrix")[, j,..., drop = FALSE],
                 transactionInfo = x@transactionInfo)
         }else if(missing(j)) {
-            new("transactions",as(x, "itemMatrix")[i,,...,drop=drop],
-                transactionInfo = x@transactionInfo[i,,drop=FALSE])
+            new("transactions", as(x, "itemMatrix")[i,,..., drop = FALSE],
+                transactionInfo = x@transactionInfo[i,, drop = FALSE])
         }else{
-            new("transactions",as(x, "itemMatrix")[i,j,...,drop=drop],
-                transactionInfo = x@transactionInfo[i,,drop=FALSE])
+            new("transactions", as(x, "itemMatrix")[i, j,..., drop = FALSE],
+                transactionInfo = x@transactionInfo[i,, drop = FALSE])
         }
     })
 
@@ -140,22 +135,22 @@ setMethod("c", signature(x = "transactions"),
 setMethod("show", signature(object = "transactions"),
     function(object) {
         cat("transactions in sparse format with\n",
-            dim(object)[1],"transactions (rows) and\n",
-            dim(object)[2],"items (columns)\n")
+            length(object), "transactions (rows) and\n",
+            nitems(object), "items (columns)\n")
     })
 
 setMethod("image", signature(x = "transactions"),
-    function(x, ...) {
-        image(as(x,"itemMatrix"), xlab="Items (Columns)", 
-            ylab="Transactions (Rows)")
-    })
+    function(x, ...)
+    image(as(x, "itemMatrix"), xlab = "Items (Columns)", 
+        ylab = "Transactions (Rows)")
+)
 
 setMethod("summary", signature(object = "transactions"),
-    function(object, ...) {
-        new("summary.transactions", summary(as(object,"itemMatrix")),
-            transactionInfo = transactionInfo(object)[1:min(3, 
-                    length(object)), , drop = FALSE])
-    })
+    function(object, ...)
+    new("summary.transactions", summary(as(object,"itemMatrix")),
+        transactionInfo = transactionInfo(object)[1:min(3, length(object)), 
+            , drop = FALSE])
+)
 
 setMethod("show", signature(object = "summary.transactions"),
     function(object) {
@@ -174,9 +169,8 @@ setMethod("show", signature(object = "summary.transactions"),
 
 
 setMethod("transactionInfo", signature(x = "transactions"),
-    function(x) {
-        x@transactionInfo
-    })
+    function(x) x@transactionInfo
+)
 
 setReplaceMethod("transactionInfo", signature(x = "transactions"),
     function(x, value) {
@@ -188,46 +182,11 @@ setMethod("labels", signature(object = "transactions"),
     function(object, ...) {
 
         ## check if transaction labels exist
-        transactionID <-  
+        transactionID <- 
         if(length(object@transactionInfo) != 0)   
-        as(object@transactionInfo[["transactionID"]], "character")
-        else
-        as(1 : length(object), "character")
+            as(object@transactionInfo[["transactionID"]], "character")
+        else as(1 : length(object), "character")
 
         list(items = itemLabels(object), transactionID = transactionID)
-    })
-
-
-##***************************************************************
-## read function
-
-read.transactions <-
-function(file, format = c("basket", "single"), sep = NULL, cols = NULL)
-{
-    format <- match.arg(format)
-    if(format == "basket") {
-        if(is.null(sep)) sep <- "[ \t]+"
-        return(as(strsplit(readLines(file), split = sep),
-                "transactions"))
-    }
-    ## If format is "single", have lines with TIDs and IIDs in the
-    ## columns specified by 'cols'.
-    if(!(is(cols, "numeric") && (length(cols) == 2)))
-    stop("'cols' must be a numeric vector of length 2.")
-    cols <- as(cols, "integer")
-    ## Thanks to BDR for indicating how to only read in the relevant
-    ## columns.
-    what <- vector("list", length = max(cols))
-    what[cols] <- ""
-    entries <- scan(file = file, sep = sep, what = what, flush = TRUE,
-        quiet = TRUE)
-    as(split(entries[[cols[2]]], entries[[cols[1]]]), "transactions")
-}
-
-## write
-
-setMethod("WRITE", signature(x = "transactions"),
-    function(x, ...) {
-        write.table(as(x, "data.frame"), ...)
     })
 

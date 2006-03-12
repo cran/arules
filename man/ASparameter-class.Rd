@@ -45,10 +45,10 @@
       \itemize{
 	\item \code{"frequent itemsets"} 
 	\item \code{"maximally frequent itemsets"}
-	\item \code{"closed itemsets"}
+	\item \code{"closed frequent itemsets"}
 	\item \code{"rules"} (only available for Apriori) 
  	\item \code{"hyperedgesets"} (only available for Apriori; 
-	see references for the definition of association hyperegesets)
+	see references for the definition of association hyperedgesets)
       }
     }
     \item{\code{ext}:}{a logical indicating whether to
