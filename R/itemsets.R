@@ -84,29 +84,57 @@ setMethod("[", signature(x = "itemsets", i = "ANY", j = "ANY", drop = "ANY"),
     return(y)
     })
 
+### auxilliary function to combine 2 quality data.frames
+.combineQuality <- function(a, b) {
+  namesA <- names(a)
+  namesB <- names(b)
+ 
+  ### do we have a NULL data.frame
+  if(length(a) == 0) a <- b 
+  if(length(b) == 0) b <- a 
+  ### Note: the copied values will be set to NA in the following    
+  
+  if(!setequal(namesA, namesB)) {
+    ### in a but not in b
+    diffAB <- setdiff(namesA, namesB)
+    if(length(diffAB) > 0 ) 
+      sapply(diffAB, FUN = function(x) b[[x]] <<- NA)
+    
+    ### in b but not in a  
+    diffBA <- setdiff(namesB, namesA) 
+    if(length(diffBA) > 0 ) 
+      sapply(diffBA, FUN = function(x) a[[x]] <<- NA)
+  }
+  
+  rbind(a, b)
+}
 
 setMethod("c", signature(x = "itemsets"),
     function(x, ..., recursive = TRUE){
 
-# build quality data.frame first.
-# todo: merge data.frames w/differernt quality measures
-    q <- x@quality
-    lapply(list(...), FUN = function(i)
-      q <<- rbind(q, i@quality))
+    args <- list(...)  
+    if(length(args) == 0) return(x)  
 
-# create joint itemMatrix
+    # build quality data.frame first
+    q <- x@quality
+    for(i in 1:length(args)) {
+      q <- .combineQuality(q, args[[i]]@quality)
+    }
+    
+    # create joint itemMatrix
     z <- lapply(list(...), FUN = function(i) i@items)
     new("itemsets", items = c(x@items, z, recursive = TRUE), 
       quality = q) 
     })
 
+  
 setMethod("duplicated", signature(x = "itemsets"),
    function(x, incomparables = FALSE, ...) {
      duplicated(x@items, 
      	incomparables = incomparables, ...)
    })
 
-setMethod("match", signature(x = "itemsets"),
+setMethod("match", signature(x = "itemsets", table = "itemsets"),
     function(x,  table, nomatch = NA, incomparables = FALSE) {
     match(x@items, table@items,
       nomatch = nomatch, incomparables = incomparables)

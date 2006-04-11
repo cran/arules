@@ -111,11 +111,17 @@ setMethod("[", signature(x = "rules", i = "ANY", j = "ANY", drop = "ANY"),
 
 setMethod("c", signature(x = "rules"),
   function(x, ..., recursive = FALSE) {
-# build quality data.frame first.
-# todo: merge data.frames w/differernt quality measures
+    
+    args <- list(...)  
+    if(length(args) == 0) return(x)
+
+    # build quality data.frame first
+    # uses .combineQuality() defined in itemsets.R
     q <- x@quality
-    lapply(list(...), FUN = function(i)
-      q <<- rbind(q, i@quality))
+    for(i in 1:length(args)) {
+      q <- .combineQuality(q, args[[i]]@quality)
+    }
+
 
 # create joint itemMatrix
     lhs <- lapply(list(...), FUN = function(i) i@lhs)
@@ -147,7 +153,7 @@ setMethod("duplicated", signature(x = "rules"),
     })
 
 
-setMethod("match", signature(x = "rules"),
+setMethod("match", signature(x = "rules", table = "rules"),
     function(x,  table, nomatch = NA, incomparables = FALSE) {
     match(.joinedList(x), .joinedList(table),
       nomatch = nomatch, incomparables = incomparables)

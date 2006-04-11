@@ -1,45 +1,29 @@
 ###*****************************************************************
-### Functions union, intersect, setequal 
+### Basic set operations:  union, intersect, setequal, ... 
+### as defined in base; worke now for all classes which implement 
+### unique, match and length (in arules associations and itemMatrix). 
 ###
-### set operations
 
-### makes no sense for itemMatrix
-#setMethod("union", signature(x = "itemMatrix", y = "itemMatrix"),
-    #    function(x, y) {
-	#unique(c(x, y))
-	#})
 
-setMethod("union", signature(x = "associations", y = "associations"),
-    function(x, y) {
-    unique(c(x, y))
-    })
+setMethod("union", signature(x = "ANY", y = "ANY"),
+  function(x, y) unique(c(x, y)) 
+) 
 
-#setMethod("intersect", signature(x = "itemMatrix", y = "itemMatrix"),
-    #    function(x, y) {
-	#u <- c(x, y)
-	#u[duplicated(u)]
-	#})
+setMethod("intersect", signature(x = "ANY", y = "ANY"),
+  function(x, y) unique(y[match(x, y, 0)])
+)
+  
+setMethod("setequal", signature(x = "ANY", y = "ANY"),
+  function(x, y) all(c(match(x, y, 0) > 0, match(y, x, 0) > 0))
+)
 
-setMethod("intersect", signature(x = "associations", y = "associations"),
-    function(x, y) {
-    u <- c(x, y)
-    u[duplicated(u)]
-    })
+setMethod("setdiff", signature(x = "ANY", y = "ANY"),
+  function(x, y) 
+  unique(if (length(x) || length(y)) x[match(x, y, 0) == 0] else x)
+)
 
-#setMethod("setequal", signature(x = "itemMatrix", y = "itemMatrix"),
-    #    function(x, y) {
-	# 
-	#   if(length(x) != length(y)) return(FALSE) 
+setMethod("is.element", signature(el = "ANY", set = "ANY"),
+  function(el, set) match(el, set, 0) > 0 
+)
 
-	#   if(length(union(x,y)) == length(x)) return(TRUE)
-	#   return(FALSE)    
-	#})
-
-setMethod("setequal", signature(x = "associations", y = "associations"),
-    function(x, y) {
-    if(length(x) != length(y)) return(FALSE) 
-
-    if(length(union(x,y)) == length(x)) return(TRUE)
-    return(FALSE)    
-    })
 

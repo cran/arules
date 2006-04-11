@@ -35,8 +35,8 @@ unique(x, incomparables = FALSE, ...)
 \examples{
 data("Adult")
 
-r1 <- apriori(Adult[1:1000])
-r2 <- apriori(Adult[1001:2000])
+r1 <- apriori(Adult[1:1000], parameter = list(support = 0.5))
+r2 <- apriori(Adult[1001:2000], parameter = list(support = 0.5))
 
 ### Note that this produces a collection of rules from two sets
 r_comb <- c(r1, r2)

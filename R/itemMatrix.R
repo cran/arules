@@ -62,23 +62,17 @@ setMethod("LIST", signature(from = "itemMatrix"),
 
 
 setAs("list","itemMatrix", function(from, to) {
+    
+    ### get names
     from_names <- unique(unlist(from))
-    data <- c(0:(length(from_names)-1))
+    data <- c(1:(length(from_names)))
     names(data) <- from_names 
 
-    #l <- lapply(from, function(x) as(data[x], "vector"))
-    l <- lapply(from, function(x) as.vector(data[x]))
-    t <- new("dgTMatrix")
-    j <- c(1:(length(l)))
-    t@i <- unlist(l)
-    t@j <- unlist(lapply(j, function(x) 
-      rep.int(as.integer(x-1), length(l[[x]]))))
-    t@Dim <- as.integer(c(length(data),length(l)))
-    t@x <- rep.int(1, length(t@i))
+    ### code items from 1..numItems and kill doubles
+    l <- lapply(from, function(x) unique(as.vector(data[as.character(x)])))
 
-    z <- as(t, "dgCMatrix")
-    z@x <- rep.int(1, length(z@x)) # kill doubles
-    new("itemMatrix", data=z, itemInfo = data.frame(labels = from_names))
+    new("itemMatrix", data= as(l, "dgCMatrix"), 
+      itemInfo = data.frame(labels = from_names))
     })
 
 
@@ -208,7 +202,7 @@ setMethod("unique", signature(x = "itemMatrix"),
     x[!duplicated(x, incomparables = incomparables, ...)]
     })
 
-setMethod("match", signature(x = "itemMatrix"),
+setMethod("match", signature(x = "itemMatrix", table = "itemMatrix"),
     function(x,  table, nomatch = NA, incomparables = FALSE) {
     match(LIST(x, decode = FALSE), LIST(table, decode = FALSE), 
       nomatch = nomatch, incomparables = incomparables)

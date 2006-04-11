@@ -148,7 +148,10 @@ setMethod("hyperLift",  signature(x = "rules"),
     function(x, transactions, d = 0.99) {
     c_XY <-  quality(x)$support * length(transactions)
     c_X <- c_XY / quality(x)$confidence
-    cons <- unlist(LIST(rhs(x), decode = FALSE))
+    
+    ##cons <- unlist(LIST(rhs(x), decode = FALSE))
+    ## that's low-level but way faster!
+    cons <- x@rhs@data@i+1
 
 ### check that the consequents are all singletons
     if (length(cons) != length(x)) stop("this implementation only works for
@@ -185,7 +188,10 @@ setMethod("hyperConfidence",  signature(x = "rules"),
     t <- length(transactions)
     c_XY <-  quality(x)$support * t 
     c_X <- c_XY / quality(x)$confidence
-    cons <- unlist(LIST(rhs(x), decode = FALSE))
+    
+    ##cons <- unlist(LIST(rhs(x), decode = FALSE))
+    ## that's low-level but way faster!
+    cons <- x@rhs@data@i+1
 
 ### check that the consequents are all singletons
     if (length(cons) != length(x)) stop("this implementation only works for

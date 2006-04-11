@@ -18,7 +18,7 @@
 \usage{
 itemFrequencyPlot(x, \dots)
 \S4method{itemFrequencyPlot}{itemMatrix}(x, type = "relative", 
-    support = NULL,
+    support = NULL, topN = NULL,
     population = NULL, popCol = "black", popLwd = 1,
     lift = FALSE, horiz = FALSE, 
     names = TRUE, cex.names =  par("cex.axis"), 
@@ -35,6 +35,9 @@ itemFrequencyPlot(x, \dots)
     at least \code{support}. If no population is given, support is calculated 
     from \code{x} otherwise from the population. Support is interpreted relative
     or absolute according to the setting of \code{type}.}
+  \item{topN}{\code{"numeric"}; only plot the \code{topN} 
+    items with the highest item frequency or lift (if \code{lift = TRUE}).
+    The items are plotted in descending order. }
   \item{population}{ object of same class  as \code{x}; if \code{x}
     is a segment of a population, the population mean frequency for
     each item can be shown as a line in the plot.}
@@ -72,13 +75,14 @@ Adult.largeIncome <- Adult[Adult \%in\%
 itemFrequencyPlot(Adult.largeIncome)
 
 # plot with the averages of the population plotted as a line 
-# (first 72 variables/items)
+# (for first 72 variables/items)
 itemFrequencyPlot(Adult.largeIncome[, 1:72], 
 	population = Adult[, 1:72])
 
 # plot lift ratio (frequency in x / frequency in population)
-itemFrequencyPlot(Adult.largeIncome[, 1:72], 
-        population = Adult[, 1:72], 
+# for items with a support of 20\% in the population
+itemFrequencyPlot(Adult.largeIncome, 
+        population = Adult, support = 0.2, 
 	lift = TRUE, horiz = TRUE)
 }
 \keyword{hplot}

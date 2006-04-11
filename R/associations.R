@@ -23,9 +23,9 @@ setReplaceMethod("quality", signature(x = "associations"),
 
 ### sort + unique
 setMethod("SORT", signature(x = "associations"),
-  function (x, by = "support", decreasing = TRUE) {
+  function (x, by = "support", na.last = NA, decreasing = TRUE) {
     if(length(x) == 0) return(x)
-    x[order(x@quality[[by]], decreasing = decreasing)]
+    x[order(x@quality[[by]], na.last = na.last, decreasing = decreasing)]
   
   })
 

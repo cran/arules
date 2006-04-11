@@ -10,13 +10,17 @@
 }
 \usage{
 SORT(x, \dots)
-\S4method{SORT}{associations}(x, by = "support", decreasing = TRUE)
+\S4method{SORT}{associations}(x, by = "support", na.last = NA, 
+    decreasing = TRUE)
 }
 \arguments{
   \item{x}{ an object to be sorted.}
   \item{\dots}{ further arguments.}
   \item{by}{ a character string specifying the quality measure stored in
     \code{x} to be used to sort \code{x}.}
+  \item{na.last}{for controlling the treatment of 'NA's. If 'TRUE', missing
+    values in the data are put last; if 'FALSE', they are put
+    first; if 'NA', they are removed.}
   \item{decreasing}{\code{"logical"}; should the sort be increasing or
     decreasing? (default is decreasing)}
 }

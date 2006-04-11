@@ -1,46 +1,65 @@
 \name{sets}
 \alias{union}
-%\alias{union,itemMatrix,itemMatrix-method}
-\alias{union,associations,associations-method}
+\alias{union-methods}
+\alias{union,ANY-method}
 \alias{intersect}
-%\alias{intersect,itemMatrix,itemMatrix-method}
-\alias{intersect,associations,associations-method}
+\alias{intersect-methods}
+\alias{intersect,ANY-method}
 \alias{setequal}
-%\alias{setequal,itemMatrix,itemMatrix-method}
-\alias{setequal,associations,associations-method}
-\title{Set Operations for Associations}
+\alias{setequal-methods}
+\alias{setequal,ANY-method}
+\alias{setdiff}
+\alias{setdiff-methods}
+\alias{setdiff,ANY-method}
+\alias{is.element}
+\alias{is.element-methods}
+\alias{is.element,ANY-method}
+%
+%
+\title{Set Operations}
 \description{
-  Provides the generic set functions 
+  Provides the generic functions 
+  and the S4 methods for 
+  the set operations 
   \code{union},  
-  \code{intersect} and  
-  \code{setequal}  
-  and the S4 methods for sets of associations (e.g., rules, itemsets). 
+  \code{intersect}, 
+  \code{setequal},  
+  \code{setdiff} and  
+  \code{is.element}
+  on
+  sets of associations (e.g., rules, itemsets) and itemMatrix. 
 }
 \usage{
 union(x, y)
-%\S4method{union}{associations,associations}(x, y)
-%\S4method{union}{itemMatrix,itemMatrix}(x, y)
 intersect(x, y)
-%\S4method{intersect}{associations,associations}(x, y)
-%\S4method{intersect}{itemMatrix,itemMatrix}(x, y)
 setequal(x, y)
-%\S4method{setequal}{associations,associations}(x, y)
-%\S4method{setequal}{itemMatrix,itemMatrix}(x, y)
+setdiff(x, y)
+is.element(el, set)
 }
 \arguments{
-  \item{x,y}{ sets of associations.}
-%  \item{x,y}{ a set of associations or an \code{itemMatrix} object.}
+  \item{x,y, el, set}{ sets of associations or itemMatrix objects.}
 }
+\details{
+All S4 methods for set operations are defined for the 
+class name \code{"ANY"} in the signature, 
+so they should work for all S4 classes for which the following
+methods are available: \code{match}, \code{length} and \code{unique}. }
 \value{
-   An object of the same class as \code{x} and \code{y}.
+\code{union},
+\code{intersect},
+\code{setequal} and
+\code{setdiff} return an object of the same class as 
+\code{x} and \code{y}.
+
+\code{is.element} returns a logic vector of length \code{el} indicating
+for each element if it is included in \code{set}.
 }
 \seealso{
-  \code{\link{associations-class}}
-%  \code{\link{itemMatrix-class}}
+  \code{\link{associations-class}},
+  \code{\link{itemMatrix-class}}
 }
 \examples{
 data("Adult")
-
 
 ### mine some rules
 r <- apriori(Adult)

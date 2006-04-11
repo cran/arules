@@ -1,8 +1,8 @@
 \name{match}
 \alias{match}
-\alias{match,itemsets-method}
-\alias{match,rules-method}
-\alias{match,itemMatrix-method}
+\alias{match,itemsets,itemsets-method}
+\alias{match,rules,rules-method}
+\alias{match,itemMatrix,itemMatrix-method}
 \title{Value Matching}
 \description{
   Provides the generic function \code{match}  
@@ -40,10 +40,10 @@ data("Adult")
 ### get unique transactions
 vals <- unique(Adult)
 
-### count frequency
+### count frequency of unique transactions
 cnts <- tabulate(match(Adult, vals))
 
-### plot frequency counts
+### plot frequency of unique transactions
 plot(sort(cnts, decreasing=TRUE))
 
 }
