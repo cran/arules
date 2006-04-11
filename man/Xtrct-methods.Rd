@@ -18,6 +18,8 @@
 \alias{[,Matrix,ANY,ANY,ANY-method} % Namespace import problem
 \alias{[<-,Matrix,ANY,ANY,ANY-method} % Namespace import problem
 \alias{[<-,Matrix,missing,missing,ANY-method} % Namespace import problem
+\alias{[,Matrix,lMatrix,missing,ANY-method} % Namespace import problem
+\alias{[,Matrix,logical,missing,ANY-method} % Namespace import problem
 %
 \title{Methods for "[": Extraction or Subsetting in Package 'arules'}
 \description{

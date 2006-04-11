@@ -36,7 +36,7 @@ setMethod("itemFrequency", signature(x = "tidLists"),
 ### plot item frequency
 setMethod("itemFrequencyPlot", signature(x = "itemMatrix"),
     function(x, type = c("relative", "absolute"), support = NULL, 
-      population = NULL, popCol = "black", popLwd = 1, 
+      topN = NULL, population = NULL, popCol = "black", popLwd = 1, 
       lift = FALSE, horiz = FALSE,
       names = TRUE, cex.names =  par("cex.axis"), 
       xlab = NULL, ylab = NULL, mai = NULL, ...) {
@@ -46,7 +46,7 @@ setMethod("itemFrequencyPlot", signature(x = "itemMatrix"),
       # force relative for lift
       if(lift == TRUE) type <- "relative"
     
-      # do support
+      # plot only items with support
       if(!is.null(support)) {
 	if(!is.null(population)) {
 	  frequentItems <- itemFrequency(population, type) >= support
@@ -83,7 +83,16 @@ setMethod("itemFrequencyPlot", signature(x = "itemMatrix"),
 	  label <- "lift ratio"
       }
 
-      # kill names
+      # plot only top n items (either itemFrequency or lift)
+      if(!is.null(topN)) {
+	take <- order(itemFrequency, decreasing = TRUE)[1:topN]
+	itemFrequency <- itemFrequency[take] 
+	if(!is.null(population))
+	   population.itemFrequency <- population.itemFrequency[take]
+      }
+      
+      
+      # supress names
       if(names == FALSE) names(itemFrequency) <- NA
       
       if(horiz == FALSE) midpoints <- .barplot_vert(itemFrequency, ..., 

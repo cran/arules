@@ -120,6 +120,20 @@ if(!isGeneric("itemFrequencyPlot")) {
                function(x, ...) standardGeneric("itemFrequencyPlot"))
 }
 
+if(!isGeneric("is.element")) {
+    setGeneric("is.element",
+               function(el, set) standardGeneric("is.element"))
+}
+
+if(!isGeneric("is.superset")) {
+    setGeneric("is.superset",
+               function(set, el, proper = FALSE) standardGeneric("is.superset"))
+}
+
+if(!isGeneric("is.subset")) {
+    setGeneric("is.subset",
+               function(set, el, proper = FALSE) standardGeneric("is.subset"))
+}
 
 if(!isGeneric("labels")) {
     setGeneric("labels",
@@ -180,10 +194,16 @@ if(!isGeneric("sample")) {
       standardGeneric("sample"))
 }
 
-if(!isGeneric("setequal"))
+if(!isGeneric("setdiff")) {
+    setGeneric("setdiff",
+               function(x, y) standardGeneric("setdiff"))
+	   }
+
+if(!isGeneric("setequal")) {
     setGeneric("setequal",
                function(x, y) standardGeneric("setequal"))
-
+	   }
+	     
 if(!isGeneric("support")) {
     setGeneric("support",
                function(x, transactions, ...) 
@@ -245,8 +265,8 @@ if(!isGeneric("dissimilarity")) {
 }
 
 if(!isGeneric("predict")) {
-  setGeneric("predict",
-    function(object, ...) standardGeneric("predict"))
-}
+    setGeneric("predict",
+      function(object, ...) standardGeneric("predict"))
+  }
 
 

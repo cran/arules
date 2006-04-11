@@ -43,6 +43,7 @@ data("Adult")
 rules <- apriori(Adult)
 
 ### subset the rules
-rules.sub <- subset(rules, subset = rhs \%in\% "Never-married" & lift > 2)
+rules.sub <- subset(rules, subset = rhs \%in\% "marital-status=Never-married" 
+    & lift > 2)
 }
 \keyword{manip}

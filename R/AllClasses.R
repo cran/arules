@@ -14,7 +14,6 @@ setClass("itemMatrix",
 ### regular itemMatrix
     if(length(itemInfo(object)[["labels"]]) == dim(object)[2]) return(TRUE)
     return("number of item labels does not match number of columns in itemMatrix")
-
     })
 
 
@@ -38,7 +37,6 @@ setClass("transactions",
 ### check dimensions
 ### no transactionInfo (empty data.frame)
     if(length(object@transactionInfo) == 0) return(TRUE) 
-
 
     if (length(object) == length(object@transactionInfo[[1]]))
     return(TRUE)
@@ -213,7 +211,7 @@ setClass("ECcontrol",
   setClass("itemsets",
       representation(items = "itemMatrix", tidLists = "tidLists_or_NULL"),
       contains = "associations",
-      prototype(tidLists = NULL),
+      prototype(tidLists = NULL, quality = data.frame()),
       validity = function(object) {
 ### if tidLists exists, check dimensions
 ### Note, we cannot check dim(object@tidLists)[2] here since we
@@ -223,7 +221,7 @@ setClass("ECcontrol",
       return("mismatch between number of itemsets and length of tidLists")
 
 ### if quality exists, check dimensions
-      if (!length(object@quality) && 
+      if (length(object@quality) > 0 && 
 	dim(object@quality)[1] != length(object@items))
       return("mismatch between number of items and rows in quality")
 
@@ -240,12 +238,13 @@ setClass("ECcontrol",
 setClass("rules",
     representation(lhs = "itemMatrix", rhs = "itemMatrix"),
     contains = "associations",
+    prototype(quality = data.frame()),
     validity = function(object) {
 
 ### check dimensions
     if (!all(dim(object@lhs) == dim(object@rhs))) 
     return("dimension mismatch between lhs and rhs")
-    if (!length(object@quality) && 
+    if (length(object@quality) > 0 && 
       dim(object@quality)[1] != length(object@lhs))
     return("mismatch between number of rules and rows in quality")
 

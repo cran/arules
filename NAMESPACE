@@ -1,10 +1,12 @@
 useDynLib(arules)
 
 import("Matrix")
+importFrom("stats", "predict") 
 
 export(
     "read.transactions", 
     "random.transactions", 
+    "random.patterns",
     "apriori", 
     "eclat"
     )
@@ -50,6 +52,9 @@ exportMethods(
     "itemLabels", "itemLabels<-", 
     "itemFrequency", 
     "itemFrequencyPlot",
+    "is.element",
+    "is.subset",
+    "is.superset",
     "labels", 
     "length", 
     "lhs", "lhs<-",
@@ -59,6 +64,7 @@ exportMethods(
     "rhs", "rhs<-", 
     "ruleInduction",
     "sample",
+    "setdiff",
     "setequal",
     "show", 
     "size", 
