@@ -31,12 +31,12 @@ eclat(data, parameter = NULL, control = NULL)
 }
 \references{
   Mohammed J. Zaki, Srinivasan Parthasarathy, Mitsunori Ogihara, and Wei
-  Li.
+  Li. (1997)
   \emph{New algorithms for fast discovery of association rules}.
   Technical Report 651, Computer Science Department, University of
-  Rochester, Rochester, NY 14627, July 1997.
+  Rochester, Rochester, NY 14627.
   
-  Christian Borgelt. Efficient Implementations of Apriori and
+  Christian Borgelt (2003). Efficient Implementations of Apriori and
   Eclat. \emph{Workshop of Frequent Item Set Mining Implementations}
   (FIMI 2003, Melbourne, FL, USA).
 }

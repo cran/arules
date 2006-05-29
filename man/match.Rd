@@ -28,8 +28,6 @@ match(x,  table, nomatch = NA, incomparables = FALSE)
         first match if there is a match, otherwise \code{nomatch}.
 }
 \seealso{
-  \code{\link{unique}},
-  \code{\link{duplicated}},
   \code{\link{rules-class}},
   \code{\link{itemsets-class}},
   \code{\link{itemMatrix-class}}

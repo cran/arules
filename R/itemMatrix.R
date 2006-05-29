@@ -14,6 +14,11 @@ setMethod("dim", signature(x = "itemMatrix"),
     rev(dim(x@data))
     })
 
+setMethod("nitems", signature(x = "itemMatrix"),
+    function(x) {
+    dim(x)[2]
+    })
+
 ### number of elements (rows)
 setMethod("length", signature(x = "itemMatrix"),
     function(x) {
@@ -30,9 +35,14 @@ setMethod("size", signature(x = "itemMatrix"),
 ### Coercions
 
 setAs("matrix", "itemMatrix",
-    function(from) {
+  function(from) {
+
+    ## check input
+    if (any(from != 0 && from !=1))
+    stop("from is not a binary matrix!")
+
     i <- t(as(from, "dgCMatrix"))
-    
+
     ### make it binary
     i@x <- rep.int(1,length(i@x))
 
@@ -43,6 +53,8 @@ setAs("matrix", "itemMatrix",
 setAs("itemMatrix", "matrix",
     function(from) {
     m <- as(t(from@data), "matrix")
+    ### save half the memory
+    storage.mode(m) <- "integer"
     dimnames(m)[[2]] <- from@itemInfo[["labels"]]
     return(m)
     })

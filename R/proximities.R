@@ -1,12 +1,22 @@
 ###*******************************************************************
 ### general dissimilarity method
 
-#####*****************************************************************
-### dissimilarity between transactions or items
+###*******************************************************************
+### dissimilarity; currently implemented using dense matrices
+
+### Memory usage of dissimilarity with  "jaccard", "matching" ore "dice"
+### (on a 32 bit machine)
+###
+### input: x and y (integer, 4 byte) 
+### intermediate: 4 matrices size nx x ny (double, 8 byte)
+### result: either 1 dist nx x ny /2 or full matrix for crossdissim.
+###
+### total w/o input: about 5 * nx * ny * 8 byte
+
+
 setMethod("dissimilarity", signature(x = "matrix"),
     function(x, y = NULL, method = NULL, args = NULL) {
        ## Compute dissimilarities on binary data
-       ## Returns a "S3 dist" object, for the time being.
 
        ## check input
        if (any(x != 0 && x !=1)) 
@@ -17,14 +27,13 @@ setMethod("dissimilarity", signature(x = "matrix"),
        else cross <- FALSE
       
        
-       builtin_methods <- c("Affinity", "Jaccard", "Matching", "Dice", 
-	 "Euclidean")
+       builtin_methods <- c("affinity", "jaccard", "matching", "dice", 
+	 "euclidean")
        
        if(is.null(method)) ind <- 2      # Jaccard is standard
        else if(is.na(ind <- pmatch(tolower(method),
 	  tolower(builtin_methods))))
-    stop(gettextf("Value '%s' is not a valid abbreviation for a similarity method.",
-	method), domain = NA)
+    stop(gettextf("Value '%s' is not a valid abbreviation for a similarity method.", method), domain = NA)
    
       method <- builtin_methods[ind]
    
@@ -60,8 +69,10 @@ setMethod("dissimilarity", signature(x = "matrix"),
  	## see: Gower, J. C. and P. Legendre.  1986.  Metric and 
 	## Euclidean properties of dissimilarity coefficients.  
 	## J. Classif. 3: 5 - 48. 
-        a <- x %*% t(y)
-        ### save some memory
+	#a <- x %*% t(y)
+        a <- tcrossprod(x, y)
+        
+	### save some memory
 	#b <- x %*% (1 - t(y))
 	#c <- (1 - x) %*% t(y)
 	#d <- ncol(x) - a - b - c
@@ -123,9 +134,10 @@ setMethod("dissimilarity", signature(x = "itemMatrix"),
    function(x, y = NULL, method = NULL, args = NULL, 
      which = "transactions") {
      
-     ## items instead of transactions
-     if (pmatch(which, c("transactions", "items")) == 2) items <- TRUE
-     else items <- FALSE
+     ## items instead of transactions?
+     items <- FALSE
+     if (pmatch(tolower(which), c("transactions", "items")) == 2) 
+	transactions <- TRUE
      
      x <- as(x, "matrix")
      if(items) x <- t(x) 

@@ -1,4 +1,5 @@
 \name{length}
+\alias{length}
 \alias{length,itemMatrix-method}
 \alias{length,rules-method}
 \alias{length,itemsets-method}
@@ -9,6 +10,8 @@
   objects defined in the package \pkg{arules}.
 }
 \usage{
+%length(x)
+
 \S4method{length}{rules}(x)
 
 \S4method{length}{itemsets}(x)

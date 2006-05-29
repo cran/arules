@@ -9,13 +9,13 @@
   List Representation for Objects Based on ``itemMatrix''
 }
 \description{
-  Provides the generic function \code{LIST} and the S4 method to create
+  Provides the generic function \code{LIST} and the S4 methods to create
   a list representation from objects based on
   \code{\link[arules:itemMatrix-class]{itemMatrix}} (e.g.,
   \code{\link[arules:transactions-class]{transactions}},
   \code{\link[arules:tidLists-class]{tidLists}}, or
   \code{\link[arules:itemsets-class]{itemsets}}).
-  These methods are also used for the coercion to \code{list}.
+  These methods can be used for the coercion to \code{list}.
 }
 \usage{
 LIST(from, \dots)
@@ -36,6 +36,8 @@ LIST(from, \dots)
   }
 }
 \details{
+  Using \code{LIST} with \code{decode = TRUE} is equivalent to 
+  the standard coercion \code{as(x, "list")}.
   \code{LIST} returns the object \code{from} as a list of vectors.
   Each vector represents one row of the
   \code{\link[arules:itemMatrix-class]{itemMatrix}} (e.g., items in a
@@ -45,6 +47,7 @@ LIST(from, \dots)
   a \code{"list"} primitive.
 }
 \seealso{
+  \code{\link{decode}},
   \code{\link{coerce,itemMatrix,list-method}},
   \code{\link{itemMatrix-class}}
 }

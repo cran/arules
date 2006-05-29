@@ -1,4 +1,5 @@
 \name{sets}
+\alias{sets}
 \alias{union}
 \alias{union-methods}
 \alias{union,ANY-method}

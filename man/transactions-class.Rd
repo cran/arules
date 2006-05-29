@@ -97,6 +97,15 @@
   }
 }
 \seealso{
+  \code{\link{[-methods}},
+  \code{\link{LIST}},
+  \code{\link{WRITE}},
+  \code{\link{c}},
+  \code{\link{image}},
+  \code{\link{inspect}},
+  \code{\link{read.transactions}},
+  \code{\link{random.transactions}},
+  \code{\link{sets}},
   \code{\link{itemMatrix-class}}
 }
 \examples{

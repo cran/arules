@@ -14,8 +14,6 @@
 itemFrequency(x, ...)
 
 \S4method{itemFrequency}{itemMatrix}(x, type)
-
-\S4method{itemFrequency}{itemMatrix}(x, type)
 }
 \arguments{
   \item{x}{an object.}
@@ -32,6 +30,7 @@ itemFrequency(x, ...)
   order as in the binary matrix in \code{x}.
 }
 \seealso{ 
+  \code{\link{itemFrequencyPlot}},
   \code{\link{itemMatrix-class}},
   \code{\link{transactions-class}}
 }

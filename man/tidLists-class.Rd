@@ -105,11 +105,16 @@
 }
 }
 \seealso{
-  \code{\link[Matrix]{dgCMatrix}} (in \pkg{Matrix}),
+  \code{\link{[-methods}},
+  \code{\link{LIST}},
   \code{\link{eclat}},
+  \code{\link{image}},
+  \code{\link{length}},
+  \code{\link{size}},
+  \code{\link[Matrix]{dgCMatrix}} (in \pkg{Matrix}),
   \code{\link{itemMatrix-class}},
-  \code{\link{transactions-class}},
-  \code{\link{itemsets-class}}
+  \code{\link{itemsets-class}},
+  \code{\link{transactions-class}}
 }
 \examples{
 ## Create transaction data set.

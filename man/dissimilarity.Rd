@@ -92,18 +92,19 @@ d_affinity <- dissimilarity(rules, method = "Affinity",
 plot(hclust(d_affinity))
 }
 \references{
-  Sneath, P. H. A. Some thoughts on bacterial classification. 
-  Journal of General Microbiology 17, pages 184-200, 1957.
+  Sneath, P. H. A. (1957). Some thoughts on bacterial classification. 
+  Journal of General Microbiology 17, pages 184-200.
  
-  Sokal, R. R. and Michener, C. D. A statistical method for evaluating 
+  Sokal, R. R. and Michener, C. D. (1958). A statistical method for evaluating 
   systematic relationships. University of Kansas Science Bulletin 38, 
-  pages 1409-1438, 1958
+  pages 1409-1438.
   
-  Dice, L. R. Measures of the amount of ecologic association 
-  between species. Ecology 26, pages 297-302, 1945.
+  Dice, L. R. (1945). Measures of the amount of ecologic association 
+  between species. Ecology 26, pages 297-302.
  
-  Charu C. Aggarwal, Cecilia Procopiuc, and Philip S. Yu.
+  Charu C. Aggarwal, Cecilia Procopiuc, and Philip S. Yu. (2002).
     Finding localized associations in market basket data.
-  IEEE Trans. on Knowledge and Data Engineering, 14(1), pages 51-62, 2002.
+  IEEE Trans. on Knowledge and Data Engineering, 14(1), pages 51-62.
 }
 \keyword{cluster}
+\keyword{models}

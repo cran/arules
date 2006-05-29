@@ -55,8 +55,6 @@
 }
 \section{Methods}{
   \describe{
- %   \item{[}{\code{signature(x = "itemsets")};
- %     extracts a subset of itemsets and the associated quality measures}
     \item{coerce}{\code{signature(from = "itemsets", to =
 	"data.frame")};
       represent the itemsets in readable form}
@@ -75,11 +73,6 @@
       returns labels for the itemsets as a
       character vector. The labels have te following format: 
 	"{item1, item2,..., itemn}"}
-    %\item{length}{\code{signature(x = "itemsets")};
-    %  returns the number of itemsets stored in the the set}
-    %\item{subset}{\code{signature(x = "itemsets")};
-    %  select a subset of itemsets using restrictions on the quality
-    %  measures or on the items present in the itemsets}
    \item{itemLabels}{\code{signature(object = "itemsets")};
       returns the item labels as a character vector.
       The index for each lable is the column index of the item in the
@@ -90,8 +83,18 @@
   }
 }
 \seealso{
-  \code{\link{eclat}},
+  \code{\link{[-methods}},
   \code{\link{apriori}},
+  \code{\link{c}},
+  \code{\link{duplicated}},
+  \code{\link{eclat}},
+  \code{\link{inspect}},
+  \code{\link{is.maximal}},
+  \code{\link{length}},
+  \code{\link{match}},
+  \code{\link{sets}},
+  \code{\link{size}},
+  \code{\link{subset}},
   \code{\link{associations-class}}, 
   \code{\link{tidLists-class}} 
 }

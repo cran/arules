@@ -24,17 +24,6 @@ if(!isGeneric("WRITE")) {
     function(x, ...) standardGeneric("WRITE"))
 }
 
-
-if(!isGeneric("allConfidence")) {
-    setGeneric("allConfidence",
-               function(x, ...) standardGeneric("allConfidence"))
-}
-
-if(!isGeneric("crossSupportRatio")) {
-    setGeneric("crossSupportRatio",
-               function(x, ...) standardGeneric("crossSupportRatio"))
-}
-
 if(!isGeneric("crossTable")) {
     setGeneric("crossTable",
                function(x, ...) standardGeneric("crossTable"))
@@ -42,7 +31,7 @@ if(!isGeneric("crossTable")) {
 
 if(!isGeneric("decode")) {
     setGeneric("decode",
-               function(x, code, ...) standardGeneric("decode"))
+               function(x, ...) standardGeneric("decode"))
 }
 
 if(!isGeneric("duplicated")) {
@@ -53,17 +42,12 @@ if(!isGeneric("duplicated")) {
 
 if(!isGeneric("encode")) {
     setGeneric("encode",
-               function(x, code, ...) standardGeneric("encode"))
+               function(x, ...) standardGeneric("encode"))
 }
 
-if(!isGeneric("hyperLift")) {
-  setGeneric("hyperLift",
-	     function(x, ...) standardGeneric("hyperLift"))
-}
-
-if(!isGeneric("hyperConfidence")) {
-  setGeneric("hyperConfidence",
-	     function(x, ...) standardGeneric("hyperConfidence"))
+if(!isGeneric("generatingItemsets")) {
+    setGeneric("generatingItemsets",
+               function(x) standardGeneric("generatingItemsets"))
 }
 
 if(!isGeneric("inspect"))
@@ -99,11 +83,6 @@ if(!isGeneric("items")) {
                function(x) standardGeneric("items"))
 }
 
-if(!isGeneric("itemsets")) {
-    setGeneric("itemsets",
-               function(x) standardGeneric("itemsets"))
-}
-
 if(!isGeneric("items<-")) {
     setGeneric("items<-",
                function(x, value) standardGeneric("items<-"))
@@ -127,12 +106,14 @@ if(!isGeneric("is.element")) {
 
 if(!isGeneric("is.superset")) {
     setGeneric("is.superset",
-               function(set, el, proper = FALSE) standardGeneric("is.superset"))
+               function(x, y = NULL, proper = FALSE) 
+	       standardGeneric("is.superset"))
 }
 
 if(!isGeneric("is.subset")) {
     setGeneric("is.subset",
-               function(set, el, proper = FALSE) standardGeneric("is.subset"))
+               function(x, y = NULL, proper = FALSE) 
+	       standardGeneric("is.subset"))
 }
 
 if(!isGeneric("labels")) {
@@ -157,6 +138,28 @@ if(!isGeneric("match")) {
 	       standardGeneric("match"))
 }
 
+if(!isGeneric("interestMeasure")) {
+    setGeneric("interestMeasure",
+               function(x,  method, transactions = NULL, ...) 
+	       standardGeneric("interestMeasure"))
+}
+
+
+if(!isGeneric("nitems")) {
+    setGeneric("nitems",
+               function(x) standardGeneric("nitems"))
+}
+
+if(!isGeneric("is.closed")) {
+    setGeneric("is.closed",
+               function(x) standardGeneric("is.closed"))
+}
+
+if(!isGeneric("is.maximal")) {
+    setGeneric("is.maximal",
+               function(x, ...) standardGeneric("is.maximal"))
+}
+
 
 if(!isGeneric("quality")) {
     setGeneric("quality",
@@ -170,7 +173,7 @@ if(!isGeneric("quality<-")) {
 
 if(!isGeneric("recode")) {
     setGeneric("recode",
-               function(x, code, ...) standardGeneric("recode"))
+               function(x, ...) standardGeneric("recode"))
 }
 
 if(!isGeneric("rhs")) {

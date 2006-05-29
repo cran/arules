@@ -62,7 +62,6 @@ rules <- apriori(Adult, parameter = list(confidence = 0.5),
   default="lhs"))
 }
 \seealso{
-  \code{\link{apriori}},
-  \code{\link{transactions-class}}
+  \code{\link{apriori}}
 }
 \keyword{classes}

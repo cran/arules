@@ -85,7 +85,7 @@ setMethod("items", signature(x = "rules"),
     })
 
 # get the generating itemsets
-setMethod("itemsets", signature(x = "rules"),
+setMethod("generatingItemsets", signature(x = "rules"),
   function(x) {
     new("itemsets", items = items(x), 
       quality = data.frame(support = quality(x)$support))

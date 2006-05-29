@@ -37,18 +37,18 @@ apriori(data, parameter = NULL, appearance = NULL, control = NULL)
   \code{\link[arules:itemsets-class]{itemsets}}.
 }
 \references{
-  R. Agrawal, T. Imielinski, and A. Swami. Mining association rules
+  R. Agrawal, T. Imielinski, and A. Swami (1993). Mining association rules
   between sets of items in large databases. In \emph{Proceedings of the
     ACM SIGMOD International Conference on Management of Data}, pages
   207-216,
-  Washington D.C., May 1993.
+  Washington D.C.
   
-  Christian Borgelt and Rudolf Kruse. Induction of Association Rules:
+  Christian Borgelt and Rudolf Kruse (2002). Induction of Association Rules:
   Apriori Implementation. \emph{15th Conference on Computational
     Statistics} (COMPSTAT 2002, Berlin, Germany) Physica Verlag,
-  Heidelberg, Germany 2002
+  Heidelberg, Germany.
 
-  Christian Borgelt. Efficient Implementations of Apriori and
+  Christian Borgelt (2003). Efficient Implementations of Apriori and
   Eclat.  \emph{Workshop of Frequent Item Set Mining Implementations}
   (FIMI 2003, Melbourne, FL, USA).
 }

@@ -10,8 +10,8 @@
 }
 \usage{
 affinity(x)
-\S4method{affinity}{itemMatrix}(x)
-\S4method{affinity}{matrix}(x)
+%\S4method{affinity}{itemMatrix}(x)
+%#\S4method{affinity}{matrix}(x)
 }
 \arguments{
   \item{x}{a \code{matrix}, \code{itemMatrix} 
@@ -29,6 +29,7 @@ where \eqn{sup(.)} is the support measure. This means that affinity is the
   the affinities between items in \code{x}.
 }
 \seealso{
+  \code{\link{dissimilarity}},
   \code{\link{ar_similarity-class}},
   \code{\link[arules]{itemMatrix-class}}
 }
@@ -43,8 +44,9 @@ a <- affinity(s)
 summary(as.vector(a))
 }
 \references{
-   Charu C. Aggarwal, Cecilia Procopiuc, and Philip S. Yu.
+   Charu C. Aggarwal, Cecilia Procopiuc, and Philip S. Yu. (2002)
     \emph{Finding localized associations in market basket data.}
-    IEEE Trans. on Knowledge and Data Engineering, 14(1):51-62, 2002.
+    IEEE Trans. on Knowledge and Data Engineering, 14(1):51-62.
 }
 \keyword{cluster}
+\keyword{models}
