@@ -20,15 +20,7 @@ Object of class \code{transactions}.
   and Thomas Reutterer.
 }
 \references{
-Michael Hahsler, Kurt Hornik, and Thomas Reutterer. Implications of
-probabilistic data modeling for mining association rules. In Proceedings of the
-29th Annual Conference of the Gesellschaft fuer Klassifikation e.V., University
-of Magdeburg, March 9-11, 2005, Studies in Classification, Data Analysis, and
-Knowledge Organization. Springer-Verlag, 2005. Accepted for publication.
-}
-\examples{
-data(Groceries)
-
-summary(Groceries)
+Michael Hahsler, Kurt Hornik, and Thomas Reutterer. (2006). Implications of probabilistic data modeling for mining association rules. In M. Spiliopoulou, R. Kruse, C. Borgelt, A. Nürnberger, and W. Gaul, editors, From Data and Information Analysis to Knowledge Engineering,
+Studies in Classification, Data Analysis, and Knowledge Organization, pages 598-605. Springer-Verlag.
 }
 \keyword{datasets}

@@ -28,27 +28,30 @@
   with another object.
 }
 \usage{
-decode(x, code, \ldots)
+decode(x, \ldots)
+\S4method{decode}{list}(x, itemLabels)
+\S4method{decode}{numeric}(x, itemLabels)
 
-encode(x, code, \ldots)
-\S4method{encode}{list}(x, code, itemMatrix = TRUE)
-\S4method{encode}{character}(x, code, itemMatrix = TRUE)
-\S4method{encode}{numeric}(x, code, itemMatrix = TRUE)
+encode(x, \ldots)
+\S4method{encode}{list}(x, itemLabels, itemMatrix = TRUE)
+\S4method{encode}{character}(x, itemLabels, itemMatrix = TRUE)
+\S4method{encode}{numeric}(x, itemLabels, itemMatrix = TRUE)
 
-recode(x, code, \ldots)
-\S4method{recode}{itemMatrix}(x, code = NULL, match = NULL, \ldots)
+recode(x, \ldots)
+\S4method{recode}{itemMatrix}(x, itemLabels = NULL, match = NULL, \ldots)
 }
 \arguments{
     \item{x}{ a vector or a list of vectors of character strings 
 	(for \code{encode}) or of numeric (for \code{decode}), or
 	an object of class \code{itemMatrix} (for \code{recode}).}
-    \item{code}{a vector of character strings used for coding where 
+    \item{itemLabels}{a vector of character strings used for coding where 
     the position of an item label in the vector gives the item's column ID.  
-    The used \code{code} can be obtained from \code{itemMatrix},  
+    The used \code{itemLabels} vector can be obtained from \code{itemMatrix},  
     \code{transactions} and \code{associations} by the 
     method \code{itemLabels}.}
-    \item{itemMatrix}{return an object of class \code{itemMatrix}.}
-    \item{match}{an \code{itemMatrix} object whose coding \code{x} 
+    \item{itemMatrix}{return an object of class \code{itemMatrix} otherwise
+      an object of the same class as \code{x} is returned.}
+    \item{match}{an \code{itemMatrix} object whose item coding \code{x} 
 	should match.}
     \item{\ldots}{further arguments.}
 }
@@ -71,14 +74,14 @@ data("Adult")
 
 ### Example 1: Manual decoding
 ### get code
-code <- itemLabels(Adult)
-head(code)
+iLabels <- itemLabels(Adult)
+head(iLabels)
 
 ### get undecoded list and decode in a second step
 list <- LIST(Adult[1:5], decode = FALSE)
 list
 
-decode(list, code = code)
+decode(list, itemLabels = iLabels)
 
 ### Example 2: Manually create an itemMatrix 
 data <- list(
@@ -86,7 +89,7 @@ data <- list(
     c("income=large", "age=Middle-aged")
     )
 
-iM <- encode(data, code)
+iM <- encode(data, iLabels)
 iM
 
 inspect(iM)

@@ -23,9 +23,9 @@ WRITE(x, \dots)
   the data to disk.
 }
 \seealso{
- code{\link{write.table}},
- code{\link{transactions-class}},
- code{\link{associations-class}}
+\code{\link{write.table}} (in \pkg{base}),
+ \code{\link{transactions-class}},
+ \code{\link{associations-class}}
 }
 \examples{
 data("Epub")

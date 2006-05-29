@@ -40,7 +40,7 @@ data("Epub")
 # in this data set we can see that not all
 # items were available from the beginning.
 
-image(Epub)
+image(Epub[1:1000])
 
 }
 \keyword{hplot}

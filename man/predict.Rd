@@ -10,19 +10,28 @@
   medoids or labeled examples.
   }
 \usage{
-\S4method{predict}{itemMatrix}(object,   newdata, labels = NULL, \ldots)
+\S4method{predict}{itemMatrix}(object, newdata, labels = NULL, blocksize = 200,\ldots)
 }
 \arguments{
     \item{object}{ medoids (no labels needed) or examples (labels needed). }
   \item{newdata}{ objects to predict labels for. }
   \item{labels}{ \code{"numeric"}; labels for the examples in \code{object}. }
-  \item{\ldots}{ further arguments (currently unused). }
+  \item{blocksize}{ \code{"numeric"}; how much memory can predict 
+    use for big \code{x} and/or \code{y} (approx. in MB). This is only a 
+    crude approximation for 32-bit machines (64-bit architectures need 
+    double the blocksize in memory) and using the 
+    default Jaccard method for dissimilarity calculation. 
+    In general, reducing \code{blocksize} will decrease 
+    the memory usage but will increase the run-time.}
+  \item{\ldots}{ further arguments passed on to \code{dissimilarity}. E.g., 
+    \code{method}.}
 }
 \value{
    An integer vector of the same length as \code{newdata}  
    containing the predicted labels for each element.
 }
 \seealso{
+  \code{\link{dissimilarity}},
   \code{\link{itemMatrix-class}}
 }
 \examples{
@@ -45,4 +54,4 @@ labels <- predict(small, large, l)
 itemFrequencyPlot(large[labels==1, itemFrequency(large) > 0.1])
 }
 \keyword{models}
-\keyword{manip}
+\keyword{cluster}

@@ -61,6 +61,7 @@ A numeric vector with the midpoints of the drawn bars; useful for
 adding to the graph.
 }
 \seealso{
+  \code{\link{itemFrequency}},
   \code{\link{itemMatrix-class}}
 }
 \examples{

@@ -1,5 +1,5 @@
 \name{combine}
-%\alias{c}
+\alias{c}
 \alias{c,itemMatrix-method}
 \alias{c,transactions-method}
 \alias{c,rules-method}

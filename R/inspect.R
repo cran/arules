@@ -9,7 +9,7 @@ setMethod("inspect", signature(x = "itemsets"),
 
 	n_of_itemsets <- length(x)
 
-        if(length(n_of_itemsets) == 0) return()
+        if(n_of_itemsets == 0) return()
         ## Nothing to inspect here ...
 
 	items <- unlist(as(items(x), "list"))
@@ -138,7 +138,7 @@ setMethod("inspect", signature(x = "transactions"),
         
 	n_of_itemsets <- length(x)
 
-        if(length(n_of_itemsets) == 0) return()
+        if(n_of_itemsets == 0) return()
         ## Nothing to inspect here ...
 
 	items <- unlist(as(x, "list"))
@@ -191,7 +191,7 @@ setMethod("inspect", signature(x = "itemMatrix"),
 
 	n_of_itemsets <- length(x)
 
-        if(length(n_of_itemsets) == 0) return()
+        if(n_of_itemsets == 0) return()
         ## Nothing to inspect here ...
 
 	items <- unlist(as(x, "list"))

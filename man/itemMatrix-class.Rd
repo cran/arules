@@ -27,6 +27,8 @@
 \alias{itemInfo,itemMatrix-method}
 \alias{itemInfo<-}
 \alias{itemInfo}
+\alias{nitems}
+\alias{nitems,itemMatrix-method}
 %\alias{length,itemMatrix-method}
 \alias{show,itemMatrix-method}
 \alias{summary,itemMatrix-method}
@@ -79,38 +81,21 @@
 }
 \section{Methods}{
   \describe{
-%    \item{[}{\code{signature(x = "itemMatrix")};
-%      extracts parts of the \code{itemMatrix}.  The first argument
-%      selects rows (e.g., transactions or rules) and the second argument
-%      selects columns (items). 
-%      Either argument can be omitted to select all rows or columns.}
-%    \item{LIST}{\code{signature(from = "itemMatrix")}:
-%      the internal method used for the coercion to \code{list}.
-%      It returns the object \code{from} 
-%      as a list of item vectors.
-%      Each vector represents the items in one row 
-%      (e.g., transaction or itemset). 
-%      The items are represented by default by the item labels
-%      (equal to coercion to list), however
-%      with the argument \code{decode = FALSE} the items can be
-%      represented in the list by the corresponding
-%      column numbers in the \code{itemMatrix} instead.}
-    \item{coerce}{\code{signature(from = "matrix", to = "itemMatrix")}}
-    \item{coerce}{\code{signature(from = "list", to = "itemMatrix")}}
+    \item{coerce}{\code{signature(from = "matrix", to = "itemMatrix")}};
+      expects \code{from} to be a binary matrix only containing 0s and 1s.
+    \item{coerce}{\code{signature(from = "list", to = "itemMatrix")}};
+      \code{from} is a list of vectors. Each vector contains one 
+      set/transaction/\ldots.
     \item{coerce}{\code{signature(from = "itemMatrix", to = "dgCMatrix")}};
       access the sparse matrix representation. Note, the \code{dgCMatrix} 
       contains a transposed from of the itemMatrix.
-    \item{coerce}{\code{signature(from = "itemMatrix", to = "matrix")}}
-    \item{coerce}{\code{signature(from = "itemMatrix", to = "list")}}
-%    \item{decode}{\code{signature(x = "itemMatrix")};
-%      decodes the numeric items codes (column numbers in the itemMatrix)
-%      given in argument \code{items} to the item names using the labels
-%      stored in \code{x}.
-%      \code{items} can be a vector or list.}
+    \item{coerce}{\code{signature(from = "itemMatrix", to = "matrix")}; coerces
+      to a dense 0-1 matrix of \code{storage.mode} \code{"integer"} instead of 
+	\code{"double"} to save memory.}
+    \item{coerce}{\code{signature(from = "itemMatrix", to = "list")}}; see also
+      the methods for \code{LIST}.
     \item{dim}{\code{signature(x = "itemMatrix")};
       returns the dimensions of the itemMatrix.}
-%    \item{image}{\code{signature(x = "itemMatrix")};
-%      plots an image of the itemMatrix for visual inspection.}
     \item{\%in\%}{\code{signature(x = "itemMatrix")}: matches values 
       against the item labels for 
       each element (row) in the itemMatrix.}
@@ -137,13 +122,28 @@
       \code{setStart} and 
       \code{setEnd}. 
       }
-%    \item{length}{\code{signature(x = "itemMatrix")};
-%      returns the number of elements (rows) in the itemMatrix.}
+    \item{nitems}{\code{signature(x = "itemMatrix")}; returns the number 
+      of items (number if columns) in the itemMatrix.}
     \item{show}{\code{signature(object = "itemMatrix")}}
     \item{summary}{\code{signature(object = "itemMatrix")}}
   }
 }
 \seealso{
+  \code{\link{LIST}},
+  \code{\link{c}},
+  \code{\link{duplicated}},
+  \code{\link{inspect}},
+  \code{\link{is.subset}},
+  \code{\link{is.superset}},
+  \code{\link{itemFrequency}},
+  \code{\link{itemFrequencyPlot}},
+  \code{\link{match}},
+  \code{\link{length}},
+  \code{\link{sets}},
+  \code{\link{subset}},
+  \code{\link{unique}},
+  \code{\link{[-methods}},
+  \code{\link{image}},
   \code{\link[Matrix]{dgCMatrix-class}} (from \pkg{Matrix}),
   \code{\link{transactions-class}},
   \code{\link{itemsets-class}},

@@ -8,8 +8,8 @@
 \alias{itemInfo,rules-method}
 \alias{itemLabels,rules-method}
 \alias{items,rules-method}
-\alias{itemsets}
-\alias{itemsets,rules-method}
+\alias{generatingItemsets}
+\alias{generatingItemsets,rules-method}
 \alias{labels,rules-method}
 \alias{itemLabels,rules-method}
 %\alias{length,rules-method}
@@ -68,7 +68,7 @@ removed with \code{\link{unique}}.
       lhs and rhs (i.e., the itemsets
       which generated the rule) as a 
       the \code{\link[arules:itemMatrix-class]{itemMatrix}}}
-    \item{itemsets}{\code{signature(x = "rules")};
+    \item{generatingItemsets}{\code{signature(x = "rules")};
       returns a collection of the itemsets which generated the rules (one 
       itemset for each rule). Note that the collection can contain duplicated
       elements. Use \code{unique} to remove duplicates and obtain a 
@@ -103,9 +103,18 @@ removed with \code{\link{unique}}.
   }
 }
 \seealso{
-  \code{\link{apriori}},
-  \code{\link{associations-class}},
-  \code{\link{itemMatrix-class}},
+\code{\link{[-methods}},
+\code{\link{apriori}},
+\code{\link{c}},
+\code{\link{duplicated}},
+\code{\link{inspect}},
+\code{\link{length}},
+\code{\link{match}},
+\code{\link{sets}},
+\code{\link{size}},
+\code{\link{subset}},
+\code{\link{associations-class}},
+\code{\link{itemMatrix-class}},
 }
 \examples{
 data("Adult")

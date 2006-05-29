@@ -6,41 +6,44 @@
 ### ... ... for dissimilarity, e.g., method
 
 setMethod("predict", signature(object = "itemMatrix"),
-    function(object, newdata, labels = NULL, ...) {
+  function(object, newdata, labels = NULL, blocksize = 200, ...) {
 
-        ### maximal size of the proximity matrix to 
-        MAXBLOCK <- 5000000  
-	lenOb <- length(object) 
-        lenNew <- length(newdata)
-	
-        if(lenOb >= MAXBLOCK) stop("Too many examples (>=5000000).") 
-      
-        if(is.null(labels)) labels <- 1 : lenOb
+    lenOb <- length(object) 
+    lenNew <- length(newdata)
 
-	# do it in one run
-	if(lenOb*lenNew < MAXBLOCK) {
-	  xd <- dissimilarity(newdata, object, ...)
-	  return(labels[max.col(-xd)])
-	}
+    ### memory requirements for dissimilarity (see proximities.R)
+    ### total w/o input: about 5 * nx * ny * 8 byte
+    ### required memory in MB
+    ### reqMemMB <- 5 * lenOb * lenNew * 8 / 1024 / 1024
+    blocksize <- floor(blocksize * 1024 * 1024 / 5 / lenOb / 8)
+    
+    if(blocksize < 1) 
+	stop("Too many examples in object. Increase usable memory blocksize!") 
 
-	# do it in blocks
-	newLabels <- integer(lenNew)
+    if(is.null(labels)) labels <- 1 : lenOb
 
-	blockLength <- floor(MAXBLOCK / lenOb)
-	print(blockLength)
-	blockStart <- 1
-	while(blockStart < lenNew) {
-	  blockEnd <- min(blockStart+blockLength, lenNew)
-	  xd <- dissimilarity(newdata[blockStart:blockEnd], object, ...)
-	  newLabels[blockStart:blockEnd] <- labels[max.col(-xd)] 
-	  blockStart <- blockEnd
-	}
-        
-	return(newLabels)	
-	
-   
-### check labels stuff
-     })
+    # do it in one run
+    if(lenOb*lenNew <= blocksize) {
+      xd <- dissimilarity(newdata, object, ...)
+      return(labels[max.col(-xd)])
+    }
+
+    # do it in blocks
+    newLabels <- integer(lenNew)
+
+    blockStart <- 1
+    while(blockStart < lenNew) {
+      blockEnd <- min(blockStart+blocksize, lenNew)
+      xd <- dissimilarity(newdata[blockStart:blockEnd], object, ...)
+      newLabels[blockStart:blockEnd] <- labels[max.col(-xd)] 
+      blockStart <- blockEnd
+    }
+
+    return(newLabels)	
+
+
+    ### check labels stuff
+  })
 
 
 

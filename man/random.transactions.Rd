@@ -86,7 +86,8 @@ random.transactions(nItems, nTrans, method = "independent", \ldots,
   \code{\link{transactions-class}}.
 }
 \references{
-Michael Hahsler, Kurt Hornik, and Thomas Reutterer (2006). Implications of probabilistic data modeling for mining association rules. In M. Spiliopoulou, R. Kruse, C. Borgelt, A. Nuernberger, and W. Gaul, editors, From Data and Information Analysis to Knowledge Engineering, Proceedings of the 29th Annual Conference of the Gesellschaft fuer Klassifikation e.V., University of Magdeburg, March 9-11, 2005, Studies in Classification, Data Analysis, and Knowledge Organization, pages 598-605. Springer-Verlag.
+Michael Hahsler, Kurt Hornik, and Thomas Reutterer (2006). Implications of probabilistic data modeling for mining association rules. In M. Spiliopoulou, R. Kruse, C. Borgelt, A. Nuernberger, and W. Gaul, editors, From Data and Information Analysis to Knowledge Engineering, 
+Studies in Classification, Data Analysis, and Knowledge Organization, pages 598-605. Springer-Verlag.
 
 Rakesh Agrawal and Ramakrishnan Srikant (1994). Fast algorithms for mining association rules in large databases. In Jorge B. Bocca, Matthias Jarke, and Carlo Zaniolo, editors,  Proc. 20th Int. Conf. Very Large Data Bases, VLDB, pages 487-499, Santiago, Chile.
 }

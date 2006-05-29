@@ -67,6 +67,13 @@
   \code{\link{rules-class}}
 }
 \seealso{
+  \code{\link{SORT}},
+  \code{\link{WRITE}},
+  \code{\link{length}},
+  \code{\link{is.subset}},
+  \code{\link{is.superset}},
+  \code{\link{sets}},
+  \code{\link{unique}},
   \code{\link{itemMatrix-class}}
 }
 \keyword{classes}
