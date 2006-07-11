@@ -50,7 +50,7 @@ setMethod("dissimilarity", signature(x = "matrix"),
 	  if(cross == FALSE) {
 	     dist <- 1 - as.dist(x %*% affinities %*% t(x))
 	  }else{
-	     y <- y/pmax(rowSums(y), 1)
+	     y <- y / pmax(rowSums(y), 1)
 	     dist <- new("ar_cross_dissimilarity", 
 	     	1 - x %*% affinities %*% t(y))
 	  }

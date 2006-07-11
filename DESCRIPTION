@@ -1,6 +1,6 @@
 Package: arules
-Version: 0.4-0
-Date: 2006-05-29
+Version: 0.4-1
+Date: 2006-07-02
 Title: Mining Association Rules and Frequent Itemsets
 Author: Michael Hahsler, Bettina Gruen and Kurt Hornik
 Maintainer: Michael Hahsler <hahsler@ai.wu-wien.ac.at> 
@@ -15,4 +15,4 @@ License: GPL version 2 or later.
  distributed under the GPL version 2.1.
 SaveImage: no
 LazyLoad: yes
-Packaged: Mon May 29 16:04:40 2006; hahsler
+Packaged: Tue Jul 11 13:27:51 2006; hornik

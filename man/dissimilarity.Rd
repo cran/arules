@@ -26,20 +26,20 @@ dissimilarity(x, y = NULL, method = NULL, args = NULL, \ldots)
     itemsets, rules}). }
   \item{y}{ \code{NULL} or a second set to calculate cross dissimilarities. }
   \item{method}{ the distance measure to be used. Implemented measures
-  are (defaults to \code{"Jaccard"}):
+  are (defaults to \code{"jaccard"}):
    \describe{
-       \item{\code{"Jaccard"}:}{ the number of items which occur in both 
+       \item{\code{"jaccard"}:}{ the number of items which occur in both 
          elements divided by the total number of items in the 
          elements (Sneath, 1957). 
          This measure is often 
          also called: \emph{binary, asymmetric binary,} etc. }
-       \item{\code{"Matching"}:}{ the \emph{Matching coefficient} defined
+       \item{\code{"matching"}:}{ the \emph{Matching coefficient} defined
          by Sokal and Michener (1958). This coefficient gives the same
 	 weigth to presents and absence of items.}
-       \item{\code{"Dice"}:}{ the \emph{Dice's coefficient} defined
+       \item{\code{"dice"}:}{ the \emph{Dice's coefficient} defined
          by Dice (1945). Similar to \emph{Jaccard} but gives double the
 	 weight to agreeing items.}
-       \item{\code{"Affinity"}:}{ measure based on 
+       \item{\code{"affinity"}:}{ measure based on 
          the \code{\link{affinity}}},
          a similarity measure between items. It is defined as the
          average \emph{affinity} between the items in two transactions 
@@ -48,7 +48,7 @@ dissimilarity(x, y = NULL, method = NULL, args = NULL, \ldots)
   \item{args}{ a list of additional arguments for the methods.  
   
      For calculating
-     \code{"Affinity"} for associations, the affinities between the items in 
+     \code{"affinity"} for associations, the affinities between the items in 
      the transactions are needed and passed to the method as the first 
      element in \code{args}.}
    \item{which}{a string indicating if the dissimilarity should be 
@@ -76,7 +76,7 @@ d_jaccard <- dissimilarity(s)
 plot(hclust(d_jaccard))
 
 ## calculate affinity-based distances and do hclust
-d_affinity <- dissimilarity(s, method = "Affinity")
+d_affinity <- dissimilarity(s, method = "affinity")
 plot(hclust(d_affinity))
 
 
@@ -87,7 +87,7 @@ rules <- apriori(Adult)
 rules <- subset(rules, subset = lift > 2)
 
 ## we need to supply the item affinities from the dataset (sample)
-d_affinity <- dissimilarity(rules, method = "Affinity", 
+d_affinity <- dissimilarity(rules, method = "affinity", 
   args = list(affinity = affinity(s)))
 plot(hclust(d_affinity))
 }

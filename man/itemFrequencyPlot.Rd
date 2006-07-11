@@ -37,7 +37,7 @@ itemFrequencyPlot(x, \dots)
     or absolute according to the setting of \code{type}.}
   \item{topN}{\code{"numeric"}; only plot the \code{topN} 
     items with the highest item frequency or lift (if \code{lift = TRUE}).
-    The items are plotted in descending order. }
+    The items are plotted ordered by descending support. }
   \item{population}{ object of same class  as \code{x}; if \code{x}
     is a segment of a population, the population mean frequency for
     each item can be shown as a line in the plot.}
