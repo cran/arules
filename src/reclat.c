@@ -289,7 +289,6 @@ SEXP reclat(SEXP x, SEXP y, SEXP dim, SEXP parms, SEXP control)
 	  Rprintf("\n");
   }
   /* --- evaluate arguments --- */
-  y = AS_CHARACTER(y);
   supp   = param.supp = *REAL(GET_SLOT(parms, install("support")));       /* minimal support 's'*/
   target = param.target = BMtargetcode(CHAR(CHARACTER_POINTER(GET_SLOT(parms, install("target")))[0]));
   min    = param.minlen = *INTEGER(GET_SLOT(parms, install("minlen")));   /* minimal rule length 'm'*/
@@ -297,7 +296,7 @@ SEXP reclat(SEXP x, SEXP y, SEXP dim, SEXP parms, SEXP control)
   sort   = param.sort = *INTEGER(GET_SLOT(control, install("sort")));
             /* flag for item sorting and recoding 'q'*/	
   ext    = param.ext = *INTEGER(GET_SLOT(parms, install("ext")));
-  sparse = *INTEGER(GET_SLOT(control, install("sparse")));
+  sparse = *REAL(GET_SLOT(control, install("sparse")));
   trans  = param.trans = *INTEGER(GET_SLOT(parms, install("tidLists")));
 
   if (ext) flags |= OF_ABS;       
@@ -317,7 +316,7 @@ SEXP reclat(SEXP x, SEXP y, SEXP dim, SEXP parms, SEXP control)
 
   if (param.verbose) Rprintf("create itemset ... \n");
   /* --- create item set and transaction set --- */
-  in.x = y;
+  in.x = AS_CHARACTER(y); 
   in.ind = INTEGER(x);
   in.index = 0;
   tacnt = in.tnb = length(x)-1;

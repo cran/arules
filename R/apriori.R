@@ -27,8 +27,8 @@ apriori <-  function(data, parameter = NULL, appearance = NULL, control = NULL)
     ### call apriori
     result <- .Call("rapriori", 
                  ## transactions
-                 as(items@p, "integer"),
-                 as(items@i, "integer"),
+                 items@p,
+                 items@i,
                  items@Dim,
 		 ## parameter
 		 parameter, control,

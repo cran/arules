@@ -15,8 +15,7 @@
 #endif
 
 #include <R.h>
-#include <Rinternals.h>
-#include <Rdefines.h>
+/* #include <Rinternals.h> */
 #include <Rdefines.h>
 
 /*-----------------------------------------------------------------------
