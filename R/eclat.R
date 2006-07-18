@@ -23,7 +23,7 @@ eclat <-  function(data, parameter = NULL, control = NULL)
       cat("\n")
     }
 
-    ### the C code of eclat dies when no item is frequent co we do this
+    ### the C code of eclat dies when no item is frequent so we do this
     if(max(itemFrequency(data)) <= parameter@support) {
       if(control@verbose) cat("eclat - zero frequent items\n")
       return(new("itemsets"))
@@ -32,8 +32,8 @@ eclat <-  function(data, parameter = NULL, control = NULL)
     ### call eclat
     result <- .Call("reclat", 
                  ## Transactions
-                 as(items@p, "integer"),
-                 as(items@i, "integer"),
+                 items@p,
+                 items@i,
                  items@Dim,
 		 ## parameter
                  parameter, control,

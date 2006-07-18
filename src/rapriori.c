@@ -925,7 +925,6 @@ SEXP rapriori(SEXP x, SEXP y, SEXP dim, SEXP parms, SEXP control, SEXP app)
 	}
 
 	/* --- evaluate arguments --- */
-	y = AS_CHARACTER(y);
  	param.supp = *REAL(GET_SLOT(parms, install("support")));       /* minimal support 's'*/
  	param.conf = *REAL(GET_SLOT(parms, install("confidence")));    /* minimal confidence 'c'*/ 
 	param.minval = *REAL(GET_SLOT(parms, install("minval")));      /* minimal evaluation measure value 'd'*/
@@ -1034,7 +1033,7 @@ SEXP rapriori(SEXP x, SEXP y, SEXP dim, SEXP parms, SEXP control, SEXP app)
 		Rprintf("[%.2fs].\n", SEC_SINCE(t));
 	}
 
-	in.x = y;
+	in.x = AS_CHARACTER(y); 
 	in.ind = INTEGER(x);
 	in.index = 0;
 	in.tnb = length(x)-1;
