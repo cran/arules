@@ -1409,11 +1409,11 @@ algorithmic control:
 apriori - find association rules with the apriori algorithm
 version 4.21 (2004.05.09)        (c) 1996-2004   Christian Borgelt
 set item appearances ...[0 item(s)] done [0.00s].
-set transactions ...[115 item(s), 48842 transaction(s)] done [0.10s].
-sorting and recoding items ... [67 item(s)] done [0.01s].
+set transactions ...[115 item(s), 48842 transaction(s)] done [0.09s].
+sorting and recoding items ... [67 item(s)] done [0.02s].
 creating transaction tree ... done [0.09s].
 checking subsets of size 1 2 3 4 5 done [0.72s].
-writing ... [80215 rule(s)] done [0.02s].
+writing ... [80215 rule(s)] done [0.03s].
 creating S4 object  ... done [0.28s].
 \end{Soutput}
 \begin{Sinput}
@@ -1776,7 +1776,7 @@ and compare the system time (in seconds) used for mining.
 > time
 \end{Sinput}
 \begin{Soutput}
-[1] 0.664 0.009 0.690 0.000 0.000
+[1] 0.658 0.015 0.674 0.000 0.000
 \end{Soutput}
 \begin{Sinput}
 > timeSample <- system.time(itemsetsSample <- eclat(AdultSample, 
@@ -1784,7 +1784,7 @@ and compare the system time (in seconds) used for mining.
 > timeSample
 \end{Sinput}
 \begin{Soutput}
-[1] 0.15 0.00 0.15 0.00 0.00
+[1] 0.146 0.000 0.146 0.000 0.000
 \end{Soutput}
 \end{Schunk}
 
@@ -1799,7 +1799,7 @@ factor of:
 > time[1]/timeSample[1]
 \end{Sinput}
 \begin{Soutput}
-[1] 4.426667
+[1] 4.506849
 \end{Soutput}
 \end{Schunk}
 
@@ -1819,7 +1819,7 @@ set of 5908 itemsets
 > itemsetsSample
 \end{Sinput}
 \begin{Soutput}
-set of 5936 itemsets 
+set of 5858 itemsets 
 \end{Soutput}
 \end{Schunk}
 
@@ -1834,7 +1834,7 @@ frequent itemsets found in the database were also found in the sample.
 > sum(match > 0)/length(itemsets)
 \end{Sinput}
 \begin{Soutput}
-[1] 0.9830738
+[1] 0.9703791
 \end{Soutput}
 \end{Schunk}
 
@@ -1850,14 +1850,14 @@ were infrequent in the database give:
 \end{Sinput}
 \begin{Soutput}
    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-0.05004 0.05046 0.05106 0.05135 0.05210 0.05450 
+0.05004 0.05061 0.05127 0.05157 0.05227 0.05716 
 \end{Soutput}
 \begin{Sinput}
 > summary(quality(itemsetsSample[-match])$support)
 \end{Sinput}
 \begin{Soutput}
    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-0.05005 0.05049 0.05092 0.05127 0.05168 0.05603 
+0.05005 0.05038 0.05114 0.05150 0.05233 0.05537 
 \end{Soutput}
 \end{Schunk}
 
@@ -1876,7 +1876,7 @@ sample, we can calculate accuracy from the the error rate.
 \end{Sinput}
 \begin{Soutput}
    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
- 0.8633  0.9666  0.9819  0.9766  0.9915  1.0000 
+ 0.8511  0.9566  0.9756  0.9702  0.9894  1.0000 
 \end{Soutput}
 \end{Schunk}
 
