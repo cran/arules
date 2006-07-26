@@ -1042,7 +1042,7 @@ SEXP rapriori(SEXP x, SEXP y, SEXP dim, SEXP parms, SEXP control, SEXP app)
 	ruleset->cnt = is_cnt(itemset);
 	ruleset->tacnt = in.tnb;
  	SET_SLOT(parms, install("maxlen"), allocVector(INTSXP, 1)); 
- 	LOGICAL(GET_SLOT(parms, install("maxlen")))[0] = maxlen;
+ 	INTEGER(GET_SLOT(parms, install("maxlen")))[0] = maxlen;
 	
 	t = clock();
 	if (param.verbose) Rprintf("creating S4 object  ... ");
