@@ -27,7 +27,7 @@
 \description{
   The \code{transactions} class represents transaction data used for
   mining itemsets or rules.  It is a direct extension of class
-  \code{\link[arules:itemMatrix-class]{itemMatrix}} to store a binary incidence
+  \code{\linkS4class{itemMatrix}} to store a binary incidence
   matrix, item labels, and optionally transaction IDs and user IDs.
 }
 \section{Objects from the Class}{
@@ -43,13 +43,13 @@
     \item{\code{data}:}{object of class
       \code{\link[Matrix:dgCMatrix-class]{dgCMatrix}} to store the
       binary incidence matrix (see
-      \code{\link[arules:itemMatrix-class]{itemMatrix}} class)} 
+      \code{\linkS4class{itemMatrix}} class)} 
     \item{\code{itemInfo}:}{object of class \code{"data.frame"} to store 
-      item labels (see \code{\link[arules:itemMatrix-class]{itemMatrix}} class)}
+      item labels (see \code{\linkS4class{itemMatrix}} class)}
   }
 }
 \section{Extends}{
-  Class \code{\link[arules:itemMatrix-class]{itemMatrix}}, directly.
+  Class \code{\linkS4class{itemMatrix}}, directly.
 }
 \section{Methods}{
   \describe{

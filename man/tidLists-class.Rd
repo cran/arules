@@ -35,14 +35,14 @@
   
   \code{tidLists} can be used for different purposes.
   For some operations (e.g., support counting) it is efficient to
-  coerce a \code{\link[arules:transactions-class]{transactions}} database 
+  coerce a \code{\linkS4class{transactions}} database 
   into \code{tidLists} where each list contains the transaction IDs for an 
   item (and the support is given by the length of the list).
   
   The implementation of the Eclat mining algorithm (which uses
   transaction ID list intersection) can also produce
   transaction ID lists for the found itemsets as part of the
-  returned \code{\link[arules:itemsets-class]{itemsets}} object.
+  returned \code{\linkS4class{itemsets}} object.
   These lists can then be used for 
   further computation.
   
@@ -52,11 +52,11 @@
 \section{Objects from the Class}{
   Objects are created by Eclat if the \code{\link{eclat}} function is
   called with \code{tidLists = TRUE} in the
-  \code{\link[arules:ECparameter-class]{ECparameter}} object, and returned
-  as part of the mined \code{\link[arules:itemsets-class]{itemsets}}.
+  \code{\linkS4class{ECparameter}} object, and returned
+  as part of the mined \code{\linkS4class{itemsets}}.
   Objects can also be created
   by coercion from an object of class 
-  \code{\link[arules:transactions-class]{transactions}} or 
+  \code{\linkS4class{transactions}} or 
   by calls of the form
   \code{new("tidLists", ...)}.
 }

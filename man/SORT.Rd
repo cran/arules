@@ -4,7 +4,7 @@
 \title{Sorting Associations}
 \description{
   Provides the generic function \code{SORT} and the S4 method to sort 
-  elements in class \code{\link[arules:associations-class]{associations}}
+  elements in class \code{\linkS4class{associations}}
   (e.g., itemsets or rules) according to the value of measures stored in
   the association's slot \code{quality} (e.g., support).
 }

@@ -9,7 +9,7 @@
   Database) formatted as a \code{data.frame}.
   The \code{Adult} data set contains the data 
   already prepared and coerced to 
-  \code{\link[arules:transactions-class]{transactions}}
+  \code{\linkS4class{transactions}}
   for use with
   \pkg{arules}.  
 }

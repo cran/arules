@@ -10,8 +10,8 @@
   Provides the generic function \code{dissimilarity} and the S4 methods
   to compute and returns distances 
   for binary data in a \code{matrix},
-  \code{\link[arules:transactions-class]{transactions}} or 
-  \code{\link[arules:associations-class]{associations}}.
+  \code{\linkS4class{transactions}} or 
+  \code{\linkS4class{associations}}.
 }
 \usage{
 dissimilarity(x, y = NULL, method = NULL, args = NULL, \ldots)
@@ -61,8 +61,8 @@ dissimilarity(x, y = NULL, method = NULL, args = NULL, \ldots)
 \seealso{
   \code{\link{affinity}},
   \code{\link{dist-class}},
-  \code{\link[arules]{itemMatrix-class}},
-  \code{\link[arules]{associations-class}}.
+  \code{\link{itemMatrix-class}},
+  \code{\link{associations-class}}.
 }
 \examples{
 data("Adult")

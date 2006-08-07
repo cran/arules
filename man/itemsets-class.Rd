@@ -38,12 +38,12 @@
 \section{Slots}{
   \describe{
     \item{\code{items}:}{object of class
-      \code{\link[arules:itemMatrix-class]{itemMatrix}} containing the 
+      \code{\linkS4class{itemMatrix}} containing the 
       items in the set of itemsets}
     \item{\code{quality}:}{object of class \code{"data.frame"}
       containing the quality measures for the itemsets}
     \item{\code{tidLists}:}{object of class
-      \code{\link[arules:tidLists-class]{tidLists}} containing the IDs of the
+      \code{\linkS4class{tidLists}} containing the IDs of the
       transactions which support each itemset.  The slot contains
       \code{NULL} if no transactions ID list is available (transactions
       ID lists are only available for \code{\link{eclat}}).
@@ -51,7 +51,7 @@
   }
 }
 \section{Extends}{
-  Class \code{\link[arules:associations-class]{associations}}, directly.
+  Class \code{\linkS4class{associations}}, directly.
 }
 \section{Methods}{
   \describe{
@@ -59,10 +59,10 @@
 	"data.frame")};
       represent the itemsets in readable form}
     \item{items}{\code{signature(x = "itemsets")};
-      returns the \code{\link[arules:itemMatrix-class]{itemMatrix}}
+      returns the \code{\linkS4class{itemMatrix}}
       representing the set of itemsets}
     \item{items<-}{\code{signature(x = "itemsets")};
-      replaces the \code{\link[arules:itemMatrix-class]{itemMatrix}}
+      replaces the \code{\linkS4class{itemMatrix}}
       representing the set of itemsets}
     \item{itemInfo}{\code{signature(object = "itemsets")}; 
       returns the whole	item information data frame including item

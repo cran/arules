@@ -1,0 +1,266 @@
+\begin{thebibliography}{37}
+\expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
+\expandafter\ifx\csname url\endcsname\relax
+  \def\url#1{{\tt #1}}\fi
+
+\bibitem[Aggarwal et~al.(2002)Aggarwal, Procopiuc, and
+  Yu]{arules:Aggarwal+Procopiuc+Yu:2002}
+C.~C. Aggarwal, C.~M. Procopiuc, and P.~S. Yu.
+\newblock Finding localized associations in market basket data.
+\newblock {\em Knowledge and Data Engineering}, 14\penalty0 (1):\penalty0
+  51--62, 2002.
+
+\bibitem[Agrawal et~al.(1993)Agrawal, Imielinski, and
+  Swami]{arules:Agrawal+Imielinski+Swami:1993}
+R.~Agrawal, T.~Imielinski, and A.~Swami.
+\newblock Mining association rules between sets of items in large databases.
+\newblock In {\em Proceedings of the 1993 ACM SIGMOD International Conference
+  on Management of Data}, pages 207--216. ACM Press, 1993.
+\newblock URL \url{http://doi.acm.org/10.1145/170035.170072}.
+
+\bibitem[Agrawal and Srikant(1994)]{arules:Agrawal+Srikant:1994}
+R.~Agrawal and R.~Srikant.
+\newblock Fast algorithms for mining association rules.
+\newblock In J.~B. Bocca, M.~Jarke, and C.~Zaniolo, editors, {\em Proc. 20th
+  Int. Conf. Very Large Data Bases, {VLDB}}, pages 487--499. Morgan Kaufmann,
+  12--15 September 1994.
+
+\bibitem[Bates and Maechler(2005)]{arules:Bates+Maechler:2005}
+D.~Bates and M.~Maechler.
+\newblock {\em Matrix: A Matrix Package for R}, 2005.
+\newblock R package version 0.95-5.
+
+\bibitem[Bayardo et~al.(2000)Bayardo, Agrawal, and
+  Gunopulos]{arules:Bayardo+Agrawal+Gunopulos:2000}
+R.~Bayardo, R.~Agrawal, and D.~Gunopulos.
+\newblock Constraint-based rule mining in large, dense databases.
+\newblock {\em Data Mining and Knowledge Discovery}, 4\penalty0 (2/3):\penalty0
+  217--240, 2000.
+
+\bibitem[Berry and Linoff(1997)]{arules:Berry+Linoff:1997}
+M.~J.~A. Berry and G.~S. Linoff.
+\newblock {\em Data Mining Techniques for Marketing, Sales and Customer
+  Support}.
+\newblock Wiley Computer Publishing, 1997.
+
+\bibitem[Blake and Merz(1998)]{arules:Blake+Merz:1998}
+C.~L. Blake and C.~J. Merz.
+\newblock {\em {UCI} Repository of Machine Learning Databases}.
+\newblock University of California, Irvine, Dept. of Information and Computer
+  Sciences, 1998.
+\newblock URL \url{http://www.ics.uci.edu/~mlearn/MLRepository.html}.
+
+\bibitem[Borgelt(2003)]{arules:Borgelt:2003}
+C.~Borgelt.
+\newblock Efficient implementations of {Apriori} and {Eclat}.
+\newblock In {\em FIMI'03: Proceedings of the IEEE ICDM Workshop on Frequent
+  Itemset Mining Implementations}, November 2003.
+
+\bibitem[Borgelt(2004)]{arules:Borgelt:2004}
+C.~Borgelt.
+\newblock {\em Apriori -- Finding Association Rules/Hyperedges with the
+  {Apriori} Algorithm}.
+\newblock Working Group Neural Networks and Fuzzy Systems,
+  Otto-von-Guericke-University of Magdeburg, Universit\"atsplatz 2, D-39106
+  Magdeburg, Germany, 2004.
+\newblock URL \url{http://fuzzy.cs.uni-magdeburg.de/~borgelt/apriori.html}.
+
+\bibitem[Borgelt and Kruse(2002)]{arules:Borgelt+Kruse:2002}
+C.~Borgelt and R.~Kruse.
+\newblock Induction of association rules: {Apriori} implementation.
+\newblock In {\em Proc.\ 15th Conf.\ on Computational Statistics (Compstat
+  2002, Berlin, Germany)}, Heidelberg, Germany, 2002. Physika Verlag.
+
+\bibitem[Brin et~al.(1997)Brin, Motwani, Ullman, and
+  Tsur]{arules:Brin+Motwani+Ullman+Tsur:1997}
+S.~Brin, R.~Motwani, J.~D. Ullman, and S.~Tsur.
+\newblock Dynamic itemset counting and implication rules for market basket
+  data.
+\newblock In {\em SIGMOD 1997, Proceedings ACM SIGMOD International Conference
+  on Management of Data}, pages 255--264, Tucson, Arizona, USA, May 1997.
+
+\bibitem[DuMouchel and Pregibon(2001)]{arules:DuMouchel+Pregibon2001}
+W.~DuMouchel and D.~Pregibon.
+\newblock Empirical {B}ayes screening for multi-item associations.
+\newblock In F.~Provost and R.~Srikant, editors, {\em Proceedings of the ACM
+  SIGKDD Intentional Conference on Knowledge Discovery in Databases \& Data
+  Mining (KDD01)}, pages 67--76. ACM Press, 2001.
+
+\bibitem[Fowler(2004)]{misc:Fowler:2004}
+M.~Fowler.
+\newblock {\em UML Distilled: A Brief Guide to the Standard Object Modeling
+  Language}.
+\newblock Addison-Wesley Professional, third edition, 2004.
+
+\bibitem[Goethals and Zaki(2003)]{arules:Goethals+Zaki:2003}
+B.~Goethals and M.~J. Zaki, editors.
+\newblock {\em FIMI'03: Proceedings of the IEEE ICDM Workshop on Frequent
+  Itemset Mining Implementations}, November 2003. Sun SITE Central Europe
+  (CEUR).
+
+\bibitem[Goethals and Zaki(2004)]{arules:Goethals+Zaki:2004}
+B.~Goethals and M.~J. Zaki.
+\newblock Advances in frequent itemset mining implementations: Report on
+  {FIMI}'03.
+\newblock {\em SIGKDD Explorations}, 6\penalty0 (1):\penalty0 109--117, 2004.
+
+\bibitem[Gupta et~al.(1999)Gupta, Strehl, and
+  Ghosh]{arules:Gupta+Strehl+Ghosh:1999}
+G.~K. Gupta, A.~Strehl, and J.~Ghosh.
+\newblock Distance based clustering of association rules.
+\newblock In {\em Proc. ANNIE 1999, St. Louis}, volume~9, pages 759--764. ASME,
+  November 1999.
+\newblock ISBN 0-7918-0098-9.
+
+\bibitem[Hahsler et~al.(2005{\natexlab{a}})Hahsler, Gr{\"u}n, and
+  Hornik]{arules:Hahsler+Gruen+Hornik:2005b}
+M.~Hahsler, B.~Gr{\"u}n, and K.~Hornik.
+\newblock arules -- {A} computational environment for mining association rules
+  and frequent item sets.
+\newblock {\em Journal of Statistical Software}, 14\penalty0 (15):\penalty0
+  1--25, October 2005{\natexlab{a}}.
+\newblock ISSN 1548-7660.
+\newblock URL \url{http://www.jstatsoft.org/v14/i15/}.
+
+\bibitem[Hahsler et~al.(2005{\natexlab{b}})Hahsler, Hornik, and
+  Reutterer]{arules:Hahsler+Hornik+Reutterer:2005}
+M.~Hahsler, K.~Hornik, and T.~Reutterer.
+\newblock Implications of probabilistic data modeling for rule mining.
+\newblock Technical Report~14, Department of Statistics and Mathematics,
+  Wirschaftsuniversit\"at Wien, Augasse 2-6, 1090 Wien, Mar.
+  2005{\natexlab{b}}.
+\newblock URL
+  \url{http://epub.wu-wien.ac.at/dyn/openURL?id=oai:epub.wu-wien.ac.at:epub-wu%
+-01_7f0}.
+
+\bibitem[Hastie et~al.(2001)Hastie, Tibshirani, and
+  Friedman]{arules:Hastie+Tibshirani+Friedman:2001}
+T.~Hastie, R.~Tibshirani, and J.~Friedman.
+\newblock {\em The Elements of Statistical Learning (Data Mining, Inference and
+  Prediction)}.
+\newblock Springer Verlag, 2001.
+
+\bibitem[Hipp et~al.(2000)Hipp, G\"untzer, and
+  Nakhaeizadeh]{arules:Hipp+Guentzer+Nakhaeizadeh:2000}
+J.~Hipp, U.~G\"untzer, and G.~Nakhaeizadeh.
+\newblock Algorithms for association rule mining -- {A} general survey and
+  comparison.
+\newblock {\em SIGKDD Explorations}, 2\penalty0 (2):\penalty0 1--58, 2000.
+
+\bibitem[Liu et~al.(1999)Liu, Hsu, and Ma]{arules:Liu+Hsu+Ma:1999}
+B.~Liu, W.~Hsu, and Y.~Ma.
+\newblock Pruning and summarizing the discovered associations.
+\newblock In {\em Proceedings of the fifth ACM SIGKDD international conference
+  on Knowledge discovery and data mining (KDD-99)}, pages 125--134. ACM Press,
+  1999.
+
+\bibitem[Mannila et~al.(1994)Mannila, Toivonen, and
+  Verkamo]{arules:Mannila+Toivonen+Verkamo:1994}
+H.~Mannila, H.~Toivonen, and A.~I. Verkamo.
+\newblock Efficient algorithms for discovering association rules.
+\newblock In U.~M. Fayyad and R.~Uthurusamy, editors, {\em {AAAI} Workshop on
+  Knowledge Discovery in Databases ({KDD}-94)}, pages 181--192, Seattle,
+  Washington, 1994. AAAI Press.
+
+\bibitem[Omiecinski(2003)]{arules:Omiecinski:2003}
+E.~R. Omiecinski.
+\newblock Alternative interest measures for mining associations in databases.
+\newblock {\em IEEE Transactions on Knowledge and Data Engineering},
+  15\penalty0 (1):\penalty0 57--69, Jan/Feb 2003.
+
+\bibitem[Parthasarathy(2002)]{arules:Parthasarathy:2002}
+S.~Parthasarathy.
+\newblock Efficient progressive sampling for association rules.
+\newblock In {\em Proceedings of the 2002 IEEE International Conference on Data
+  Mining (ICDM'02)}, pages 354--361. {IEEE} Computer Society, 2002.
+
+\bibitem[Pasquier et~al.(1999)Pasquier, Bastide, Taouil, and
+  Lakhal]{arules:Pasquier+Bastide+Taouil+Lakhal:1999}
+N.~Pasquier, Y.~Bastide, R.~Taouil, and L.~Lakhal.
+\newblock Discovering frequent closed itemsets for association rules.
+\newblock In {\em Proceeding of the 7th International Conference on Database
+  Theory, Lecture Notes In Computer Science (LNCS 1540)}, pages 398--416.
+  Springer, 1999.
+
+\bibitem[Piatetsky-Shapiro(1991)]{arules:Piatetsky-Shapiro:1991}
+G.~Piatetsky-Shapiro.
+\newblock Discovery, analysis, and presentation of strong rules.
+\newblock In G.~Piatetsky-Shapiro and W.~J. Frawley, editors, {\em Knowledge
+  Discovery in Databases}. AAAI/MIT Press, Cambridge, MA, 1991.
+
+\bibitem[{R Development Core Team}(2005)]{arules:R:2005}
+{R Development Core Team}.
+\newblock {\em R: A Language and Environment for Statistical Computing}.
+\newblock R Foundation for Statistical Computing, Vienna, Austria, 2005.
+\newblock URL \url{http://www.R-project.org}.
+\newblock {ISBN} 3-900051-07-0.
+
+\bibitem[Silverstein et~al.(1998)Silverstein, Brin, and
+  Motwani]{arules:Silverstein+Brin+Motwani:1998}
+C.~Silverstein, S.~Brin, and R.~Motwani.
+\newblock Beyond market baskets: Generalizing association rules to dependence
+  rules.
+\newblock {\em Data Mining and Knowledge Discovery}, 2:\penalty0 39--68, 1998.
+
+\bibitem[Srikant and Agrawal(1996)]{arules:Srikant+Agrawal:1996}
+R.~Srikant and R.~Agrawal.
+\newblock Mining quantitative association rules in large relational tables.
+\newblock In H.~V. Jagadish and I.~S. Mumick, editors, {\em Int. Conf. on
+  Management of Data, {SIGMOD}}, pages 1--12. {ACM} Press, 1996.
+
+\bibitem[Strehl and Ghosh(2003)]{arules:Strehl+Gosh:2003}
+A.~Strehl and J.~Ghosh.
+\newblock Relationship-based clustering and visualization for high-dimensional
+  data mining.
+\newblock {\em INFORMS Journal on Computing}, 15\penalty0 (2):\penalty0
+  208--230, 2003.
+
+\bibitem[Tan et~al.(2004)Tan, Kumar, and
+  Srivastava]{arules:Tan+Kumar+Srivastava2004}
+P.-N. Tan, V.~Kumar, and J.~Srivastava.
+\newblock Selecting the right objective measure for association analysis.
+\newblock {\em Information Systems}, 29\penalty0 (4):\penalty0 293--313, 2004.
+
+\bibitem[Toivonen(1996)]{arules:Toivonen:1996}
+H.~Toivonen.
+\newblock Sampling large databases for association rules.
+\newblock In {\em Proceedings of the 22th International Conference on Very
+  Large Data Bases}, pages 134--145. Morgan Kaufmann Publishers Inc., 1996.
+
+\bibitem[Xiong et~al.(2003)Xiong, Tan, and Kumar]{arules:Xiong+Tan+Kumar:2003}
+H.~Xiong, P.-N. Tan, and V.~Kumar.
+\newblock Mining strong affinity association patterns in data sets with skewed
+  support distribution.
+\newblock In B.~Goethals and M.~J. Zaki, editors, {\em Proceedings of the IEEE
+  International Conference on Data Mining, November 19--22, 2003, Melbourne,
+  Florida}, pages 387--394, November 2003.
+
+\bibitem[Zaki(2000)]{arules:Zaki:2000}
+M.~J. Zaki.
+\newblock Scalable algorithms for association mining.
+\newblock {\em IEEE Transactions on Knowledge and Data Engineering},
+  12\penalty0 (3):\penalty0 372--390, May/June 2000.
+
+\bibitem[Zaki(2004)]{arules:Zaki:2004}
+M.~J. Zaki.
+\newblock Mining non-redundant association rules.
+\newblock {\em Data Mining and Knowledge Discovery}, 9:\penalty0 223--248,
+  2004.
+
+\bibitem[Zaki et~al.(1997{\natexlab{a}})Zaki, Parthasarathy, Li, and
+  Ogihara]{arules:Zaki+Parthasarathy+Li+Ogihara:1997}
+M.~J. Zaki, S.~Parthasarathy, W.~Li, and M.~Ogihara.
+\newblock Evaluation of sampling for data mining of association rules.
+\newblock In {\em Proceedings of the 7th International Workshop on Research
+  Issues in Data Engineering (RIDE '97) High Performance Database Management
+  for Large-Scale Applications}, pages 42--50. {IEEE} Computer Society,
+  1997{\natexlab{a}}.
+
+\bibitem[Zaki et~al.(1997{\natexlab{b}})Zaki, Parthasarathy, Ogihara, and
+  Li]{arules:Zaki+Parthasarathy+Ogihara+Li:1997}
+M.~J. Zaki, S.~Parthasarathy, M.~Ogihara, and W.~Li.
+\newblock New algorithms for fast discovery of association rules.
+\newblock Technical Report 651, Computer Science Department, University of
+  Rochester, Rochester, NY 14627, July 1997{\natexlab{b}}.
+
+\end{thebibliography}

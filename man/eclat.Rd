@@ -11,15 +11,15 @@ eclat(data, parameter = NULL, control = NULL)
 }
 \arguments{
  \item{data}{object of class
-   \code{\link[arules:transactions-class]{transactions}} or any data structure
+   \code{\linkS4class{transactions}} or any data structure
    which can be coerced into
-   \code{\link[arules:transactions-class]{transactions}} (e.g., binary
+   \code{\linkS4class{transactions}} (e.g., binary
    \code{matrix}, \code{data.frame}).}
  \item{parameter}{object of class
-   \code{\link[arules:ECparameter-class]{ECparameter}} or named list (default
+   \code{\linkS4class{ECparameter}} or named list (default
    values are: support 0.1 and maxlen 5)}
   \item{control}{Object of class
-    \code{\link[arules:ECcontrol-class]{ECcontrol}} or named list for
+    \code{\linkS4class{ECcontrol}} or named list for
     algorithmic controls.}
 }
 \details{
@@ -27,7 +27,7 @@ eclat(data, parameter = NULL, control = NULL)
   Borgelt for mining frequent itemsets. 
 }
 \value{
-  Returns an object of class \code{\link[arules:itemsets-class]{itemsets}}.
+  Returns an object of class \code{\linkS4class{itemsets}}.
 }
 \references{
   Mohammed J. Zaki, Srinivasan Parthasarathy, Mitsunori Ogihara, and Wei

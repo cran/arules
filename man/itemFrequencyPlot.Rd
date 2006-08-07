@@ -8,12 +8,12 @@
   Provides the generic function \code{itemFrequencyPlot} and the S4 method 
   to create an item frequency bar plot for inspecting 
   the item frequency distribution for objects based on
-  \code{\link[arules:itemMatrix-class]{itemMatrix}} (e.g.,
-  \code{\link[arules:transactions-class]{transactions}},
+  \code{\linkS4class{itemMatrix}} (e.g.,
+  \code{\linkS4class{transactions}},
   or items in
-  \code{\link[arules:itemsets-class]{itemsets}}
+  \code{\linkS4class{itemsets}}
   and 
-  \code{\link[arules:rules-class]{rules}}).
+  \code{\linkS4class{rules}}).
 }
 \usage{
 itemFrequencyPlot(x, \dots)

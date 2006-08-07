@@ -7,6 +7,9 @@
   point-of-sale transaction data from a typical local grocery outlet.  The data
   set contains 9835 transactions and the items are aggregated to 169
   categories.
+
+  If you use this data set in your paper, please refer to the paper in the
+  references section.
 }
 \usage{data(Groceries)}
 \format{
