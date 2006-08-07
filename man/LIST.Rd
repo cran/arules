@@ -11,10 +11,10 @@
 \description{
   Provides the generic function \code{LIST} and the S4 methods to create
   a list representation from objects based on
-  \code{\link[arules:itemMatrix-class]{itemMatrix}} (e.g.,
-  \code{\link[arules:transactions-class]{transactions}},
-  \code{\link[arules:tidLists-class]{tidLists}}, or
-  \code{\link[arules:itemsets-class]{itemsets}}).
+  \code{\linkS4class{itemMatrix}} (e.g.,
+  \code{\linkS4class{transactions}},
+  \code{\linkS4class{tidLists}}, or
+  \code{\linkS4class{itemsets}}).
   These methods can be used for the coercion to \code{list}.
 }
 \usage{
@@ -31,7 +31,7 @@ LIST(from, \dots)
   \item{\dots}{further arguments.}
   \item{decode}{\code{"logical"}; controlling whether the items/transactions are
     decoded from the column numbers internally used by
-    \code{\link[arules:itemMatrix-class]{itemMatrix}} to the names stored in
+    \code{\linkS4class{itemMatrix}} to the names stored in
     the object \code{from}.  The default behavior is to decode.
   }
 }
@@ -40,7 +40,7 @@ LIST(from, \dots)
   the standard coercion \code{as(x, "list")}.
   \code{LIST} returns the object \code{from} as a list of vectors.
   Each vector represents one row of the
-  \code{\link[arules:itemMatrix-class]{itemMatrix}} (e.g., items in a
+  \code{\linkS4class{itemMatrix}} (e.g., items in a
   transaction or itemset).
 }
 \value{

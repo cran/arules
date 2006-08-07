@@ -106,6 +106,11 @@ Range: \eqn{0\ldots\infty}{0\ldots Inf}.
   the  improvement of a rule is 
   the minimum difference between its confidence and the confidence of any
   proper sub-rule with the same consequent. Range: \eqn{0\ldots1}.}
+\item{"leverage"}{(see Piatetsky-Shapiro 1991)
+  defined as \eqn{P(X \Rightarrow Y) - (P(X)P(Y))}{P(X->Y) - (P(X)P(Y))}.
+  It measures the difference of X and Y appearing together in the data set 
+  and what would be expected if X and Y where statistically dependent. 
+  Range: {0\ldots1}.}
 \item{"phi"}{ the correlation coefficient \eqn{\phi}{phi} 
   (see Tan et al. 2004) Range: \eqn{-1} (perfect neg. correlation)
   to \eqn{+1} (perfect pos. correlation).}
@@ -154,6 +159,9 @@ associations in databases. IEEE Transactions on Knowledge and Data Engineering,
 15(1):57-69, Jan/Feb 2003.
 
 Pang-Ning Tan, Vipin Kumar, and Jaideep Srivastava (2004). Selecting the right objective measure for association analysis. Information Systems, 29(4):293-313.
+
+Piatetsky-Shapiro, G. (1991). Discovery, analysis, and presentation of strong 
+rules. Knowledge Discovery in Databases, pages 229-248.
 
 Hui Xiong, Pang-Ning Tan, and Vipin Kumar (2003). Mining strong affinity
 association patterns in data sets with skewed support distribution. In Bart

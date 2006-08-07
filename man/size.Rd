@@ -8,11 +8,11 @@
 \description{
   Provides the generic function \code{size} and S4 methods to get the
   size of each element from objects based on
-  \code{\link[arules:itemMatrix]{itemMatrix}}.
+  \code{\linkS4class{itemMatrix}}.
   For example, it is used to get a vector of transaction sizes (i.e., 
   the number of present items (ones) per element (row) of the binary
   incidence matrix) from an object of class
-  \code{\link[arules:transactions-class]{transactions}}).
+  \code{\linkS4class{transactions}}).
 }
 \usage{
 size(x)

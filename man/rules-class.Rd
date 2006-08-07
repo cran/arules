@@ -41,16 +41,16 @@ removed with \code{\link{unique}}.
 \section{Slots}{
   \describe{
     \item{\code{lhs}:}{Object of class
-      \code{\link[arules:itemMatrix-class]{itemMatrix}}; 
+      \code{\linkS4class{itemMatrix}}; 
       the left-hand-sides of the rules (antecedents)}
     \item{\code{rhs}:}{Object of class
-      \code{\link[arules:itemMatrix-class]{itemMatrix}};
+      \code{\linkS4class{itemMatrix}};
       the right-hand-sides of the rules (consequents)} 
     \item{\code{quality}:}{Object of class \code{"data.frame"}}
   }
 }
 \section{Extends}{
-  Class \code{\link[arules:associations-class]{associations}}, directly.
+  Class \code{\linkS4class{associations}}, directly.
 }
 \section{Methods}{
   \describe{
@@ -67,7 +67,7 @@ removed with \code{\link{unique}}.
       returns for each rule the union of the items in the 
       lhs and rhs (i.e., the itemsets
       which generated the rule) as a 
-      the \code{\link[arules:itemMatrix-class]{itemMatrix}}}
+      the \code{\linkS4class{itemMatrix}}}
     \item{generatingItemsets}{\code{signature(x = "rules")};
       returns a collection of the itemsets which generated the rules (one 
       itemset for each rule). Note that the collection can contain duplicated
@@ -77,7 +77,7 @@ removed with \code{\link{unique}}.
       returns labels for the rules ("{lhs} => {rhs}") as a
       \code{character} vector. The representation can be customized using 
       the additional parameter \code{ruleSep} and parameters for \code{label}
-      defined in \code{\link[arules:itemMatrix-class]{itemMatrix.}}} 
+      defined in \code{\linkS4class{itemMatrix}}} 
    \item{itemLabels}{\code{signature(object = "rules")};
       returns the item labels as a character vector.
       The index for each lable is the column index of the item in the
@@ -85,16 +85,16 @@ removed with \code{\link{unique}}.
 %   \item{length}{\code{signature(x = "rules")};
 %      returns the number of rules stored in the the set}
     \item{lhs}{\code{signature(x = "rules")};
-      returns the \code{\link[arules:itemMatrix-class]{itemMatrix}}
+      returns the \code{\linkS4class{itemMatrix}}
       representing the left-hand-side of the rules (antecedents)}
     \item{lhs<-}{\code{signature(x = "rules")};
-      replaces the \code{\link[arules:itemMatrix-class]{itemMatrix}}
+      replaces the \code{\linkS4class{itemMatrix}}
       representing the left-hand-side of the rules (antecedents)}
     \item{rhs}{\code{signature(x = "rules")};
-      returns the \code{\link[arules:itemMatrix-class]{itemMatrix}}
+      returns the \code{\linkS4class{itemMatrix}}
       representing the right-hand-side of the rules (consequents)}
     \item{rhs<-}{\code{signature(x = "rules")};
-      replaces the \code{\link[arules:itemMatrix-class]{itemMatrix}}
+      replaces the \code{\linkS4class{itemMatrix}}
       representing the right-hand-side of the rules (consequents)}
     %\item{subset}{\code{signature(x = "rules")};
     %  selects a subset using restrictions on the quality measures or on

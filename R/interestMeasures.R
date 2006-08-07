@@ -99,7 +99,7 @@ setMethod("interestMeasure",  signature(x = "itemsets"),
 setMethod("interestMeasure",  signature(x = "rules"),
     function(x, method, transactions = NULL, ...) {
   
-      builtin_methods <- c("hyperLift", "hyperConfidence", 
+      builtin_methods <- c("leverage", "hyperLift", "hyperConfidence", 
 	"improvement", "chiSquare", 
 	"cosine", "conviction", "gini", "oddsRatio", "phi") 
 
@@ -292,6 +292,8 @@ setMethod("interestMeasure",  signature(x = "rules"),
   )
   if(method == "oddsRatio") return(f11*f00/(f10*f01))
   if(method == "phi") return((N*f11-f1x*fx1) / sqrt(f1x*fx1*f0x*fx0))
+  if(method == "leverage") return(f11/N - (f1x*fx1/N^2))
+ 
   
   ### this one is from Bing Liu, Wynne Hsu, and Yiming Ma (1999) 
   if(method == "chiSquare") {

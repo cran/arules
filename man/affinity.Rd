@@ -6,7 +6,7 @@
 \description{
   Provides the generic function \code{affinity} and the S4 methods
   to compute and return a similarity matrix with the affinities between items  
-  for a set of \code{\link[arules:transactions-class]{transactions}}. 
+  for a set of \code{\linkS4class{transactions}}. 
 }
 \usage{
 affinity(x)

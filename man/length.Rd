@@ -22,25 +22,25 @@
 }
 \arguments{
   \item{x}{ an object of class 
-  \code{\link[arules:transactions-class]{transactions}},
-  \code{\link[arules:rules-class]{rules}},
-  \code{\link[arules:itemsets-class]{itemsets}},
-  \code{\link[arules:tidLists-class]{tidLists}}, or
-  \code{\link[arules:itemMatrix-class]{itemMatrix}}.
+  \code{\linkS4class{transactions}},
+  \code{\linkS4class{rules}},
+  \code{\linkS4class{itemsets}},
+  \code{\linkS4class{tidLists}}, or
+  \code{\linkS4class{itemMatrix}}.
   }
   }
 \details{
-  For \code{\link[arules:itemMatrix-class]{itemMatrix}} and
-  \code{\link[arules:transactions-class]{transactions}} the length is defined
+  For \code{\linkS4class{itemMatrix}} and
+  \code{\linkS4class{transactions}} the length is defined
   as the number of rows (transactions) in the binary incidence matrix.
   
-  For sets of associations (\code{\link[arules:rules-class]{rules}},
-  \code{\link[arules:itemsets-class]{itemsets}} and
-  \code{\link[arules:associations-class]{associations}} in general) the length
+  For sets of associations (\code{\linkS4class{rules}},
+  \code{\linkS4class{itemsets}} and
+  \code{\linkS4class{associations}} in general) the length
   is defined as the number of elements in the set (i.e., the number of
   rules or itemsets).
   
-  For \code{\link[arules:tidLists-class]{tidLists}} the length is the number of
+  For \code{\linkS4class{tidLists}} the length is the number of
   lists (one per item or itemset) in the object.
 }
 \value{

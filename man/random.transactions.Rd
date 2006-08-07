@@ -4,7 +4,7 @@
 \title{Simulate a Random Transaction Data Set}
 \description{
   Simulates a random
-  \code{\link[arules:transactions-class]{transactions}} object
+  \code{\linkS4class{transactions}} object
   using different methods.
 }
 \usage{
@@ -80,7 +80,7 @@ random.transactions(nItems, nTrans, method = "independent", \ldots,
 }
 \value{
   Returns an object of class
-  \code{\link[arules:transactions-class]{transactions}}.
+  \code{\linkS4class{transactions}}.
 }
 \seealso{
   \code{\link{transactions-class}}.

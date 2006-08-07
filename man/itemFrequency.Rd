@@ -6,9 +6,9 @@
 \description{
   Provides the generic function \code{itemFrequency} and S4 methods to get the
   frequency/support for all single items in an objects based on
-  \code{\link[arules:itemMatrix]{itemMatrix}}.  For example, it is used to get the
+  \code{\linkS4class{itemMatrix}}.  For example, it is used to get the
   single item support from an object of class
-  \code{\link[arules:transactions-class]{transactions}} without mining.
+  \code{\linkS4class{transactions}} without mining.
 }
 \usage{
 itemFrequency(x, ...)

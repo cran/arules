@@ -3,7 +3,7 @@
 \title{Read Transaction Data}
 \description{
   Reads a transaction data file from disk and creates a
-  \code{\link[arules:transactions-class]{transactions}} object.
+  \code{\linkS4class{transactions}} object.
 }
 \usage{
 read.transactions(file, format = c("basket", "single"), sep = NULL,
@@ -31,7 +31,7 @@ read.transactions(file, format = c("basket", "single"), sep = NULL,
 }
 \value{
   Returns an object of class
-  \code{\link[arules:transactions-class]{transactions}}.
+  \code{\linkS4class{transactions}}.
 }
 \seealso{
   \code{\link{transactions-class}}

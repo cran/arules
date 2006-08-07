@@ -24,6 +24,11 @@ if(!isGeneric("WRITE")) {
     function(x, ...) standardGeneric("WRITE"))
 }
 
+if(!isGeneric("coverage")) {
+    setGeneric("coverage",
+               function(x) standardGeneric("coverage"))
+}
+
 if(!isGeneric("crossTable")) {
     setGeneric("crossTable",
                function(x, ...) standardGeneric("crossTable"))

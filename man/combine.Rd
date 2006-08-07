@@ -9,13 +9,13 @@
   Provides the 
   S4 methods to 
   combine several objects based on 
-  \code{\link[arules:itemMatrix-class]{itemMatrix}}
+  \code{\linkS4class{itemMatrix}}
   into a single object.
   
   Note, use \code{\link{union}} rather than \code{c}
   to combine several mined 
-  \code{\link[arules:itemsets-class]{itemsets}} 
-  (or \code{\link[arules:rules-class]{rules}}) into a single set.
+  \code{\linkS4class{itemsets}} 
+  (or \code{\linkS4class{rules}}) into a single set.
 }
 \usage{
 %c(x, \ldots, recursive = FALSE)

@@ -96,8 +96,10 @@ setAs("itemMatrix", "dgCMatrix",
     })
  
 ###*******************************************************
-### match: find elements which contain some items (as 
+### find elements which contain some items (as 
 ###        labels or in itemInfo)
+### note this is not what we would expect for %in% in R!
+### but match below works the R-way
 setMethod("%in%", signature(x = "itemMatrix"),
   function(x, table) {
     pos <- match(table, itemInfo(x)$labels)

@@ -21,13 +21,13 @@
 \newcommand{\set}[1]{\mathcal{#1}}
 
 \usepackage{Sweave}
-%% \VignetteIndexEntry{Data structures for association rules}
+%% \VignetteIndexEntry{Introduction to arules}
 
 
 \begin{document}
 %% ------------------------------------------------------------------
 %% ------------------------------------------------------------------
-\title{\pkg{arules} ---  A Computational Environment for Mining 
+\title{Introduction to \pkg{arules} --- Mining 
     Association Rules and Frequent Item Sets}
 \author{Michael Hahsler and Bettina Gr{\"u}n and Kurt Hornik}
 \maketitle
@@ -661,9 +661,13 @@ the following methods:
  \item subset extraction (\code{[} and \func{subset}),
  \item set operations (\func{union}, \func{intersect} and
   \func{setequal}), and
- \item matching elements from two sets (\func{match}).
+ \item matching elements from two sets (\func{match}),
 % \item handling of duplicated elements for a collection
 %     of associations (\func{duplicated} and \func{unique}).
+\item \func{WRITE} for writing associations to disk in human readable form 
+  (to save and load associations in compact form, 
+  use \func{save} and \func{load} from the
+  \pkg{base} package).
 \end{itemize}
 
 The associations currently implemented in package~\pkg{arules} are sets
@@ -960,6 +964,84 @@ in \proglang{R}
 
 %% ------------------------------------------------------------------
 %% ------------------------------------------------------------------
+
+
+\subsection{Sub-, super-, maximal and closed itemsets}
+For some calculations it is necessary to find all sub- or supersets 
+for a specific itemset
+in a set of itemsets. This functionality is implemented as 
+\func{is.subset} and \func{is.superset}. 
+For example, \code{is.subset(x, y, proper = TRUE)}, finds all
+proper subsets of the itemsets in \code{x} in the set~\code{y}. 
+The result is a logical matrix with \code{length(x)} 
+rows and \code{length(y)} columns.  Each logical row vector represents 
+which elements in \code{y} are subsets of the corresponding element in 
+\code{x}. If \code{y} is omitted, the sub- or superset structure within the
+set \code{x} is returned.
+
+Similar methods, \func{is.maximal} and \func{is.closed}, can be used to find all
+\emph{maximal itemsets} or \emph{closed itemsets} in a set.  An itemset is
+maximal in a set if no proper superset of the itemset is contained in the
+set~\citep{arules:Zaki+Parthasarathy+Ogihara+Li:1997}.  An itemset is closed,
+if it is its own closure (i.e., for an items no superset with the same support
+exits)~\citep{arules:Pasquier+Bastide+Taouil+Lakhal:1999}.
+
+
+Note that these methods can be extremely slow and have high memory 
+usage if the set contains many itemsets. 
+
+\subsection{Additional measures of interestingness}
+\pkg{arules} provides 
+\func{interestMeasure}
+which can be used to calculate
+a broad variety of interest measures for itemsets and rules. 
+All measures are calculated
+using the quality information available from the
+sets of itemsets or rules (i.e., support, confidence, lift) and,
+if necessary, missing information is obtained from the
+transactions used to mine the associations.
+
+For example, available measures for itemsets are:
+\begin{itemize}
+\item All-confidence~\citep{arules:Omiecinski:2003}
+\item Cross-support ratio~\citep{arules:Xiong+Tan+Kumar:2003}
+\end{itemize}
+
+For rules the following measures are implemented:
+\begin{itemize}
+\item Chi square measure~\citep{arules:Liu+Hsu+Ma:1999}
+\item Conviction~\citep{arules:Brin+Motwani+Ullman+Tsur:1997} 
+\item Hyper-lift and hyper-confidence~\citep{arules:Hahsler+Hornik+Reutterer:2005} 
+\item Leverage~\citep{arules:Piatetsky-Shapiro:1991} 
+\item Improvement~\citep{arules:Bayardo+Agrawal+Gunopulos:2000} 
+\item Several measures from \cite{arules:Tan+Kumar+Srivastava2004} 
+  (e.g., cosine, Gini index, $\phi$-coefficient, odds ratio)
+\end{itemize}
+
+\subsection{Distance based clustering transactions and associations}
+
+To allow for distance based clustering~\citep{arules:Gupta+Strehl+Ghosh:1999},
+\pkg{arules} provides \func{dissimilarity} which can be used to calculate
+dissimilarities and cross-dissimilarities between transactions or associations
+(i.e., itemsets and rules). Currently, the following standard measures for
+binary data are available: Jaccard coefficient, simple matching coefficient and
+dice coefficient. Additionally, dissimilarity between transactions can be
+calculated based on affinities between
+items~\citep{arules:Aggarwal+Procopiuc+Yu:2002}.
+
+The result of \func{dissimilarity} is either a \code{dist} object, which can be
+directly used by most clustering methods in R (e.g., \code{hclust} for
+hierarchical clustering), or an object of class \code{ar\_cross\_dissimilarity}.
+
+Since the number of transactions or associations in often too large to
+efficiently calculate a dissimilarity matrix and apply a clustering algorithm,
+\func{sample} can be used to cluster only a subset of transactions 
+(associations). To assign the remaining transactions (associations)
+to clusters, \func{predict} implements the nearest neighbor approach for
+predicting memberships for new data.
+
+
+
 
 \section{Examples\label{sec:examples}}
 
@@ -1413,8 +1495,8 @@ set transactions ...[115 item(s), 48842 transaction(s)] done [0.09s].
 sorting and recoding items ... [67 item(s)] done [0.02s].
 creating transaction tree ... done [0.09s].
 checking subsets of size 1 2 3 4 5 done [0.72s].
-writing ... [80215 rule(s)] done [0.03s].
-creating S4 object  ... done [0.28s].
+writing ... [80215 rule(s)] done [0.02s].
+creating S4 object  ... done [0.32s].
 \end{Soutput}
 \begin{Sinput}
 > rules
@@ -1664,8 +1746,9 @@ per definition an all-confidence of~1).
 
 The resulting itemsets show that the item high school graduate (but no
 higher education) is highly associated with working full-time, a small
-income and working in the private sector.  All-confidence is already
-implemented in \pkg{arules} as the function \func{allConfidence}.
+income and working in the private sector.  All-confidence is 
+along with many other measures of interestingness already
+implemented in \pkg{arules} as the function \func{interestMeasure}.
 
 \subsection{Example 4: Sampling}
 In this example, we show how sampling
@@ -1776,7 +1859,7 @@ and compare the system time (in seconds) used for mining.
 > time
 \end{Sinput}
 \begin{Soutput}
-[1] 0.658 0.015 0.674 0.000 0.000
+[1] 0.653 0.021 0.681 0.000 0.000
 \end{Soutput}
 \begin{Sinput}
 > timeSample <- system.time(itemsetsSample <- eclat(AdultSample, 
@@ -1784,7 +1867,7 @@ and compare the system time (in seconds) used for mining.
 > timeSample
 \end{Sinput}
 \begin{Soutput}
-[1] 0.146 0.000 0.146 0.000 0.000
+[1] 0.147 0.000 0.147 0.000 0.000
 \end{Soutput}
 \end{Schunk}
 
@@ -1799,7 +1882,7 @@ factor of:
 > time[1]/timeSample[1]
 \end{Sinput}
 \begin{Soutput}
-[1] 4.506849
+[1] 4.442177
 \end{Soutput}
 \end{Schunk}
 
@@ -1819,7 +1902,7 @@ set of 5908 itemsets
 > itemsetsSample
 \end{Sinput}
 \begin{Soutput}
-set of 5858 itemsets 
+set of 5921 itemsets 
 \end{Soutput}
 \end{Schunk}
 
@@ -1834,7 +1917,7 @@ frequent itemsets found in the database were also found in the sample.
 > sum(match > 0)/length(itemsets)
 \end{Sinput}
 \begin{Soutput}
-[1] 0.9703791
+[1] 0.9827353
 \end{Soutput}
 \end{Schunk}
 
@@ -1850,14 +1933,14 @@ were infrequent in the database give:
 \end{Sinput}
 \begin{Soutput}
    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-0.05004 0.05061 0.05127 0.05157 0.05227 0.05716 
+0.05004 0.05041 0.05094 0.05097 0.05133 0.05409 
 \end{Soutput}
 \begin{Sinput}
 > summary(quality(itemsetsSample[-match])$support)
 \end{Sinput}
 \begin{Soutput}
    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-0.05005 0.05038 0.05114 0.05150 0.05233 0.05537 
+0.05005 0.05038 0.05092 0.05118 0.05185 0.05375 
 \end{Soutput}
 \end{Schunk}
 
@@ -1876,7 +1959,7 @@ sample, we can calculate accuracy from the the error rate.
 \end{Sinput}
 \begin{Soutput}
    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
- 0.8511  0.9566  0.9756  0.9702  0.9894  1.0000 
+ 0.8973  0.9706  0.9840  0.9798  0.9928  1.0000 
 \end{Soutput}
 \end{Schunk}
 
@@ -1930,9 +2013,10 @@ Alternatively data can be generated by simple probabilistic models
 as done by
 \cite{arules:Hahsler+Hornik+Reutterer:2005}.
 
-Finally, similarity measures between itemsets and rules can be
-implemented for \pkg{arules}. With such measures distance based
-clustering and visualization of associations is possible 
+%Finally, similarity measures between itemsets and rules can be
+%implemented for \pkg{arules}. With such measures distance based
+Finally, the impelentation of distance based
+clustering could be used for visualization of associations 
 \citep[see e.g.,][]{arules:Strehl+Gosh:2003}.
 
 \section*{Acknowledgments}
@@ -1943,7 +2027,7 @@ The authors of \pkg{arules} would like to thank Christian Borgelt for the
 implementation of Apriori and Eclat.
 
 
-\bibliographystyle{plainnat}
+\bibliographystyle{abbrvnat}
 \bibliography{arules,misc}
 
 \end{document}
