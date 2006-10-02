@@ -1,11 +1,11 @@
-###*******************************************************
-### Function subset
-###
-### subset associations using constraints on interest measures 
-### or items.
+##*******************************************************
+## Function subset
+##
+## subset associations using constraints on interest measures 
+## or items.
 
-###****************************************************************
-### subset for itemMatrix
+##****************************************************************
+## subset for itemMatrix
 
 setMethod("subset", signature(x = "itemMatrix"),
     function(x, subset, ...) {
@@ -16,8 +16,8 @@ setMethod("subset", signature(x = "itemMatrix"),
 
 
 
-###****************************************************************
-### subset for associations
+##****************************************************************
+## subset for associations
 
 setMethod("subset", signature(x = "itemsets"),
     function(x, subset, ...) {

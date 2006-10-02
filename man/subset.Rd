@@ -6,11 +6,9 @@
 \alias{subset,rules-method}
 \title{Subsetting Itemsets, Rules and Transactions}
 \description{
-  Provides the generic function \code{subset} and S4 methods to 
-  subset associations or 
-  transactions (itemMatrix)
-  which meet certain conditions (e.g., contains certain items or 
-  satisfies a minimum lift).
+  Provides the generic function \code{subset} and S4 methods to subset
+  associations or transactions (itemMatrix) which meet certain conditions
+  (e.g., contains certain items or satisfies a minimum lift).
 }
 \usage{
 subset(x, ...)

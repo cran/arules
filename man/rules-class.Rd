@@ -28,9 +28,8 @@
 \description{
 The \code{rules} class represents a set of rules.
 
-Note that the class can also contain
-a collection of rules with duplicated elements. Duplicated elements can be
-removed with \code{\link{unique}}.
+Note that the class can also contain a collection of rules with duplicated
+elements. Duplicated elements can be removed with \code{\link{unique}}.
 
 }
 \section{Objects from the Class}{
@@ -46,7 +45,7 @@ removed with \code{\link{unique}}.
     \item{\code{rhs}:}{Object of class
       \code{\linkS4class{itemMatrix}};
       the right-hand-sides of the rules (consequents)} 
-    \item{\code{quality}:}{Object of class \code{"data.frame"}}
+    \item{\code{quality}:}{a data.frame}
   }
 }
 \section{Extends}{

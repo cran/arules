@@ -228,7 +228,7 @@ static void _report_R (int *ids, int cnt, int supp, int *tal, void *data)
 			  }
 			  if (tal[i >> BM_SHIFT] & (1 << (i & BM_MASK))) {
 				  /*Rprintf(" %d", i+1);*/
-				  ruleset->trans[h] = i+1;
+				  ruleset->trans[h] = i;
 				  h++;
 			  }
 		  }
@@ -260,7 +260,7 @@ static void _report_R (int *ids, int cnt, int supp, int *tal, void *data)
   Main Functions
 ----------------------------------------------------------------------*/
 
-SEXP reclat(SEXP x, SEXP y, SEXP dim, SEXP parms, SEXP control)
+SEXP reclat(SEXP x, SEXP y, SEXP dim, SEXP parms, SEXP control, SEXP itemInfo)
 {
  	int i, l, k = 0, n = 0, maxcnt = 0;
 	INPUT   in;
@@ -403,7 +403,7 @@ SEXP reclat(SEXP x, SEXP y, SEXP dim, SEXP parms, SEXP control)
   }
   t = clock();                  /* start the timer */
   if (param.verbose) Rprintf("Creating S4 object  ... ");
-  ans = PROTECT(returnObject(ruleset, dim, &param));
+  ans = PROTECT(returnObject(ruleset, dim, &param, itemInfo));
   if (param.verbose) {
 	  Rprintf("done ");
 	  Rprintf("[%.2fs].\n", SEC_SINCE(t));

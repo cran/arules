@@ -6,16 +6,12 @@
 \alias{c,itemsets-method}
 \title{Combining Objects}
 \description{
-  Provides the 
-  S4 methods to 
-  combine several objects based on 
-  \code{\linkS4class{itemMatrix}}
-  into a single object.
+  Provides the S4 methods to combine several objects based on
+  \code{\linkS4class{itemMatrix}} into a single object.
   
-  Note, use \code{\link{union}} rather than \code{c}
-  to combine several mined 
-  \code{\linkS4class{itemsets}} 
-  (or \code{\linkS4class{rules}}) into a single set.
+  Note, use \code{\link{union}} rather than \code{c} to combine several mined
+  \code{\linkS4class{itemsets}} (or \code{\linkS4class{rules}}) into a single
+  set.
 }
 \usage{
 %c(x, \ldots, recursive = FALSE)
@@ -30,7 +26,7 @@
 \arguments{
   \item{x}{ first object.}
   \item{\dots}{ further objects of the same class as \code{x} to be combined.}
-  \item{recursive}{ \code{"logical"};  If \code{recursive=TRUE}, 
+  \item{recursive}{ a logical. If \code{recursive=TRUE}, 
     the function recursively
     descends through lists combining all their elements into a
     vector.}

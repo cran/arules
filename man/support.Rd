@@ -4,10 +4,9 @@
 \alias{support,associations-method}
 \title{Support Counting for Itemsets}
 \description{
-   Provides the generic function and the needed S4 method to
-   count support for given itemsets
-   (and other types of associations) 
-   in a given transaction database. 
+   Provides the generic function and the needed S4 method to count support for
+   given itemsets (and other types of associations) in a given transaction
+   database. 
 }
 \usage{
 support(x, transactions, ...)

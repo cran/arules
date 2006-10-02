@@ -19,16 +19,10 @@
 %
 \title{Set Operations}
 \description{
-  Provides the generic functions 
-  and the S4 methods for 
-  the set operations 
-  \code{union},  
-  \code{intersect}, 
-  \code{setequal},  
-  \code{setdiff} and  
-  \code{is.element}
-  on
-  sets of associations (e.g., rules, itemsets) and itemMatrix. 
+  Provides the generic functions and the S4 methods for the set operations
+  \code{union},  \code{intersect}, \code{setequal},  \code{setdiff} and
+  \code{is.element} on sets of associations (e.g., rules, itemsets) and
+  itemMatrix. 
 }
 \usage{
 union(x, y)
@@ -46,11 +40,8 @@ class name \code{"ANY"} in the signature,
 so they should work for all S4 classes for which the following
 methods are available: \code{match}, \code{length} and \code{unique}. }
 \value{
-\code{union},
-\code{intersect},
-\code{setequal} and
-\code{setdiff} return an object of the same class as 
-\code{x} and \code{y}.
+\code{union}, \code{intersect}, \code{setequal} and \code{setdiff} return an
+object of the same class as \code{x} and \code{y}.
 
 \code{is.element} returns a logic vector of length \code{el} indicating
 for each element if it is included in \code{set}.

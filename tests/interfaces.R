@@ -7,7 +7,7 @@ data <- list(
     c("b","e"),
     c("a","c"),
     c("c","e"),
-    c("a","b","d","e"),
+    c("a","b","d","e")
     )
 names(data) <- paste("Tr",c(1:7), sep = "")
 t <- as(data, "transactions")

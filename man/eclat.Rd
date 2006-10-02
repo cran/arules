@@ -18,7 +18,7 @@ eclat(data, parameter = NULL, control = NULL)
  \item{parameter}{object of class
    \code{\linkS4class{ECparameter}} or named list (default
    values are: support 0.1 and maxlen 5)}
-  \item{control}{Object of class
+  \item{control}{object of class
     \code{\linkS4class{ECcontrol}} or named list for
     algorithmic controls.}
 }
@@ -36,7 +36,7 @@ eclat(data, parameter = NULL, control = NULL)
   Technical Report 651, Computer Science Department, University of
   Rochester, Rochester, NY 14627.
   
-  Christian Borgelt (2003). Efficient Implementations of Apriori and
+  Christian Borgelt (2003) Efficient Implementations of Apriori and
   Eclat. \emph{Workshop of Frequent Item Set Mining Implementations}
   (FIMI 2003, Melbourne, FL, USA).
 }

@@ -14,7 +14,7 @@ affinity(x)
 %#\S4method{affinity}{matrix}(x)
 }
 \arguments{
-  \item{x}{a \code{matrix}, \code{itemMatrix} 
+  \item{x}{a matrix or an object of class \code{itemMatrix} 
   or \code{transactions}.} 
 }
 \details{
@@ -44,9 +44,9 @@ a <- affinity(s)
 summary(as.vector(a))
 }
 \references{
-   Charu C. Aggarwal, Cecilia Procopiuc, and Philip S. Yu. (2002)
-    \emph{Finding localized associations in market basket data.}
-    IEEE Trans. on Knowledge and Data Engineering, 14(1):51-62.
+   Charu C. Aggarwal, Cecilia Procopiuc, and Philip S. Yu (2002)
+    Finding localized associations in market basket data,
+    \emph{IEEE Trans. on Knowledge and Data Engineering,} 14(1):51--62.
 }
 \keyword{cluster}
 \keyword{models}

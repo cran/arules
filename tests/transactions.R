@@ -7,7 +7,7 @@ data <- list(
   c("b","e"),
   c("a","d"),
   c("d","e"),
-  c("a","b","d","e","f","g"),
+  c("a","b","d","e","f","g")
     )
 names(data) <- paste("Tr",c(1:7), sep = "")
 

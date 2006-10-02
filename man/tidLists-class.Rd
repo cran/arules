@@ -25,48 +25,39 @@
 
 \title{Class ``tidLists'' --- Transaction ID Lists for Items/Itemsets}
 \description{
-  Transaction ID lists contains a set of lists. 
-  Each list 
-  is associated with an item/itemset and
-  stores the IDs of the transactions which support the item/itemset.
-  \code{tidLists} uses the class \code{\link[Matrix:dgCMatrix-class]{dgCMatrix}}
-  to efficiently store the transaction ID lists as a sparse matrix.
-  Each column in the matrix represents one transaction ID list.
+  Transaction ID lists contains a set of lists.  Each list is associated with
+  an item/itemset and stores the IDs of the transactions which support the
+  item/itemset.  \code{tidLists} uses the class
+  \code{\link[Matrix:dgCMatrix-class]{dgCMatrix}} to efficiently store the
+  transaction ID lists as a sparse matrix.  Each column in the matrix
+  represents one transaction ID list.
   
-  \code{tidLists} can be used for different purposes.
-  For some operations (e.g., support counting) it is efficient to
-  coerce a \code{\linkS4class{transactions}} database 
-  into \code{tidLists} where each list contains the transaction IDs for an 
-  item (and the support is given by the length of the list).
+  \code{tidLists} can be used for different purposes.  For some operations
+  (e.g., support counting) it is efficient to coerce a
+  \code{\linkS4class{transactions}} database into \code{tidLists} where each
+  list contains the transaction IDs for an item (and the support is given by
+  the length of the list).
   
-  The implementation of the Eclat mining algorithm (which uses
-  transaction ID list intersection) can also produce
-  transaction ID lists for the found itemsets as part of the
-  returned \code{\linkS4class{itemsets}} object.
-  These lists can then be used for 
-  further computation.
-  
-  
-  
+  The implementation of the Eclat mining algorithm (which uses transaction ID
+  list intersection) can also produce transaction ID lists for the found
+  itemsets as part of the returned \code{\linkS4class{itemsets}} object.  These
+  lists can then be used for further computation.
 }
 \section{Objects from the Class}{
-  Objects are created by Eclat if the \code{\link{eclat}} function is
-  called with \code{tidLists = TRUE} in the
-  \code{\linkS4class{ECparameter}} object, and returned
-  as part of the mined \code{\linkS4class{itemsets}}.
-  Objects can also be created
-  by coercion from an object of class 
-  \code{\linkS4class{transactions}} or 
-  by calls of the form
+  Objects are created by Eclat if the \code{\link{eclat}} function is called
+  with \code{tidLists = TRUE} in the \code{\linkS4class{ECparameter}} object,
+  and returned as part of the mined \code{\linkS4class{itemsets}}.  Objects can
+  also be created by coercion from an object of class
+  \code{\linkS4class{transactions}} or by calls of the form
   \code{new("tidLists", ...)}.
 }
 \section{Slots}{
   \describe{
     \item{\code{data}:}{object of class
       \code{\link[Matrix:dgCMatrix-class]{dgCMatrix}}.}
-     \item{\code{itemInfo}:}{object of class \code{"data.frame"} always an
+     \item{\code{itemInfo}:}{always an
        empty data.frame for transaction ID lists.}
-     \item{\code{transactionInfo}:}{object of class \code{"data.frame"} 
+     \item{\code{transactionInfo}:}{a data.frame
        with vectors of the same length as the number of transactions. 
        Each vector can hold additional information e.g., store
        transaction IDs or user IDs for each transaction.}
@@ -128,7 +119,7 @@ data <- list(
   c("a","c"),
   c("a","b","d"),
   c("c","e"),
-  c("a","b","d","e"),
+  c("a","b","d","e")
   )
 t <- as(data, "transactions")
 

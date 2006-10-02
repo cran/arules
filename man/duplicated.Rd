@@ -5,17 +5,14 @@
 \alias{duplicated,itemMatrix-method}
 \title{Find Duplicated Elements}
 \description{
-  Provides the generic function \code{duplicated}  
-  and the S4 methods for \code{itemMatrix} and associations. 
-  \code{duplicated} finds 
-  duplicated elements in an \code{itemMatrix}.
-  It returns a logical vector indicating which elements
-    are duplicates.
+  Provides the generic function \code{duplicated}  and the S4 methods for
+  \code{itemMatrix} and associations.  \code{duplicated} finds duplicated
+  elements in an \code{itemMatrix}.  It returns a logical vector indicating
+  which elements are duplicates.
   
-  Note that \code{duplicated}
-  can also be used to find transactions with 
-  identical items and identical rules and itemsets in
-  collections stored in \code{rules} and \code{itemsets}.
+  Note that \code{duplicated} can also be used to find transactions with
+  identical items and identical rules and itemsets in collections stored in
+  \code{rules} and \code{itemsets}.
 }
 \usage{
 duplicated(x, incomparables = FALSE, ...)

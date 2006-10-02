@@ -1,7 +1,8 @@
 useDynLib(arules)
 
 import("Matrix")
-importFrom("stats", "predict") 
+importFrom("stats", "predict")
+importFrom("stats4", "summary") 
 
 export(
     "read.transactions", 

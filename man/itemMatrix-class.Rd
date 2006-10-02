@@ -47,7 +47,7 @@
   Objects can be created by calls of the form \code{new("itemMatrix",
     ...)}.
   However, most of the time objects will be created by coercion from a
-  \code{matrix}, \code{list} or \code{data.frame}.
+  matrix, list or data.frame.
 }
 \section{Slots}{
   \describe{
@@ -61,13 +61,13 @@
       slot is always a transposed version of the binary incidence matrix
       in \code{itemMatrix}.
     }
-    \item{\code{itemInfo}:}{Object of class \code{"data.frame"} which
+    \item{\code{itemInfo}:}{a data.frame which
       contains named vectors of the length equal to the number of
       elements in the set.  If the slot is not empty (contains no item
-      labels), the first element in the \code{data.frame} must have the
+      labels), the first element in the data.frame must have the
       name \code{"labels"} and contain a character vector with the item
       labels used for representing an item.  In addition to the item
-      labels, the \code{data.frame} can contain arbitrary named vectors
+      labels, the data.frame can contain arbitrary named vectors
       (of the same length) to represent, e.g., variable names and values
       which were used to create the binary items or hierarchical
       category information associated with each item label.  
@@ -107,11 +107,11 @@
     \item{itemLabels<-}{\code{signature(object = "itemMatrix")};
       replaces the item labels used for encoding.}
     \item{itemInfo}{\code{signature(object = "itemMatrix")};
-      returns the whole item information \code{data.frame} including
+      returns the whole item information data.frame including
       labels.}
     \item{itemInfo<-}{\code{signature(object = "itemMatrix")};
-      replaces the item info by a \code{data.frame}.
-      The length of the vectors in the \code{data.frame} has to match
+      replaces the item info by a data.frame.
+      The length of the vectors in the data.frame has to match
       the number of elements (rows) in the itemMatrix.}
     \item{labels}{\code{signature(x = "transactions")};
       returns the labels (item labels and element names) 

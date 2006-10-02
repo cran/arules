@@ -39,12 +39,14 @@ For rules the following measures are implemented:
 \item{"chiSquare"}{ (see Liu et al. 1999). The chi-square statistic 
   to test for independence between the lhs and rhs of the rule.
   The critical value of the chi-square distribution with \eqn{1} degree of 
-  fredom (2x2 contengency table) at \eqn{\alpha=0.05}{alpha=0.05} 
+  freedom (2x2 contengency table) at \eqn{\alpha=0.05}{alpha=0.05} 
   is \eqn{3.84}; higher chi-square
-  values indicate that the lhs and the rhs are not independent.  Note that if
-  any cell in the contingency table has an expected value below \eqn{5}, the
-  chi-square value is set to \code{NA} 
-  since the approximation used in the chi-square test breaks down.}
+  values indicate that the lhs and the rhs are not independent.  
+  %Note that if
+  %any cell in the contingency table has an expected value below \eqn{5}, the
+  %chi-square value is set to \code{NA} 
+  %since the approximation used in the chi-square test breaks down.
+  }
 \item{"cosine"}{(see Tan et al. 2004) equivalent to the IS measure. 
   Range: \eqn{0\ldots1}. 
   }
@@ -136,38 +138,40 @@ was used for mining.
 }
 \references{
 R. Bayardo, R. Agrawal, and D. Gunopulos (2000). Constraint-based rule mining
-in large, dense databases. Data Mining and Knowledge Discovery, 4(2/3):217-240,
-2000.
+in large, dense databases.  \emph{Data Mining and Knowledge Discovery},
+4(2/3):217--240, 2000.
 
 Sergey Brin, Rajeev Motwani, Jeffrey D. Ullman, and Shalom Tsur (1997). Dynamic
-itemset counting and implication rules for market basket data. In SIGMOD 1997,
-Proceedings ACM SIGMOD International Conference on Management of Data, pages
-255-264, Tucson, Arizona, USA.
+itemset counting and implication rules for market basket data. In \emph{SIGMOD
+1997, Proceedings ACM SIGMOD International Conference on Management of Data},
+pages 255--264, Tucson, Arizona, USA.
 
-Michael Hahsler, Kurt Hornik, and Thomas Reutterer (2005).  Implications of
-probabilistic data modeling for rule mining.  Report 14, Research Report
+Michael Hahsler, Kurt Hornik, and Thomas Reutterer (2005).  \emph{Implications
+of probabilistic data modeling for rule mining}.  Report 14, Research Report
 Series, Department of Statistics and Mathematics, Wirtschaftsuniversität Wien,
 Augasse 2-6, 1090 Wien, Austria.
 
 Bing Liu, Wynne Hsu, and Yiming Ma (1999). Pruning and summarizing the
-discovered associations. In KDD '99: Proceedings of the fifth ACM SIGKDD
-international conference on Knowledge discovery and data mining, pages 125-134.
-ACM Press, 1999.
+discovered associations. In \emph{KDD '99: Proceedings of the fifth ACM SIGKDD
+international conference on Knowledge discovery and data mining}, pages
+125--134.  ACM Press, 1999.
 
 Edward R. Omiecinski (2003). Alternative interest measures for mining
-associations in databases. IEEE Transactions on Knowledge and Data Engineering,
-15(1):57-69, Jan/Feb 2003.
+associations in databases. \emph{IEEE Transactions on Knowledge and Data
+Engineering}, 15(1):57--69, Jan/Feb 2003.
 
-Pang-Ning Tan, Vipin Kumar, and Jaideep Srivastava (2004). Selecting the right objective measure for association analysis. Information Systems, 29(4):293-313.
+Pang-Ning Tan, Vipin Kumar, and Jaideep Srivastava (2004). Selecting the right
+objective measure for association analysis. \emph{Information Systems},
+29(4):293--313.
 
-Piatetsky-Shapiro, G. (1991). Discovery, analysis, and presentation of strong 
-rules. Knowledge Discovery in Databases, pages 229-248.
+Piatetsky-Shapiro, G. (1991). Discovery, analysis, and presentation of strong
+rules. In: \emph{Knowledge Discovery in Databases}, pages 229--248.
 
 Hui Xiong, Pang-Ning Tan, and Vipin Kumar (2003). Mining strong affinity
 association patterns in data sets with skewed support distribution. In Bart
-Goethals and Mohammed J. Zaki, editors, Proceedings of the IEEE International
-Conference on Data Mining, November 19 - 22, 2003, Melbourne, Florida, pages
-387-394.
+Goethals and Mohammed J. Zaki, editors, \emph{Proceedings of the IEEE
+International Conference on Data Mining}, November 19--22, 2003, Melbourne,
+Florida, pages 387--394.
 }
 
 \seealso{ \code{\link{itemsets-class}}, \code{\link{rules-class}} }

@@ -6,7 +6,7 @@ data <- list(
     c("A", "B", "C", "G"),
     c("C", "D"),
     c("C", "D"),
-    c("E", "F"),
+    c("E", "F")
     )
 
 trans <- as(data, "transactions")

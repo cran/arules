@@ -6,13 +6,11 @@
 \alias{size,tidLists-method}
 \title{Getting the Size of Each Element}
 \description{
-  Provides the generic function \code{size} and S4 methods to get the
-  size of each element from objects based on
-  \code{\linkS4class{itemMatrix}}.
-  For example, it is used to get a vector of transaction sizes (i.e., 
-  the number of present items (ones) per element (row) of the binary
-  incidence matrix) from an object of class
-  \code{\linkS4class{transactions}}).
+  Provides the generic function \code{size} and S4 methods to get the size of
+  each element from objects based on \code{\linkS4class{itemMatrix}}.  For
+  example, it is used to get a vector of transaction sizes (i.e., the number of
+  present items (ones) per element (row) of the binary incidence matrix) from
+  an object of class \code{\linkS4class{transactions}}).
 }
 \usage{
 size(x)
@@ -25,10 +23,10 @@ size(x)
   \item{x}{an object.}
 }
 \value{
-  \code{size} returns a numeric vector of length \code{length(x)}.
-  Each element is the size of the corresponding element (row in the
-  matrix) in object \code{x}. For rules, \code{size} returns 
-  the sum of the number of elements in the RHS and the RHS.
+  \code{size} returns a numeric vector of length \code{length(x)}.  Each
+  element is the size of the corresponding element (row in the matrix) in
+  object \code{x}. For rules, \code{size} returns the sum of the number of
+  elements in the RHS and the RHS.
 }
 \seealso{ 
   \code{\link{itemMatrix-class}},

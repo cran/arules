@@ -13,11 +13,10 @@
 \title{Classes ``AScontrol'', ``APcontrol'', ``ECcontrol'' ---
   Specifying the `control' Argument of apriori() and eclat()}
 \description{
-  The \code{AScontrol} class holds the algorithmic parameters for
-  the used mining algorithms.
-  \code{APcontrol} and \code{ECcontrol} directly extend \code{AScontrol}
-  with additional slots for parameters only suitable for the algorithms
-  Apriori (\code{APcontrol}) and Eclat (\code{ECcontrol}).
+  The \code{AScontrol} class holds the algorithmic parameters for the used
+  mining algorithms.  \code{APcontrol} and \code{ECcontrol} directly extend
+  \code{AScontrol} with additional slots for parameters only suitable for the
+  algorithms Apriori (\code{APcontrol}) and Eclat (\code{ECcontrol}).
 }
 \section{Objects from the Class}{
   A suitable default control object will be automatically created by
@@ -31,7 +30,7 @@
 \section{Slots}{
   Common slots defined in \code{AScontrol}:
   \describe{
-    \item{\code{sort}:}{\code{"integer"};
+    \item{\code{sort}:}{ an integer scalar indicating how to 
       sort items with respect to their frequency: (default: 1)
       \describe{
 	\item{ 1:}{ascending}
@@ -41,13 +40,13 @@
 	\item{-2:}{descending with respect to transaction size sum}
       }
     }
-    \item{\code{verbose}:}{\code{"logical"};
+    \item{\code{verbose}:}{a logical indicating whether to
       report progress}
   }
   
   Additional slots for Apriori in \code{APcontrol}:
   \describe{
-    \item{\code{filter}:}{\code{"numeric"};
+    \item{\code{filter}:}{a numeric scalar indicating how to
       filter unused items from transactions (default: 0.1)
       \describe{
 	\item{\eqn{=0}:}{do not filter items with respect to. usage in
@@ -56,21 +55,21 @@
 	\item{\eqn{>0}:}{take execution times ratio into account}
       }
     }
-    \item{\code{tree}:}{\code{"logical"};
+    \item{\code{tree}:}{a logical indicating whether to
       organize transactions as a prefix tree (default: \code{TRUE})}
-    \item{\code{heap}:}{\code{"logical"};
+    \item{\code{heap}:}{a logical indicating whether to
       use heapsort instead of quicksort to sort the transactions
       (default: \code{TRUE})}
-    \item{\code{memopt}:}{\code{"logical"};
+    \item{\code{memopt}:}{a logical indicating whether to 
       minimize memory usage instead of maximize speed (default:
       \code{FALSE})}
-    \item{\code{load}:}{\code{"logical"};
+    \item{\code{load}:}{a logical indicating whether to
       load transactions into memory (default: \code{TRUE})}
   }
   
   Additional slots for Eclat in \code{ECcontrol}:
   \describe{
-    \item{\code{sparse}:}{\code{"numeric"};
+    \item{\code{sparse}:}{a numeric value for the
       threshold for sparse representation (default: 7)}
   }
 }
@@ -83,7 +82,7 @@
   }
 }
 \references{
-  Christian Borgelt (2004).
+  Christian Borgelt (2004)
   \emph{Apriori --- Finding Association Rules/Hyperedges with the Apriori
     Algorithm}.
   \url{http://fuzzy.cs.uni-magdeburg.de/~borgelt/apriori.html}

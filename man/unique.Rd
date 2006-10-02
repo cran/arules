@@ -4,12 +4,9 @@
 \alias{unique,itemMatrix-method}
 \title{Remove Duplicated Elements from a Collection} 
 \description{
-  Provides the generic function \code{unique}   
-  and the S4 methods for \code{itemMatrix}.
-  \code{unique} uses 
-  \code{\link{duplicated}}
-  to return an \code{itemMatrix} 
-  with the duplicate elements removed.
+  Provides the generic function \code{unique}   and the S4 methods for
+  \code{itemMatrix}.  \code{unique} uses \code{\link{duplicated}} to return an
+  \code{itemMatrix} with the duplicate elements removed.
   
   Note that \code{unique} can also be used on collections of 
   \code{associations}.

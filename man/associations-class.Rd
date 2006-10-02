@@ -26,7 +26,7 @@
   A virtual class: No objects may be created from it.}
 \section{Slots}{
   \describe{
-    \item{\code{quality}:}{Object of class \code{data.frame} for quality
+    \item{\code{quality}:}{a data.frame for quality
       measures (e.g., interest measures as support or confidence).  Each
       quality measure is a named vector with the same length as the
       number of elements in the set of associations and each vector
@@ -54,11 +54,11 @@
 %      argument \code{by} (default: \code{by = "support", decreasing =
 %	TRUE}).}
     \item{quality<-}{\code{signature(x = "associations")};
-      replaces the quality \code{data.frame}.  The length of the vectors
-      in the \code{data.frame} has to equal the number of associations
+      replaces the quality \code{data.frame}.  The lengths of the vectors
+      in the data.frame have to equal the number of associations
       in the set.}
     \item{quality}{\code{signature(x = "associations")};
-      returns the quality \code{data.frame}.}
+      returns the quality data.frame.}
     \item{show}{\code{signature(object = "associations")}}
   }
 }

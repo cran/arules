@@ -1067,11 +1067,6 @@ First, we load \pkg{arules} and the data set.
 \begin{Sinput}
 > library("arules")
 \end{Sinput}
-\begin{Soutput}
-Loading required package: stats4
-Loading required package: Matrix
-Loading required package: lattice
-\end{Soutput}
 \end{Schunk}
 
 \begin{Schunk}
@@ -1495,8 +1490,8 @@ set transactions ...[115 item(s), 48842 transaction(s)] done [0.09s].
 sorting and recoding items ... [67 item(s)] done [0.02s].
 creating transaction tree ... done [0.09s].
 checking subsets of size 1 2 3 4 5 done [0.72s].
-writing ... [80215 rule(s)] done [0.02s].
-creating S4 object  ... done [0.32s].
+writing ... [80215 rule(s)] done [0.03s].
+creating S4 object  ... done [0.06s].
 \end{Soutput}
 \begin{Sinput}
 > rules
@@ -1859,7 +1854,7 @@ and compare the system time (in seconds) used for mining.
 > time
 \end{Sinput}
 \begin{Soutput}
-[1] 0.653 0.021 0.681 0.000 0.000
+[1] 0.526 0.012 0.543 0.000 0.000
 \end{Soutput}
 \begin{Sinput}
 > timeSample <- system.time(itemsetsSample <- eclat(AdultSample, 
@@ -1867,7 +1862,7 @@ and compare the system time (in seconds) used for mining.
 > timeSample
 \end{Sinput}
 \begin{Soutput}
-[1] 0.147 0.000 0.147 0.000 0.000
+[1] 0.119 0.000 0.120 0.000 0.000
 \end{Soutput}
 \end{Schunk}
 
@@ -1882,7 +1877,7 @@ factor of:
 > time[1]/timeSample[1]
 \end{Sinput}
 \begin{Soutput}
-[1] 4.442177
+[1] 4.420168
 \end{Soutput}
 \end{Schunk}
 
@@ -1902,7 +1897,7 @@ set of 5908 itemsets
 > itemsetsSample
 \end{Sinput}
 \begin{Soutput}
-set of 5921 itemsets 
+set of 5178 itemsets 
 \end{Soutput}
 \end{Schunk}
 
@@ -1917,7 +1912,7 @@ frequent itemsets found in the database were also found in the sample.
 > sum(match > 0)/length(itemsets)
 \end{Sinput}
 \begin{Soutput}
-[1] 0.9827353
+[1] 0.8764387
 \end{Soutput}
 \end{Schunk}
 
@@ -1933,14 +1928,13 @@ were infrequent in the database give:
 \end{Sinput}
 \begin{Soutput}
    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-0.05004 0.05041 0.05094 0.05097 0.05133 0.05409 
+0.05004 0.05127 0.05271 0.05308 0.05454 0.06060 
 \end{Soutput}
 \begin{Sinput}
 > summary(quality(itemsetsSample[-match])$support)
 \end{Sinput}
 \begin{Soutput}
    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-0.05005 0.05038 0.05092 0.05118 0.05185 0.05375 
 \end{Soutput}
 \end{Schunk}
 
@@ -1959,7 +1953,7 @@ sample, we can calculate accuracy from the the error rate.
 \end{Sinput}
 \begin{Soutput}
    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
- 0.8973  0.9706  0.9840  0.9798  0.9928  1.0000 
+ 0.8208  0.8901  0.9116  0.9088  0.9268  0.9986 
 \end{Soutput}
 \end{Schunk}
 

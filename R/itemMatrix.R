@@ -1,14 +1,14 @@
-###*******************************************************
-### Class itemMatrix
-###
-### Basic class for sparse representation of sets or collections
-### of itemsets
+##*******************************************************
+## Class itemMatrix
+##
+## Basic class for sparse representation of sets or collections
+## of itemsets
 
 
-###*******************************************************
-### dimensions
+##*******************************************************
+## dimensions
 
-### dimensions of the binary matrix
+## dimensions of the binary matrix
 setMethod("dim", signature(x = "itemMatrix"),
     function(x) {
     rev(dim(x@data))
@@ -19,20 +19,20 @@ setMethod("nitems", signature(x = "itemMatrix"),
     dim(x)[2]
     })
 
-### number of elements (rows)
+## number of elements (rows)
 setMethod("length", signature(x = "itemMatrix"),
     function(x) {
     dim(x)[1]
     })
 
-### produces a vector of element sizes
+## produces a vector of element sizes
 setMethod("size", signature(x = "itemMatrix"),
     function(x) {
     diff(x@data@p)
     })
 
-###*******************************************************
-### Coercions
+##*******************************************************
+## Coercions
 
 setAs("matrix", "itemMatrix",
   function(from) {
@@ -43,7 +43,7 @@ setAs("matrix", "itemMatrix",
 
     i <- t(as(from, "dgCMatrix"))
 
-    ### make it binary
+    ## make it binary
     i@x <- rep.int(1,length(i@x))
 
     new("itemMatrix", data = i,  
@@ -53,7 +53,7 @@ setAs("matrix", "itemMatrix",
 setAs("itemMatrix", "matrix",
     function(from) {
     m <- as(t(from@data), "matrix")
-    ### save half the memory
+    ## save half the memory
     storage.mode(m) <- "integer"
     dimnames(m)[[2]] <- from@itemInfo[["labels"]]
     return(m)
@@ -75,12 +75,12 @@ setMethod("LIST", signature(from = "itemMatrix"),
 
 setAs("list","itemMatrix", function(from, to) {
     
-    ### get names
+    ## get names
     from_names <- unique(unlist(from))
     data <- c(1:(length(from_names)))
     names(data) <- from_names 
 
-    ### code items from 1..numItems and kill doubles
+    ## code items from 1..numItems and kill doubles
     l <- lapply(from, function(x) unique(as.vector(data[as.character(x)])))
 
     new("itemMatrix", data= as(l, "dgCMatrix"), 
@@ -95,46 +95,46 @@ setAs("itemMatrix", "dgCMatrix",
     return(tmp)
     })
  
-###*******************************************************
-### find elements which contain some items (as 
-###        labels or in itemInfo)
-### note this is not what we would expect for %in% in R!
-### but match below works the R-way
+##*******************************************************
+## find elements which contain some items (as 
+##        labels or in itemInfo)
+## note this is not what we would expect for %in% in R!
+## but match below works the R-way
 setMethod("%in%", signature(x = "itemMatrix"),
   function(x, table) {
     pos <- match(table, itemInfo(x)$labels)
-    return(diff(x@data[pos]@p)==1)
+    return(diff(x[,pos]@data@p)==1)
   })
 
-### partial in  
+## partial in  
 setMethod("%pin%", signature(x = "itemMatrix"),
   function(x, table) {
     pos <- grep(table, as.character(itemInfo(x)$labels))
-    return(diff(x@data[pos]@p)==1)
+    return(diff(x[,pos]@data@p)==1)
   })
 
 
-###*******************************************************
-### subset, combine, duplicated, unique 
+##*******************************************************
+## subset, combine, duplicated, unique 
 
-### remember the sparce matrix is tored in transposed form (i <-> j)
+## remember the sparce matrix is tored in transposed form (i <-> j)
 setMethod("[", signature(x = "itemMatrix", i = "ANY", j = "ANY", drop = "ANY"),
     function(x, i, j, ..., drop) {
     
     if(missing(j) && missing(i)) return(x)
     
-    ### drop is always false
+    ## drop is always false
     drop <- FALSE 
     
     y <- x
     
-    ### i and j are reversed!
+    ## i and j are reversed!
     if (missing(j)) {
         y@data <- x@data[ ,i, ..., drop=drop]
         return(y)
     }
         
-    ### transalate item labels to column numbers, if j is character
+    ## transalate item labels to column numbers, if j is character
     if (is.character(j)) 
     # fixed thanks to a bug report by Seth Falcon (06/31/01)
     j <- itemLabels(x) %in% j
@@ -145,7 +145,7 @@ setMethod("[", signature(x = "itemMatrix", i = "ANY", j = "ANY", drop = "ANY"),
         return(y)
     }
 
-    ### so we have i and j
+    ## so we have i and j
     y@data <- x@data[j, i, ..., drop=drop]
     y@itemInfo <- x@itemInfo[j, , drop=FALSE]
     return(y)
@@ -184,7 +184,7 @@ setMethod("c", signature(x = "itemMatrix"),
      i <- x@data@i
      p <- x@data@p
      x <- x@data@x
-     ### pmax makes sure that the column counts for the added elements
+     ## pmax makes sure that the column counts for the added elements
      # start with the number of the previous element
      pmax <- p
     
@@ -224,8 +224,8 @@ setMethod("match", signature(x = "itemMatrix", table = "itemMatrix"),
 
 
 
-###*******************************************************
-### accessors
+##*******************************************************
+## accessors
 
 setMethod("labels", signature(object = "itemMatrix"),
     function(object, itemSep = ", ", setStart = "{", setEnd = "}", ...) {
@@ -257,8 +257,8 @@ setReplaceMethod("itemInfo", signature(object = "itemMatrix"),
     })
 
 
-###*******************************************************
-### show/summary + plots
+##*******************************************************
+## show/summary + plots
 
 setMethod("show", signature(object = "itemMatrix"),
     function(object) {

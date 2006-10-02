@@ -6,10 +6,9 @@
 %
 \title{Find Maximal Itemsets}
 \description{
-Provides the generic function
-and the S4 method \code{is.maximal} for finding maximal itemsets.
-An itemset is maximal in a set if no proper superset of the itemset is
-contained in the set (Zaki et al., 1997).
+Provides the generic function and the S4 method \code{is.maximal} for finding
+maximal itemsets.  An itemset is maximal in a set if no proper superset of the
+itemset is contained in the set (Zaki et al., 1997).
 }
 \usage{
 is.maximal(x,\ldots)
@@ -18,7 +17,7 @@ is.maximal(x,\ldots)
 \arguments{
   \item{x}{ the set of itemsets or an itemMatrix object. }
   \item{\ldots}{ further arguments.}
-  \item{blocksize}{ \code{"numeric"}; how much memory can is.maximal
+  \item{blocksize}{a numeric value indicating how much memory can is.maximal
     use for large \code{x} (approx. in MB). This is only a
     crude approximation for 32-bit machines (64-bit architectures need
     double the blocksize in memory).}
@@ -37,6 +36,9 @@ for each element in \code{x} if it is a maximal itemset.
 \code{\link{itemsets-class}}
 }
 \references{
-Mohammed J. Zaki, Srinivasan Parthasarathy, Mitsunori Ogihara, and Wei Li (1997): New algorithms for fast discovery of association rules. Technical Report 651, Computer Science Department, University of Rochester, Rochester, NY 14627.
+Mohammed J. Zaki, Srinivasan Parthasarathy, Mitsunori Ogihara, and Wei Li
+(1997). \emph{New algorithms for fast discovery of association rules}.
+Technical Report 651, Computer Science Department, University of Rochester,
+Rochester, NY 14627.
 }
 \keyword{models}

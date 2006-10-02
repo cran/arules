@@ -14,8 +14,8 @@ apriori(data, parameter = NULL, appearance = NULL, control = NULL)
   \item{data}{object of class
     \code{\linkS4class{transactions}} or any data structure
     which can be coerced into
-    \code{\linkS4class{transactions}} (e.g., binary
-    \code{matrix}, \code{data.frame}).}
+    \code{\linkS4class{transactions}} (e.g., a binary
+    matrix or data.frame).}
   \item{parameter}{object of class
     \code{\linkS4class{APparameter}} or named list.
     The default behavior is to mine rules with support 0.1, confidence
@@ -37,18 +37,18 @@ apriori(data, parameter = NULL, appearance = NULL, control = NULL)
   \code{\linkS4class{itemsets}}.
 }
 \references{
-  R. Agrawal, T. Imielinski, and A. Swami (1993). Mining association rules
+  R. Agrawal, T. Imielinski, and A. Swami (1993) Mining association rules
   between sets of items in large databases. In \emph{Proceedings of the
     ACM SIGMOD International Conference on Management of Data}, pages
-  207-216,
+  207--216,
   Washington D.C.
   
-  Christian Borgelt and Rudolf Kruse (2002). Induction of Association Rules:
+  Christian Borgelt and Rudolf Kruse (2002) Induction of Association Rules:
   Apriori Implementation. \emph{15th Conference on Computational
     Statistics} (COMPSTAT 2002, Berlin, Germany) Physica Verlag,
   Heidelberg, Germany.
 
-  Christian Borgelt (2003). Efficient Implementations of Apriori and
+  Christian Borgelt (2003) Efficient Implementations of Apriori and
   Eclat.  \emph{Workshop of Frequent Item Set Mining Implementations}
   (FIMI 2003, Melbourne, FL, USA).
 }

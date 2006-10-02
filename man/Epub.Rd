@@ -10,7 +10,7 @@
 }
 \usage{data(Epub)}
 \format{
-  Object of class \code{\link[arules:transactions-class]{transactions}} with
+  Object of class \code{\linkS4class{transactions}} with
   3975 transactions and 465 items.
   Item labels are document IDs of the from \code{"doc\_11d"}.
   Session IDs and time stamps for transactions are also provided.
