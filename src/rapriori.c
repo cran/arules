@@ -720,11 +720,10 @@ void createRules(ISTREE *istree, ARparameter *param) {
 }
 
 
-SEXP returnObject(RULESET *set, SEXP dim, ARparameter *param)
+SEXP returnObject(RULESET *set, SEXP dim, ARparameter *param, SEXP itemInfo)
 {
 	int i, len, j, k;
-	SEXP ans, tp, q, dmns, names, items, lhs, rhs, trans, tidLists;
-	
+	SEXP ans, class, tp, qual, q, rownames, names, items, lhs, rhs, trans, tidLists;
 	
 	if (param->target <= TT_CLSET)	{
 		ans = PROTECT(NEW_OBJECT(MAKE_CLASS("itemsets")));
@@ -746,10 +745,9 @@ SEXP returnObject(RULESET *set, SEXP dim, ARparameter *param)
 	
 	/* set items/lhs */
 	items = PROTECT(NEW_OBJECT(MAKE_CLASS("dgCMatrix")));
-	tp = PROTECT(allocVector(STRSXP, set->ttotal));
+	tp = PROTECT(allocVector(INTSXP, set->ttotal));
 	for (i = 0; i < set->ttotal; i++) 
-	  SET_STRING_ELT(tp, i, mkChar(set->body[i]));
-	tp = AS_INTEGER(tp);
+	  INTEGER(tp)[i] = atoi(set->body[i]);
 	SET_SLOT(items, install("i"), tp);
 	UNPROTECT(1);
 	
@@ -776,7 +774,7 @@ SEXP returnObject(RULESET *set, SEXP dim, ARparameter *param)
 	lhs = PROTECT(NEW_OBJECT(MAKE_CLASS("itemMatrix")));
         /* SET_SLOT(lhs , install("data"), duplicate(items)); */
         SET_SLOT(lhs , install("data"), items);
-        UNPROTECT(1);
+        SET_SLOT(lhs , install("itemInfo"), itemInfo);
 
 	if (param->target == TT_RULE) 
 	  /* SET_SLOT(ans, install("lhs"), duplicate(lhs)); */
@@ -784,17 +782,16 @@ SEXP returnObject(RULESET *set, SEXP dim, ARparameter *param)
 	else	
 	  /* SET_SLOT(ans, install("items"), duplicate(lhs)); */
 	  SET_SLOT(ans, install("items"), lhs);
-	UNPROTECT(1);
-
+        UNPROTECT(1);
 	
 	/* set rhs for rules */	
 	if (param->target == TT_RULE) {
 	  items = PROTECT(NEW_OBJECT(MAKE_CLASS("dgCMatrix")));
 	  
-	  tp = PROTECT(allocVector(STRSXP, set->rnb));
+	  tp = PROTECT(allocVector(INTSXP, set->rnb));
 	  for (i = 0; i < set->rnb; i++) 
-	    SET_STRING_ELT(tp, i, mkChar(set->head[i]));
-	  SET_SLOT(items, install("i"), AS_INTEGER(tp));
+	    INTEGER(tp)[i] = atoi(set->head[i]);
+	  SET_SLOT(items, install("i"), tp);
 	  UNPROTECT(1);
 	  
 	  tp = PROTECT(allocVector(INTSXP, set->rnb+1));
@@ -820,53 +817,57 @@ SEXP returnObject(RULESET *set, SEXP dim, ARparameter *param)
 	  /* SET_SLOT(rhs, install("data"), duplicate(items));
 	  SET_SLOT(ans, install("rhs"), duplicate(rhs)); */
 	  SET_SLOT(rhs, install("data"), items);
+	  SET_SLOT(rhs, install("itemInfo"), itemInfo);
 	  SET_SLOT(ans, install("rhs"), rhs);
 	  UNPROTECT(2);
 	}
 	
 	/* set quality measures */
-	q = PROTECT(allocMatrix(REALSXP, set->rnb, len));
+	qual = PROTECT(allocVector(VECSXP, len));
 	names = PROTECT(allocVector(STRSXP, len));
 
 	k=0;
+	SET_VECTOR_ELT(qual, k, q = allocVector(REALSXP, set->rnb));
 	for (i = 0; i < set->rnb; i++) REAL(q)[i] = set->supp[i];
-	j = set->rnb;
 	SET_STRING_ELT(names, k++, mkChar("support"));
 
 	if (param->target > TT_CLSET) {
-	  for (i = 0; i < set->rnb; i++) REAL(q)[i+j] = set->conf[i];
-	  j += set->rnb;
+	  SET_VECTOR_ELT(qual, k, q = allocVector(REALSXP, set->rnb));
+	  for (i = 0; i < set->rnb; i++) REAL(q)[i] = set->conf[i];
 	  SET_STRING_ELT(names, k++, mkChar("confidence"));
 	}
 
 	if (param->aval) {
-	  for (i = 0; i < set->rnb; i++) REAL(q)[i+j] = set->aval[i];
-	  j += set->rnb;
+	  SET_VECTOR_ELT(qual, k, q = allocVector(REALSXP, set->rnb));
+	  for (i = 0; i < set->rnb; i++) REAL(q)[i] = set->aval[i];
 	  SET_STRING_ELT(names, k++, mkChar(aremtypes[param->arem]));
 	}
 	if (param->ext) {
-	  for (i = 0; i < set->rnb; i++) REAL(q)[i+j] = set->ext[i];
-	  j += set->rnb;
+	  SET_VECTOR_ELT(qual, k, q = allocVector(REALSXP, set->rnb));
+	  for (i = 0; i < set->rnb; i++) REAL(q)[i] = set->ext[i];
 	  if (param->target == TT_RULE) 
 	    SET_STRING_ELT(names, k++, mkChar("lhs.support"));
 	  else SET_STRING_ELT(names, k++, mkChar("transIdenticalToItemsets"));
 	}
 	
-	
 	if (param->target == TT_RULE) {
-	for (i = 0; i < set->rnb; i++) REAL(q)[i+j] = set->lift[i];
-		j += set->rnb;
-		SET_STRING_ELT(names, k++, mkChar("lift"));
+	  SET_VECTOR_ELT(qual, k, q = allocVector(REALSXP, set->rnb));
+	  for (i = 0; i < set->rnb; i++) REAL(q)[i] = set->lift[i];
+	  SET_STRING_ELT(names, k++, mkChar("lift"));
 	}	
-	
-	
-	dmns = PROTECT(allocVector(VECSXP, 2));
-	SET_VECTOR_ELT(dmns, 1, names);
-	setAttrib(q, R_DimNamesSymbol, dmns);
-  	/* SET_SLOT(ans, install("quality"), duplicate(q)); */
-  	SET_SLOT(ans, install("quality"), q);
-	UNPROTECT(3);
-	
+
+	rownames = PROTECT(allocVector(INTSXP, set->rnb));
+	for (i = 0; i < set->rnb; i++) INTEGER(rownames)[i] = i+1;
+	setAttrib(qual, install("row.names"), rownames);
+	UNPROTECT(1);
+ 	setAttrib(qual, install("names"), names);
+	UNPROTECT(1);
+ 	PROTECT(class = allocVector(STRSXP, 1)); 
+ 	SET_STRING_ELT(class, 0, mkChar("data.frame")); 
+ 	classgets(qual, class); 
+  	SET_SLOT(ans, install("quality"), qual);
+ 	UNPROTECT(3); 
+
 	
    	/* set transaction ID list (possible with eclat) */	
 	if (param->trans) {
@@ -907,7 +908,7 @@ SEXP returnObject(RULESET *set, SEXP dim, ARparameter *param)
 	return ans;
 }
 
-SEXP rapriori(SEXP x, SEXP y, SEXP dim, SEXP parms, SEXP control, SEXP app)
+SEXP rapriori(SEXP x, SEXP y, SEXP dim, SEXP parms, SEXP control, SEXP app, SEXP itemInfo)
 {
  	ARparameter param;
  	int k;
@@ -1046,7 +1047,7 @@ SEXP rapriori(SEXP x, SEXP y, SEXP dim, SEXP parms, SEXP control, SEXP app)
 	
 	t = clock();
 	if (param.verbose) Rprintf("creating S4 object  ... ");
-	ans = PROTECT(returnObject(ruleset, dim, &param));
+	ans = PROTECT(returnObject(ruleset, dim, &param, itemInfo));
 	cleanup();
         UNPROTECT(1);
 	
@@ -1054,7 +1055,6 @@ SEXP rapriori(SEXP x, SEXP y, SEXP dim, SEXP parms, SEXP control, SEXP app)
 		Rprintf("done ");
 		Rprintf("[%.2fs].\n", SEC_SINCE(t));
 	}
-	
 	return ans;
 }
 

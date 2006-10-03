@@ -24,9 +24,8 @@
 \title{Methods for "[": Extraction or Subsetting in Package 'arules'}
 \description{
   Methods for \code{"["}, i.e., extraction or subsetting in package
-  \pkg{arules}. Subsetting can be done by integers containing 
-  column/row numbers,
-  vectors of logicals or strings containing parts of item labels.
+  \pkg{arules}. Subsetting can be done by integers containing column/row
+  numbers, vectors of logicals or strings containing parts of item labels.
 
 }
 \section{Methods}{

@@ -1,35 +1,4 @@
-###*******************************************************
-### Function [ for dgCMatrix
-###
-### additional subset functionality for dgCMatrix
-
-
-### subset method directly on a dgCMatrix
-setMethod("[", signature(x = "dgCMatrix", i = "ANY", j = "ANY", drop = "ANY"), 
-   function(x, i, j, ..., drop) {
-   
-   ### drop argument is not implemented, we dont need it
-   if(missing(j) && missing(i)) return(x)
-
-   ### this should take care of everything "[" can do:
-   ### neg. indices, 0, etc.
-   if (missing(i)) i <- 1 : x@Dim[1]
-   else i <- c(1 : x@Dim[1])[i]
-
-   if (missing(j)) j <- 1 : x@Dim[2]
-   else j <- c(1 : x@Dim[2])[j]
-
-   z <- .Call("dgC_subset", x, i, j, PACKAGE = "arules")
-
-   ### set dimnames
-   rownames(z) <- rownames(x)[i]
-   colnames(z) <- colnames(x)[j]
-   ### other elements missing (e.g., factor)?
-
-   z
-   })
-
-### to list
+## to list
 setAs("dgCMatrix", "list",
   function(from) {
     data <- from
@@ -47,7 +16,7 @@ setAs("dgCMatrix", "list",
 setAs("list", "dgCMatrix",
     function(from) {
 
-        ### create a dgCMatrix
+        ## create a dgCMatrix
         i <- as.integer(unlist(from) - 1) # dgCMatrix starts with indes 0 
         p <- as.integer(c(0, cumsum(sapply(from, length))))
 

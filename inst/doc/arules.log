@@ -1,4 +1,4 @@
-This is pdfeTeXk, Version 3.14159-1.10b-2.1 (Web2C 7.4.5) (format=pdflatex 2006.1.12)  7 AUG 2006 11:40
+This is pdfeTeXk, Version 3.14159-1.10b-2.1 (Web2C 7.4.5) (format=pdflatex 2006.1.12)  3 OCT 2006 13:20
 entering extended mode
  file:line:error style messages enabled.
 **\nonstopmode \input /home/staff/hahsler/baR/trunk/R/arules/inst/doc/arules.te
@@ -129,7 +129,7 @@ Package: ifthen 2001/05/26 v1.1c Standard LaTeX ifthen package (DPC)
 (/usr/share/texmf/tex/latex/multirow/multirow.sty
 \bigstrutjot=\dimen108
 )
-(/usr/share/R/share/texmf/Sweave.sty
+(/srv/ai/localhost/home/staff/hahsler/R/R-beta/share/texmf/Sweave.sty
 Package: Sweave 
 
 (/usr/share/texmf/tex/latex/fancyvrb/fancyvrb.sty
@@ -143,7 +143,7 @@ Style option: `fancyvrb' v2.7, with DG/SPQR fixes <2000/03/21> (tvz)
 \FV@StepNumber=\count98
 \FV@OutFile=\write4
 )
-(/usr/share/R/share/texmf/upquote.sty
+(/srv/ai/localhost/home/staff/hahsler/R/R-beta/share/texmf/upquote.sty
 Package: upquote 2003/08/11 v1.1 Covington's upright-quote modification to verb
 atim and verb
 
@@ -265,13 +265,14 @@ File: t1aett.fd 1997/11/16 Font definitions for T1/aett.
 ) [3 <./arules-classes.pdf>] [4] [5] [6]
 LaTeX Font Info:    Try loading font information for TS1+aer on input line 653.
 
- (/usr/share/R/share/texmf/ts1aer.fd
+
+(/srv/ai/localhost/home/staff/hahsler/R/R-beta/share/texmf/ts1aer.fd
 File: ts1aer.fd 
 )
 LaTeX Font Info:    Font shape `TS1/aer/m/n' in size <10> not available
 (Font)              Font shape `TS1/cmr/m/n' tried instead on input line 653.
- [7] [8]
-[9] [10] [11] [12] <arules-epub.pdf, id=373, 433.62pt x 433.62pt>
+ [7]
+[8] [9] [10] [11] [12] <arules-epub.pdf, id=373, 433.62pt x 433.62pt>
 File: arules-epub.pdf Graphic file (type pdf)
 
 <use arules-epub.pdf> [13] [14 <./arules-epub.pdf>] [15] [16]
@@ -289,7 +290,7 @@ File: arules-035.pdf Graphic file (type pdf)
 [27]) [28] (./arules.aux) ) 
 Here is how much of TeX's memory you used:
  4220 strings out of 94960
- 58987 string characters out of 1182470
+ 59218 string characters out of 1182470
  106041 words of memory out of 1000001
  7136 multiletter control sequences out of 10000+50000
  57614 words of font info for 113 fonts, out of 500000 for 1000
@@ -317,4 +318,4 @@ onts/type1/bluesky/cm/cmss9.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmr9.p
 fb></usr/share/texmf/fonts/type1/bluesky/cm/cmbx9.pfb></usr/share/texmf/fonts/t
 ype1/bluesky/cm/cmr12.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmb10.pfb></
 usr/share/texmf/fonts/type1/bluesky/cm/cmr17.pfb>
-Output written on arules.pdf (28 pages, 387658 bytes).
+Output written on arules.pdf (28 pages, 387761 bytes).

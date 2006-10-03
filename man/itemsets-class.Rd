@@ -21,12 +21,11 @@
 
 \title{Class ``itemsets'' --- A Set of Itemsets}
 \description{
-  The \code{itemsets} class represents a set of itemsets and the
-  associated quality measures. 
+  The \code{itemsets} class represents a set of itemsets and the associated
+  quality measures. 
   
-  Note that the class can also contain
-  a collection of itemsets with duplicated elements. Duplicated elements can be
-  removed with \code{\link{unique}}.
+  Note that the class can also contain a collection of itemsets with duplicated
+  elements. Duplicated elements can be removed with \code{\link{unique}}.
 }
 \section{Objects from the Class}{
   Objects are the result of calling the functions \code{\link{apriori}}
@@ -40,7 +39,7 @@
     \item{\code{items}:}{object of class
       \code{\linkS4class{itemMatrix}} containing the 
       items in the set of itemsets}
-    \item{\code{quality}:}{object of class \code{"data.frame"}
+    \item{\code{quality}:}{a data.frame
       containing the quality measures for the itemsets}
     \item{\code{tidLists}:}{object of class
       \code{\linkS4class{tidLists}} containing the IDs of the

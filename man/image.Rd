@@ -5,14 +5,12 @@
 \alias{image,tidLists-method}
 \title{Visual Inspection of Binary Incidence Matrices}
 \description{
-  Provides the S4 methods \code{image} to
-  generate level plots to
-  visually inspect 
-  binary incidence matrices, i.e.,
-  objects based on \code{\linkS4class{itemMatrix}}
-  (e.g., transactions, tidLists, items in itemsets or rhs/lhs in rules).
-  These plots can be used to identify problems in a data set 
-  (e.g., recording problems with some transactions containing all items).
+  Provides the S4 methods \code{image} to generate level plots to visually
+  inspect binary incidence matrices, i.e., objects based on
+  \code{\linkS4class{itemMatrix}} (e.g., transactions, tidLists, items in
+  itemsets or rhs/lhs in rules).  These plots can be used to identify problems
+  in a data set (e.g., recording problems with some transactions containing all
+  items).
 }
 \usage{
 %image(x, \dots)

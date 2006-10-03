@@ -83,6 +83,6 @@ void              rs_delete (RULESET *ruleset);
   Functions
 ----------------------------------------------------------------------*/
 
-SEXP              rapriori(SEXP x, SEXP y, SEXP dim, SEXP parms, SEXP control, SEXP app);
+SEXP              rapriori(SEXP x, SEXP y, SEXP dim, SEXP parms, SEXP control, SEXP app, SEXP itemInfo);
 int               is_read_in(ITEMSET *iset, INPUT *in);
-SEXP              returnObject(RULESET *set, SEXP dim, ARparameter* param);
+SEXP              returnObject(RULESET *set, SEXP dim, ARparameter* param, SEXP itemInfo);

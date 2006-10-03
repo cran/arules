@@ -37,19 +37,19 @@
 }
 \section{Slots}{
   \describe{
-    \item{\code{set}:}{\code{"integer"};
-      indicates how many items are specified for each of lhs, rhs,
+    \item{\code{set}:}{an integer scalar
+      indicating how many items are specified for each of lhs, rhs,
       items, both and none}
-    \item{\code{items}:}{\code{"integer"};
+    \item{\code{items}:}{an integer
       vector of item IDs (column numbers)}
-    \item{\code{labels}:}{\code{"character"};
+    \item{\code{labels}:}{a character
       vector of item labels}
-    \item{\code{default}:}{\code{"character"};
-      indicates the value for default appearance}
+    \item{\code{default}:}{a character scalar
+      indicating the value for default appearance}
     }
 }
 \references{
-  Christian Borgelt (2004).
+  Christian Borgelt (2004)
   \emph{Apriori --- Finding Association Rules/Hyperedges with the Apriori
     Algorithm}.
   \url{http://fuzzy.cs.uni-magdeburg.de/~borgelt/apriori.html}

@@ -6,9 +6,9 @@
 \description{
   Provides the generic function \code{itemFrequency} and S4 methods to get the
   frequency/support for all single items in an objects based on
-  \code{\linkS4class{itemMatrix}}.  For example, it is used to get the
-  single item support from an object of class
-  \code{\linkS4class{transactions}} without mining.
+  \code{\linkS4class{itemMatrix}}.  For example, it is used to get the single
+  item support from an object of class \code{\linkS4class{transactions}}
+  without mining.
 }
 \usage{
 itemFrequency(x, ...)
@@ -25,9 +25,8 @@ itemFrequency(x, ...)
 }
 \value{
   \code{itemFrequency} returns a named numeric vector.  Each element is the
-  frequency/support of the corresponding item in object \code{x}. 
-  The items appear in the vector in the same
-  order as in the binary matrix in \code{x}.
+  frequency/support of the corresponding item in object \code{x}.  The items
+  appear in the vector in the same order as in the binary matrix in \code{x}.
 }
 \seealso{ 
   \code{\link{itemFrequencyPlot}},

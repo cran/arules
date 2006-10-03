@@ -36,7 +36,7 @@
  }
 \section{Slots}{
   \describe{
-    \item{\code{transactionInfo}:}{object of class \code{"data.frame"}
+    \item{\code{transactionInfo}:}{a data.frame
       with vectors of the same length as the number of
       transactions.  Each vector can hold additional information, e.g.,
       store transaction IDs or user IDs for each transaction.}
@@ -44,7 +44,7 @@
       \code{\link[Matrix:dgCMatrix-class]{dgCMatrix}} to store the
       binary incidence matrix (see
       \code{\linkS4class{itemMatrix}} class)} 
-    \item{\code{itemInfo}:}{object of class \code{"data.frame"} to store 
+    \item{\code{itemInfo}:}{a data.frame to store 
       item labels (see \code{\linkS4class{itemMatrix}} class)}
   }
 }
@@ -81,8 +81,8 @@
 %      plots an image of the transactions for visual inspection}
     \item{coerce}{\code{signature(from = "transactions", to = "data.frame")}; 
       represents the set of transactions in a printable form 
-      as a \code{data.frame}. 
-      Note that this does not reverse coercion from \code{data.frame} 
+      as a data.frame. 
+      Note that this does not reverse coercion from data.frame 
       to \code{transactions}.}
     \item{labels}{\code{signature(x = "transactions")};
       returns the labels (item labels and transaction IDs) 
@@ -115,7 +115,7 @@ a_list <- list(
       c("a","b"),
       c("a","b","d"),
       c("c","e"),
-      c("a","b","d","e"),
+      c("a","b","d","e")
       )
 
 # set transaction names

@@ -4,10 +4,9 @@
 \alias{sample,associations-method}
 \title{Random Samples and Permutations}
 \description{
-  Provides the generic function \code{sample} and the S4 method to 
-  take a  sample of the specified size from the elements of \code{x}
-  using either with or without replacement.
-   \code{sample} can be used to sample from a set of  
+  Provides the generic function \code{sample} and the S4 method to take a
+  sample of the specified size from the elements of \code{x} using either with
+  or without replacement.  \code{sample} can be used to sample from a set of
   transactions or associations.
 }
 \usage{
@@ -19,7 +18,7 @@ sample(x, size, replace = FALSE, prob = NULL)
   \item{x}{ object to be sampled from 
   	(a set of \code{associations} or \code{transactions}).}
   \item{size}{ sample size.}
-  \item{replace}{ \code{"logical"}; sample with replacement? }
+  \item{replace}{a logical. Sample with replacement? }
   \item{prob}{  a numeric vector of probability weights. }
 }
 \value{

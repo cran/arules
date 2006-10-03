@@ -3,17 +3,16 @@
 \alias{random.patterns}
 \title{Simulate a Random Transaction Data Set}
 \description{
-  Simulates a random
-  \code{\linkS4class{transactions}} object
-  using different methods.
+  Simulates a random \code{\linkS4class{transactions}} object using different
+  methods.
 }
 \usage{
 random.transactions(nItems, nTrans, method = "independent", \ldots,
 	verbose = FALSE)
 }
 \arguments{
-  \item{nItems}{\code{"integer"}; number of items.}
-  \item{nTrans}{\code{"integer"}; number of transactions.}
+  \item{nItems}{an integer. Number of items.}
+  \item{nTrans}{an integer. Number of transactions.}
   \item{method}{name of the simulation method used (default: 
     all items occur independently).}  
   \item{\ldots}{further arguments used for the specific simulation 
@@ -86,10 +85,16 @@ random.transactions(nItems, nTrans, method = "independent", \ldots,
   \code{\link{transactions-class}}.
 }
 \references{
-Michael Hahsler, Kurt Hornik, and Thomas Reutterer (2006). Implications of probabilistic data modeling for mining association rules. In M. Spiliopoulou, R. Kruse, C. Borgelt, A. Nuernberger, and W. Gaul, editors, From Data and Information Analysis to Knowledge Engineering, 
-Studies in Classification, Data Analysis, and Knowledge Organization, pages 598-605. Springer-Verlag.
+Michael Hahsler, Kurt Hornik, and Thomas Reutterer (2006). Implications of
+probabilistic data modeling for mining association rules. In M. Spiliopoulou,
+R. Kruse, C. Borgelt, A. Nuernberger, and W. Gaul, editors, \emph{From Data and
+Information Analysis to Knowledge Engineering, Studies in Classification, Data
+Analysis, and Knowledge Organization}, pages 598--605. Springer-Verlag.
 
-Rakesh Agrawal and Ramakrishnan Srikant (1994). Fast algorithms for mining association rules in large databases. In Jorge B. Bocca, Matthias Jarke, and Carlo Zaniolo, editors,  Proc. 20th Int. Conf. Very Large Data Bases, VLDB, pages 487-499, Santiago, Chile.
+Rakesh Agrawal and Ramakrishnan Srikant (1994). Fast algorithms for mining
+association rules in large databases. In Jorge B. Bocca, Matthias Jarke, and
+Carlo Zaniolo, editors,  \emph{Proceedings of the 20th International Conference
+on Very Large Data Bases, VLDB}, pages 487--499, Santiago, Chile.
 }
 \examples{
  # generate random 1000 transactions for 200 items with 

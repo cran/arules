@@ -1,12 +1,12 @@
-###*******************************************************
-### Function apriori
-###
-### Call the APRIORI algorithm
+##*******************************************************
+## Function apriori
+##
+## Call the APRIORI algorithm
 
 
 apriori <-  function(data, parameter = NULL, appearance = NULL, control = NULL)
   {
-    ### prepare data
+    ## prepare data
     data <- as(data, "transactions")
     items <- data@data
     if (is(appearance, "list")) appearance <- 
@@ -16,7 +16,7 @@ apriori <-  function(data, parameter = NULL, appearance = NULL, control = NULL)
     parameter <- as(parameter, "APparameter")
    
     if(control@verbose) {
-      ### print parameter
+      ## print parameter
       cat("\nparameter specification:\n")
       print(parameter)
       cat("\nalgorithmic control:\n")
@@ -24,36 +24,26 @@ apriori <-  function(data, parameter = NULL, appearance = NULL, control = NULL)
       cat("\n")
     }
     
-    ### call apriori
+    ## call apriori
     result <- .Call("rapriori", 
-                 ## transactions
-                 items@p,
-                 items@i,
-                 items@Dim,
-		 ## parameter
-		 parameter, control,
-                 appearance,
-                 PACKAGE = "arules")                  
-
+        ## transactions
+        items@p,
+        items@i,
+        items@Dim,
+        ## parameter
+        parameter, control,
+        appearance,
+        data@itemInfo,
+        PACKAGE = "arules")                  
 
     if (is(result, "rules"))  { 
-      ### validate sparse Matrix (this takes care of sorting vector i)
+      ## validate sparse Matrix (this takes care of sorting vector i)
       validObject(result@lhs@data)
       validObject(result@rhs@data)
-    
-      result@lhs@itemInfo <- data@itemInfo
-      result@rhs@itemInfo <- data@itemInfo
     } else {
-      ### validate sparse Matrix (this takes care of sorting vector i)
-      validObject(result@items@data)
-      
-      result@items@itemInfo <- data@itemInfo
-    }
-    
-    ### make quality a data.frame
-    #result@quality <- as(result@quality, "data.frame")
-    result@quality <- as.data.frame(result@quality)
-     
+      ## validate sparse Matrix (this takes care of sorting vector i)
+      validObject(result@items@data)     
+    }   
     result
   }
 

@@ -6,12 +6,9 @@
 \description{
   The \code{AdultUCI} data set contains the questionnaire data of the
   \dQuote{Adult} database (originally called the \dQuote{Census Income}
-  Database) formatted as a \code{data.frame}.
-  The \code{Adult} data set contains the data 
-  already prepared and coerced to 
-  \code{\linkS4class{transactions}}
-  for use with
-  \pkg{arules}.  
+  Database) formatted as a data.frame.  The \code{Adult} data set contains the
+  data already prepared and coerced to \code{\linkS4class{transactions}} for
+  use with \pkg{arules}.  
 }
 \usage{
 data("Adult")
@@ -109,17 +106,14 @@ data("AdultUCI")
   \url{http://www.ics.uci.edu/~mlearn/MLRepository.html}
 }
 \references{
-  Blake, C.L. \& Merz, C.J. (1998).
+  Blake, C.L. \& Merz, C.J. (1998):
   UCI Repository of Machine Learning Databases.
   Irvine, CA: University of California, Department of Information and
   Computer Science.
 
-  The data set was first cited in 
-  Kohavi, R. (1996).
-  Scaling Up the Accuracy of Naive-Bayes Classifiers: a Decision-Tree
-  Hybrid.
-  \emph{Proceedings of the Second International Conference on Knowledge
-    Discovery and Data Mining}. 
+  The data set was first cited in Kohavi, R. (1996):  Scaling Up the Accuracy
+  of Naive-Bayes Classifiers: a Decision-Tree Hybrid.  \emph{Proceedings of the
+  Second International Conference on Knowledge Discovery and Data Mining}. 
 }
 \examples{
 data("AdultUCI")

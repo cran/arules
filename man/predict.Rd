@@ -3,26 +3,24 @@
 \alias{predict,itemMatrix-method}
 \title{Model Predictions}
 \description{
-  Provides the S4 method
-  \code{predict} for \code{itemMatrix} (e.g., transactions). 
-  Predicts the membership (nearest neighbor) of new data to 
-  clusters represented by
-  medoids or labeled examples.
+  Provides the S4 method \code{predict} for \code{itemMatrix} (e.g.,
+  transactions).  Predicts the membership (nearest neighbor) of new data to
+  clusters represented by medoids or labeled examples.
   }
 \usage{
 \S4method{predict}{itemMatrix}(object, newdata, labels = NULL, blocksize = 200,\ldots)
 }
 \arguments{
-    \item{object}{ medoids (no labels needed) or examples (labels needed). }
+  \item{object}{ medoids (no labels needed) or examples (labels needed). }
   \item{newdata}{ objects to predict labels for. }
-  \item{labels}{ \code{"numeric"}; labels for the examples in \code{object}. }
-  \item{blocksize}{ \code{"numeric"}; how much memory can predict 
-    use for big \code{x} and/or \code{y} (approx. in MB). This is only a 
-    crude approximation for 32-bit machines (64-bit architectures need 
-    double the blocksize in memory) and using the 
-    default Jaccard method for dissimilarity calculation. 
-    In general, reducing \code{blocksize} will decrease 
-    the memory usage but will increase the run-time.}
+  \item{labels}{an integer vector containing the labels for the examples in
+    \code{object}. }
+  \item{blocksize}{a numeric scalar indicating how much memory predict can
+    use for big \code{x} and/or \code{y} (approx. in MB). This is only a crude
+    approximation for 32-bit machines (64-bit architectures need double the
+    blocksize in memory) and using the default Jaccard method for dissimilarity
+    calculation.  In general, reducing \code{blocksize} will decrease the
+    memory usage but will increase the run-time.}
   \item{\ldots}{ further arguments passed on to \code{dissimilarity}. E.g., 
     \code{method}.}
 }

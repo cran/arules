@@ -7,11 +7,9 @@
   Dissimilarity Computation
 }
 \description{
-  Provides the generic function \code{dissimilarity} and the S4 methods
-  to compute and returns distances 
-  for binary data in a \code{matrix},
-  \code{\linkS4class{transactions}} or 
-  \code{\linkS4class{associations}}.
+  Provides the generic function \code{dissimilarity} and the S4 methods to
+  compute and returns distances for binary data in a \code{matrix},
+  \code{\linkS4class{transactions}} or \code{\linkS4class{associations}}.
 }
 \usage{
 dissimilarity(x, y = NULL, method = NULL, args = NULL, \ldots)
@@ -51,7 +49,7 @@ dissimilarity(x, y = NULL, method = NULL, args = NULL, \ldots)
      \code{"affinity"} for associations, the affinities between the items in 
      the transactions are needed and passed to the method as the first 
      element in \code{args}.}
-   \item{which}{a string indicating if the dissimilarity should be 
+   \item{which}{a character string indicating if the dissimilarity should be 
      calculated between transavtions (default) or items (use \code{"items"}). }
    \item{\ldots}{further arguments.}
 }
@@ -92,19 +90,19 @@ d_affinity <- dissimilarity(rules, method = "affinity",
 plot(hclust(d_affinity))
 }
 \references{
-  Sneath, P. H. A. (1957). Some thoughts on bacterial classification. 
-  Journal of General Microbiology 17, pages 184-200.
+  Sneath, P. H. A. (1957) Some thoughts on bacterial classification. 
+  \emph{Journal of General Microbiology} 17, pages 184--200.
  
-  Sokal, R. R. and Michener, C. D. (1958). A statistical method for evaluating 
-  systematic relationships. University of Kansas Science Bulletin 38, 
-  pages 1409-1438.
+  Sokal, R. R. and Michener, C. D. (1958) A statistical method for evaluating 
+  systematic relationships. \emph{University of Kansas Science Bulletin} 38, 
+  pages 1409--1438.
   
-  Dice, L. R. (1945). Measures of the amount of ecologic association 
-  between species. Ecology 26, pages 297-302.
+  Dice, L. R. (1945) Measures of the amount of ecologic association 
+  between species. \emph{Ecology} 26, pages 297--302.
  
-  Charu C. Aggarwal, Cecilia Procopiuc, and Philip S. Yu. (2002).
+  Charu C. Aggarwal, Cecilia Procopiuc, and Philip S. Yu. (2002)
     Finding localized associations in market basket data.
-  IEEE Trans. on Knowledge and Data Engineering, 14(1), pages 51-62.
+    \emph{IEEE Trans. on Knowledge and Data Engineering} 14(1):51--62.
 }
 \keyword{cluster}
 \keyword{models}

@@ -257,8 +257,8 @@ if(!isGeneric("unique")) {
                function(x, incomparables = FALSE, ...) standardGeneric("unique"))
 }
 
-###***************************************************************
-### for clustering
+##***************************************************************
+## for clustering
 
 if(!isGeneric("affinity")) {
   setGeneric("affinity",
@@ -274,7 +274,7 @@ if(!isGeneric("dissimilarity")) {
 
 if(!isGeneric("predict")) {
     setGeneric("predict",
-      function(object, ...) standardGeneric("predict"))
-  }
+        function(object, ...) standardGeneric("predict"))
+}
 
 

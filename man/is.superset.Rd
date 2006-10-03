@@ -9,9 +9,9 @@
 %
 \title{Find Super and Subsets}
 \description{
-  Provides the generic functions 
-  and the S4 methods \code{is.subset} and \code{is.superset}
-  for finding super or subsets in associations and itemMatrix objects.
+  Provides the generic functions and the S4 methods \code{is.subset} and
+  \code{is.superset} for finding super or subsets in associations and
+  itemMatrix objects.
 }
 \usage{
 is.subset(x, y = NULL, proper = FALSE)
@@ -20,22 +20,19 @@ is.superset(x, y = NULL, proper = FALSE)
 \arguments{
   \item{x, y}{ associations or itemMatrix objects. If \code{y = NULL}, 
     the super or subset structure within set \code{x} is calculated.}
-  \item{proper}{\code{"logical"}; all or just proper super or subsets.}
+  \item{proper}{a logical indicating if all or just proper super or subsets.}
 }
 \details{
-looks for each element in \code{x} which 
-elements in \code{y} are supersets  or subsets. Note that the method
-can be very slow and memory intensive  
-if \code{x} and/or \code{y} contain many elements.
+looks for each element in \code{x} which elements in \code{y} are supersets  or
+subsets. Note that the method can be very slow and memory intensive  if
+\code{x} and/or \code{y} contain many elements.
 }
 \value{
-returns a 
-logical matrix with \code{length(x)} rows
-and \code{length(y)} columns. 
-Each logical row vector represents which elements in \code{y}
-are supersets (subsets) of the corresponding element in \code{x}.
-If either \code{x} or \code{y} have lenght zero, \code{NULL} is returned 
-instead of a matrix.
+returns a logical matrix with \code{length(x)} rows and \code{length(y)}
+columns.  Each logical row vector represents which elements in \code{y} are
+supersets (subsets) of the corresponding element in \code{x}.  If either
+\code{x} or \code{y} have lenght zero, \code{NULL} is returned instead of a
+matrix.
 }
 \seealso{
   \code{\link{associations-class}},

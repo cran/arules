@@ -9,13 +9,11 @@
   List Representation for Objects Based on ``itemMatrix''
 }
 \description{
-  Provides the generic function \code{LIST} and the S4 methods to create
-  a list representation from objects based on
-  \code{\linkS4class{itemMatrix}} (e.g.,
-  \code{\linkS4class{transactions}},
-  \code{\linkS4class{tidLists}}, or
-  \code{\linkS4class{itemsets}}).
-  These methods can be used for the coercion to \code{list}.
+  Provides the generic function \code{LIST} and the S4 methods to create a list
+  representation from objects based on \code{\linkS4class{itemMatrix}} (e.g.,
+  \code{\linkS4class{transactions}}, \code{\linkS4class{tidLists}}, or
+  \code{\linkS4class{itemsets}}).  These methods can be used for the coercion
+  to a list.
 }
 \usage{
 LIST(from, \dots)
@@ -29,7 +27,7 @@ LIST(from, \dots)
 \arguments{
   \item{from}{the object to be converted into a list.}
   \item{\dots}{further arguments.}
-  \item{decode}{\code{"logical"}; controlling whether the items/transactions are
+  \item{decode}{a logical controlling whether the items/transactions are
     decoded from the column numbers internally used by
     \code{\linkS4class{itemMatrix}} to the names stored in
     the object \code{from}.  The default behavior is to decode.
@@ -44,7 +42,7 @@ LIST(from, \dots)
   transaction or itemset).
 }
 \value{
-  a \code{"list"} primitive.
+  a list primitive.
 }
 \seealso{
   \code{\link{decode}},

@@ -16,8 +16,9 @@ ruleInduction(x, ...)
   \item{\dots}{ further arguments. }
   \item{transactions}{ the transaction data set used to mine 
   	the itemsets. }
-  \item{confidence}{ \code{"numeric"}; minimum confidence for the rules. }  
-  \item{verbose}{ \code{"logical"}; report progress. }  
+  \item{confidence}{a numeric value giving the minimum confidence for the
+    rules. }  
+  \item{verbose}{ a logical indicating whether to report progress. }  
 }
 \details{
   Currently, only a very simple rule induction method is implemented.

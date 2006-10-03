@@ -17,10 +17,8 @@ WRITE(x, \dots)
   \item{\dots}{further arguments passed on to \code{\link{write.table}}.}
 }
 \details{
-  \code{WRITE} 
-  first uses coercion to \code{data.frame} to obtain a printable form
-  of \code{x} and then uses \code{\link{write.table}} to write
-  the data to disk.
+  \code{WRITE} first uses coercion to data.frame to obtain a printable form of
+  \code{x} and then uses \code{\link{write.table}} to write the data to disk.
 }
 \seealso{
 \code{\link{write.table}} (in \pkg{base}),

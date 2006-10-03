@@ -5,15 +5,13 @@
 \title{Income Data Set}
 \description{
   The \code{IncomeESL} data set originates from an example in the book
-  \sQuote{The Elements of Statistical Learning} (see Section source). 
-  The data set is an extract from this survey.  It consists of 8993
-  instances (obtained from the original data set with 9409 instances, by
-  removing those observations with the annual income missing) with 14
-  demographic attributes.  The data set is a good mixture of categorical
-  and continuous variables with a lot of missing data.  This is
-  characteristic of data mining applications.
-  The \code{Income} data set contains the data
-  already prepared and coerced to
+  \sQuote{The Elements of Statistical Learning} (see Section source).  The data
+  set is an extract from this survey.  It consists of 8993 instances (obtained
+  from the original data set with 9409 instances, by removing those
+  observations with the annual income missing) with 14 demographic attributes.
+  The data set is a good mixture of categorical and continuous variables with a
+  lot of missing data.  This is characteristic of data mining applications.
+  The \code{Income} data set contains the data already prepared and coerced to
   \code{\link[arules:transactions-class]{transactions}}.
 }
 \usage{
@@ -54,7 +52,7 @@ data("IncomeESL")
   Impact Resources, Inc., Columbus, OH (1987).
 
   Obtained from the web site of the book:
-  Hastie, T., Tibshirani, R. \& Friedman, J. (2001).
+  Hastie, T., Tibshirani, R. \& Friedman, J. (2001)
   \emph{The Elements of Statistical Learning}.
   Springer-Verlag.
   (\url{http://www-stat.stanford.edu/~tibs/ElemStatLearn/};

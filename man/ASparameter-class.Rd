@@ -15,12 +15,11 @@
 \title{Classes ``ASparameter'', ``APparameter'', ``ECparameter'' ---
   Specifying the `parameter' Argument of apriori() and eclat()}
 \description{
-  The \code{ASparameter} class holds the mining parameters (e.g.,
-  minimum support) for the used mining algorithms.
-  \code{APparameter} and \code{ECparameter} directly extend
-  \code{ASparameter} with additional slots for parameters only suitable
-  for the Apriori (\code{APparameter}) or the Eclat algorithms
-  (\code{ECparameter}).
+  The \code{ASparameter} class holds the mining parameters (e.g., minimum
+  support) for the used mining algorithms.  \code{APparameter} and
+  \code{ECparameter} directly extend \code{ASparameter} with additional slots
+  for parameters only suitable for the Apriori (\code{APparameter}) or the
+  Eclat algorithms (\code{ECparameter}).
 }
 \section{Objects from the Class}{
   A suitable default parameter object will be automatically created by
@@ -34,14 +33,14 @@
 \section{Slots}{
   Common slots defined in \code{ASparameter}:
   \describe{
-    \item{\code{support}:}{\code{"numeric"};
+    \item{\code{support}:}{a numeric value for the 
       minimal support of an item set (default: \eqn{0.1})}
-    \item{\code{minlen}:}{\code{"integer"};
+    \item{\code{minlen}:}{an integer value for the
       minimal number of items per item set (default: 1)}
-    \item{\code{maxlen}:}{\code{"integer"};
+    \item{\code{maxlen}:}{an integer value for the
       maximal number of items per item set (default: 5)}
-    \item{\code{target}:}{\code{"character"};
-      indicates the type of association mined.
+    \item{\code{target}:}{a character string 
+      indicating the type of association mined.
       One of
       \itemize{
 	\item \code{"frequent itemsets"} 
@@ -52,20 +51,21 @@
 	see references for the definition of association hyperegesets)
       }
     }
-    \item{\code{ext}:}{\code{"logical"};
+    \item{\code{ext}:}{a logical indicating whether to
       produce extended information on quality measures (e.g.,
       lhs.support) (default: \code{FALSE})}
   }
 
   Additional slots for Apriori in \code{APparameter}:
   \describe{
-    \item{\code{confidence}:}{\code{"numeric"};
+    \item{\code{confidence}:}{a numeric value for the
       minimal confidence of rules/association hyperedges (default:
       \eqn{0.8})}
-    \item{\code{smax}:}{\code{"numeric"};
+    \item{\code{smax}:}{a numeric value for the
       maximal support of itemsets/rules/hyperedgesets (default: 1)}
-    \item{\code{arem}:}{\code{"character"};
-      additional rule evaluation measure (default: none) given by one of
+    \item{\code{arem}:}{a character string indicating the used
+      additional rule evaluation measure (default: \code{"none"}) given 
+        by one of
       \describe{
 	\item{\code{"none"}:}{no additional evaluation measure}
 	\item{\code{"diff"}:}{absolute confidence difference}
@@ -75,13 +75,13 @@
 	\item{\code{"chi2"}:}{normalized \eqn{\chi^2} measure}
       }
     }
-    \item{\code{aval}:}{\code{"logical"};
+    \item{\code{aval}:}{a logical indicating whether to
       return the additional rule evaluation measure selected with
       \code{arem}.}
-    \item{\code{minval}:}{\code{"numeric"};
+    \item{\code{minval}:}{a numeric value for the
       minimal value of additional evaluation measure selected with
       \code{arem} (default: \eqn{0.1})}
-    \item{\code{originalSupport}:}{\code{"logical"};
+    \item{\code{originalSupport}:}{a logical indicating whether to
       use for minimum support the original definition of the support of
       a rule (lhs and rhs) instead of lhs support.  Make sure to use
       \code{ext = TRUE} if \code{originalSupport} is set to \code{FALSE}
@@ -90,7 +90,7 @@
   
   Additional slots for Eclat in \code{ECparameter}:
   \describe{
-    \item{\code{tidLists}:}{\code{"logical"};
+    \item{\code{tidLists}:}{a logical indicating whether to
       return also a list of supporting transactions (transaction IDs)
       (default: \code{FALSE})}
   }
@@ -105,7 +105,7 @@
   }
 }
 \references{
-  Christian Borgelt (2004).
+  Christian Borgelt (2004)
   \emph{Apriori --- Finding Association Rules/Hyperedges with the Apriori
     Algorithm}.
   \url{http://fuzzy.cs.uni-magdeburg.de/~borgelt/apriori.html}

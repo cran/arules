@@ -10,19 +10,16 @@
 \alias{recode,itemMatrix-method}
 \title{Item Coding -- Handling Item Labels and Column IDs Conversions}
 \description{
-  Provides the generic functions 
-  and the S4 methods for 
-  converting item labels into column IDs used in the binary matrix 
-  representation and vice versa.
+  Provides the generic functions and the S4 methods for converting item labels
+  into column IDs used in the binary matrix representation and vice versa.
 
   \code{decode} converts from the numeric (column IDs) representation to
-  readable item labels. 
-  \code{decode} is used by \code{\link{LIST}}.
+  readable item labels.  \code{decode} is used by \code{\link{LIST}}.
 
-  \code{encode} converts from readable item labels to an itemMatrix
-  using a given coding. With this method it is possible to create 
-  several compatible \code{itemMatrix} objects (i.e., use the same
-  binary representation for items) from data. 
+  \code{encode} converts from readable item labels to an itemMatrix using a
+  given coding. With this method it is possible to create several compatible
+  \code{itemMatrix} objects (i.e., use the same binary representation for
+  items) from data. 
 
   \code{recode} recodes an \code{itemMatrix} object so its coding is compatible
   with another object.

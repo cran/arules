@@ -5,15 +5,11 @@
   Creating a Item Frequencies/Support Bar Plot
 }
 \description{
-  Provides the generic function \code{itemFrequencyPlot} and the S4 method 
-  to create an item frequency bar plot for inspecting 
-  the item frequency distribution for objects based on
-  \code{\linkS4class{itemMatrix}} (e.g.,
-  \code{\linkS4class{transactions}},
-  or items in
-  \code{\linkS4class{itemsets}}
-  and 
-  \code{\linkS4class{rules}}).
+  Provides the generic function \code{itemFrequencyPlot} and the S4 method to
+  create an item frequency bar plot for inspecting the item frequency
+  distribution for objects based on \code{\linkS4class{itemMatrix}} (e.g.,
+  \code{\linkS4class{transactions}}, or items in \code{\linkS4class{itemsets}}
+  and \code{\linkS4class{rules}}).
 }
 \usage{
 itemFrequencyPlot(x, \dots)
@@ -31,11 +27,11 @@ itemFrequencyPlot(x, \dots)
   \item{type}{ a character string indicating whether 
 	item frequencies should be displayed 
   relative of absolute.}
-  \item{support}{\code{"numeric"}; only display items which have a support of 
+  \item{support}{a numeric value. Only display items which have a support of 
     at least \code{support}. If no population is given, support is calculated 
     from \code{x} otherwise from the population. Support is interpreted relative
     or absolute according to the setting of \code{type}.}
-  \item{topN}{\code{"numeric"}; only plot the \code{topN} 
+  \item{topN}{a integer value. Only plot the \code{topN} 
     items with the highest item frequency or lift (if \code{lift = TRUE}).
     The items are plotted ordered by descending support. }
   \item{population}{ object of same class  as \code{x}; if \code{x}
@@ -43,15 +39,18 @@ itemFrequencyPlot(x, \dots)
     each item can be shown as a line in the plot.}
   \item{popCol}{plotting color for population.}
   \item{popLwd}{line width for population.}
-  \item{lift}{\code{"logical"}; plot the lift ratio between instead 
-    of frequencies. The lift ratio is gives how many times an item is 
-    more frequent in \code{x} than in \code{population}.}
-  \item{horiz}{\code{"logical"}; If \code{FALSE} (default), 
+  \item{lift}{a logical indicating whether to plot the lift ratio between
+  instead of frequencies. The lift ratio is gives how many times an item is
+  more frequent in \code{x} than in \code{population}.}
+  \item{horiz}{a logical. If \code{horiz = FALSE} (default), 
     the bars are drawn vertically. If \code{TRUE}, the bars are
     drawn horizontally.}
-  \item{names}{\code{"logical"}; should the names (bar labels) displayed?}
-  \item{cex.names}{\code{"numeric"}; expansion factor for axis names (bar labels).}
-  \item{xlab}{a character string with the label for the x axis (use an empty string to force no label).}
+  \item{names}{a logical indicating if the names (bar labels) should be 
+    displayed?}
+  \item{cex.names}{a numeric value for the expansion factor for axis names (bar
+    labels).}
+  \item{xlab}{a character string with the label for the x axis 
+    (use an empty string to force no label).}
   \item{ylab}{a character string with the label for the y axis (see xlab).}
   \item{mai}{a numerical vector giving the plots margin sizes in inches (see `? par').}
   }
