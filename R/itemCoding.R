@@ -3,10 +3,8 @@ setMethod("decode", signature(x = "numeric"),
     function(x, itemLabels) itemLabels[x])
 
 setMethod("decode", signature(x = "list"),
-    function(x, itemLabels) {
-        lapply(x, function(r) itemLabels[r])     
-    })
-
+    function(x, itemLabels) lapply(x, function(r) itemLabels[r])    
+    )
 
 ## labels -> IDs
 setMethod("encode", signature(x = "character"),
@@ -42,13 +40,13 @@ setMethod("encode", signature(x = "list"),
         if(itemMatrix == FALSE) return(ids)
 
         ## create an itemMatrix
-        dgC <- as(ids, "dgCMatrix")
+        ngC <- as(ids, "ngCMatrix")
 
         ## fix dim, if necessary (i.e., if items with high IDs
             ##   do not occur in ids)
-        dgC@Dim <- c(length(itemLabels), dgC@Dim[2])    
+        ngC@Dim <- c(length(itemLabels), ngC@Dim[2])    
 
-        new("itemMatrix", data = dgC, 
+        new("itemMatrix", data = ngC, 
             itemInfo = data.frame(labels = itemLabels))
     })
 

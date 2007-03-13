@@ -4,14 +4,11 @@
 
 setMethod("crossTable", signature(x = "itemMatrix"),
     function(x, ...) {
-        #crossprod(as(x, "matrix"))
+        m <- as(tcrossprod(as(x, "dgCMatrix")), "matrix")
 
-        # much faster
-        m <- as(tcrossprod(as(x, "dgCMatrix")),"matrix")
-
-        # dgCMatrix somehow does not handle dimnames well!
+        ## FIXME:
+        ## dsCMatrix -> matrix in Matrix somehow does not handle dimnames!
         dimnames(m) <- list(itemLabels(x), itemLabels(x))
 
         m
-
     })

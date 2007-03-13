@@ -23,7 +23,7 @@ setMethod("interestMeasure",  signature(x = "itemsets"),
 .basicItemsetMeasures <- function(x, method, transactions = NULL) {
 
     if(is.null(quality(x)$support)) stop("The following measure in the quality slot of x is missing: support.")
-    num_items <- dim(items(x))[2]
+    num_items <- nitems(items(x))
 
     if(is.null(transactions)) {
         ## get the support of all singleton itemsets from the itemsets

@@ -26,7 +26,7 @@ size(x)
   \code{size} returns a numeric vector of length \code{length(x)}.  Each
   element is the size of the corresponding element (row in the matrix) in
   object \code{x}. For rules, \code{size} returns the sum of the number of
-  elements in the RHS and the RHS.
+  elements in the LHS and the RHS.
 }
 \seealso{ 
   \code{\link{itemMatrix-class}},

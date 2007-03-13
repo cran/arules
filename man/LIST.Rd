@@ -3,8 +3,8 @@
 \alias{LIST,itemMatrix-method}
 \alias{LIST,transactions-method}
 \alias{LIST,tidLists-method}
-\alias{coerce,dgCMatrix,list-method}
-\alias{coerce,list,dgCMatrix-method}
+\alias{coerce,ngCMatrix,list-method}
+\alias{coerce,list,ngCMatrix-method}
 \title{
   List Representation for Objects Based on ``itemMatrix''
 }

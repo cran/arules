@@ -1,5 +1,5 @@
 ## to list
-setAs("dgCMatrix", "list",
+setAs("ngCMatrix", "list",
   function(from) {
     data <- from
     
@@ -13,15 +13,14 @@ setAs("dgCMatrix", "list",
     return(z)
   })
 
-setAs("list", "dgCMatrix",
+setAs("list", "ngCMatrix",
     function(from) {
 
-        ## create a dgCMatrix
-        i <- as.integer(unlist(from) - 1) # dgCMatrix starts with indes 0 
+        ## create a ngCMatrix
+        i <- as.integer(unlist(from) - 1) # ngCMatrix starts with index 0 
         p <- as.integer(c(0, cumsum(sapply(from, length))))
 
-        new("dgCMatrix", i = i, p = p, 
-            x = rep.int(1, times = length(i)),
+        new("ngCMatrix", i = i, p = p, 
             Dim = as.integer(c(max(i)+1, length(from))))
 
     })

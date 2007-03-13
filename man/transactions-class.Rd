@@ -41,7 +41,7 @@
       transactions.  Each vector can hold additional information, e.g.,
       store transaction IDs or user IDs for each transaction.}
     \item{\code{data}:}{object of class
-      \code{\link[Matrix:dgCMatrix-class]{dgCMatrix}} to store the
+      \code{\link[Matrix:ngCMatrix-class]{ngCMatrix}} to store the
       binary incidence matrix (see
       \code{\linkS4class{itemMatrix}} class)} 
     \item{\code{itemInfo}:}{a data.frame to store 

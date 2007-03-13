@@ -24,7 +24,7 @@ setReplaceMethod("quality", signature(x = "associations"),
 ## sort + unique
 ## since R 2.4.0 sort is a generic
 setMethod("sort", signature(x = "associations"),
-    function (x, decreasing = FALSE, na.last = NA, by = "support") {
+    function (x, decreasing = TRUE, na.last = NA, by = "support") {
         if(length(x) == 0) return(x)
         x[order(x@quality[[by]], na.last = na.last, decreasing = decreasing)]
     })

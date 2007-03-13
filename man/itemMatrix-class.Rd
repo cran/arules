@@ -4,16 +4,13 @@
 \alias{summary.itemMatrix-class}
 \alias{show,summary.itemMatrix-method}
 \alias{print,summary.itemMatrix-method}
-%\alias{[,itemMatrix-method}
-%\alias{LIST,itemMatrix-method}
-%\alias{LIST}
 \alias{coerce,matrix,itemMatrix-method}
 \alias{coerce,list,itemMatrix-method}
 \alias{coerce,itemMatrix,matrix-method}
 \alias{coerce,itemMatrix,dgCMatrix-method}
+\alias{coerce,itemMatrix,ngCMatrix-method}
 \alias{coerce,itemMatrix,list-method}
 \alias{dim,itemMatrix-method}
-%\alias{image,itemMatrix-method}
 \alias{\%in\%,itemMatrix-method}
 \alias{\%pin\%}
 \alias{\%pin\%,itemMatrix-method}
@@ -29,12 +26,8 @@
 \alias{itemInfo}
 \alias{nitems}
 \alias{nitems,itemMatrix-method}
-%\alias{length,itemMatrix-method}
 \alias{show,itemMatrix-method}
 \alias{summary,itemMatrix-method}
-%%% some additional stuff for dgCMatrix
-%\alias{[}
-%\alias{[,dgCMatrix-method}
 
 \title{Class ``itemMatrix'' --- Sparse Binary Incidence Matrix to Represent Sets
   of Items}
@@ -52,12 +45,12 @@
 \section{Slots}{
   \describe{
     \item{\code{data}:}{Object of class
-      \code{\link[Matrix:dgCMatrix-class]{dgCMatrix}} 
+      \code{\link[Matrix:ngCMatrix-class]{ngCMatrix}} 
       (from package \pkg{Matrix}) which stores 
       item occurrences in sparse representation.  Note that the 
-      \code{dgCMatrix} is column-oriented and \code{itemMatrix} is
+      \code{ngCMatrix} is column-oriented and \code{itemMatrix} is
       row-oriented with each row representing an element (an itemset, a
-      transaction, etc.).  As a result, the \code{dgCMatrix} in this
+      transaction, etc.).  As a result, the \code{ngCMatrix} in this
       slot is always a transposed version of the binary incidence matrix
       in \code{itemMatrix}.
     }
@@ -86,6 +79,9 @@
     \item{coerce}{\code{signature(from = "list", to = "itemMatrix")}};
       \code{from} is a list of vectors. Each vector contains one 
       set/transaction/\ldots.
+    \item{coerce}{\code{signature(from = "itemMatrix", to = "ngCMatrix")}};
+      access the sparse matrix representation. Note, the \code{ngCMatrix} 
+      contains a transposed from of the itemMatrix.
     \item{coerce}{\code{signature(from = "itemMatrix", to = "dgCMatrix")}};
       access the sparse matrix representation. Note, the \code{dgCMatrix} 
       contains a transposed from of the itemMatrix.
@@ -120,10 +116,9 @@
       the representation of the elements: 
       \code{itemSep}, 
       \code{setStart} and 
-      \code{setEnd}. 
-      }
+      \code{setEnd}.}
     \item{nitems}{\code{signature(x = "itemMatrix")}; returns the number 
-      of items (number if columns) in the itemMatrix.}
+      of items (number in columns) in the itemMatrix.}
     \item{show}{\code{signature(object = "itemMatrix")}}
     \item{summary}{\code{signature(object = "itemMatrix")}}
   }
@@ -144,7 +139,8 @@
   \code{\link{unique}},
   \code{\link{[-methods}},
   \code{\link{image}},
-  \code{\link[Matrix]{dgCMatrix-class}} (from \pkg{Matrix}),
+  \code{\link[Matrix]{ngCMatrix-class}} 
+  (from \pkg{Matrix}),
   \code{\link{transactions-class}},
   \code{\link{itemsets-class}},
   \code{\link{rules-class}}
@@ -164,8 +160,8 @@ as(i[1:5], "list")
 ## Get first 5 elements (rows) of the itemMatrix as matrix.
 as(i[1:5], "matrix")
 
-## Get first 5 elements (rows) of the itemMatrix as sparse dgCMatrix.
-##  Warning: for efficiency reasons, the dgCMatrix you get is transposed!
-as(i[1:5], "dgCMatrix")
+## Get first 5 elements (rows) of the itemMatrix as sparse ngCMatrix.
+##  Warning: for efficiency reasons, the ngCMatrix you get is transposed!
+as(i[1:5], "ngCMatrix")
 }
 \keyword{classes}

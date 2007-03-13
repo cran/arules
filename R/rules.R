@@ -74,11 +74,8 @@ setReplaceMethod("rhs", signature(x = "rules"),
 ## get the union of rhs and lhs
 setMethod("items", signature(x = "rules"),
     function(x) {
-        tmp <- lhs(x)
-        lhs<- as(as(tmp, "dgCMatrix"), "dgTMatrix")
-        rhs<- as(as(rhs(x), "dgCMatrix"), "dgTMatrix")
-        ## should be impossible to sum up to more than 1
-        tmp@data <- as(lhs + rhs, "dgCMatrix")
+        tmp <- x@lhs
+        tmp@data <- as(x@lhs@data + x@rhs@data, "ngCMatrix")
         tmp
     })
 
@@ -109,7 +106,6 @@ setMethod("[", signature(x = "rules", i = "ANY", j = "ANY", drop = "ANY"),
 
 setMethod("c", signature(x = "rules"),
     function(x, ..., recursive = FALSE) {
-
         args <- list(...)  
         if(length(args) == 0) return(x)
 
@@ -168,7 +164,8 @@ setMethod("summary", signature(object = "rules"),
             length = length(object),
             lengths = table(size(object@lhs)+size(object@rhs)),
             lengthSummary = summary(size(object@lhs)+size(object@rhs)),
-            quality = summary(object@quality))
+            quality = if(length(object@quality) > 0) summary(object@quality)
+            else summary(NULL))
     })
 
 setMethod("show", signature(object = "summary.rules"), 

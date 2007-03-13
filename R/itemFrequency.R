@@ -9,11 +9,15 @@ setMethod("itemFrequency", signature(x = "itemMatrix"),
     function(x, type = c("relative", "absolute")) {
         type <- match.arg(type)
 
-        supports <- tabulate(x@data@i+1, nbins = x@data@Dim[1])
+        ## we could also use rowSums
+        ##supports <- tabulate(x@data@i + as.integer(1), nbins = x@data@Dim[1])
+        
+        supports <- .Call("R_rowSums_ngCMatrix", x@data)
+        
         names(supports) <- itemLabels(x)
 
         switch(type,
-            relative =  supports/dim(x)[1],
+            relative =  supports/length(x),
             absolute =  supports)
     })
 

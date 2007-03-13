@@ -27,7 +27,7 @@
 \begin{document}
 %% ------------------------------------------------------------------
 %% ------------------------------------------------------------------
-\title{Introduction to \pkg{arules} --- Mining 
+\title{Introduction to \pkg{arules} -- Mining 
     Association Rules and Frequent Item Sets}
 \author{Michael Hahsler and Bettina Gr{\"u}n and Kurt Hornik}
 \maketitle
@@ -239,7 +239,7 @@ new class that extends \class{associations}.
 
 Items in \class{associations} and \class{transactions} are implemented
 by the \class{itemMatrix} class which provides a facade for the sparse
-matrix implementation \class{dgCMatrix} from the \proglang{R} package
+matrix implementation \class{ngCMatrix} from the \proglang{R} package
 \pkg{Matrix}~\citep{arules:Bates+Maechler:2005}.
 
 To control the behavior of the mining algorithms, the two classes
@@ -330,30 +330,22 @@ supermarket transaction) only contains a small number of items compared
 to the total number of available items, the binary incidence matrix will
 in general be very sparse with many items and a very large number of
 rows.  A natural representation for such data is a sparse matrix format.
-For our implementation we chose the \class{dgCMatrix} class defined in
-package~\pkg{Matrix}.  The \class{dgCMatrix} is a compressed, sparse,
-column-oriented matrix which contains the indices of the non-zero rows,
-the pointers to the initial indices of elements in each column and the
-non-zero elements of the matrix.  Since package~\pkg{Matrix} does not
-provide efficient subset selection functionality which directly works on
-the \class{dgCMatrix} data structure, we implemented a suitable function
-in \proglang{C} and interfaced it as the subset selection method
-(\code{[}).  Despite the column orientation of the \class{dgCMatrix}, it
-is more convenient to work with incidence matrices which are
-row-oriented.  This makes the most important manipulation, selecting a
-subset of transactions from a data set for mining, more comfortable and
-efficient.  Therefore, we implemented the class \class{itemMatrix}
-providing a row-oriented facade to the \class{dgCMatrix} which stores a
-transposed incidence matrix\footnote{Note that the developers of
-  package~\pkg{Matrix} recently started adding support for a sparse
-  row-oriented format and for sparse logical matrices.  The classes are
-  defined, but the available functionality currently is rather minimal.
-  Once all required functionality is implemented, \pkg{arules} will
-  switch the internal representation to sparse row-oriented logical
-  matrices.}.  At this level also the constraint that the incidence
-matrix is binary (and not real valued as the \class{dgCMatrix}) is
-enforced.  In sparse representation the following information needs to
-be stored for the collection of itemsets in
+For our implementation we chose the \class{ngCMatrix} class defined in
+package~\pkg{Matrix}.  The \class{ngCMatrix} is a compressed, sparse, logical,
+column-oriented matrix which contains the indices of the \code{TRUE} rows and
+the pointers to the initial indices of elements in each column of the matrix.
+Despite the column orientation of the \class{ngCMatrix}, it is more convenient
+to work with incidence matrices which are row-oriented.  This makes the most
+important manipulation, selecting a subset of transactions from a data set for
+mining, more comfortable and efficient.  Therefore, we implemented the class
+\class{itemMatrix} providing a row-oriented facade to the \class{ngCMatrix}
+which stores a transposed incidence matrix\footnote{Note that the developers of
+package~\pkg{Matrix} contains some support for a sparse row-oriented format,
+but the available functionality currently is rather minimal.  Once all required
+functionality is implemented, \pkg{arules} will switch the internal
+representation to sparse row-oriented logical matrices.}.  
+In sparse representation the following
+information needs to be stored for the collection of itemsets in
 Figure~\ref{fig:itemsetMatrix}: A vector of indices of the non-zero
 elements (row-wise starting with the first row) $1, 2, 2, 4, 1, 2, 3, 3$
 and the pointers $1, 3, 5, 8$ where each row starts in the index vector.
@@ -362,18 +354,18 @@ one in the index vector and ends with element 2 (since with element 3
 already the next row starts).  The first two elements of the index
 vector represent the items in the first row which are $i_1$ and $i_2$ or
 milk and bread, respectively.  The two vectors are stored in the
-\class{dgCMatrix}. Note that indices for the \class{dgCMatrix} start
+\class{ngCMatrix}. Note that indices for the \class{ngCMatrix} start
 with zero rather than with one and thus actually the vectors $0, 1, 1,
 3, 0, 3, 3$ and $0, 3, 4, 7$ are stored.  However, the data structure of
-the \class{dgCMatrix} class is not intended to be directly accessed by
+the \class{ngCMatrix} class is not intended to be directly accessed by
 the end user of \pkg{arules}. The interfaces of \class{itemMatrix} can
 be used without knowledge of how the internal representation of the data
-works.  However, if necessary, the \class{dgCMatrix} can be directly
+works.  However, if necessary, the \class{ngCMatrix} can be directly
 accessed by developers to add functionality to \pkg{arules} (e.g., to
 develop new types of associations or interest measures or to efficiently
 compute a distance matrix between itemsets for clustering).  In this
-case, the \class{dgCMatrix} should be accessed using the coercion
-mechanism from \class{itemMatrix} to \class{dgCMatrix} via \func{as}.
+case, the \class{ngCMatrix} should be accessed using the coercion
+mechanism from \class{itemMatrix} to \class{ngCMatrix} via \func{as}.
 
 In addition to the sparse matrix, \class{itemMatrix} stores item labels
 (e.g., names of the items) and handles the necessary mapping between the
@@ -421,27 +413,23 @@ To get the actual number of items in the itemsets stored in the
 number of items (ones) for each element in the set (row sum in the
 matrix).  Obtaining the sizes from the sparse representations is a very
 efficient operation, since it can be calculated directly from the vector
-of column pointers in the \class{dgCMatrix}.  For a purchase incidence
+of column pointers in the \class{ngCMatrix}.  For a purchase incidence
 matrix, \func{size} will produce a vector as long as the number of
 transactions in the matrix with each element of the vector containing
 the number of items in the corresponding transaction.  This information
 can be used, e.g., to select or filter unusually long or short
 transactions.
 
-\func{itemFrequency} calculates the frequency for each 
-item in an \class{itemMatrix}. Conceptually, the item frequencies
-are the column sums of the binary matrix. Technically, 
-column sums can be implemented
-for sparse representation efficiently by just
-tabulating the vector of row numbers of the non-zero elements in
-the \class{dgCMatrix}.
-Item frequencies can be used for many purposes. 
-For example, they are needed to compute interest measures.
-\func{itemFrequency} is also used by \func{itemFrequencyPlot} 
-to produce a bar plot of item count frequencies or support. 
-Such a plot gives a quick overview of a set of itemsets 
-and shows which are the most important 
-items in terms of occurrence frequency.
+\func{itemFrequency} calculates the frequency for each item in an
+\class{itemMatrix}. Conceptually, the item frequencies are the column sums of
+the binary matrix. Technically, column sums can be implemented for sparse
+representation efficiently by just tabulating the vector of row numbers of the
+non-zero elements in the \class{ngCMatrix}.  Item frequencies can be used for
+many purposes.  For example, they are needed to compute interest measures.
+\func{itemFrequency} is also used by \func{itemFrequencyPlot} to produce a bar
+plot of item count frequencies or support.  Such a plot gives a quick overview
+of a set of itemsets and shows which are the most important items in terms of
+occurrence frequency.
 
 
 Coercion from and to \class{matrix} and \class{list} primitives is
@@ -797,17 +785,19 @@ If only the support information for a single or a few itemsets is needed,
 we might not want to mine the database for all frequent itemsets. 
 We also do not know in advance how high (or low) to set the minimum support to
 still get the support information for the itemsets in question.
-
 For this problem, \pkg{arules} contains \func{support}
 which determines the support for a set of given sets of items
-(as an \class{itemMatrix}) by means of transaction ID set 
-intersection (using \class{tidLists}).
-Transaction ID set intersection is used by several fast mining algorithms 
-(e.g., by Eclat~\citep{arules:Zaki+Parthasarathy+Ogihara+Li:1997}). 
-The support of an itemset is determined by intersecting
-the transaction ID sets of its subsets. In the simplest case 
-the transaction IDs for all items in an itemset are intersected.
-The support count is then the size of the intersection set.
+(as an \class{itemMatrix}).
+
+For counting, we use a prefix tree~\citep{arules:Knuth:1997} to organize the
+counters. The used prefix tree is similar to the itemset tree described
+by~\cite{arules:Borgelt+Kruse:2002}. However, we do not generate the tree
+level-wise, but we first generate a prefix tree which only contains the nodes
+necessary to hold the counters for all itemsets which need to be counted.
+Using the nodes in this tree only, we count the itemsets for each
+transaction recursively. After counting, the support for each itemset is
+contained in the node with the prefix equal to the itemset. The exact
+procedure is described in~\cite{arules:Hahsler+Buchta+Hornik:2007}.
 
 In addition to determining the support of a few itemsets without mining all
 frequent itemsets, \func{support} is also useful for finding 
@@ -838,7 +828,6 @@ Apriori is used to return only itemsets or Eclat or some other algorithm
 is used to mine itemsets, the data structure needed for rule induction
 is no longer available for computing rule confidence.
 
-
 If rules need to be induced from an arbitrary set of itemsets, support
 values required to calculate confidence are typically missing.  For
 example, if all available information is an itemset containing five
@@ -849,32 +838,28 @@ database. Finally, to induce rules efficiently for a given set of
 itemsets, we also have to store support values in a suitable data
 structure which allows fast look-ups for calculating rule confidence.
 
-Function~\func{ruleInduction} provided in \pkg{arules} reuses the
-counting mechanism, the data structure and the rule induction engine of
-the \proglang{C} implementation of Apriori to induce rules for a given
+Function~\func{ruleInduction} provided in \pkg{arules} 
+uses a prefix tree to induce rules for a given
 confidence from an arbitrary set of itemsets $\set{X}$ in the following
 way:
 
 \begin{enumerate}
- \item Reduce the database to only the items which occur in $\set{X}$,
- \item determine the lowest support of an itemset in $\set{X}$,
- \item reuse the implementation of Apriori to mine the set of all rules
-  $\set{R}$ from the reduced database using the given confidence and the
-  lowest itemset support found above,
- \item remove the rules from $\set{R}$ which can not be generated from
-  the itemsets in $\set{X}$.
+    \item Count  the support values for each itemset $X \in \set{X}$ and the
+        subsets $\{X \setminus \{x\}: x \in X\}$ needed for rule generation
+        in a single pass over the database
+        and store them in a suitable data structure.
+    \item Populate set $\set{R}$ by selectively generating only rules for the
+        itemsets in $\set{X}$ using the support information
+        from the data structure created in step 1.
 \end{enumerate}
 
-Note that in the rule filtering step the set of items in each mined rule
-in $\set{R}$ has to be matched against the items in each itemset in
-$\set{X}$.  This procedure can take a considerable amount of time,
-especially, if set $\set{X}$ contains many disjoint itemsets.  In this
-case a large number of rules containing items from different itemsets in
-$\set{X}$ will be generated and have to be filtered.  However, if only a
-small number of distinct items occurs in $\set{X}$, \func{ruleInduction}
-is reasonably fast.
 
-%\subsection{Other interest measures}
+Efficient support counting is done as described in Section~\ref{sec:counting}
+above. After counting, all necessary support counts are contained in the prefix
+tree. We can retrieve the needed support values and generating the rules is
+straight forward. The exact procedure is described
+in~\cite{arules:Hahsler+Buchta+Hornik:2007}.
+
 
 \subsection{Sampling from transactions\label{sec:sample}}
 
@@ -1011,7 +996,7 @@ For rules the following measures are implemented:
 \begin{itemize}
 \item Chi square measure~\citep{arules:Liu+Hsu+Ma:1999}
 \item Conviction~\citep{arules:Brin+Motwani+Ullman+Tsur:1997} 
-\item Hyper-lift and hyper-confidence~\citep{arules:Hahsler+Hornik+Reutterer:2005} 
+\item Hyper-lift and hyper-confidence~\citep{arules:Hahsler+Hornik:2007} 
 \item Leverage~\citep{arules:Piatetsky-Shapiro:1991} 
 \item Improvement~\citep{arules:Bayardo+Agrawal+Gunopulos:2000} 
 \item Several measures from \cite{arules:Tan+Kumar+Srivastava2004} 
@@ -1040,8 +1025,7 @@ efficiently calculate a dissimilarity matrix and apply a clustering algorithm,
 to clusters, \func{predict} implements the nearest neighbor approach for
 predicting memberships for new data.
 
-
-
+A small example can be found in~\cite{arules:Hahsler+Hornik:2007b}.
 
 \section{Examples\label{sec:examples}}
 
@@ -1486,10 +1470,10 @@ algorithmic control:
 apriori - find association rules with the apriori algorithm
 version 4.21 (2004.05.09)        (c) 1996-2004   Christian Borgelt
 set item appearances ...[0 item(s)] done [0.00s].
-set transactions ...[115 item(s), 48842 transaction(s)] done [0.09s].
-sorting and recoding items ... [67 item(s)] done [0.02s].
-creating transaction tree ... done [0.09s].
-checking subsets of size 1 2 3 4 5 done [0.72s].
+set transactions ...[115 item(s), 48842 transaction(s)] done [0.10s].
+sorting and recoding items ... [67 item(s)] done [0.01s].
+creating transaction tree ... done [0.10s].
+checking subsets of size 1 2 3 4 5 done [0.68s].
 writing ... [80215 rule(s)] done [0.03s].
 creating S4 object  ... done [0.06s].
 \end{Soutput}
@@ -1854,7 +1838,7 @@ and compare the system time (in seconds) used for mining.
 > time
 \end{Sinput}
 \begin{Soutput}
-[1] 0.526 0.012 0.543 0.000 0.000
+[1] 0.560 0.000 0.559 0.000 0.000
 \end{Soutput}
 \begin{Sinput}
 > timeSample <- system.time(itemsetsSample <- eclat(AdultSample, 
@@ -1862,7 +1846,7 @@ and compare the system time (in seconds) used for mining.
 > timeSample
 \end{Sinput}
 \begin{Soutput}
-[1] 0.119 0.000 0.120 0.000 0.000
+[1] 0.124 0.000 0.120 0.000 0.000
 \end{Soutput}
 \end{Schunk}
 
@@ -1877,7 +1861,7 @@ factor of:
 > time[1]/timeSample[1]
 \end{Sinput}
 \begin{Soutput}
-[1] 4.420168
+[1] 4.516129
 \end{Soutput}
 \end{Schunk}
 
@@ -1897,7 +1881,7 @@ set of 5908 itemsets
 > itemsetsSample
 \end{Sinput}
 \begin{Soutput}
-set of 5178 itemsets 
+set of 5192 itemsets 
 \end{Soutput}
 \end{Schunk}
 
@@ -1912,7 +1896,7 @@ frequent itemsets found in the database were also found in the sample.
 > sum(match > 0)/length(itemsets)
 \end{Sinput}
 \begin{Soutput}
-[1] 0.8764387
+[1] 0.8788084
 \end{Soutput}
 \end{Schunk}
 
@@ -1928,7 +1912,7 @@ were infrequent in the database give:
 \end{Sinput}
 \begin{Soutput}
    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-0.05004 0.05127 0.05271 0.05308 0.05454 0.06060 
+0.05004 0.05126 0.05268 0.05302 0.05455 0.05954 
 \end{Soutput}
 \begin{Sinput}
 > summary(quality(itemsetsSample[-match])$support)
@@ -1953,7 +1937,7 @@ sample, we can calculate accuracy from the the error rate.
 \end{Sinput}
 \begin{Soutput}
    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
- 0.8208  0.8901  0.9116  0.9088  0.9268  0.9986 
+ 0.8069  0.8923  0.9079  0.9087  0.9244  0.9965 
 \end{Soutput}
 \end{Schunk}
 

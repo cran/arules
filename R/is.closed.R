@@ -11,15 +11,26 @@ setMethod("is.closed", signature(x = "itemsets"),
         ## exists no super set of X with the same support count as X
 
         support <- quality(x)$support
-        isclosed <- logical(length(x))
+        if(is.null(support)) stop(sQuote("x"), 
+            " does not contain support information")
+        
+        ## since R_pnclosed only supports abs. support counts
+        size <- attr(quality(x),"size.data")
+        if (!is.null(size)) 
+            isclosed <- .Call("R_pnclosed", x@items@data, 
+                as.integer(support * size), FALSE)
+        else {
+            cat("legacy approach can take a while ...\n")
+            
+            isclosed <- logical(length(x))
 
-        ## start with the smallest items
-        for(i in 1:length(x)) {
-            supersets <- is.subset(x[i], x, proper = TRUE)
-            suppressWarnings(if(support[i] > max(support[supersets])) 
-                isclosed[i] <- TRUE)
+            ## start with the smallest items
+            for(i in 1:length(x)) {
+                supersets <- is.subset(x[i], x, proper = TRUE)
+                suppressWarnings(if(support[i] > max(support[supersets])) 
+                    isclosed[i] <- TRUE)
+            }
         }
-
         return(isclosed)
     })
 

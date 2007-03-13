@@ -13,7 +13,7 @@
 }
 \usage{
 itemFrequencyPlot(x, \dots)
-\S4method{itemFrequencyPlot}{itemMatrix}(x, type = "relative", 
+\S4method{itemFrequencyPlot}{itemMatrix}(x, type = c("relative", "absolute"), 
     support = NULL, topN = NULL,
     population = NULL, popCol = "black", popLwd = 1,
     lift = FALSE, horiz = FALSE, 

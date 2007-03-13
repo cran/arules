@@ -7,6 +7,7 @@
 \alias{coerce,tidLists,matrix-method}
 \alias{coerce,tidLists,list-method}
 \alias{coerce,tidLists,dgCMatrix-method}
+\alias{coerce,tidLists,ngCMatrix-method}
 \alias{coerce,tidLists,transactions-method}
 \alias{coerce,transactions,tidLists-method}
 \alias{coerce,tidLists,itemMatrix-method}
@@ -28,7 +29,7 @@
   Transaction ID lists contains a set of lists.  Each list is associated with
   an item/itemset and stores the IDs of the transactions which support the
   item/itemset.  \code{tidLists} uses the class
-  \code{\link[Matrix:dgCMatrix-class]{dgCMatrix}} to efficiently store the
+  \code{\link[Matrix:ngCMatrix-class]{ngCMatrix}} to efficiently store the
   transaction ID lists as a sparse matrix.  Each column in the matrix
   represents one transaction ID list.
   
@@ -54,7 +55,7 @@
 \section{Slots}{
   \describe{
     \item{\code{data}:}{object of class
-      \code{\link[Matrix:dgCMatrix-class]{dgCMatrix}}.}
+      \code{\link[Matrix:ngCMatrix-class]{ngCMatrix}}.}
      \item{\code{itemInfo}:}{always an
        empty data.frame for transaction ID lists.}
      \item{\code{transactionInfo}:}{a data.frame
@@ -68,13 +69,13 @@
  % \item{[}{\code{signature(x = "tidLists")};
  %   extracts parts (transaction ID vectors) from the tidLists. 
  %   The argument selects the item or itemset.}
-  \item{coerce}{\code{signature(from = "tidLists", to = "dgCMatrix")};
+  \item{coerce}{\code{signature(from = "tidLists", to = "ngCMatrix")};
       access the sparse matrix representation. In the
-      \code{dgCMatrix} each column represents the transaction IDs
+      \code{ngCMatrix} each column represents the transaction IDs
       for one item/itemset.}
+  \item{coerce}{\code{signature(from = "tidLists", to = "dgCMatrix")}}
   \item{coerce}{\code{signature(from = "tidLists", to = "list")}}
   \item{coerce}{\code{signature(from = "tidLists", to = "matrix")}}
-  \item{coerce}{\code{signature(from = "tidLists", to = "dgCMatrix")}}
   \item{coerce}{\code{signature(from = "tidLists", to = "itemMatrix")}}
   \item{coerce}{\code{signature(from = "itemMatrix", to = "tidLists")}}
   \item{coerce}{\code{signature(from = "tidLists", to = "transactions")}}
@@ -82,17 +83,17 @@
   \item{dim}{\code{signature(x = "tidLists")};
       returns the dimensions of the sparse Matrix representing the 
       \code{tidLists}.}
+  \item{itemInfo}{ returns the slot \code{itemInfo}.}
+  \item{itemLabels}{\code{signature(object = "tidLists")};
+    returns the item labels as a character vector.}
   \item{labels}{\code{signature(x = "transactions")};
     returns the labels (item labels and transaction IDs)
     for the incidence matrix as a list of two vectors named \code{items}
     and \code{transactionID}.}
-   \item{itemInfo}{ returns the slot \code{itemInfo}.}
-  \item{itemLabels}{\code{signature(object = "tidLists")};
-    returns the item labels as a character vector.}
-  \item{transactionInfo}{\code{signature(x = "transactions")}:
-    returns the slot \code{transactionInfo}.}
   \item{show}{\code{signature(object = "tidLists")}}
   \item{summary}{\code{signature(object = "tidLists")}}
+  \item{transactionInfo}{\code{signature(x = "transactions")}:
+    returns the slot \code{transactionInfo}.}
 }
 }
 \seealso{
@@ -102,7 +103,7 @@
   \code{\link{image}},
   \code{\link{length}},
   \code{\link{size}},
-  \code{\link[Matrix]{dgCMatrix}} (in \pkg{Matrix}),
+  \code{\link[Matrix]{ngCMatrix}} (in \pkg{Matrix}),
   \code{\link{itemMatrix-class}},
   \code{\link{itemsets-class}},
   \code{\link{transactions-class}}

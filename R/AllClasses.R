@@ -8,12 +8,12 @@
 
 setClass("itemMatrix",
     representation(
-        data        = "dgCMatrix", 
+        data        = "ngCMatrix", 
         itemInfo    = "data.frame"), 
     
     validity= function(object) {
         ## regular itemMatrix
-        if(length(itemInfo(object)[["labels"]]) == dim(object)[2]) return(TRUE)
+        if(length(itemInfo(object)[["labels"]]) == nitems(object)) return(TRUE)
         return("number of item labels does not match number of columns in itemMatrix")
     })
 
@@ -58,7 +58,7 @@ setClass("summary.transactions",
 
 setClass("tidLists",
     representation(
-        data        = "dgCMatrix",
+        data        = "ngCMatrix",
         itemInfo    = "data.frame",
         transactionInfo = "data.frame"),
     

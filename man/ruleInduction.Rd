@@ -9,7 +9,8 @@
 }
 \usage{
 ruleInduction(x, ...)
-\S4method{ruleInduction}{itemsets}(x, transactions, confidence = 0.8, verbose = FALSE)
+\S4method{ruleInduction}{itemsets}(x, transactions, confidence = 0.8, 
+    control = NULL)
 }
 \arguments{
   \item{x}{ the set of itemsets from which rules will be induced. }
@@ -18,15 +19,31 @@ ruleInduction(x, ...)
   	the itemsets. }
   \item{confidence}{a numeric value giving the minimum confidence for the
     rules. }  
-  \item{verbose}{ a logical indicating whether to report progress. }  
-}
+  \item{control}{a named list with elements
+      \code{method} indicating the method (\code{"apriori"} or \code{"ptree"}),
+     and the logical arguments \code{reduce} and
+    \code{verbose} to indicate if unused items are removed and if
+    the output should be verbose.
+    Currently,  \code{"ptree"} is the default method.}
+    }
 \details{
-  Currently, only a very simple rule induction method is implemented.
-  All rules are mined from the transactions data set using the
+For in control \code{method = "apriori"} is used, 
+  a very simple rule induction method is used.
+  All rules are mined from the transactions data set using Apriori with the
   minimal support found in itemsets. And in a second step
   all rules which do not stem from one of the itemsets are removed.
   This procedure will be in many cases very slow (e.g., for itemsets 
   with many elements or very low support).
+
+If in control \code{method = "ptree"} is used, 
+the transactions are read into a prefix tree and
+then the rules are selectively generated using the counts in the tree.
+This is normally faster, but the code is not yet optimized.
+
+If in control \code{reduce = TRUE} is used, unused items are removed from
+the data before creating rules. This might be slower for large transaction
+data sets.
+
 }
 \value{
    An object of class \code{rules}.
@@ -42,7 +59,7 @@ closed <- apriori(Adult,
 	parameter = list(target = "closed", support = 0.4))
 
 ### rule induction
-rules <- ruleInduction(closed, Adult, verbose = TRUE)
+rules <- ruleInduction(closed, Adult, control = list(verbose = TRUE))
 
 ### inspect the resulting rules
 inspect(SORT(rules, by = "lift")[1:5])

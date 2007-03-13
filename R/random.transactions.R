@@ -55,7 +55,7 @@ random.transactions <- function(
         which(runif(nItems) <= iProb))
 
     ## create sparse matrix (transposed)
-    z <- as(simList, "dgCMatrix")
+    z <- as(simList, "ngCMatrix")
     z@Dim[1] <- as.integer(nItems)
 
     new("transactions", data = z,
@@ -152,7 +152,7 @@ random.transactions <- function(
         tn[[i]] <- sort(union(transactions[[i]], noise[[i]]))
     }
 
-    z <- as(tn, "dgCMatrix")
+    z <- as(tn, "ngCMatrix")
     z@Dim[1] <- as.integer(nItems)
 
     new("transactions", data = z,
@@ -261,7 +261,7 @@ random.patterns <- function(
     }
 
     ## create itemMatrix w/o recoding
-    z <- as(patterns, "dgCMatrix")
+    z <- as(patterns, "ngCMatrix")
     z@Dim[1] <- as.integer(nItems)
 
     imatrix <- new("itemMatrix", data = z, 
@@ -289,7 +289,7 @@ random.patterns <- function(
     }
 
 
-    if(!is.null(nItems) && nItems != dim(items(patterns))[2])
+    if(!is.null(nItems) && nItems != nitems(items(patterns)))
     stop("nItems in patterns and the given nItems do not match!\n")
 
 
@@ -342,7 +342,7 @@ random.patterns <- function(
         transactions[[i]] <- trans
     }
 
-    z <- as(transactions, "dgCMatrix")
+    z <- as(transactions, "ngCMatrix")
     z@Dim[1] <- as.integer(nItems)
 
     new("transactions", data = z,

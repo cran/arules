@@ -12,21 +12,22 @@ itemset is contained in the set (Zaki et al., 1997).
 }
 \usage{
 is.maximal(x,\ldots)
-\S4method{is.maximal}{itemMatrix}(x, blocksize = 200)
+%\S4method{is.maximal}{itemMatrix}(x, blocksize = 200)
+\S4method{is.maximal}{itemMatrix}(x)
 }
 \arguments{
   \item{x}{ the set of itemsets or an itemMatrix object. }
   \item{\ldots}{ further arguments.}
-  \item{blocksize}{a numeric value indicating how much memory can is.maximal
-    use for large \code{x} (approx. in MB). This is only a
-    crude approximation for 32-bit machines (64-bit architectures need
-    double the blocksize in memory).}
+%  \item{blocksize}{a numeric value indicating how much memory can is.maximal
+%    use for large \code{x} (approx. in MB). This is only a
+%    crude approximation for 32-bit machines (64-bit architectures need
+%    double the blocksize in memory).}
 }
-\details{
-Note that the method uses \code{is.superset} which can be extremely slow and 
-have a high memory usage for \code{x} 
-containing many elements.
-}
+%\details{
+%Note that the method uses \code{is.superset} which can be extremely slow and 
+%have a high memory usage for \code{x} 
+%containing many elements.
+%}
 \value{a logical vector with the same length as \code{x} indicating
 for each element in \code{x} if it is a maximal itemset.
 }

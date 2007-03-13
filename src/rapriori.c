@@ -1,6 +1,13 @@
 /*----------------------------------------------------------------------
-modefication from Bettina Gruen and Michael Hahsler (MFH)
-based on Christian Borgelt's code
+The code for apriori and eclat were obtained from
+            http://fuzzy.cs.uni-magdeburg.de/~borgelt/
+
+and are copyrighted by 1996-2003 Christian Borgelt
+
+This program is free software; you can redistribute it and/or modify it under
+the terms of the LGPL.
+
+The R-interface was added by Bettina Grün and modified by Michael Hahsler (MFH)
 ----------------------------------------------------------------------*/
 
 #include "rapriori.h"
@@ -448,6 +455,10 @@ void frequentItem(ARparameter *param, INPUT *in)
     if (k <  0) {cleanup(); error(msgs(E_NOMEM));}  /* add a level to the item set tree */
     if (k != 0) break;          /* if no level was added, abort */
     if (param->verbose) Rprintf(" %d", ist_height(istree));
+    
+    /* R check for C-C to interupt execution */
+    R_CheckUserInterrupt();
+    
     if (tatree) {               /* if a transaction tree was created */
       if (((param->filter < 0)         /* if to filter w.r.t. item usage */
       &&   (i < -param->filter *n))    /* and enough items were removed */
@@ -722,7 +733,7 @@ void createRules(ISTREE *istree, ARparameter *param) {
 
 SEXP returnObject(RULESET *set, SEXP dim, ARparameter *param, SEXP itemInfo)
 {
-	int i, len, j, k;
+	int i, len, k;
 	SEXP ans, class, tp, qual, q, rownames, names, items, lhs, rhs, trans, tidLists;
 	
 	if (param->target <= TT_CLSET)	{
@@ -744,7 +755,7 @@ SEXP returnObject(RULESET *set, SEXP dim, ARparameter *param, SEXP itemInfo)
 	if (param->ext) len++;
 	
 	/* set items/lhs */
-	items = PROTECT(NEW_OBJECT(MAKE_CLASS("dgCMatrix")));
+	items = PROTECT(NEW_OBJECT(MAKE_CLASS("ngCMatrix")));
 	tp = PROTECT(allocVector(INTSXP, set->ttotal));
 	for (i = 0; i < set->ttotal; i++) 
 	  INTEGER(tp)[i] = atoi(set->body[i]);
@@ -754,39 +765,28 @@ SEXP returnObject(RULESET *set, SEXP dim, ARparameter *param, SEXP itemInfo)
 	tp = PROTECT(allocVector(INTSXP, set->rnb+1));
 	INTEGER(tp)[0] = 0;						     
 	for (i = 0; i < set->rnb; i++) INTEGER(tp)[i+1] = set->tnb[i];
- 	/* SET_SLOT(items, install("p"), duplicate(tp)); */
  	SET_SLOT(items, install("p"), tp);
-	UNPROTECT(1);
-	
-	tp = PROTECT(allocVector(REALSXP, set->ttotal));
-	for (i = 0; i < set->ttotal; i++) REAL(tp)[i] = 1;
-	/* SET_SLOT(items, install("x"), duplicate(tp)); */
-	SET_SLOT(items, install("x"), tp);
 	UNPROTECT(1);
 	
 	tp = PROTECT(allocVector(INTSXP, 2));
 	INTEGER(tp)[0] = INTEGER(dim)[0];
 	INTEGER(tp)[1] = set->rnb;
-	/* SET_SLOT(items, install("Dim"), duplicate(tp)); */
 	SET_SLOT(items, install("Dim"), tp);
 	UNPROTECT(1);
 	
 	lhs = PROTECT(NEW_OBJECT(MAKE_CLASS("itemMatrix")));
-        /* SET_SLOT(lhs , install("data"), duplicate(items)); */
         SET_SLOT(lhs , install("data"), items);
         SET_SLOT(lhs , install("itemInfo"), itemInfo);
 
 	if (param->target == TT_RULE) 
-	  /* SET_SLOT(ans, install("lhs"), duplicate(lhs)); */
 	  SET_SLOT(ans, install("lhs"), lhs);
 	else	
-	  /* SET_SLOT(ans, install("items"), duplicate(lhs)); */
 	  SET_SLOT(ans, install("items"), lhs);
         UNPROTECT(1);
 	
 	/* set rhs for rules */	
 	if (param->target == TT_RULE) {
-	  items = PROTECT(NEW_OBJECT(MAKE_CLASS("dgCMatrix")));
+	  items = PROTECT(NEW_OBJECT(MAKE_CLASS("ngCMatrix")));
 	  
 	  tp = PROTECT(allocVector(INTSXP, set->rnb));
 	  for (i = 0; i < set->rnb; i++) 
@@ -796,26 +796,16 @@ SEXP returnObject(RULESET *set, SEXP dim, ARparameter *param, SEXP itemInfo)
 	  
 	  tp = PROTECT(allocVector(INTSXP, set->rnb+1));
 	  for (i = 0; i < set->rnb+1; i++) INTEGER(tp)[i] = i;
-	  /* SET_SLOT(items, install("p"),  duplicate(tp)); */
 	  SET_SLOT(items, install("p"),  tp);
 	  UNPROTECT(1);
 	  
-	  tp = PROTECT(allocVector(REALSXP, set->rnb));
-	  for (i = 0; i < set->rnb; i++) REAL(tp)[i] = 1;
-	  /* SET_SLOT(items, install("x"),  duplicate(tp)); */
-	  SET_SLOT(items, install("x"),  tp);
-	  UNPROTECT(1);
-	
 	  tp = PROTECT(allocVector(INTSXP, 2));
 	  INTEGER(tp)[0] = INTEGER(dim)[0];
 	  INTEGER(tp)[1] = set->rnb;
-	  /* SET_SLOT(items, install("Dim"), duplicate(tp)); */
 	  SET_SLOT(items, install("Dim"), tp);
 	  UNPROTECT(1); 
 	  
 	  rhs =  PROTECT(NEW_OBJECT(MAKE_CLASS("itemMatrix")));
-	  /* SET_SLOT(rhs, install("data"), duplicate(items));
-	  SET_SLOT(ans, install("rhs"), duplicate(rhs)); */
 	  SET_SLOT(rhs, install("data"), items);
 	  SET_SLOT(rhs, install("itemInfo"), itemInfo);
 	  SET_SLOT(ans, install("rhs"), rhs);
@@ -871,35 +861,28 @@ SEXP returnObject(RULESET *set, SEXP dim, ARparameter *param, SEXP itemInfo)
 	
    	/* set transaction ID list (possible with eclat) */	
 	if (param->trans) {
-	  trans = PROTECT(NEW_OBJECT(MAKE_CLASS("dgCMatrix")));
-	  tp = PROTECT(allocVector(INTSXP, set->trtotal));
+	  trans = PROTECT(NEW_OBJECT(MAKE_CLASS("ngCMatrix")));
+	  
+      tp = PROTECT(allocVector(INTSXP, set->trtotal));
 	  for (i = 0; i < set->trtotal; i++) INTEGER(tp)[i] = set->trans[i];
-	  /* SET_SLOT(trans, install("i"), duplicate(tp)); */
 	  SET_SLOT(trans, install("i"), tp); 
 	  UNPROTECT(1);
-	  tp = PROTECT(allocVector(INTSXP, set->rnb+1));
+	  
+      tp = PROTECT(allocVector(INTSXP, set->rnb+1));
 	  for (i = 0; i < set->rnb+1; i++) INTEGER(tp)[i] = set->trnb[i];
-	  /* SET_SLOT(trans, install("p"),  duplicate(tp)); */
 	  SET_SLOT(trans, install("p"),  tp);
 	  UNPROTECT(1);
-	  tp = PROTECT(allocVector(REALSXP, set->trtotal));
-	  for (i = 0; i < set->trtotal; i++) REAL(tp)[i] = 1;
-	  /* SET_SLOT(trans, install("x"),  duplicate(tp)); */
-	  SET_SLOT(trans, install("x"),  tp); 
-	  UNPROTECT(1);
-	  tp = PROTECT(allocVector(INTSXP, 2));
+	  
+      tp = PROTECT(allocVector(INTSXP, 2));
 	  INTEGER(tp)[0] = set->tacnt;
 	  INTEGER(tp)[1] = set->rnb;
-	  /* SET_SLOT(trans, install("Dim"), duplicate(tp)); */
 	  SET_SLOT(trans, install("Dim"), duplicate(tp));
 	  UNPROTECT(1);
 	  
 	  tidLists = PROTECT(NEW_OBJECT(MAKE_CLASS("tidLists")));
-	  /* SET_SLOT(tidLists, install("data"), duplicate(trans)); */
 	  SET_SLOT(tidLists, install("data"), trans);
 	  UNPROTECT(1);
 	  
-	  /* SET_SLOT(ans, install("tidLists"), duplicate(tidLists)); */
 	  SET_SLOT(ans, install("tidLists"), tidLists);
 	  UNPROTECT(1);
 	}
