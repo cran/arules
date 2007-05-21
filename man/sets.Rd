@@ -53,10 +53,10 @@ for each element if it is included in \code{set}.
 \examples{
 data("Adult")
 
-### mine some rules
+## mine some rules
 r <- apriori(Adult)
 
-### take 2 subsets
+## take 2 subsets
 r1 <- r[1:10]
 r2 <- r[6:15]
 

@@ -12,11 +12,10 @@ setMethod("inspect", signature(x = "itemsets"),
         if(n_of_itemsets == 0) return()
         ## Nothing to inspect here ...
 
-        items <- unlist(as(items(x), "list"))
-
         ## number of rows + fix empty itemsets
+        items <- unlist(lapply(as(items(x), "list"), 
+                FUN = function(x) if(length(x) == 0) "" else x))
         n_of_items <- size(items(x))
-        items[n_of_items == 0] <- ""
         n_of_items[n_of_items == 0] <- 1
 
         ## calculate begin and end positions
@@ -92,7 +91,7 @@ setMethod("inspect", signature(x = "rules"),
         out[, 1] <- format(tmp)
 
         ## Column 2: lhs.
-        pre <- rep.int("  ", n_of_rows)
+        pre <- rep.int(" ", n_of_rows)
         pre[entry_beg_pos] <- "{"
             post <- rep.int("", n_of_rows)
             post[lhs_pos] <- ","
@@ -108,7 +107,7 @@ setMethod("inspect", signature(x = "rules"),
         out[, 3] <- format(tmp)
 
         ## Column 4: rhs.
-        pre <- rep.int("  ", n_of_rows)
+        pre <- rep.int(" ", n_of_rows)
         pre[entry_mid_pos] <- "{"
             post <- rep.int("", n_of_rows)
             post[rhs_pos] <- ","
@@ -141,11 +140,10 @@ setMethod("inspect", signature(x = "transactions"),
         if(n_of_itemsets == 0) return()
         ## Nothing to inspect here ...
 
-        items <- unlist(as(x, "list"))
-
         ## number of rows + fix empty itemsets
+        items <- unlist(lapply(as(x, "list"), 
+                FUN = function(x) if(length(x) == 0) "" else x))
         n_of_items <- size(x)
-        items[n_of_items == 0] <- ""
         n_of_items[n_of_items == 0] <- 1
 
         ## calculate begin and end positions

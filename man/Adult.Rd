@@ -120,11 +120,11 @@ data("AdultUCI")
 dim(AdultUCI)
 AdultUCI[1:2,]
 
-### remove attributes
+## remove attributes
 AdultUCI[["fnlwgt"]] <- NULL
 AdultUCI[["education-num"]] <- NULL
 
-### map metric attributes
+## map metric attributes
 AdultUCI[[ "age"]] <- ordered(cut(AdultUCI[[ "age"]], c(15,25,45,65,100)),
   labels = c("Young", "Middle-aged", "Senior", "Old"))
 
@@ -140,7 +140,7 @@ AdultUCI[[ "capital-loss"]] <- ordered(cut(AdultUCI[[ "capital-loss"]],
   c(-Inf,0, median(AdultUCI[[ "capital-loss"]][AdultUCI[[ "capital-loss"]]>0]),
   Inf)), labels = c("None", "Low", "High"))
 
-### create transactions
+## create transactions
 Adult <- as(AdultUCI, "transactions")
 Adult
 

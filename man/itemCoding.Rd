@@ -69,18 +69,18 @@ recode(x, \ldots)
 \examples{
 data("Adult")
 
-### Example 1: Manual decoding
-### get code
+## Example 1: Manual decoding
+## get code
 iLabels <- itemLabels(Adult)
 head(iLabels)
 
-### get undecoded list and decode in a second step
+## get undecoded list and decode in a second step
 list <- LIST(Adult[1:5], decode = FALSE)
 list
 
 decode(list, itemLabels = iLabels)
 
-### Example 2: Manually create an itemMatrix 
+## Example 2: Manually create an itemMatrix 
 data <- list(
     c("income=small", "age=Young"),
     c("income=large", "age=Middle-aged")
@@ -91,17 +91,17 @@ iM
 
 inspect(iM)
 
-### use the itemMatrix to create transactions
+## use the itemMatrix to create transactions
 as(iM, "transactions")
 
 
-### Example 3: use recode
-### select first 100 transactions and all education-related items
+## Example 3: use recode
+## select first 100 transactions and all education-related items
 sub <- Adult[1:100, itemInfo(Adult)$variables ==  "education"]
 itemLabels(sub)
 image(sub)
 
-### recode to match Adult again
+## recode to match Adult again
 sub.recoded <- recode(sub, match = Adult)
 image(sub.recoded)
 }

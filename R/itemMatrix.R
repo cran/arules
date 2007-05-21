@@ -9,9 +9,11 @@
 setMethod("dim", signature(x = "itemMatrix"),
     function(x) rev(dim(x@data))
 )
+## with dim nrow and ncol should work too
+
 
 setMethod("nitems", signature(x = "itemMatrix"),
-    function(x) dim(x)[2]
+    function(x, ...) dim(x)[2]
 )
 
 setMethod("length", signature(x = "itemMatrix"),
@@ -20,14 +22,12 @@ setMethod("length", signature(x = "itemMatrix"),
 
 ## produces a vector of element sizes
 setMethod("size", signature(x = "itemMatrix"),
-    function(x) {
-        ## FIXME:
+    function(x, ...) {
         ## if Matrix had colSums implemented efficiently, we could do
         ## colSums(x)
-
         ## a possible hack would be diff(x@data@p)
 
-        ## for now we use our own C code
+        ## we use our own C code
         .Call("R_colSums_ngCMatrix", x@data)
     })
 
@@ -39,25 +39,27 @@ setAs("matrix", "itemMatrix",
     function(from) {
 
         ## make logical
-        if(storage.mode(from) != "logical") storage.mode(from) <- "logical"
+        if(mode(from) != "logical") mode(from) <- "logical"
 
-        ## we have to transpose since there is not enough support 
-        ## for "ngRMatrix"
+        ## we have to transpose since there is 
+        ## currently only minimal support for "ngRMatrix" in Matrix
         i <- t(as(from, "ngCMatrix"))
+        ## kill Dimnames
+        i@Dimnames <- list(NULL, NULL)
 
         new("itemMatrix", data = i,  
-            itemInfo = data.frame(labels = labels(from)[[2]]))
+            itemInfo = data.frame(labels = I(as.character(labels(from)[[2]]))))
     })
 
 setAs("itemMatrix", "matrix",
     function(from) {
 
         m <- as(t(from@data), "matrix")
-        storage.mode(m) <- "integer"
+        mode(m) <- "integer"
         
         ## FIXME:
-        ## something -> matrix looses dimnames in Matrix!
-        dimnames(m)[[2]] <- from@itemInfo[["labels"]]
+        ## matrix looses dimnames during coercion in Matrix!
+        dimnames(m)[[2]] <- itemLabels(from)
         m
     })
 
@@ -82,17 +84,25 @@ setAs("list","itemMatrix", function(from, to) {
 
         ## code items from 1..numItems and kill doubles
         l <- lapply(from, function(x) unique(as.vector(data[as.character(x)])))
+        l <- as(l, "ngCMatrix")
+        ## kill Dimnames
+        l@Dimnames <- list(NULL, NULL)
 
-        new("itemMatrix", data= as(l, "ngCMatrix"), 
-            itemInfo = data.frame(labels = from_names))
+        new("itemMatrix", data = l, 
+            itemInfo = data.frame(labels = I(as.character(from_names))))
     })
 
+## beware: "ngCMatrix" and "dgCMatrix" is transposed!
 setAs("itemMatrix", "ngCMatrix",
-    function(from) from@data
-)
+    function(from) {
+        ngC <- from@data
+        ## this is low level since ngCMatrix has no labels <- 
+        ngC@Dimnames[[1]] <- itemLabels(from)
+        ngC
+    })
 
 setAs("itemMatrix", "dgCMatrix",
-    function(from) as(from@data, "dgCMatrix")
+    function(from) as(as(from, "ngCMatrix"), "dgCMatrix")
 )
 
 ##*******************************************************
@@ -100,16 +110,26 @@ setAs("itemMatrix", "dgCMatrix",
 ##        labels or in itemInfo)
 ## note this is not what we would expect for %in% in R!
 ## but match below works the R-way
-setMethod("%in%", signature(x = "itemMatrix"),
+setMethod("%in%", signature(x = "itemMatrix", table = "character"),
     function(x, table) {
         pos <- match(table, itemLabels(x))
-        if(is.na(pos[1])) return(rep(FALSE, length(x)))
+        if(any(is.na(pos))) stop("table contains an unknown item label" )
         return(size(x[, pos]) > 0)
     })
 
-## partial in  
-setMethod("%pin%", signature(x = "itemMatrix"),
+## all items have to be in
+setMethod("%ain%", signature(x = "itemMatrix", table = "character"),
     function(x, table) {
+        pos <- match(table, itemLabels(x))
+        if(any(is.na(pos))) stop("table contains an unknown item label" )
+        return(size(x[, pos]) == length(pos))
+    })
+
+## partial in  
+setMethod("%pin%", signature(x = "itemMatrix", table = "character"),
+    function(x, table) {
+        if (length(table) > 1)
+            stop(sQuote(table)," contains more than one item label pattern")
         pos <- grep(table, itemLabels(x))
         if(is.na(pos[1])) return(rep(FALSE, length(x)))
         return(size(x[, pos]) > 0)
@@ -119,86 +139,101 @@ setMethod("%pin%", signature(x = "itemMatrix"),
 ##*******************************************************
 ## subset, combine, duplicated, unique 
 
-## remember the sparce matrix is tored in transposed form (i <-> j)
+## remember the sparse matrix is stored in transposed form (i <-> j)
 setMethod("[", signature(x = "itemMatrix", i = "ANY", j = "ANY", drop = "ANY"),
-        function(x, i, j, ..., drop) {  #]
+    function(x, i, j, ..., drop) {  #]
 
-        if(missing(j) && missing(i)) return(x)
-
-        ## drop is always false
-        drop <- FALSE 
-
-        ## fixed thanks to a bug report by Seth Falcon (06/31/01)
-        if(!missing(j)){
-            if(is.character(j)) j <- itemLabels(x) %in% j
-            x@itemInfo <- x@itemInfo[j, , drop = FALSE]
-        }
-    
+        ## the code in Matrix does not work with multindexes
+        ## use was x@data[j, ..., drop = FALSE] with Matrix
         ## i and j are reversed!
-        if(missing(i)) x@data <- x@data[j, ..., drop = drop]
-        else if(missing(j)) x@data <- x@data[,i, ..., drop = drop]
-        else x@data <- x@data[j,i, ..., drop = drop]
-        
+        if (!missing(i)) {
+            x@data <- .Call("R_colSubset_ngCMatrix", x@data, i)
+            if (length(x@itemsetInfo))
+                x@itemsetInfo <- x@itemsetInfo[i,, drop = FALSE]
+        }
+        if (!missing(j)) {
+            ## fixed thanks to a bug report by Seth Falcon (06/31/01)
+            if (is.character(j)) 
+                j <- itemLabels(x) %in% j
+            x@data <- .Call("R_rowSubset_ngCMatrix", x@data, j)
+            x@itemInfo <- x@itemInfo[j,, drop = FALSE]
+        }
+
         x
     })
 
 
+#setMethod("c", signature(x = "itemMatrix"),
+#    function(x, ..., recursive = FALSE){
+#
+#        z <- list(...)
+#        if(length(z) < 1) return(x) 
+#
+#        if(recursive) z <- unlist(z)
+#        if(any(!sapply(is (z, "itemMatrix")))) 
+#            stop("All elements have to be itemMatrix!")
+#
+#        num_items <- x@data@Dim[1]
+#        num_trans <- x@data@Dim[2]
+#        i <- x@data@i
+#        p <- x@data@p
+#        ## pmax makes sure that the column counts for the added elements
+#        # start with the number of the previous element
+#        pmax <- p
+#
+#        for (elem in z) {
+#            if(elem@data@Dim[1] != num_items) 
+#            stop ("Number of items mismatch")
+#            pmax <-  p[length(p)]
+#
+#            i <- c(i, elem@data@i)
+#            p <- c(p, (elem@data@p[-1] + pmax))
+#            num_trans <- num_trans + elem@data@Dim[2]
+#        }
+#
+#        data <- new("ngCMatrix", i = i, p = p, 
+#            Dim = c(num_items,num_trans) )
+#
+#        new("itemMatrix", 
+#            data = new("ngCMatrix", i = i, p = p, 
+#                Dim = c(num_items,num_trans)), 
+#            itemInfo = z[[1]]@itemInfo)
+#    })
 
 setMethod("c", signature(x = "itemMatrix"),
-    function(x, ..., recursive = FALSE){
-
-        z <- list(...)
-
-        if(recursive == TRUE) {
-            flatten <- function(x) {
-                res <- list()
-
-                for (i in 1 : length(x)) {
-                    if(class(x[[i]]) == "list") 
-                    res <- c(res, Recall(x[[i]]))
-                    else res <- c(res, list(x[[i]]))
-                }
-
-                return(res)
+    function(x, ..., recursive = FALSE) {
+        args <- list(...)
+        if (recursive)
+            args <- unlist(args)
+        for (y in args) {
+            if (!inherits(y, "itemMatrix"))
+                stop("can only combine itemMatrix")
+            x@itemsetInfo <- .combineMeta(x, y, "itemsetInfo")
+            k <- match(itemLabels(y), itemLabels(x))
+            n <- which(is.na(k))
+            if (length(n)) {
+                k[n] <- x@data@Dim[1] + seq(length(n))
+                x@data@Dim[1] <- x@data@Dim[1] + length(n)
+                x@itemInfo <- rbind(x@itemInfo, 
+                                    y@itemInfo[n,, drop = FALSE])
             }
-
-            z <- flatten(list(...)) 
-        } 
-
-        if(length(z) < 1) return(x) 
-
-        num_items <- x@data@Dim[1]
-        num_trans <- x@data@Dim[2]
-        i <- x@data@i
-        p <- x@data@p
-        ## pmax makes sure that the column counts for the added elements
-        # start with the number of the previous element
-        pmax <- p
-
-        for (elem in z) {
-            if(elem@data@Dim[1] != num_items) 
-            stop ("Number of items mismatch")
-            pmax <-  p[length(p)]
-
-            i <- c(i, elem@data@i)
-            p <- c(p, (elem@data@p[-1] + pmax))
-            num_trans <- num_trans + elem@data@Dim[2]
+            if (any(k != seq(length(k))))
+                y@data <- .Call("R_recode_ngCMatrix", y@data, k)
+            if (y@data@Dim[1] <  x@data@Dim[1])
+                y@data@Dim[1] <- x@data@Dim[1]
+            x@data <- .Call("R_cbind_ngCMatrix", x@data, y@data)
         }
-
-        data <- new("ngCMatrix", i = i, p = p, 
-            Dim = c(num_items,num_trans) )
-
-        new("itemMatrix", 
-            data = new("ngCMatrix", i = i, p = p, 
-                Dim = c(num_items,num_trans)), 
-            itemInfo = z[[1]]@itemInfo)
+        validObject(x)
+        x
     })
 
 setMethod("duplicated", signature(x = "itemMatrix"),
     function(x, incomparables = FALSE, ...) {
-        #duplicated(LIST(x, decode = FALSE),
+        #duplicated(LIST(x, decode  FALSE),
         #    incomparables = incomparables, ...)
-        i <- .Call("R_pnindex", x@data, FALSE)
+        
+        # more efficient C code
+        i <- .Call("R_pnindex", x@data, NULL, FALSE)
         duplicated(i)
     })
 
@@ -207,40 +242,51 @@ setMethod("unique", signature(x = "itemMatrix"),
         x[!duplicated(x, incomparables = incomparables, ...)]
     })
 
+#setMethod("match", signature(x = "itemMatrix", table = "itemMatrix"),
+#    function(x,  table, nomatch = NA, incomparables = FALSE) {
+#        match(LIST(x, decode = FALSE), LIST(table, decode = FALSE), 
+#            nomatch = nomatch, incomparables = incomparables)
+#    })
+
+## more efficient C code
 setMethod("match", signature(x = "itemMatrix", table = "itemMatrix"),
-    function(x,  table, nomatch = NA, incomparables = FALSE) {
-        #match(LIST(x, decode = FALSE), LIST(table, decode = FALSE), 
-        #    nomatch = nomatch, incomparables = incomparables)
-        comb <- c(x, table)    
-        i <- .Call("R_pnindex", comb@data, FALSE)
-        match(i[c(1:length(x))], i[-c(1:length(x))], 
-            nomatch = nomatch, incomparables = incomparables)
-})
-
-
+    function(x, table, nomatch = NA, incomparables = FALSE) {
+        k <- match(itemLabels(x), itemLabels(table))
+        n <- which(is.na(k))
+        if (length(n)) {
+            k[n] <- table@data@Dim[1] + seq(length(n))
+            table@data@Dim[1] <- table@data@Dim[1] + length(n)
+        }
+        if (any(k != seq(length(k))))
+            x@data <- .Call("R_recode_ngCMatrix", x@data, k)
+        if (x@data@Dim[1] <  table@data@Dim[1])
+            x@data@Dim[1] <- table@data@Dim[1]
+        i <- .Call("R_pnindex", table@data, x@data, FALSE)
+        match(i, seq(length(table)), nomatch = nomatch, 
+                                     incomparables = incomparables)
+    }
+)
 
 ##*******************************************************
 ## accessors
 
 setMethod("labels", signature(object = "itemMatrix"),
     function(object, itemSep = ", ", setStart = "{", setEnd = "}", ...) {
-        list(items = as(object@itemInfo[["labels"]], "character"),
+        list(items = as.character(object@itemInfo[["labels"]]),
             elements = paste(setStart, sapply(as(object, "list"),
                     function(x) paste(x, collapse =itemSep)), setEnd, sep=""))
     })
 
 setMethod("itemLabels", signature(object = "itemMatrix"),
-    function(object, ...) as(object@itemInfo[["labels"]], "character")
+    function(object, ...) as.character(object@itemInfo[["labels"]])
 )
 
 setReplaceMethod("itemLabels", signature(object = "itemMatrix"),
     function(object, value) {
         if(length(value) != nitems(object)) 
         stop("number of itemLabels does not match number of items")
-        
-        object@itemInfo <- data.frame(labels = value)
-        ## this is low level since ngCMatrix has no labels <- 
-        object@data@Dimnames[[1]] <- value
+       
+        object@itemInfo[["labels"]] <- as.character(value)
         object
     })
 
@@ -250,11 +296,24 @@ setMethod("itemInfo", signature(object = "itemMatrix"),
 
 setReplaceMethod("itemInfo", signature(object = "itemMatrix"),
     function(object, value) {
-        if(dim(value)[1] != nitems(object))
+        if(nrow(value) != nitems(object))
         stop("number of entries in itemInfo does not match number of items")
 
         object@itemInfo <- value
-        object@data@Dimnames[[1]] <- value[,1]
+        object
+})
+
+
+setMethod("itemsetInfo", signature(object = "itemMatrix"),
+    function(object) object@itemsetInfo
+)
+
+setReplaceMethod("itemsetInfo", signature(object = "itemMatrix"),
+    function(object, value) {
+        if(nrow(value) != length(object))
+        stop("number of entries in itemsetInfo does not match number of rows")
+
+        object@itemsetInfo <- value
         object
     })
 
@@ -265,8 +324,8 @@ setReplaceMethod("itemInfo", signature(object = "itemMatrix"),
 setMethod("show", signature(object = "itemMatrix"),
     function(object) {
         cat("itemMatrix in sparse format with\n", 
-            dim(object)[1],"rows (elements/transactions) and\n", 
-            dim(object)[2],"columns (items)\n")
+            length(object), "rows (elements/transactions) and\n", 
+            nitems(object), "columns (items)\n")
         invisible(object)
     })
 
@@ -287,14 +346,17 @@ setMethod("image", signature(x = "itemMatrix"),
 
 setMethod("summary", signature(object = "itemMatrix"),
     function(object, maxsum = 6, ...) {
-        lst <- as(object,"list")
-        chars <- as(unlist(lst), "character")
+        ifs <- sort(itemFrequency(object, type = "abs"), decreasing = TRUE)
+        isum <- head(ifs, maxsum - as.integer(1))
+        isum <- c(isum, "(Other)" = sum(ifs) - sum(isum))
+        sizes <- size(object)
+            
         new("summary.itemMatrix", Dim=dim(object),
-            itemSummary = summary(as.factor(chars), maxsum = maxsum),
-            lengths = table(size(object)),
-            lengthSummary = summary(size(object)),
-            itemInfo=itemInfo(object)[1:min(3, length(labels(object))),, 
-                drop = FALSE])
+            itemSummary = isum,
+            lengths = table(sizes),
+            lengthSummary = summary(sizes),
+            itemInfo= head(itemInfo(object), 3)
+        )
     })
 
 setMethod("show", signature(object = "summary.itemMatrix"),

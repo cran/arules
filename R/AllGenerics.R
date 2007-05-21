@@ -9,6 +9,11 @@ if(!isGeneric("%pin%")) {
                function(x, table) standardGeneric("%pin%"))
 }
 
+if(!isGeneric("%ain%")) {
+    setGeneric("%ain%",
+               function(x, table) standardGeneric("%ain%"))
+}
+
 if(!isGeneric("SORT")) {
     setGeneric("SORT",
                function(x, ...) standardGeneric("SORT"))
@@ -71,6 +76,16 @@ if(!isGeneric("itemInfo")) {
 if(!isGeneric("itemInfo<-")) {
     setGeneric("itemInfo<-",
                function(object, value) standardGeneric("itemInfo<-"))
+}
+
+if(!isGeneric("itemsetInfo")) {
+    setGeneric("itemsetInfo",
+               function(object) standardGeneric("itemsetInfo"))
+}
+
+if(!isGeneric("itemsetInfo<-")) {
+    setGeneric("itemsetInfo<-",
+               function(object, value) standardGeneric("itemsetInfo<-"))
 }
 
 if(!isGeneric("itemLabels")) {
@@ -152,7 +167,7 @@ if(!isGeneric("interestMeasure")) {
 
 if(!isGeneric("nitems")) {
     setGeneric("nitems",
-               function(x) standardGeneric("nitems"))
+               function(x, ...) standardGeneric("nitems"))
 }
 
 if(!isGeneric("is.closed")) {
@@ -220,7 +235,7 @@ if(!isGeneric("support")) {
 
 if(!isGeneric("size")) {
     setGeneric("size",
-               function(x) standardGeneric("size"))
+               function(x, ...) standardGeneric("size"))
 }
 
 if(!isGeneric("subset")) {

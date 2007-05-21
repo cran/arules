@@ -22,14 +22,15 @@
 
 .list2object <-  function(from, to) {
     if (!length(from)) return(new(to)) 
-    n = names(from)
-    s = slotNames(to)
-    p = pmatch(n, s)
-    if(any(is.na(p)))
-    stop(paste("\nInvalid slot name(s) for class",
-            to, ":", paste(n[is.na(p)], collapse=" ")))
-    names(from) = s[p]
-    do.call("new", c(from, Class=to))
+    s <- slotNames(to)
+    p <- pmatch(names(from), s)
+    if(any(is.na(p))) stop(paste("\nInvalid slot name(s) for class",
+            to, ":", paste(names(from)[is.na(p)], collapse=" ")))
+    names(from) <- s[p]
+    do.call("new", c(from, Class = to))
 }
 
+
+## this is defined in base
+"%in%" <-  function(x, table) match(x, table, nomatch = 0) > 0
 

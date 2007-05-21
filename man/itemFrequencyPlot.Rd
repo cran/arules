@@ -53,7 +53,6 @@ itemFrequencyPlot(x, \dots)
     (use an empty string to force no label).}
   \item{ylab}{a character string with the label for the y axis (see xlab).}
   \item{mai}{a numerical vector giving the plots margin sizes in inches (see `? par').}
-  }
 }
 \value{
 A numeric vector with the midpoints of the drawn bars; useful for
@@ -66,21 +65,21 @@ adding to the graph.
 \examples{
 data(Adult)
 
-# the following example compares the item frequencies
-# of people with a large income (boxes) with the average in the data set
+## the following example compares the item frequencies
+## of people with a large income (boxes) with the average in the data set
 Adult.largeIncome <- Adult[Adult \%in\% 
 	"income=large"]
 
-# simple plot
+## simple plot
 itemFrequencyPlot(Adult.largeIncome)
 
-# plot with the averages of the population plotted as a line 
-# (for first 72 variables/items)
+## plot with the averages of the population plotted as a line 
+## (for first 72 variables/items)
 itemFrequencyPlot(Adult.largeIncome[, 1:72], 
 	population = Adult[, 1:72])
 
-# plot lift ratio (frequency in x / frequency in population)
-# for items with a support of 20\% in the population
+## plot lift ratio (frequency in x / frequency in population)
+## for items with a support of 20\% in the population
 itemFrequencyPlot(Adult.largeIncome, 
         population = Adult, support = 0.2, 
 	lift = TRUE, horiz = TRUE)

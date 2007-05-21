@@ -109,7 +109,7 @@
   \code{\link{itemMatrix-class}}
 }
 \examples{
-### 1. example: creating transactions form a list
+## 1. example: creating transactions form a list
 a_list <- list(
       c("a","b","c"),
       c("a","b"),
@@ -118,18 +118,18 @@ a_list <- list(
       c("a","b","d","e")
       )
 
-# set transaction names
+## set transaction names
 names(a_list) <- paste("Tr",c(1:5), sep = "")
 a_list
 
-# coerce into transactions
+## coerce into transactions
 trans <- as(a_list, "transactions")
 
-# analyze transactions
+## analyze transactions
 summary(trans)
 image(trans)
 
-### 2. example: creating transactions from a matrix
+## 2. example: creating transactions from a matrix
 a_matrix <- matrix(
       c(1,1,1,0,0,
 	1,1,0,0,0,
@@ -137,25 +137,25 @@ a_matrix <- matrix(
 	0,0,1,0,1,
 	1,1,0,1,1), ncol = 5)
 
-# set dim names
+## set dim names
 dimnames(a_matrix) <-  list(
 	c("a","b","c","d","e"),
 	paste("Tr",c(1:5), sep = ""))
 
 a_matrix
 
-# coerce
+## coerce
 trans2 <-  as(a_matrix, "transactions")
 trans2
 
-### example 3: creatring transactions from data.frame
+## example 3: creatring transactions from data.frame
 a_data.frame <- data.frame(
 	age = as.factor(c(6,8,7,6,9,5)), 
 	grade = as.factor(c(1,3,1,1,4,1)))  
-# note: all attributes have to be factors
+## note: all attributes have to be factors
 a_data.frame
 
-# coerce
+## coerce
 trans3 <- as(a_data.frame, "transactions") 
 image(trans3)
 

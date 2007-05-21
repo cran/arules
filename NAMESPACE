@@ -28,6 +28,7 @@ exportClasses(
 
 exportMethods(
         "%in%",
+        "%ain%",
         "%pin%",
         "LIST",
         "SORT",
@@ -36,7 +37,7 @@ exportMethods(
         "coverage",
         "crossTable",
         "c", 
-        "coerce", 
+        "coerce",           ### for setAs
         "decode", 
         "dim", 
         "duplicated",
@@ -47,6 +48,7 @@ exportMethods(
         "inspect", 
         "intersect", 
         "itemInfo", "itemInfo<-", 
+        "itemsetInfo", "itemsetInfo<-", 
         "items", "items<-",
         "itemLabels", "itemLabels<-", 
         "itemFrequency", 

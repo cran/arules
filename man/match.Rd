@@ -1,5 +1,6 @@
 \name{match}
 \alias{match}
+\alias{\%in\%}
 \alias{match,itemsets,itemsets-method}
 \alias{match,rules,rules-method}
 \alias{match,itemMatrix,itemMatrix-method}
@@ -8,12 +9,18 @@
   Provides the generic function \code{match}  and the S4 methods for
   associations and transactions.  \code{match} returns a vector of the
   positions of (first) matches of its first argument in its second.
-}
+
+  \code{\%in\%} is a more intuitive interface as a binary operator, which
+  returns a logical vector indicating if there is a match or not for
+  its left operand.
+  }
 \usage{
 match(x,  table, nomatch = NA, incomparables = FALSE)
 %\S4method{match}{rules}(x,  table, nomatch = NA, incomparables = FALSE)
 %\S4method{match}{itemsets}(x,  table, nomatch = NA, incomparables = FALSE)
 %\S4method{match}{itemMatrix}(x,  table, nomatch = NA, incomparables = FALSE)
+
+x \%in\% table
 }
 \arguments{
   \item{x}{ an object of class \code{itemMatrix}, \code{transactions} or 
@@ -23,10 +30,13 @@ match(x,  table, nomatch = NA, incomparables = FALSE)
   \item{incomparables}{ not implemented. }
 }
 \value{
-   An integer vector of the same length as \code{x}  giving the position in
-   \code{table} of the first match if there is a match, otherwise
+   \code{match}: An integer vector of the same length as \code{x}  giving the
+   position in \code{table} of the first match if there is a match, otherwise
    \code{nomatch}.
-}
+
+   \code{\%in\%}:  A logical vector, indicating if a match was located for each
+   element of \code{x}.
+   }
 \seealso{
   \code{\link{rules-class}},
   \code{\link{itemsets-class}},
@@ -35,14 +45,13 @@ match(x,  table, nomatch = NA, incomparables = FALSE)
 \examples{
 data("Adult")
 
-### get unique transactions
+## get unique transactions, count frequency of unique transactions 
+## and plot frequency of unique transactions
 vals <- unique(Adult)
-
-### count frequency of unique transactions
 cnts <- tabulate(match(Adult, vals))
-
-### plot frequency of unique transactions
 plot(sort(cnts, decreasing=TRUE))
 
+## find all transactions which are equal to transaction 10 in Adult
+which(Adult \%in\% Adult[10])
 }
 \keyword{manip}

@@ -60,14 +60,14 @@
 data(Adult)
 Adult
 
-### select first 10 transactions
+## select first 10 transactions
 Adult[1:10]
 
-### select first 10 items for first 100 transactions
+## select first 10 items for first 100 transactions
 Adult[1:100, 1:10]
 
-### select the first 100 transactions for the items containing
-### "income" or "age=Young" in their labels 
+## select the first 100 transactions for the items containing
+## "income" or "age=Young" in their labels 
 Adult[1:100, c("income=small", "income=large" ,"age=Young")]
 }
 %\keyword{methods}
