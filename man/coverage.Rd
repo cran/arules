@@ -27,10 +27,8 @@ coverage(x)
 \examples{
 data("Income")
 
-### find and some rules
+## find and some rules (we only use 5 rules here) and calculate coverage
 rules <- apriori(Income)[1:5]
-
-### calculate coverage
 quality(rules) <- cbind(quality(rules), coverage = coverage(rules))
 
 inspect(rules)

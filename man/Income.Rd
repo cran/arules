@@ -62,10 +62,10 @@ data("IncomeESL")
 data("IncomeESL")
 IncomeESL[1:3, ]
 
-### remove incomplete cases
+## remove incomplete cases
 IncomeESL <- IncomeESL[complete.cases(IncomeESL), ]
 
-### preparing the data set
+## preparing the data set
 IncomeESL[["income"]] <- factor((as.numeric(IncomeESL[["income"]]) > 6) +1,
   levels = 1 : 2 , labels = c("$0-$40,000", "$40,000+"))
 	  

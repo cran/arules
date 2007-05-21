@@ -27,41 +27,52 @@ ruleInduction(x, ...)
     Currently,  \code{"ptree"} is the default method.}
     }
 \details{
-For in control \code{method = "apriori"} is used, 
-  a very simple rule induction method is used.
-  All rules are mined from the transactions data set using Apriori with the
-  minimal support found in itemsets. And in a second step
-  all rules which do not stem from one of the itemsets are removed.
-  This procedure will be in many cases very slow (e.g., for itemsets 
-  with many elements or very low support).
+  If in control \code{method = "apriori"} is used, a very simple rule
+  induction method is used. All rules are mined from the transactions
+  data set using Apriori with the minimal support found in itemsets.
+  And in a second step all rules which do not stem from one of the
+  itemsets are removed. This procedure will be in many cases very slow
+  (e.g., for itemsets with many elements or very low support).
 
-If in control \code{method = "ptree"} is used, 
-the transactions are read into a prefix tree and
-then the rules are selectively generated using the counts in the tree.
-This is normally faster, but the code is not yet optimized.
+  If in control \code{method = "ptree"} is used, the transactions are
+  counted into a prefix tree and then the rules are selectively generated
+  using the counts in the tree. This is usually faster than the above
+  approach.
 
-If in control \code{reduce = TRUE} is used, unused items are removed from
-the data before creating rules. This might be slower for large transaction
-data sets.
+  If in control \code{reduce = TRUE} is used, unused items are removed
+  from the data before creating rules. This might be slower for large
+  transaction data sets. However, if \code{method = "ptree"} this is
+  highly recommended as the items are further reorderd to reduce the
+  counting time.
 
+  If argument \code{transactions} is missing it is assumed that \code{x}
+  contains a lattice (complete set) of frequent itemsets together with 
+  their support counts. Then rules can be induced directly without 
+  support counting. This approach is very fast.
 }
 \value{
    An object of class \code{rules}.
 }
-
+%fixme: references are missing
 \seealso{ \code{\link{itemsets-class}}, \code{\link{rules-class}}
 \code{\link{transactions-class}}}
 \examples{
 data("Adult")
 
-### find all closed frequent itemsets
+## find all closed frequent itemsets
 closed <- apriori(Adult, 
 	parameter = list(target = "closed", support = 0.4))
 
-### rule induction
+## rule induction
 rules <- ruleInduction(closed, Adult, control = list(verbose = TRUE))
 
-### inspect the resulting rules
+## inspect the resulting rules
 inspect(SORT(rules, by = "lift")[1:5])
+
+## mine lattice of frequent itemsets
+ec  <- eclat(Adult, parameter = list(support = 0.4))
+rec <- ruleInduction(ec)
+inspect(rec[1:5])
+
 }
 \keyword{models}

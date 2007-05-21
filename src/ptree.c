@@ -12,13 +12,14 @@
 //
 // todo: 1) optimize insertion of left nodes. 2) check for
 //	 special cases, such as all itemsets or transactions
-//	 are empty, or the set of items is empty.
-//	 
-// Version 0.2-3
+//	 are empty, or the set of items is empty. 3) register
+//	 pointer array for finalizing.
+//	
+// note that sgCMatrix support is for package arulesSequence.
+//
+// Version 0.2-6
 //
 // (C) ceeboo 2007
-
-#define NB_SIZE 10240			    // maximum number of items
 
 typedef struct pnode {
     int index;
@@ -27,9 +28,9 @@ typedef struct pnode {
     struct pnode *pr;
 } PN;
 
-static PN *nb[NB_SIZE];			    // node pointers
+static PN *nq, **nb = NULL;		    // node pointers
 static int npn, cpn, apn;		    // node counters
-static int pb[NB_SIZE];			    // prefix buffer
+static int *pb;				    // prefix buffer
 
 static void pnfree(PN *p) {
     if (p == NULL)
@@ -40,12 +41,18 @@ static void pnfree(PN *p) {
     apn--;
 }
 
+static void nbfree() {
+    pnfree(*nb);
+    free( nb);
+    nb = NULL;
+}
+
 static PN *pnadd(PN *p, int *x, int n) {
     if (n == 0)
 	return p;
     cpn++;
     if (p == NULL) {			    // append node
-	p = (PN *) malloc(sizeof(PN));
+	p = nq = (PN *) malloc(sizeof(PN));
 	if (p) {
 	    apn++;
 	    p->index = *x;
@@ -56,12 +63,14 @@ static PN *pnadd(PN *p, int *x, int n) {
 	    npn = 1;
     } else
     if (p->index == *x) {		    // existing node
+	nq = p;
 	p->pl = pnadd(p->pl, x+1, n-1);
     } else
     if (p->index < *x) {		    // search right subtree
+	nq = p;
 	p->pr = pnadd(p->pr, x, n);
     } else {				    // prepend node
-	PN *q = (PN *) malloc(sizeof(PN));
+	PN *q = nq = (PN *) malloc(sizeof(PN));
 	if (q) {
 	    apn++;
 	    q->index = *x;
@@ -133,7 +142,7 @@ SEXP R_pncount(SEXP R_x, SEXP R_t, SEXP R_s, SEXP R_o, SEXP R_v) {
     int *x, *o = NULL;
     double s, t = 0;
     SEXP px, ix, pt, it;
-    SEXP r, pr, ir, pl, il, rs, rc, rl; 
+    SEXP r, pr, ir, pl, il, rs, rc, rl, pi; 
 #ifdef _TIME_H
     clock_t t5, t4, t3, t2, t1, t0;
 
@@ -148,14 +157,14 @@ SEXP R_pncount(SEXP R_x, SEXP R_t, SEXP R_s, SEXP R_o, SEXP R_v) {
 #endif
   
     nr = INTEGER(GET_SLOT(R_x, install("Dim")))[0];
-    if (nr >= NB_SIZE-1)
-	error("too many items");
     
     px = GET_SLOT(R_x, install("p"));
     ix = GET_SLOT(R_x, install("i"));
 
     pt = GET_SLOT(R_t, install("p"));
     it = GET_SLOT(R_t, install("i"));
+
+    pb = INTEGER(PROTECT(allocVector(INTSXP, nr+1)));
 
     if (LOGICAL(R_o)[0] == TRUE) {
 	SEXP pz, iz;
@@ -236,13 +245,19 @@ SEXP R_pncount(SEXP R_x, SEXP R_t, SEXP R_s, SEXP R_o, SEXP R_v) {
     
     cpn = apn = npn = 0;
 
+    if (nb != NULL)
+        nbfree();
+    nb = (PN **) malloc(sizeof(PN *) * (nr+1));
+    if (nb == NULL)
+        error("pointer array allocation failed");
+
     k = nr;
     nb[k] = NULL;
     while (k-- > 0)
 	nb[k] = pnadd(nb[k+1], &k, 1);
 
     if (npn) {
-	pnfree(*nb);
+	nbfree();
 	error("node allocation failed");
     }
     
@@ -272,7 +287,7 @@ SEXP R_pncount(SEXP R_x, SEXP R_t, SEXP R_s, SEXP R_o, SEXP R_v) {
 	    ni += n * (n-1);
 	}
 	if (npn) {
-	    pnfree(*nb);
+	    nbfree();
 	    error("node allocation failed");
 	}
 	f = l;
@@ -316,10 +331,10 @@ SEXP R_pncount(SEXP R_x, SEXP R_t, SEXP R_s, SEXP R_o, SEXP R_v) {
     if (LOGICAL(R_s)[0] == TRUE) {
 	PROTECT(r = allocVector(INTSXP, LENGTH(px)-1));
 	// warnings
-	pl = il = pr = ir = rs = rc = rl = (SEXP)0;
+	pl = il = pr = ir = rs = rc = rl = pi = (SEXP)0;
     } else {
 	SEXP o, p;
-	PROTECT(r = allocVector(VECSXP, 5));
+	PROTECT(r = allocVector(VECSXP, 6));
 	
 	SET_VECTOR_ELT(r, 0, (o = NEW_OBJECT(MAKE_CLASS("ngCMatrix"))));
 	SET_SLOT(o, install("p"),   (pl = allocVector(INTSXP, np+1)));
@@ -338,6 +353,8 @@ SEXP R_pncount(SEXP R_x, SEXP R_t, SEXP R_s, SEXP R_o, SEXP R_v) {
 	SET_VECTOR_ELT(r, 2, (rs = allocVector(REALSXP, np)));
 	SET_VECTOR_ELT(r, 3, (rc = allocVector(REALSXP, np)));
 	SET_VECTOR_ELT(r, 4, (rl = allocVector(REALSXP, np)));
+
+	SET_VECTOR_ELT(r, 5, (pi = allocVector(INTSXP, np)));
 	
 	INTEGER(pl)[0] = INTEGER(pr)[0] = np = ni = 0;
 
@@ -368,6 +385,8 @@ SEXP R_pncount(SEXP R_x, SEXP R_t, SEXP R_s, SEXP R_o, SEXP R_v) {
 		    pb[0] = pb[k];
 		    pb[k] = j;
 		}
+		INTEGER(pi)[np] = i;	    // itemset index
+		
 		REAL(rs)[np] = s;
 		REAL(rc)[np] = c / (double)   pnget(nb[pb[1]], pb+1, n-1);
 		REAL(rl)[np] = REAL(rc)[np] / pnget(nb[pb[0]], pb, 1) * t;
@@ -383,7 +402,7 @@ SEXP R_pncount(SEXP R_x, SEXP R_t, SEXP R_s, SEXP R_o, SEXP R_v) {
 	R_CheckUserInterrupt();
     }
   
-    pnfree(*nb);
+    nbfree();
 
     if (apn)
 	error("node deallocation imbalance %i", apn);
@@ -427,10 +446,10 @@ SEXP R_pncount(SEXP R_x, SEXP R_t, SEXP R_s, SEXP R_o, SEXP R_v) {
 			((double) t5 - t4) / CLOCKS_PER_SEC);
 #endif
 	}
-	UNPROTECT(5);
+	UNPROTECT(6);
     }
     else
-	UNPROTECT(1);
+	UNPROTECT(2);
 
     return r;
 }
@@ -440,19 +459,25 @@ SEXP R_pncount(SEXP R_x, SEXP R_t, SEXP R_s, SEXP R_o, SEXP R_v) {
 static void pnindex(PN *p) {
     if (p == NULL)
 	return;
-    p->count = cpn++;
+    cpn++;
+    if (p->count)
+	p->count = npn++;
     pnindex(p->pl);
     pnindex(p->pr);
 }
 
-SEXP R_pnindex(SEXP R_x, SEXP R_v) {
-    if (!inherits(R_x, "ngCMatrix"))
+SEXP R_pnindex(SEXP R_x, SEXP R_y, SEXP R_v) {
+    if (!inherits(R_x, "ngCMatrix") && 
+	!inherits(R_x, "sgCMatrix"))
 	error("'x' not of class ngCMatrix");
+    if (!isNull(R_y) && !inherits(R_y, "ngCMatrix") 
+		     && !inherits(R_x, "sgCMatrix"))
+	error("'y' not of class ngCMatrix");
     if (TYPEOF(R_v) != LGLSXP)
 	error("'v' not of type logical");
     int i, k, f, l, n, nr;
     int *x;
-    SEXP r, px, ix;
+    SEXP r, px, ix, py, iy;
     
 #ifdef _TIME_H
     clock_t t2, t1 = clock();
@@ -461,21 +486,33 @@ SEXP R_pnindex(SEXP R_x, SEXP R_v) {
 	Rprintf("indexing ... ");
 #endif
     nr = INTEGER(GET_SLOT(R_x, install("Dim")))[0];
-    if (nr >= NB_SIZE-1)
-	error("too many items");
     
-    px = GET_SLOT(R_x, install("p"));
-    ix = GET_SLOT(R_x, install("i"));
+    px = py = GET_SLOT(R_x, install("p"));
+    ix = iy = GET_SLOT(R_x, install("i"));
 
+    if (!isNull(R_y)) {
+	if (nr != INTEGER(GET_SLOT(R_y, install("Dim")))[0])
+	    error("'x' and 'y' not the same number of rows");
+	    
+	py = GET_SLOT(R_y, install("p"));
+	iy = GET_SLOT(R_y, install("i"));
+    }
+    
     cpn = apn = npn = 0;
     
+    if (nb != NULL)
+        nbfree();
+    nb = (PN **) malloc(sizeof(PN *) * (nr+1));
+    if (nb == NULL)
+        error("pointer array allocation failed");
+
     k = nr;
     nb[k] = NULL;
     while (k-- > 0)
 	nb[k] = pnadd(nb[k+1], &k, 1);
 
     if (npn) {
-	pnfree(*nb);
+	nbfree();
 	error("node allocation failed");
     }
    
@@ -488,36 +525,43 @@ SEXP R_pnindex(SEXP R_x, SEXP R_v) {
 	x = INTEGER(ix)+f;
 	pnadd(nb[*x], x, n);
 	if (npn) {
-	    pnfree(*nb);
+	    nbfree();
 	    error("node allocation failed");
 	}
+	if (nq->count == 0)
+	    nq->count = i;
 	f = l;
 	R_CheckUserInterrupt();
     }
 
-    PROTECT(r = allocVector(INTSXP, LENGTH(px)-1));
+    PROTECT(r = allocVector(INTSXP, LENGTH(py)-1));
   
-    cpn = 1;
+    if (isNull(R_y)) {
+
+	cpn = 0;
+	npn = 1;
     
-    pnindex(*nb);
+	pnindex(*nb);
+    }
 
     cpn = npn = 0;
    
     f = 0;
-    for (i = 1; i < LENGTH(px); i++) {
-	l = INTEGER(px)[i];
+    for (i = 1; i < LENGTH(py); i++) {
+	l = INTEGER(py)[i];
 	n = l-f;
 	if (n == 0) {
 	    INTEGER(r)[i-1] = 0;
 	    continue;
 	}
-	x = INTEGER(ix)+f;
-	INTEGER(r)[i-1] = pnget(nb[*x], x, n);
+	x = INTEGER(iy)+f;
+	k = pnget(nb[*x], x, n);
+	INTEGER(r)[i-1] = (k > 0) ? k : 0;
 	f = l;
 	R_CheckUserInterrupt();
     }
 
-    pnfree(*nb);
+    nbfree();
 
     if (apn)
 	error("node deallocation imbalance %i", apn);
@@ -577,21 +621,25 @@ SEXP R_pnclosed(SEXP R_x, SEXP R_c, SEXP R_v) {
 	Rprintf("checking ... ");
 #endif
     nr = INTEGER(GET_SLOT(R_x, install("Dim")))[0];
-    if (nr >= NB_SIZE-1)
-	error("too many items");
     
     px = GET_SLOT(R_x, install("p"));
     ix = GET_SLOT(R_x, install("i"));
 
     cpn = apn = npn = 0;
     
+    if (nb != NULL)
+        nbfree();
+    nb = (PN **) malloc(sizeof(PN *) * (nr+1));
+    if (nb == NULL)
+        error("pointer array allocation failed");
+
     k = nr;
     nb[k] = NULL;
     while (k-- > 0)
 	nb[k] = pnadd(nb[k+1], &k, 1);
 
     if (npn) {
-	pnfree(*nb);
+	nbfree();
 	error("node allocation failed");
     }
    
@@ -604,7 +652,7 @@ SEXP R_pnclosed(SEXP R_x, SEXP R_c, SEXP R_v) {
 	x = INTEGER(ix)+f;
 	pnadd(nb[*x], x, n);
 	if (npn) {
-	    pnfree(*nb);
+	    nbfree();
 	    error("node allocation failed");
 	}
 	f = l;
@@ -643,7 +691,7 @@ SEXP R_pnclosed(SEXP R_x, SEXP R_c, SEXP R_v) {
 	R_CheckUserInterrupt();
     }
 
-    pnfree(*nb);
+    nbfree();
 
     if (apn)
 	error("node deallocation imbalance %i", apn);
@@ -659,4 +707,127 @@ SEXP R_pnclosed(SEXP R_x, SEXP R_c, SEXP R_v) {
     return r;
 }
 
+// index a set of itemset into a set of 
+// rules.
 //
+// note that missing itemsets are coded 
+// as zero.
+
+SEXP R_pnrindex(SEXP R_x, SEXP R_v) {
+    if (!inherits(R_x, "ngCMatrix") && 
+	!inherits(R_x, "sgCMatrix"))
+        error("'x' not of class ngCMatrix");
+    if (TYPEOF(R_v) != LGLSXP)
+        error("'v' not of type logical");
+    int i, j, k, f, l, m, n, nr;
+    int *x;
+    SEXP px, ix;
+    SEXP r, is, ir, il;
+#ifdef _TIME_H
+    clock_t t2, t1 = clock();
+
+    if (LOGICAL(R_v)[0] == TRUE) 
+        Rprintf("processing ... ");
+#endif
+    nr = INTEGER(GET_SLOT(R_x, install("Dim")))[0];
+    
+    px = GET_SLOT(R_x, install("p"));
+    ix = GET_SLOT(R_x, install("i"));
+
+    cpn = apn = npn = 0;
+    
+    if (nb != NULL)
+        nbfree();
+    nb = (PN **) malloc(sizeof(PN *) * (nr+1));
+    if (nb == NULL)
+        error("pointer array allocation failed");
+
+    k = nr;
+    nb[k] = NULL;
+    while (k-- > 0)
+        nb[k] = pnadd(nb[k+1], &k, 1);
+
+    if (npn) {
+        nbfree();
+        error("node allocation failed");
+    }
+  
+    m = k = 0;
+    
+    f = 0;
+    for (i = 1; i < LENGTH(px); i++) {
+        l = INTEGER(px)[i];
+        n = l-f;
+        if (n == 0) 
+            continue;
+        x = INTEGER(ix)+f;
+        pnadd(nb[*x], x, n);
+        if (npn) {
+            nbfree();
+            error("node allocation failed");
+        }
+	if (nq->count == 0)
+            nq->count = i;
+	if (n > 1) 
+	    m += n;
+	if (n > k)
+	    k = n;
+        f = l;
+        R_CheckUserInterrupt();
+    }
+
+    PROTECT(r = allocVector(VECSXP, 3));
+
+    SET_VECTOR_ELT(r, 0, (is = allocVector(INTSXP, m)));
+    SET_VECTOR_ELT(r, 1, (il = allocVector(INTSXP, m)));
+    SET_VECTOR_ELT(r, 2, (ir = allocVector(INTSXP, m)));
+  
+    pb = INTEGER(PROTECT(allocVector(INTSXP, k+1)));
+
+    cpn = npn = 0;
+
+    m = 0;
+    
+    f = 0;
+    for (i = 1; i < LENGTH(px); i++) {
+	l = INTEGER(px)[i];
+	n = l-f;
+	if (n == 0)
+	    continue;
+	if (n > 1) {
+	    x = INTEGER(ix)+f;
+	    memcpy(pb, x, sizeof(int) * n);
+	    for (k = 0; k < n; k++) {
+		if (k > 0) {
+		    j     = pb[0];
+		    pb[0] = pb[k];
+		    pb[k] = j;
+		}
+		INTEGER(is)[m] = i;
+		INTEGER(il)[m] = pnget(nb[pb[1]], pb+1, n-1);
+		INTEGER(ir)[m] = pnget(nb[pb[0]], pb, 1);
+		m++;
+	    }
+	}
+	f = l;
+	R_CheckUserInterrupt();
+    }
+
+    nbfree();
+
+    if (apn)
+        error("node deallocation imbalance %i", apn);
+#ifdef _TIME_H
+    t2 = clock();
+    if (LOGICAL(R_v)[0] == TRUE)
+        Rprintf(" %i itemsets, %i rules [%.2fs]\n", LENGTH(px) - 1, m,
+                ((double) t2-t1) / CLOCKS_PER_SEC);
+#endif
+    
+    UNPROTECT(2);
+ 
+    return r;
+}
+
+//
+

@@ -65,8 +65,8 @@ elements. Duplicated elements can be removed with \code{\link{unique}}.
     \item{items}{\code{signature(x = "rules")};
       returns for each rule the union of the items in the 
       lhs and rhs (i.e., the itemsets
-      which generated the rule) as a 
-      the \code{\linkS4class{itemMatrix}}}
+      which generated the rule) as an 
+      \code{\linkS4class{itemMatrix}}}
     \item{generatingItemsets}{\code{signature(x = "rules")};
       returns a collection of the itemsets which generated the rules (one 
       itemset for each rule). Note that the collection can contain duplicated

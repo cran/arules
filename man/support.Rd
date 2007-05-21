@@ -66,13 +66,13 @@ support(x, transactions, ...)
 \examples{
 data("Income")
 
-### find and some frequent itemsets
+## find and some frequent itemsets
 itemsets <- eclat(Income)[1:5]
 
-### inspect the support returned by eclat
+## inspect the support returned by eclat
 inspect(itemsets)
 
-### count support in the database
+## count support in the database
 support(items(itemsets), Income)
 }
 \keyword{models}

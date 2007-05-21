@@ -13,7 +13,7 @@
   an object of class \code{\linkS4class{transactions}}).
 }
 \usage{
-size(x)
+size(x, ...)
 %\S4method{size}{itemMatrix}(x)
 %\S4method{size}{itemsets}(x)
 %\S4method{size}{rules}(x)
@@ -21,6 +21,7 @@ size(x)
 }
 \arguments{
   \item{x}{an object.}
+  \item{\ldots}{further (unused) arguments.}
 }
 \value{
   \code{size} returns a numeric vector of length \code{length(x)}.  Each

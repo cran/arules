@@ -17,7 +17,7 @@ setMethod("length", signature(x = "tidLists"),
 
 ## produces a vector of element sizes
 setMethod("size", signature(x = "tidLists"),
-    function(x) {
+    function(x, ...) {
         ##diff(x@data@p)
         
         ## for now we use our own C code
@@ -73,27 +73,20 @@ setMethod("t", signature(x = "tidLists"),
 setMethod("[", signature(x = "tidLists", i = "ANY", j = "ANY", drop = "ANY"),
         function(x, i, j, ..., drop) {          #]
 
-        if(missing(j) && missing(i)) return(x)
-
-        ## drop is always false
-        drop <- FALSE
-
-        y <- x 
-
-        ## reverse i and j
-        if(missing(i)) {
-            y@data <- x@data[j, ..., drop=drop]
-            y@transactionInfo <- x@transactionInfo[j,,drop=FALSE]
-        }else if (missing(j)) {
-            y@data <- x@data[,i,...,drop=drop]
-            y@itemInfo = x@itemInfo[i,,drop=FALSE]
-        }else{
-            y@data <- x@data[j,i,...,drop=drop]
-            y@itemInfo = x@itemInfo[i,,drop=FALSE]
-            y@transactionInfo <- x@transactionInfo[j,,drop=FALSE]
+        ## i and j are reversed
+        if (!missing(i)) {
+            if (is.character(i))
+                i <- itemLabels(x) %in% i
+            x@data <- .Call("R_colSubset_ngCMatrix", x@data, i)
+            x@itemInfo = x@itemInfo[i,, drop = FALSE]
         }
+        if (!missing(j)) {
+            x@data <- .Call("R_rowSubset_ngCMatrix", x@data, j)
+            if (length(x@transactionInfo))
+                x@transactionInfo <- x@transactionInfo[j,, drop = FALSE]
+        } 
 
-        return(y)
+        x
     })
 
 
@@ -188,7 +181,7 @@ setMethod("labels", signature(object = "tidLists"),
     })
 
 setMethod("itemLabels", signature(object = "tidLists"),
-    function(object, ...) as(object@itemInfo[["labels"]], "character")
+    function(object, ...) as.character(object@itemInfo[["labels"]])
 )
 
 

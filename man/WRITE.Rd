@@ -28,10 +28,10 @@ WRITE(x, \dots)
 \examples{
 data("Epub")
 
-### write the formated result to screen
+## write the formated result to screen
 WRITE(Epub[1:5])
 
-### write the formated result to file
+## write the formated result to file
 WRITE(Epub[1:5], file = "data")
 
 unlink("data") # tidy up

@@ -97,23 +97,23 @@ Carlo Zaniolo, editors,  \emph{Proceedings of the 20th International Conference
 on Very Large Data Bases, VLDB}, pages 487--499, Santiago, Chile.
 }
 \examples{
- # generate random 1000 transactions for 200 items with 
- # a success probability decreasing from 0.2 to 0.0001
- # using the method described in Hahsler et al. (2006).
- trans <- random.transactions(nItems = 200, nTrans = 1000, 
-	iProb = seq(0.2,0.0001, length=200))
- 
- # display random data set
- image(trans)
+## generate random 1000 transactions for 200 items with 
+## a success probability decreasing from 0.2 to 0.0001
+## using the method described in Hahsler et al. (2006).
+trans <- random.transactions(nItems = 200, nTrans = 1000, 
+   iProb = seq(0.2,0.0001, length=200))
 
- # use the method by Agrawal and Srikant (1994) to simulate transactions 
- # which contains correlated items. This should create data similar to
- # T10I4D100K (just only 1000 transactions)
- patterns <- random.patterns(nItems = 1000)
- summary(patterns)
+## display random data set
+image(trans)
 
- trans2 <- random.transactions(nItems = 1000, nTrans = 1000, 
-	method = "agrawal", patterns = patterns)
- image(trans2) 
+## use the method by Agrawal and Srikant (1994) to simulate transactions 
+## which contains correlated items. This should create data similar to
+## T10I4D100K (just only 1000 transactions)
+patterns <- random.patterns(nItems = 1000)
+summary(patterns)
+
+trans2 <- random.transactions(nItems = 1000, nTrans = 1000, 
+   method = "agrawal", patterns = patterns)
+image(trans2) 
 }
 \keyword{datagen}

@@ -1,16 +1,22 @@
 ##*******************************************************
 ## Function ruleInduction
 ##
-## This is a poor man's implementation which mines all rules and
-## then filters the rules which do not stam from the itemsets
+## Provides an interface to various functions which induce
+## (strong) rules from (1) arbitrary itemsets and (2) from
+## a complete set of frequent itemsets. 
 
 setMethod("ruleInduction",  signature(x = "itemsets"),
     function(x, transactions, confidence = 0.8, control = NULL) {
 
         ## control args are: method, reduce and verbose
-        method  <- if(is.null(control$m))   "ptree" else control$m
-        reduce  <- if(is.null(control$r))   FALSE else control$r
-        verbose <- if(is.null(control$v))   FALSE else control$v
+        verbose <- if (is.null(control$v)) FALSE   else control$verbose
+
+        ## induce directly from frequent itemsets
+        if (missing(transactions))
+            return(ruleInduction.index(x, confidence, verbose))
+
+        method  <- if (is.null(control$m)) "ptree" else control$method
+        reduce  <- if (is.null(control$r)) FALSE   else control$reduce
 
         methods <- c("apriori", "ptree", "tidlists")
     
@@ -138,17 +144,45 @@ ruleInduction.tidlists <- function(x, transactions, confidence = 0.8, verbose = 
     rules
 }
 
-## this framework is inefficient as we do the support counting twice
+## ptree support counting
 
 ruleInduction.ptree <- 
 function(x, transactions, confidence = 0.8, reduce = FALSE, verbose = FALSE) {
     r <- .Call("R_pncount", x@items@data, transactions@data, FALSE, reduce, verbose)
-    names(r) <- c("data.lhs","data.rhs","support","confidence","lift")
+    names(r) <- c("data.lhs","data.rhs","support","confidence","lift", "itemset")
     new("rules",
         lhs     = new("itemMatrix", data     = r$data.lhs, 
                                     itemInfo = transactions@itemInfo),
         rhs     = new("itemMatrix", data     = r$data.rhs, 
                                     itemInfo = transactions@itemInfo),
-        quality = data.frame(r[3:5]))[r$confidence > confidence]
+        quality = data.frame(r[3:6]))[r$confidence >= confidence]
 }
 
+## ptree indexing
+
+ruleInduction.index <-
+function(x, confidence = 0.8, verbose = FALSE) {
+    if (is.null(quality(x)))
+        stop("cannot induce rules because support is missing")
+
+    r <- data.frame(.Call("R_pnrindex", x@items@data, verbose))
+    names(r) <- c("i", "li", "ri")
+
+    if (!all(r$li) || !all(r$ri))
+        stop("cannot induce rules because itemsets are incomplete")
+
+    r$support    <- x@quality$support[r$i]
+    r$confidence <- r$support /
+                    x@quality$support[r$li]
+    # filter
+    r <- r[r$confidence >= confidence,]
+    if (dim(r)[1] == 0)
+        return(new("rules"))
+    r$lift       <- r$confidence / x@quality$support[r$ri]
+
+    new("rules", lhs     = x@items[r$li],
+                 rhs     = x@items[r$ri],
+                 quality = r[4:6])
+}
+
+###

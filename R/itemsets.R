@@ -71,46 +71,81 @@ setMethod("[", signature(x = "itemsets", i = "ANY", j = "ANY", drop = "ANY"),
     })
 
 ## auxilliary function to combine 2 quality data.frames
-.combineQuality <- function(a, b) {
-    namesA <- names(a)
-    namesB <- names(b)
+#.combineQuality <- function(a, b) {
+#    namesA <- names(a)
+#    namesB <- names(b)
+#
+#    ## do we have a NULL data.frame
+#    if(length(a) == 0) a <- b 
+#    if(length(b) == 0) b <- a 
+#    ## Note: the copied values will be set to NA in the following    
+#
+#    if(!setequal(namesA, namesB)) {
+#        ## in a but not in b
+#        diffAB <- setdiff(namesA, namesB)
+#        if(length(diffAB) > 0 ) 
+#        sapply(diffAB, FUN = function(x) b[[x]] <<- NA)
+#
+#        ## in b but not in a  
+#        diffBA <- setdiff(namesB, namesA) 
+#        if(length(diffBA) > 0 ) 
+#        sapply(diffBA, FUN = function(x) a[[x]] <<- NA)
+#    }
+#
+#    rbind(a, b)
+#}
 
-    ## do we have a NULL data.frame
-    if(length(a) == 0) a <- b 
-    if(length(b) == 0) b <- a 
-    ## Note: the copied values will be set to NA in the following    
+## FIXME this is inefficient for data.frames with many
+##       rows. we do not handle cases with non-zero 
+##       rows/columns and zero columns/rows.
 
-    if(!setequal(namesA, namesB)) {
-        ## in a but not in b
-        diffAB <- setdiff(namesA, namesB)
-        if(length(diffAB) > 0 ) 
-        sapply(diffAB, FUN = function(x) b[[x]] <<- NA)
-
-        ## in b but not in a  
-        diffBA <- setdiff(namesB, namesA) 
-        if(length(diffBA) > 0 ) 
-        sapply(diffBA, FUN = function(x) a[[x]] <<- NA)
+.combineMeta <- function(x, y, name, ...) {
+    if (length(slot(x, name))) {
+        if (length(slot(y, name)))
+            slot(x, name) <- rbind(slot(x, name), slot(y, name))
+        else {
+            k <- rbind(NA, slot(x, name))
+            slot(x, name) <- 
+                rbind(slot(x, name), k[rep(1, length(y)),, drop = FALSE])
+        }
+    } else
+    if (length(slot(y, name))) {
+        k <- rbind(NA, slot(y, name))
+        slot(x, name) <- 
+            rbind(k[rep(1, length(x)),, drop = FALSE],  slot(y, name))
     }
-
-    rbind(a, b)
+    slot(x, name)
 }
+
 
 setMethod("c", signature(x = "itemsets"),
     function(x, ..., recursive = FALSE){
+#
+#        args <- list(...)  
+#        if(length(args) == 0) return(x)  
+#
+#        # build quality data.frame first
+#        q <- x@quality
+#        for(i in 1:length(args)) {
+#            q <- .combineQuality(q, args[[i]]@quality)
+#        }
+#
+#        # create joint itemMatrix
+#        z <- lapply(list(...), FUN = function(i) i@items)
+#        new("itemsets", items = c(x@items, z, recursive = TRUE), 
+#            quality = q)
 
-        args <- list(...)  
-        if(length(args) == 0) return(x)  
-
-        # build quality data.frame first
-        q <- x@quality
-        for(i in 1:length(args)) {
-            q <- .combineQuality(q, args[[i]]@quality)
+        args <- list(...)
+        if (recursive)
+            args <- unlist(args)
+        for (y in args) {
+            if (!inherits(y, "itemsets"))
+                stop("can combine itemsets only")
+            x <- new("itemsets", items   = c(x@items, y@items), 
+                                 quality = .combinMeta(x, y, "quality"))
         }
-
-        # create joint itemMatrix
-        z <- lapply(list(...), FUN = function(i) i@items)
-        new("itemsets", items = c(x@items, z, recursive = TRUE), 
-            quality = q) 
+        validObject(x)
+        x
     })
 
 

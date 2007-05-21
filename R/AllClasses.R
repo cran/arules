@@ -9,12 +9,25 @@
 setClass("itemMatrix",
     representation(
         data        = "ngCMatrix", 
-        itemInfo    = "data.frame"), 
+        itemInfo    = "data.frame",
+        itemsetInfo = "data.frame"
+    ), 
+    
+    prototype(itemInfo = data.frame(), itemsetInfo = data.frame()),
     
     validity= function(object) {
-        ## regular itemMatrix
-        if(length(itemInfo(object)[["labels"]]) == nitems(object)) return(TRUE)
+        ## itemInfo needs a labels column of appropriate length
+        if(length(itemLabels(object)) != nitems(object))
         return("number of item labels does not match number of columns in itemMatrix")
+        if(length(unique(itemLabels(object))) != nitems(object))
+        return("labels not unique in itemMatrix")
+
+        if(length(object@itemsetInfo) != 0
+            && length(object)  != length(object@itemsetInfo[[1]]))
+        return("length of itemsetInfo does not match number of rows")
+
+
+        return(TRUE)
     })
 
 
@@ -34,17 +47,15 @@ setClass("transactions",
     representation(transactionInfo = "data.frame"),
     contains = "itemMatrix",
     
-    prototype(transactionInfo = data.frame(), labels = data.frame()),
+    prototype(transactionInfo = data.frame()),
     
     validity = function(object) {
         ## check dimensions
         ## no transactionInfo (empty data.frame)
-        if(length(object@transactionInfo) == 0) return(TRUE) 
-
-        if (length(object) == length(object@transactionInfo[[1]]))
-        return(TRUE)
-
+        if(length(object@transactionInfo) != 0
+            && length(object)  != length(object@transactionInfo[[1]]))
         return("length of transactionInfo does not match number of transactions")
+        return(TRUE) 
     })
 
 setClass("summary.transactions",

@@ -70,8 +70,8 @@ setAs("data.frame", "transactions", function(from) {
         z <- new("ngCMatrix", i = i, p = p, Dim = to_dim)
         ##cat("Recoded",dim(from)[2],"variables to",to_dim[1],"binary items\n")
         new("transactions", new("itemMatrix", data = z,
-                itemInfo=data.frame(labels = to_labels, variables = to_vars, 
-                    levels=to_levels)))
+                itemInfo = data.frame(labels = I(as.character(to_labels)), 
+                    variables = to_vars, levels = to_levels)))
     })
 
 
@@ -119,12 +119,17 @@ setMethod("[", signature(x = "transactions",            # ]
 setMethod("c", signature(x = "transactions"),
     function(x, ..., recursive = FALSE){
 
-        ti <- x@transactionInfo
-        lapply(list(...), FUN = function(i)
-            ti <<- rbind(ti, i@transactionInfo))
-
-        new("transactions", c(x = as(x, "itemMatrix"), ...), 
-            transactionInfo = ti)
+        args <- list(...)
+        if (recursive)
+            args <- unlist(args)
+        for (y in args) {
+            if (!inherits(y, "transactions"))
+                stop("can only combine transactions")
+            x <- new("transactions", c(as(x, "itemMatrix"), 
+                                       as(y, "itemMatrix")),
+                     transactionInfo = .combineMeta(x, y, "transactionInfo"))
+        }
+        x
     })
 
 
@@ -148,8 +153,8 @@ setMethod("image", signature(x = "transactions"),
 setMethod("summary", signature(object = "transactions"),
     function(object, ...)
     new("summary.transactions", summary(as(object,"itemMatrix")),
-        transactionInfo = transactionInfo(object)[1:min(3, length(object)), 
-            , drop = FALSE])
+        transactionInfo = head(transactionInfo(object), 3)
+    )
 )
 
 setMethod("show", signature(object = "summary.transactions"),

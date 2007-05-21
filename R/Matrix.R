@@ -1,4 +1,5 @@
 ## to list
+## fixme: C code available
 setAs("ngCMatrix", "list",
   function(from) {
     data <- from
@@ -24,3 +25,7 @@ setAs("list", "ngCMatrix",
             Dim = as.integer(c(max(i)+1, length(from))))
 
     })
+
+## FIXME: for consistent behavior throughout the
+## package we should overload "[" for ngCMatrix
+## here and remove the C calls elsewhere.

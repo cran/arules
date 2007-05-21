@@ -11,9 +11,11 @@
 \alias{coerce,itemMatrix,ngCMatrix-method}
 \alias{coerce,itemMatrix,list-method}
 \alias{dim,itemMatrix-method}
-\alias{\%in\%,itemMatrix-method}
+\alias{\%in\%,itemMatrix,character-method}
 \alias{\%pin\%}
-\alias{\%pin\%,itemMatrix-method}
+\alias{\%pin\%,itemMatrix,character-method}
+\alias{\%ain\%}
+\alias{\%ain\%,itemMatrix,character-method}
 \alias{itemLabels<-,itemMatrix-method}
 \alias{itemLabels,itemMatrix-method}
 \alias{itemLabels<-}
@@ -24,6 +26,10 @@
 \alias{itemInfo,itemMatrix-method}
 \alias{itemInfo<-}
 \alias{itemInfo}
+\alias{itemsetInfo<-,itemMatrix-method}
+\alias{itemsetInfo,itemMatrix-method}
+\alias{itemsetInfo<-}
+\alias{itemsetInfo}
 \alias{nitems}
 \alias{nitems,itemMatrix-method}
 \alias{show,itemMatrix-method}
@@ -70,45 +76,63 @@
       %select subsets of associations containing items with matching
       %variable or category names.
     }
+    \item{\code{itemsetInfo}:}{a data.frame which may contain additional 
+        information for the rows (mostly representing itemsets) in the matrix. 
+        }
   }
 }
 \section{Methods}{
   \describe{
-    \item{coerce}{\code{signature(from = "matrix", to = "itemMatrix")}};
-      expects \code{from} to be a binary matrix only containing 0s and 1s.
-    \item{coerce}{\code{signature(from = "list", to = "itemMatrix")}};
+    \item{coerce}{\code{signature(from = "matrix", to = "itemMatrix")};
+        expects \code{from} to be a binary matrix only containing 0s and 1s.}
+    \item{coerce}{\code{signature(from = "list", to = "itemMatrix")};
       \code{from} is a list of vectors. Each vector contains one 
-      set/transaction/\ldots.
-    \item{coerce}{\code{signature(from = "itemMatrix", to = "ngCMatrix")}};
+      set/transaction/\ldots.}
+    \item{coerce}{\code{signature(from = "itemMatrix", to = "ngCMatrix")};
       access the sparse matrix representation. Note, the \code{ngCMatrix} 
-      contains a transposed from of the itemMatrix.
-    \item{coerce}{\code{signature(from = "itemMatrix", to = "dgCMatrix")}};
+      contains a transposed from of the itemMatrix.}
+    \item{coerce}{\code{signature(from = "itemMatrix", to = "dgCMatrix")};
       access the sparse matrix representation. Note, the \code{dgCMatrix} 
-      contains a transposed from of the itemMatrix.
+      contains a transposed from of the itemMatrix.}
     \item{coerce}{\code{signature(from = "itemMatrix", to = "matrix")}; coerces
       to a dense 0-1 matrix of \code{storage.mode} \code{"integer"} instead of 
-	\code{"double"} to save memory.}
-    \item{coerce}{\code{signature(from = "itemMatrix", to = "list")}}; see also
-      the methods for \code{LIST}.
+	  \code{"double"} to save memory.}
+    \item{coerce}{\code{signature(from = "itemMatrix", to = "list")}; see also
+        the methods for \code{LIST}.}
     \item{dim}{\code{signature(x = "itemMatrix")};
       returns the dimensions of the itemMatrix.}
-    \item{\%in\%}{\code{signature(x = "itemMatrix")}: matches values 
-      against the item labels for 
-      each element (row) in the itemMatrix.}
-    \item{\%pin\%}{\code{signature(x = "itemMatrix")}: matches values 
-      against the item labels for 
-      each element (row) in the itemMatrix using partial matching.}
+    \item{\%in\%}{\code{signature(x = "itemMatrix", table = "character")};
+      matches the strings in \code{table} against the item labels 
+      in \code{x} and returns a logical vector indicating if
+      a row (itemset) in \code{x} contains \emph{any} of the
+      items specified in \code{table}.
+      Note that there is a \code{\%in\%} method with 
+      \code{signature(x = "itemMatrix", table = "character")}. This method is
+      described in together with \code{\link{match}}.}
+    \item{\%ain\%}{\code{signature(x = "itemMatrix", table = "character")}; 
+        matches the strings in \code{table} against the item labels 
+        in \code{x} and returns a logical vector indicating if
+        a row (itemset) in \code{x} contains \emph{all} of the
+        items specified in \code{table}.}
+    \item{\%pin\%}{\code{signature(x = "itemMatrix", table = "character")}; 
+        matches the strings in \code{table} against the item labels 
+        in \code{x} (using \emph{partial} matching) and returns a 
+        logical vector indicating if
+        a row (itemset) in \code{x} contains \emph{any} of the
+        items specified in \code{table}.}
     \item{itemLabels}{\code{signature(object = "itemMatrix")};
       returns the item labels used for encoding as a character vector.}
     \item{itemLabels<-}{\code{signature(object = "itemMatrix")};
       replaces the item labels used for encoding.}
     \item{itemInfo}{\code{signature(object = "itemMatrix")};
-      returns the whole item information data.frame including
+      returns the whole item/column information data.frame including
       labels.}
     \item{itemInfo<-}{\code{signature(object = "itemMatrix")};
-      replaces the item info by a data.frame.
-      The length of the vectors in the data.frame has to match
-      the number of elements (rows) in the itemMatrix.}
+      replaces the item/column info by a data.frame.}
+    \item{itemsetInfo}{\code{signature(object = "itemMatrix")};
+      returns the item set/row information data.frame.}
+    \item{itemsetInfo<-}{\code{signature(object = "itemMatrix")};
+      replaces the item set/row info by a data.frame.}
     \item{labels}{\code{signature(x = "transactions")};
       returns the labels (item labels and element names) 
       for the matrix as a list of two vectors named \code{items}
@@ -161,7 +185,7 @@ as(i[1:5], "list")
 as(i[1:5], "matrix")
 
 ## Get first 5 elements (rows) of the itemMatrix as sparse ngCMatrix.
-##  Warning: for efficiency reasons, the ngCMatrix you get is transposed!
+## Warning: for efficiency reasons, the ngCMatrix you get is transposed!
 as(i[1:5], "ngCMatrix")
 }
 \keyword{classes}
