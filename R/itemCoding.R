@@ -3,73 +3,108 @@ setMethod("decode", signature(x = "numeric"),
     function(x, itemLabels) itemLabels[x])
 
 setMethod("decode", signature(x = "list"),
-    function(x, itemLabels) lapply(x, function(r) itemLabels[r])    
-    )
+    function(x, itemLabels) lapply(x, function(x) itemLabels[x]))
 
 ## labels -> IDs
 setMethod("encode", signature(x = "character"),
     function(x, itemLabels, itemMatrix = TRUE) {
         ## itemMatrix always is created from list
-        if(itemMatrix == TRUE) 
-        return(encode(list(x), itemLabels, itemMatrix == TRUE))
+        if (itemMatrix == TRUE) 
+            return(encode(list(x), itemLabels, itemMatrix == TRUE))
 
         ## regular encoding
-        res <- which(itemLabels %in% x)
-        if(length(res) < length(x))
-        stop("Unknown item label in ", deparse(x))
-
-        return(res)
-    })
+        r <- which(itemLabels %in% x)
+        if (length(r) < length(x))
+            stop("Unknown item label(s) in ", deparse(x))
+        r
+    }
+)
 
 setMethod("encode", signature(x = "numeric"),
     function(x, itemLabels, itemMatrix = TRUE) {
         ## itemMatrix always is created from list
-        if(itemMatrix == TRUE) 
-        return(encode(list(x), itemLabels, itemMatrix == TRUE))
+        if (itemMatrix == TRUE) 
+            return(encode(list(x), itemLabels, itemMatrix == TRUE))
 
         ## regular encoding
-        if(any(x > length(itemLabels)))
-        stop("Too high label ID in ", deparse(x))
+        r <- range(x)
+        if (r[1] < 1 || r[2] > length(itemLabels))
+            stop("Invalid range in ", deparse(x))
+        if (!is.integer(x)) {
+            if (!all.equal(x, (i <- as.integer(x))))
+                stop("Invalid numeric values in ", deparse(x))
+            i
+        } else
+            x
+    }
+)
 
-        return(x)
-    })
-
+## NOTES this is less error prone than creating ngCMatrix
+##       directly in internal code.
 setMethod("encode", signature(x = "list"),
     function(x, itemLabels, itemMatrix = TRUE) {
-        ids <- lapply(x, function(i) encode(i, itemLabels, itemMatrix = FALSE))
-        if(itemMatrix == FALSE) return(ids)
+        i <- lapply(x, encode, itemLabels, itemMatrix = FALSE)
+        if (itemMatrix == FALSE) 
+            return(i)
 
-        ## create an itemMatrix
-        ngC <- as(ids, "ngCMatrix")
+        ## yuck
+        if (!length(i))
+            return(recode(new("itemMatrix"), itemLabels))
 
-        ## fix dim, if necessary (i.e., if items with high IDs
-            ##   do not occur in ids)
-        ngC@Dim <- c(length(itemLabels), ngC@Dim[2])    
+        p <- sapply(i, length)
+        names(p) <- NULL
+        p <- cumsum(p)
+        i <- unlist(i, use.names = FALSE)
 
-        new("itemMatrix", data = ngC, 
-            itemInfo = data.frame(labels = itemLabels))
-    })
+        i <- new("ngCMatrix", p   = c(0L, p), 
+                              i   = i - 1L,
+                              Dim = c(length(itemLabels), length(p)))
+
+        ## item labels must be character
+        new("itemMatrix", 
+            data     = i,  
+            itemInfo = data.frame(labels = as.character(itemLabels),
+                                  stringsAsFactors = FALSE))
+    }
+)
 
 ## recode to make compatible
 setMethod("recode", signature(x = "itemMatrix"),
-    function(x, itemLabels = NULL, match = NULL ,...) {
+    function(x, itemLabels = NULL, match = NULL) {
+        if (!is.null(match)) {
+            if (!is(match, "itemMatrix"))
+                stop("'match' not of class itemMatrix")
+            if (!is.null(itemLabels))
+                stop("'match' and 'itemLabels' cannot both be specified")
+            itemLabels <- itemLabels(match)
+        }
 
-        ## match x with object in match
-        if(!is.null(match)) itemLabels <- itemLabels(match)
-
-        ## enlarge matrix
-        x@data@Dim <- c(length(itemLabels), x@data@Dim[2])
+        k <- match(itemLabels(x), itemLabels)
+        if (any(is.na(k)))
+            stop ("All item labels in x must be contained in ",
+                  "'itemLabels' or 'match'.")
 
         ## recode items
-        items.index <- as.integer(match(itemLabels(x), itemLabels) - 1)
-        if(any(is.na(items.index))) stop ("Items are incompatible!\nAll items in x have to be available in itemLabels or match.")
+        if (any(k != seq(length(k))))
+            x@data <- .Call("R_recode_ngCMatrix", x@data, k)
 
-        x@data@i <- items.index[(x@data@i +1)]
+        ## enlarge
+        if (x@data@Dim[1] <  length(itemLabels))
+            x@data@Dim[1] <- length(itemLabels)
 
-        ## fix itemlabels
-        if(!is.null(match)) itemInfo(x) <- itemInfo(match)
-        else itemInfo(x) <- data.frame(labels = itemLabels)
+        if (!is.null(match)) 
+            itemInfo(x) <- itemInfo(match)
+        else 
+            itemInfo(x) <- data.frame(labels = I(as.character(itemLabels)))
 
-        return(x)
-    })	
+        validObject(x)
+        x
+    }
+)	
 
+## most of the problems with this code are fixed.
+## however, its design and features are confusing!
+##
+## [ceeboo 2007].
+
+###

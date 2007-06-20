@@ -7,7 +7,7 @@
 }
 \usage{
 read.transactions(file, format = c("basket", "single"), sep = NULL,
-                  cols = NULL)
+                  cols = NULL, rm.duplicates = FALSE)
 }
 \arguments{
   \item{file}{the file name.}
@@ -24,6 +24,8 @@ read.transactions(file, format = c("basket", "single"), sep = NULL,
     For the \sQuote{basket} format, \code{cols} can be a numeric scalar
     giving the number of the column (field) with the transaction ids.
     If \code{cols = NULL}}, the data do not contain transaction ids.
+\item{rm.duplicates}{a logical value specifying if duplicate items should
+    be removde from the transactions.}
 }
 \details{
   For \sQuote{basket} format, each line in the transaction data file

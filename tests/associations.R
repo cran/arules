@@ -1,5 +1,7 @@
 library("arules")
 
+set.seed(20070611)
+
 m <- matrix(as.integer(runif(100000)>0.8), ncol=20)
 dimnames(m) <- list(NULL,paste("item",c(1:20),sep=""))
 t <- as(m, "transactions")

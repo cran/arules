@@ -20,11 +20,16 @@ setMethod("dissimilarity", signature(x = "matrix"),
 
         ## check input
         if (any(x != 0 && x !=1)) 
-        stop("x is not a binary matrix!")
+            stop("x is not a binary matrix!")
 
         ## cross dissimilarities?
-        if (!is.null(y)) cross <- TRUE
-        else cross <- FALSE
+        if (!is.null(y)) {
+            if (!is.matrix(y))
+                stop("'y' not a matrix")
+            cross <- TRUE
+        }
+        else 
+            cross <- FALSE
 
 
         builtin_methods <- c("affinity", "jaccard", "matching", "dice", 
@@ -137,7 +142,7 @@ setMethod("dissimilarity", signature(x = "itemMatrix"),
         ## items instead of transactions?
         items <- FALSE
         if (pmatch(tolower(which), c("transactions", "items")) == 2) 
-        transactions <- TRUE
+        items <- TRUE
 
         x <- as(x, "matrix")
         if(items) x <- t(x) 

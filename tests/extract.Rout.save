@@ -1,0 +1,59 @@
+
+R version 2.4.1 Patched (2007-03-31 r41272)
+Copyright (C) 2007 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> 
+> library(arules)
+Loading required package: stats4
+Loading required package: Matrix
+Loading required package: lattice
+**fixing ngCMatrix validation
+> data(Adult)
+> 
+> all.equal(Adult, c(Adult[1:100], Adult[-(1:100)]))
+[1] "Attributes: < Component 2: Modes: S4, list >"
+> 
+> ec <- eclat(Adult)
+
+parameter specification:
+ tidLists support minlen maxlen            target   ext
+    FALSE     0.1      1      5 frequent itemsets FALSE
+
+algorithmic control:
+ sparse sort verbose
+      7   -2    TRUE
+
+eclat - find frequent item sets with the eclat algorithm
+version 2.6 (2004.08.16)         (c) 2002-2004   Christian Borgelt
+create itemset ... 
+set transactions ...[115 item(s), 48842 transaction(s)] done [0.11s].
+sorting and recoding items ... [31 item(s)] done [0.01s].
+creating bit matrix ... [31 row(s), 48842 column(s)] done [0.01s].
+writing  ... [2143 set(s)] done [0.04s].
+Creating S4 object  ... done [0.00s].
+> all.equal(ec, c(ec[1:100], ec[-(1:100)]))
+[1] "Attributes: < Component 2: Attributes: < Component 2: Modes: S4, list > >"
+> 
+> 
+> i <- items(ec)
+> all.equal(i, c(i[1:100,], i[-(1:100),]))
+[1] "Attributes: < Component 2: Modes: S4, list >"
+> 
+> ###
+> 
+> 

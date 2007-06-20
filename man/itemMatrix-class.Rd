@@ -34,6 +34,8 @@
 \alias{nitems,itemMatrix-method}
 \alias{show,itemMatrix-method}
 \alias{summary,itemMatrix-method}
+%compat
+\alias{t,ngCMatrix-method}
 
 \title{Class ``itemMatrix'' --- Sparse Binary Incidence Matrix to Represent Sets
   of Items}

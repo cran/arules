@@ -4,7 +4,6 @@
 \alias{LIST,transactions-method}
 \alias{LIST,tidLists-method}
 \alias{coerce,ngCMatrix,list-method}
-\alias{coerce,list,ngCMatrix-method}
 \title{
   List Representation for Objects Based on ``itemMatrix''
 }

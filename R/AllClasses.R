@@ -1,5 +1,11 @@
 .onLoad <- function(lib, pkg) {
     require("methods", character = TRUE, quietly = TRUE)
+    ## 
+    require("Matrix", character = TRUE, quietly = TRUE)
+    cat("** fixing ngCMatrix validation\n")
+    setValidity("ngCMatrix",
+        function(object) .Call("R_valid_ngCMatrix", object),
+                 where = .GlobalEnv)
 }
 
 
@@ -17,34 +23,37 @@ setClass("itemMatrix",
     
     validity= function(object) {
         ## itemInfo needs a labels column of appropriate length
-        if(length(itemLabels(object)) != nitems(object))
-        return("number of item labels does not match number of columns in itemMatrix")
-        if(length(unique(itemLabels(object))) != nitems(object))
-        return("labels not unique in itemMatrix")
+        ## also the labels must be unique for matching objects.
+        if (length(object@itemInfo$labels) != nitems(object))
+            return("item labels do not match number of columns")
+        if (length(unique(object@itemInfo$labels)) != nitems(object))
+            return("item labels not unique")
 
-        if(length(object@itemsetInfo) != 0
-            && length(object)  != length(object@itemsetInfo[[1]]))
-        return("length of itemsetInfo does not match number of rows")
+        if (length(object@itemsetInfo) && 
+            length(object@itemsetInfo[[1]]) != length(object))
+            return("itemsetInfo does not match number of rows")
 
-
-        return(TRUE)
-    })
-
+        TRUE
+    }
+)
 
 setClass("summary.itemMatrix",
     representation(
-        Dim         = "integer",
-        itemSummary = "integer",
-        lengths     = "table",
+        Dim           = "integer",
+        itemSummary   = "integer",
+        lengths       = "table",
         lengthSummary = "table",
-        itemInfo    = "data.frame"))
-
+        itemInfo      = "data.frame"
+    )
+)
 
 ##**********************************************************
 ## transactions 
 
 setClass("transactions",
-    representation(transactionInfo = "data.frame"),
+    representation(
+        transactionInfo = "data.frame"
+    ),
     contains = "itemMatrix",
     
     prototype(transactionInfo = data.frame()),
@@ -52,11 +61,13 @@ setClass("transactions",
     validity = function(object) {
         ## check dimensions
         ## no transactionInfo (empty data.frame)
-        if(length(object@transactionInfo) != 0
-            && length(object)  != length(object@transactionInfo[[1]]))
-        return("length of transactionInfo does not match number of transactions")
-        return(TRUE) 
-    })
+        if (length(object@transactionInfo) &&
+            length(object@transactionInfo[[1]]) != length(object))
+           return("transactionInfo does not match number of transactions")
+
+        TRUE
+    }
+)
 
 setClass("summary.transactions",
     representation(transactionInfo = "data.frame"),
@@ -66,33 +77,43 @@ setClass("summary.transactions",
 
 ##**********************************************************
 ## transaction ID lists
+##
+## FIXME optional item labels is not a good idea!
 
 setClass("tidLists",
     representation(
-        data        = "ngCMatrix",
-        itemInfo    = "data.frame",
-        transactionInfo = "data.frame"),
-    
-    prototype(
-        transactionInfo = data.frame(),
-        itemInfo = data.frame()
+        data            = "ngCMatrix",
+        itemInfo        = "data.frame",
+        transactionInfo = "data.frame"
     ),
+    
+    prototype(itemInfo = data.frame(), transactionInfo = data.frame()),
     
     validity = function(object) { 
         ## check number of labels in itemInfo
         ## no labels (empty data.frame)
-        if(length(object@itemInfo) == 0) return(TRUE) 
+        if (length(object@itemInfo) &&
+            length(object@itemInfo[["labels"]]) != dim(object)[1])
+            return("number of item labels does not match number of rows")
 
-        if(length(itemInfo(object)[["labels"]]) == dim(object)[1]) return(TRUE)
-        else return("number of item/itemset labels does not match number of rows in tidLists")
+        if (length(object@transactionInfo) &&
+            length(object@transactionInfo[[1]]) != dim(object)[2])
+            return("transactionInfo does not match number of transactions")
 
-        ## fixme: length of transactionInfo missing
-    })
+        TRUE
+    }
+)
 
 setClassUnion("tidLists_or_NULL", c("tidLists", "NULL"))
 
 setClass("summary.tidLists",
-    representation(Dim = "integer")
+    representation(
+        Dim                = "integer",
+        transactionSummary = "integer",
+        lengths            = "table",
+        lengthSummary      = "table",
+        itemInfo           = "data.frame"
+    )
 )
 
 
@@ -107,7 +128,7 @@ setClass("APappearance",
         default = "character"),
 
     prototype(
-        set     = as.integer(rep(0, 5)),
+        set     = rep(0L, 5),
         items   = integer(),
         labels  = "",
         default = "both"),
@@ -132,8 +153,8 @@ setClass("ASparameter",
     prototype(
         target  = "frequent itemsets",
         support = 0.1,
-        minlen  = as.integer(1),
-        maxlen  = as.integer(5),
+        minlen  = 1L,
+        maxlen  = 5L,
         ext     = FALSE),
     
     validity = function(object) {
@@ -197,7 +218,7 @@ setClass("AScontrol",
     
     prototype(
         verbose = TRUE,
-        sort    = as.integer(2)),
+        sort    = 2L),
     
     validity = function(object) {
         if (object@sort > 2 | object@sort < -2) 
@@ -218,7 +239,7 @@ setClass("APcontrol",
     
     prototype(new("AScontrol"),
         filter  = 0.1,
-        sort    = as.integer(2),
+        sort    = 2L,
         tree    = TRUE,
         heap    = TRUE,
         memopt  = FALSE,
@@ -236,7 +257,7 @@ setClass("ECcontrol",
     
     prototype(new("AScontrol"),
         sparse  = 7,
-        sort    = as.integer(-2)))
+        sort    = -2L))
 
 
 
@@ -247,7 +268,11 @@ setClass("associations",
     representation(quality = "data.frame", "VIRTUAL"))
 
 setClass("itemsets",
-    representation(items = "itemMatrix", tidLists = "tidLists_or_NULL"),
+    representation(
+        items    = "itemMatrix", 
+        tidLists = "tidLists_or_NULL"
+    ),
+
     contains = "associations",
     
     prototype(tidLists = NULL, quality = data.frame()),
@@ -256,51 +281,45 @@ setClass("itemsets",
         ## if tidLists exists, check dimensions
         ## Note, we cannot check dim(object@tidLists)[2] here since we
         ## don't know the number of transactions in the used data set! 
-        if (!is.null(object@tidLists) && 
+        if (length(object@tidLists) && 
             length(object@tidLists) != length(object@items))
-        return("mismatch between number of itemsets and length of tidLists")
+            return("tidLists does not match number of itemsets")
 
         ## if quality exists, check dimensions
-        if (length(object@quality) > 0 && 
-            dim(object@quality)[1] != length(object@items))
-        return("mismatch between number of items and rows in quality")
+        if (length(object@quality) && 
+            length(object@quality[[1]]) != length(object@items))
+            return("quality does not match number of itemsets")
 
-        ## check items
-        i <- validObject(object@items, test=TRUE)
-        if(i != TRUE) return(paste("problem with items:",i))
-
-        return(TRUE)
-    })
-
-
+        TRUE
+    }
+)
 
 ## rules is the lhs
 setClass("rules",
-    representation(lhs = "itemMatrix", rhs = "itemMatrix"),
+    representation(
+        lhs = "itemMatrix", 
+        rhs = "itemMatrix"
+    ),
     contains = "associations",
     
     prototype(quality = data.frame()),
     
     validity = function(object) {
-
         ## check dimensions
         if (!all(dim(object@lhs) == dim(object@rhs))) 
-        return("dimension mismatch between lhs and rhs")
-        if (length(object@quality) > 0 && 
-            dim(object@quality)[1] != length(object@lhs))
-        return("mismatch between number of rules and rows in quality")
+            return("dimensions of lhs and rhs do not match")
 
-        ## check lhs, rhs
-        i <- validObject(object@lhs, test=TRUE)
-        if(i != TRUE) return(paste("problem with lhs:",i))
-        i <- validObject(object@rhs, test=TRUE)
-        if(i != TRUE) return(paste("problem with rhs:",i))
+        ## check quality
+        if (length(object@quality) && 
+            length(object@quality[[1]]) != length(object@lhs))
+            return("quality does not match the number of rules")
 
-        return(TRUE)
-    })
+        TRUE
+    }
+)
 
 setClass("summary.associations",
-    representation(length ="integer", quality = "table", "VIRTUAL"))
+    representation(length  ="integer", quality = "table", "VIRTUAL"))
 
 setClass("summary.itemsets",
     representation(tidLists = "logical", items = "summary.itemMatrix"),
@@ -329,3 +348,4 @@ setClass("ar_cross_dissimilarity",
     representation(method = "character")
 )
 
+###

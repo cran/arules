@@ -1,0 +1,193 @@
+
+R version 2.4.1 Patched (2007-03-31 r41272)
+Copyright (C) 2007 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library("arules")
+Loading required package: stats4
+Loading required package: Matrix
+Loading required package: lattice
+** fixing ngCMatrix validation
+> 
+> data <- list(
++     c("A", "B"),
++     c("A", "B", "C", "G"),
++     c("C", "D"),
++     c("E", "F"),
++     c("A", "B", "C", "D")
++     )
+> 
+> 
+> ### is.superset / is.subset
+> is <- new("itemsets",  items = as(data, "itemMatrix"))
+> 
+> ### find supersets in is
+> is.superset(is, is)
+      [,1]  [,2]  [,3]  [,4]  [,5]
+[1,]  TRUE FALSE FALSE FALSE FALSE
+[2,]  TRUE  TRUE FALSE FALSE FALSE
+[3,] FALSE FALSE  TRUE FALSE FALSE
+[4,] FALSE FALSE FALSE  TRUE FALSE
+[5,]  TRUE FALSE  TRUE FALSE  TRUE
+> is.superset(is)
+      [,1]  [,2]  [,3]  [,4]  [,5]
+[1,]  TRUE FALSE FALSE FALSE FALSE
+[2,]  TRUE  TRUE FALSE FALSE FALSE
+[3,] FALSE FALSE  TRUE FALSE FALSE
+[4,] FALSE FALSE FALSE  TRUE FALSE
+[5,]  TRUE FALSE  TRUE FALSE  TRUE
+> is.superset(is, is, proper = TRUE)
+      [,1]  [,2]  [,3]  [,4]  [,5]
+[1,] FALSE FALSE FALSE FALSE FALSE
+[2,]  TRUE FALSE FALSE FALSE FALSE
+[3,] FALSE FALSE FALSE FALSE FALSE
+[4,] FALSE FALSE FALSE FALSE FALSE
+[5,]  TRUE FALSE  TRUE FALSE FALSE
+> 
+> is.superset(is[5], is)
+     [,1]  [,2] [,3]  [,4] [,5]
+[1,] TRUE FALSE TRUE FALSE TRUE
+> 
+> 
+> ### find subsets in is
+> is.subset(is, is)
+      [,1]  [,2]  [,3]  [,4]  [,5]
+[1,]  TRUE  TRUE FALSE FALSE  TRUE
+[2,] FALSE  TRUE FALSE FALSE FALSE
+[3,] FALSE FALSE  TRUE FALSE  TRUE
+[4,] FALSE FALSE FALSE  TRUE FALSE
+[5,] FALSE FALSE FALSE FALSE  TRUE
+> is.subset(is, is, proper = TRUE)
+      [,1]  [,2]  [,3]  [,4]  [,5]
+[1,] FALSE  TRUE FALSE FALSE  TRUE
+[2,] FALSE FALSE FALSE FALSE FALSE
+[3,] FALSE FALSE FALSE FALSE  TRUE
+[4,] FALSE FALSE FALSE FALSE FALSE
+[5,] FALSE FALSE FALSE FALSE FALSE
+>    
+> is.subset(is[1], is)
+     [,1] [,2]  [,3]  [,4] [,5]
+[1,] TRUE TRUE FALSE FALSE TRUE
+> 
+> ### is.maximal
+> quality(is) <- data.frame(isMaximal = is.maximal(is))
+> 
+> inspect(is)
+  items isMaximal
+1 {A,            
+   B}       FALSE
+2 {A,            
+   B,            
+   C,            
+   G}        TRUE
+3 {C,            
+   D}       FALSE
+4 {E,            
+   F}        TRUE
+5 {A,            
+   B,            
+   C,            
+   D}        TRUE
+> 
+> 
+> ### is.closed
+> db <- as(data, "transactions")
+> is <- eclat(db, parameter = list(supp = 0))
+
+parameter specification:
+ tidLists support minlen maxlen            target   ext
+    FALSE       0      1      5 frequent itemsets FALSE
+
+algorithmic control:
+ sparse sort verbose
+      7   -2    TRUE
+
+eclat - find frequent item sets with the eclat algorithm
+version 2.6 (2004.08.16)         (c) 2002-2004   Christian Borgelt
+create itemset ... 
+set transactions ...[7 item(s), 5 transaction(s)] done [0.00s].
+sorting and recoding items ... [7 item(s)] done [0.00s].
+creating bit matrix ... [7 row(s), 5 column(s)] done [0.00s].
+writing  ... [26 set(s)] done [0.00s].
+Creating S4 object  ... done [0.00s].
+> 
+> quality(is) <- cbind(quality(is),
++     isClosed = is.closed(is))
+>   
+> inspect(is)
+   items support isClosed
+1  {E,                   
+    F}       0.2     TRUE
+2  {A,                   
+    B,                   
+    C,                   
+    G}       0.2     TRUE
+3  {A,                   
+    C,                   
+    G}       0.2    FALSE
+4  {B,                   
+    C,                   
+    G}       0.2    FALSE
+5  {A,                   
+    B,                   
+    G}       0.2    FALSE
+6  {A,                   
+    G}       0.2    FALSE
+7  {B,                   
+    G}       0.2    FALSE
+8  {C,                   
+    G}       0.2    FALSE
+9  {A,                   
+    B,                   
+    C,                   
+    D}       0.2     TRUE
+10 {A,                   
+    C,                   
+    D}       0.2    FALSE
+11 {B,                   
+    C,                   
+    D}       0.2    FALSE
+12 {A,                   
+    B,                   
+    D}       0.2    FALSE
+13 {A,                   
+    D}       0.2    FALSE
+14 {B,                   
+    D}       0.2    FALSE
+15 {C,                   
+    D}       0.4     TRUE
+16 {A,                   
+    B,                   
+    C}       0.4     TRUE
+17 {A,                   
+    C}       0.4    FALSE
+18 {B,                   
+    C}       0.4    FALSE
+19 {A,                   
+    B}       0.6     TRUE
+20 {A}       0.6    FALSE
+21 {B}       0.6    FALSE
+22 {C}       0.6     TRUE
+23 {D}       0.4    FALSE
+24 {G}       0.2    FALSE
+25 {E}       0.2    FALSE
+26 {F}       0.2    FALSE
+> 
+> 
+> 
+> 
+> 

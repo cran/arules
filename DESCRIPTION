@@ -1,6 +1,6 @@
 Package: arules
-Version: 0.6-1
-Date: 2007-05-21
+Version: 0.6-2
+Date: 2007-06-20
 Title: Mining Association Rules and Frequent Itemsets
 Author: Michael Hahsler, Christian Buchta, Bettina Gruen and Kurt Hornik
 Maintainer: Michael Hahsler <hahsler@ai.wu-wien.ac.at> 
@@ -9,9 +9,10 @@ Description: Provides the infrastructure for representing,
     itemsets and association rules). Also provides interfaces to 
     C implementations of the association mining algorithms Apriori and Eclat
     by C. Borgelt.
-Depends: R (>= 2.4.1), methods, stats4, Matrix (>= 0.9975-10)
-Imports: stats
+URL: http://r-forge.r-project.org/projects/arules/
+Depends: R (>= 2.5.0), stats, methods, Matrix (>= 0.99875-1) 
+Imports: stats, Matrix
 License: GPL
 SaveImage: no
 LazyLoad: yes
-Packaged: Mon May 21 16:35:03 2007; hahsler
+Packaged: Thu Jun 21 12:10:46 2007; hahsler

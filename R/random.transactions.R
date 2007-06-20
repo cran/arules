@@ -54,15 +54,10 @@ random.transactions <- function(
     simList <- replicate(nTrans,
         which(runif(nItems) <= iProb))
 
-    ## create sparse matrix (transposed)
-    z <- as(simList, "ngCMatrix")
-    z@Dim[1] <- as.integer(nItems)
-
-    new("transactions", data = z,
-        itemInfo = data.frame(labels = paste("item", c(1:nItems), sep="" )),
-        transactionInfo = data.frame(transactionID = 
-            paste("trans", c(1:nTrans), sep="" ))
-    )
+    new("transactions", 
+         encode(simList, paste("item", 1:nItems, sep = "")),
+         transactionInfo = data.frame(transactionID = 
+                                      paste("trans", 1:nTrans, sep = "")))
 }
 
 
@@ -152,14 +147,10 @@ random.transactions <- function(
         tn[[i]] <- sort(union(transactions[[i]], noise[[i]]))
     }
 
-    z <- as(tn, "ngCMatrix")
-    z@Dim[1] <- as.integer(nItems)
-
-    new("transactions", data = z,
-        itemInfo = data.frame(labels = paste("item", c(1:nItems), sep="" )),
-        transactionInfo = data.frame(transactionID =
-            paste("trans", c(1:nTrans), sep="" ))
-    )
+    new("transactions", 
+         encode(tn, paste("item", 1:nItems, sep = "")),
+         transactionInfo = data.frame(transactionID = 
+                                      paste("trans", 1:nTrans, sep = "")))
 }
 
 
@@ -261,13 +252,8 @@ random.patterns <- function(
     }
 
     ## create itemMatrix w/o recoding
-    z <- as(patterns, "ngCMatrix")
-    z@Dim[1] <- as.integer(nItems)
-
-    imatrix <- new("itemMatrix", data = z, 
-        itemInfo = data.frame(labels = as.character(c(1:nItems))))
-
-    new("itemsets", items = imatrix, 
+    new("itemsets", 
+        items   = encode(patterns, as.character(1:nItems)), 
         quality = data.frame(pWeights = pWeights, pCorrupts = pCorrupts))
 }
 
@@ -342,13 +328,10 @@ random.patterns <- function(
         transactions[[i]] <- trans
     }
 
-    z <- as(transactions, "ngCMatrix")
-    z@Dim[1] <- as.integer(nItems)
-
-    new("transactions", data = z,
-        itemInfo = data.frame(labels = paste("item", c(1:nItems), sep="" )),
-        transactionInfo = data.frame(transactionID = 
-            paste("trans", c(1:nTrans), sep="" ))
-    )
+    new("transactions", 
+         encode(transactions, paste("item", 1:nItems, sep = "")),
+         transactionInfo = data.frame(transactionID = 
+                                      paste("trans", 1:nTrans, sep = "")))
 }
 
+###

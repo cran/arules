@@ -17,6 +17,7 @@ setMethod("quality", signature(x = "associations"),
 setReplaceMethod("quality", signature(x = "associations"),
     function(x, value) {
         x@quality <- value
+        validObject(x)
         x
     })
 
@@ -85,4 +86,4 @@ setMethod("WRITE", signature(x = "associations"),
         write.table(as(x, "data.frame"), ...)
     })
 
-
+###

@@ -67,7 +67,7 @@ setMethod("ruleInduction",  signature(x = "itemsets"),
         if(reduce && method != "ptree"){
             ## expand items back to full space
             ## -1 since indices in ngCMatix start with 0 
-            items.index <- items.involved - as.integer(1)
+            items.index <- items.involved - 1L
 
             ## fix dim
             rules@lhs@data@Dim[1] <- nItems
@@ -75,8 +75,8 @@ setMethod("ruleInduction",  signature(x = "itemsets"),
 
             ## fix column indices
             ## +1 since indices in ngCMatix start with 0
-            rules@lhs@data@i <- items.index[(rules@lhs@data@i + as.integer(1))]
-            rules@rhs@data@i <- items.index[(rules@rhs@data@i + as.integer(1))]
+            rules@lhs@data@i <- items.index[(rules@lhs@data@i + 1L)]
+            rules@rhs@data@i <- items.index[(rules@rhs@data@i + 1L)]
 
             ## fix item labels
             rules@lhs@itemInfo <- itemInfo(transactions)
