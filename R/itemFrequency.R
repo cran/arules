@@ -10,7 +10,7 @@ setMethod("itemFrequency", signature(x = "itemMatrix"),
         type <- match.arg(type)
 
         ## we could also use rowSums
-        ##supports <- tabulate(x@data@i + as.integer(1), nbins = x@data@Dim[1])
+        ##supports <- tabulate(x@data@i + 1L, nbins = x@data@Dim[1])
         
         supports <- .Call("R_rowSums_ngCMatrix", x@data)
         

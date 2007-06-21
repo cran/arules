@@ -25,7 +25,7 @@ Object of class \code{transactions}.
 \references{
 Michael Hahsler, Kurt Hornik, and Thomas Reutterer (2006) Implications of
 probabilistic data modeling for mining association rules. In M. Spiliopoulou,
-R. Kruse, C. Borgelt, A. Nürnberger, and W. Gaul, editors, \emph{From Data and
+R. Kruse, C. Borgelt, A. Nuernberger, and W. Gaul, editors, \emph{From Data and
 Information Analysis to Knowledge Engineering, Studies in Classification, Data
 Analysis, and Knowledge Organization}, pages 598--605. Springer-Verlag.
 }

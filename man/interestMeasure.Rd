@@ -148,7 +148,7 @@ pages 255--264, Tucson, Arizona, USA.
 
 Michael Hahsler, Kurt Hornik, and Thomas Reutterer (2005).  \emph{Implications
 of probabilistic data modeling for rule mining}.  Report 14, Research Report
-Series, Department of Statistics and Mathematics, Wirtschaftsuniversität Wien,
+Series, Department of Statistics and Mathematics, Wirtschaftsuniversitaet Wien,
 Augasse 2-6, 1090 Wien, Austria.
 
 Bing Liu, Wynne Hsu, and Yiming Ma (1999). Pruning and summarizing the

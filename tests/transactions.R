@@ -67,4 +67,4 @@ as(tl, "list")
 as(tl, "matrix")
 inspect(as(tl, "transactions"))
 
-
+summary(tl)

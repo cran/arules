@@ -92,18 +92,22 @@ SEXP R_crosstab_ngCMatrix(SEXP x, SEXP y, SEXP t) {
     else {
 	if (!inherits(y, "ngCMatrix"))
 	    error("'y' not of class 'ngCMatrix'");
-	if (INTEGER(getAttrib(x, install("Dim")))[0] !=
-	    INTEGER(getAttrib(y, install("Dim")))[0])
-	    error("the number of rows of 'x' and 'y' do not conform");
-	
+
 	if (LOGICAL(t)[0] == FALSE)
 	    PROTECT(y = R_transpose_ngCMatrix(y));
 	
+	if (INTEGER(getAttrib(x, install("Dim")))[1] !=
+	    INTEGER(getAttrib(y, install("Dim")))[1])
+	    if (LOGICAL(t)[0] == FALSE) 
+		error("the number of rows of 'x' and 'y' do not conform");
+	    else
+		error("the number of columns of 'x' and 'y' do not conform");
+
 	nc = INTEGER(getAttrib(y, install("Dim")))[0];
 	py = getAttrib(y, install("p"));
 	iy = getAttrib(y, install("i"));
 
-	d2  = getAttrib(y, install("Dimnames"));
+	d2 = getAttrib(y, install("Dimnames"));
 	n2 = getAttrib(d2, R_NamesSymbol);
 	d2 = VECTOR_ELT(d2, 0);
 	
@@ -336,7 +340,7 @@ SEXP R_asList_ngCMatrix(SEXP x, SEXP d) {
         }
         f = l;
     }
-    setAttrib(r, R_NamesSymbol, VECTOR_ELT(getAttrib(x, install("Dimnames")), 0)
+    setAttrib(r, R_NamesSymbol, VECTOR_ELT(getAttrib(x, install("Dimnames")), 1)
 );
 
     UNPROTECT(1);
@@ -474,7 +478,7 @@ SEXP R_recode_ngCMatrix(SEXP x, SEXP s) {
 	    continue;
 	for (k = f; k < l; k++) 
 	    INTEGER(ir)[k] = INTEGER(s)[INTEGER(ix)[k]]-1;
-	R_isort(INTEGER(ir), l-f);
+	R_isort(INTEGER(ir)+f, l-f);
 	f = l;
     }
 
@@ -497,3 +501,177 @@ SEXP R_recode_ngCMatrix(SEXP x, SEXP s) {
     return r;
 }
 
+// fast but temporary memory consumption 
+// may amount to full-storage representation.
+
+SEXP R_or_ngCMatrix(SEXP x, SEXP y) {
+    if (!inherits(x, "ngCMatrix"))
+	error("'x' not of class ngCMatrix");
+    if (!inherits(y, "ngCMatrix"))
+	error("'y' not of class ngCMatrix");
+    if (INTEGER(getAttrib(x, install("Dim")))[1] !=
+	INTEGER(getAttrib(y, install("Dim")))[1])
+	error("the number of columns of 'x' and 'y' do not conform");
+    int i, kx, ky, lx, ly, n, nr;
+    SEXP r, pr, ir, px, ix, py, iy;
+
+    nr = INTEGER(getAttrib(x, install("Dim")))[0];
+    if (nr != INTEGER(getAttrib(y, install("Dim")))[0])
+	error("the number of rows of 'x' and 'y' do not conform");
+
+    px = getAttrib(x, install("p"));
+    ix = getAttrib(x, install("i"));
+
+    py = getAttrib(y, install("p"));
+    iy = getAttrib(y, install("i"));
+
+    PROTECT(r = allocVector(VECSXP, 0));
+    setAttrib(r, install("p"), (pr = allocVector(INTSXP, LENGTH(px))));
+
+    n = LENGTH(ix) + LENGTH(iy);
+    if (n > (i = nr * (LENGTH(px) - 1)));
+	n = i;
+
+    setAttrib(r, install("i"), (ir = allocVector(INTSXP, n)));
+
+    n = kx = ky = INTEGER(pr)[0] = 0;
+    for (i = 1; i < LENGTH(px); i++) {
+	lx = INTEGER(px)[i];
+	ly = INTEGER(py)[i];
+	while (kx < lx && ky < ly)
+	    if (INTEGER(ix)[kx] > INTEGER(iy)[ky])
+		INTEGER(ir)[n++] = INTEGER(iy)[ky++];
+	    else {
+		if (INTEGER(ix)[kx] == INTEGER(iy)[ky])
+		    ky++;
+		INTEGER(ir)[n++] = INTEGER(ix)[kx++];
+	    }
+	while (kx < lx)
+	    INTEGER(ir)[n++] = INTEGER(ix)[kx++];
+	while (ky < ly)
+	    INTEGER(ir)[n++] = INTEGER(iy)[ky++];
+	INTEGER(pr)[i] = n;
+    }
+
+    if (n < LENGTH(ir)) {
+	PROTECT(ix = ir);
+	setAttrib(r, install("i"), (ir = allocVector(INTSXP, n)));
+	memcpy(INTEGER(ir), INTEGER(ix), sizeof(int) * n);
+
+	UNPROTECT(1);
+    }
+    // fixme
+    setAttrib(r, install("Dim"), (ir = allocVector(INTSXP, 2)));
+    INTEGER(ir)[0] = nr;
+    INTEGER(ir)[1] = LENGTH(px)-1;
+
+    setAttrib(r, install("Dimnames"), (ir = allocVector(VECSXP, 2)));
+
+    ix = getAttrib(x, install("Dimnames"));
+    iy = getAttrib(y, install("Dimnames"));
+
+    if (isNull((pr = VECTOR_ELT(ix, 0))))
+	SET_VECTOR_ELT(ir, 0, VECTOR_ELT(iy, 0));
+    else
+	SET_VECTOR_ELT(ir, 0, pr);
+
+    if (isNull((pr = VECTOR_ELT(ix, 1))))
+	SET_VECTOR_ELT(ir, 1, VECTOR_ELT(iy, 1));
+    else
+	SET_VECTOR_ELT(ir, 1, pr);
+    
+    if (isNull((ix = getAttrib(ix, R_NamesSymbol))))
+	setAttrib(ir, R_NamesSymbol, getAttrib(iy, R_NamesSymbol));
+    else
+	setAttrib(ir, R_NamesSymbol, ix);
+
+    setAttrib(r, install("factors"), getAttrib(x, install("factors")));
+    setAttrib(r, R_ClassSymbol, getAttrib(x, R_ClassSymbol));
+
+    SET_S4_OBJECT(r);
+    UNPROTECT(1);
+
+    return r;
+
+}
+
+// package Matrix does not check thoroughly
+
+SEXP R_valid_ngCMatrix(SEXP x) {
+    if (!inherits(x, "ngCMatrix"))
+	error("'x' not of class ngCMatrix");
+    int i, k, f, l, n, m;
+    SEXP px, ix, dx;
+
+    px = getAttrib(x, install("p"));
+    ix = getAttrib(x, install("i"));
+    dx = getAttrib(x, install("Dim"));
+    
+    if (isNull(px) || isNull(ix) || isNull(dx))
+	return mkString("slot p, i, or Dim is NULL");
+
+    if (TYPEOF(px) != INTSXP || TYPEOF(ix) != INTSXP || TYPEOF(dx) != INTSXP)
+	return mkString("slot p, i, or Dim not of storage type integer");
+
+    if (LENGTH(dx) != 2 || INTEGER(dx)[0] < 0 || INTEGER(dx)[1] < 0)
+	return mkString("slot Dim invalid");
+
+    if (INTEGER(dx)[1] != LENGTH(px)-1)
+	return mkString("slot p and Dim do not conform");
+
+    f = l = INTEGER(px)[0];
+    if (f != 0)
+	return mkString("slot p invalid");
+
+    for (i = 1; i < LENGTH(px); i++) {
+	l = INTEGER(px)[i];
+	if (l < f)
+	    return mkString("slot p invalid");
+	f = l;
+    }
+    if (l != LENGTH(ix))
+	return mkString("slot p and i do not conform");
+
+    if (l > 0) {
+	f = 0;
+	for (i = 1; i < LENGTH(px); i++) {
+	    l = INTEGER(px)[i];
+	    n = -1;
+	    for (k = f; k < l; k++) {
+		m = INTEGER(ix)[k];
+		if (m <= n)
+		    return mkString("slot i invalid");
+		n = m;
+	    }
+	    if (n >= INTEGER(dx)[0])
+		return mkString("slot i invalid");
+	    f = l;
+	}
+
+    }
+
+    ix = getAttrib(x, install("Dimnames"));
+
+    if (LENGTH(ix) != 2 || TYPEOF(ix) != VECSXP)
+	return mkString("slot Dimnames invalid");
+
+    px = VECTOR_ELT(ix, 0);
+    if (!isNull(px)) {
+	if (TYPEOF(px) != STRSXP)
+	    return mkString("slot Dimnames invalid");
+	if (LENGTH(px) != INTEGER(dx)[0])
+	    return mkString("slot Dim and Dimnames do not conform");
+    }
+
+    px = VECTOR_ELT(ix, 1);
+    if (!isNull(px)) {
+	if (TYPEOF(px) != STRSXP)
+	    return mkString("slot Dimnames invalid");
+	if (LENGTH(px) != INTEGER(dx)[1])
+	    return mkString("slot Dim and Dimnames do not conform");
+    }
+
+    return ScalarLogical(TRUE);
+}
+
+//

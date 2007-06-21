@@ -1,31 +1,11 @@
-## to list
-## fixme: C code available
-setAs("ngCMatrix", "list",
-  function(from) {
-    data <- from
-    
-    z <- vector(length = (data@Dim[2]), mode = "list")
-    l <- which(diff(data@p) != 0)
-    sapply(l, function(i)
-	  z[[i]] <<- as.integer(data@i[(data@p[i]+1):data@p[i+1]]+1),
-	  simplify=FALSE)
-    # +1 since i starts with index 0 instead of 1
-    
-    return(z)
-  })
+## provide some interfaces to our C implementations
 
-setAs("list", "ngCMatrix",
-    function(from) {
+setMethod("t", signature(x = "ngCMatrix"),
+    function(x) .Call("R_transpose_ngCMatrix", x))
 
-        ## create a ngCMatrix
-        i <- as.integer(unlist(from) - 1) # ngCMatrix starts with index 0 
-        p <- as.integer(c(0, cumsum(sapply(from, length))))
+## FIXME crossprod should be here too, but see below.
 
-        new("ngCMatrix", i = i, p = p, 
-            Dim = as.integer(c(max(i)+1, length(from))))
+## overloading of [ for ngCMatrix cannot be accomplished
+## easily as there are too many signatures to overload.
 
-    })
-
-## FIXME: for consistent behavior throughout the
-## package we should overload "[" for ngCMatrix
-## here and remove the C calls elsewhere.
+###

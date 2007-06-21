@@ -63,11 +63,18 @@ dissimilarity(x, y = NULL, method = NULL, args = NULL, \ldots)
   \code{\link{associations-class}}.
 }
 \examples{
-data("Adult")
+## cluster items in Groceries with support > 5\%
+data("Groceries")
 
-## cluster transactions
-## choose a sample 
-s <- sample(Adult, 500) 
+s <- Groceries[,itemFrequency(Groceries)>0.05]
+d_jaccard <- dissimilarity(s, which = "items")
+plot(hclust(d_jaccard, method = "ward"))
+
+
+
+## cluster transactions for a sample of Adult
+data("Adult")
+s <- sample(Adult, 200) 
 
 ##  calculate Jaccard distances and do hclust
 d_jaccard <- dissimilarity(s)
@@ -79,9 +86,7 @@ plot(hclust(d_affinity))
 
 
 ## cluster rules
-## mine rules
 rules <- apriori(Adult)
-## choose promising rules
 rules <- subset(rules, subset = lift > 2)
 
 ## we need to supply the item affinities from the dataset (sample)

@@ -77,8 +77,8 @@
   \item{coerce}{\code{signature(from = "tidLists", to = "list")}}
   \item{coerce}{\code{signature(from = "tidLists", to = "matrix")}}
   \item{coerce}{\code{signature(from = "tidLists", to = "itemMatrix")}}
-  \item{coerce}{\code{signature(from = "itemMatrix", to = "tidLists")}}
   \item{coerce}{\code{signature(from = "tidLists", to = "transactions")}}
+  \item{coerce}{\code{signature(from = "itemMatrix", to = "tidLists")}}
   \item{coerce}{\code{signature(from = "transactions", to = "tidLists")}}
   \item{dim}{\code{signature(x = "tidLists")};
       returns the dimensions of the sparse Matrix representing the 
@@ -132,5 +132,8 @@ dim(tidLists(f))
 
 ## Coerce tidLists to list.
 as(tidLists(f), "list")
+
+## Inspect visually. 
+image(tidLists(f))
 }
 \keyword{classes}

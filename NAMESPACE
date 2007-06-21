@@ -1,9 +1,7 @@
 useDynLib(arules)
 
-import("Matrix")
-importFrom("stats", "predict")
-importFrom("stats4", "summary") 
-#import("sort") 
+importFrom("stats", "predict") ## otherwise predict in stats does not work
+importFrom("Matrix", "t")      ## we add/replace some methods for ngCMatrix 
 
 export(
         "read.transactions", 

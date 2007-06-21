@@ -7,154 +7,153 @@
 ## coercions
 
 setAs("matrix", "transactions",
-    function(from) {
+    function(from)
         new("transactions", as(from, "itemMatrix"), 
-            transactionInfo = data.frame(transactionID = dimnames(from)[[1]]))
-    })
+            transactionInfo = data.frame(transactionID = dimnames(from)[[1]])))
 
 setAs("transactions", "matrix",
     function(from) {
-        m <- as(as(from, "itemMatrix"), "matrix")
-        if (!is.null(from@transactionInfo[["transactionID"]])) 
-        dimnames(m)[[1]] <- from@transactionInfo[["transactionID"]]
-        return(m)
-    })
-
+        to <- as(as(from, "itemMatrix"), "matrix")
+        if (length(i <- from@transactionInfo[["transactionID"]]))
+            dimnames(to)[[1]] <- i
+        to
+    }
+)
 
 setAs("list", "transactions",
-    function(from) {
+    function(from)
         new("transactions", as(from, "itemMatrix"), 
-            transactionInfo = data.frame(transactionID = names(from)))
-    })
+            transactionInfo = data.frame(transactionID = names(from))))
 
 setAs("transactions", "list",
-    function(from) LIST(from, decode = TRUE)
-)
+    function(from) LIST(from, decode = TRUE))
 
 setMethod("LIST", signature(from = "transactions"),
     function(from, decode = TRUE) {
-        l <- LIST(as(from, "itemMatrix"), decode)
-        if(decode == TRUE) 
-        names(l) <- from@transactionInfo[["transactionID"]]
-        l
-    })
+        to <- LIST(as(from, "itemMatrix"), decode)
+        if (decode == TRUE) 
+            names(to) <- from@transactionInfo[["transactionID"]]
+        to
+    }
+)
 
-setAs("data.frame", "transactions", function(from) {
-        if (!all(sapply(from, is, "factor")))
-        stop("Column ", names(which(!sapply(from, is, "factor"))),
-            " is not a factor.")
+## NOTES NA in levels is replaced by the string "NA"
 
-        from_levels <- sapply(from, levels, simplify = FALSE)
-        assign      <- sapply(from_levels, length, USE.NAMES = FALSE)
-        to_levels   <- unlist(from_levels, use.names = FALSE)
-        to_vars     <- rep(names(from), assign)
-        to_labels   <- paste(to_vars, to_levels, sep = "=")
+setAs("data.frame", "transactions",
+    function(from) {
+        if (!length(from))
+            return(new("transactions"))
+        if (!all((p <- sapply(from, is.factor))))
+            stop("column(s)", which(p), "not a factor")
+        p <- seq(dim(from)[1])
+        x <- lapply(from, function(x)
+            tapply(p, x, eval, simplify = FALSE))
 
-        lev         <- c(0, cumsum(assign))
-        to_dim      <- c(length(to_labels),dim(from)[1])
-        len         <- rep(dim(from)[2], to_dim[2])
-        v           <- lapply(1:dim(from)[2], function(i) factor(from[[i]],
-                levels = levels(from[[i]]),
-                labels = lev[i]:(lev[i+1]-1)))
-        v           <- data.frame(v)
-        i           <- as.integer(t(v))
+        l <- unlist(lapply(x, names), use.names = FALSE)
+        l[is.na(l)] <- "NA"
+        v <- rep(names(x), sapply(x, length))
 
-        if (any(is.na(v))) {
-            i <- i[!is.na(i)]
-            ind <- table(which(is.na(v), arr.ind = TRUE)[,1])
-            rowsNA <- as.integer(names(ind))
-            len[rowsNA] <- len[rowsNA] - ind
-        }
+        x <- unlist(x, recursive = FALSE, use.names = FALSE)
+        p <- sapply(x, length)
+        names(p) <- NULL
+        x <- unlist(x, use.names = FALSE)
 
-        p <- as.integer(c(0, cumsum(len)))
-        z <- new("ngCMatrix", i = i, p = p, Dim = to_dim)
-        ##cat("Recoded",dim(from)[2],"variables to",to_dim[1],"binary items\n")
-        new("transactions", new("itemMatrix", data = z,
-                itemInfo = data.frame(labels = I(as.character(to_labels)), 
-                    variables = to_vars, levels = to_levels)))
-    })
+        x <- new("ngCMatrix", p   = c(0L, cumsum(p)),
+                              i   = x - 1L,
+                              Dim = c(dim(from)[1], length(p)))
 
+        new("transactions",
+            data     = t(x),
+            itemInfo = data.frame(labels        = I(paste(v, l, sep = "=")),
+                                  variables     = v,
+                                  levels        = l),
+            transactionInfo =
+                       data.frame(transactionID = rownames(from)))
+    }
+)
 
 ## this does not reverse coercion data.frame -> transactions
 ## it is just used for output formating!
-setAs( "transactions", "data.frame", function(from) {
-        if(!length(from)) return (data.frame())
+setAs("transactions", "data.frame",
+    function(from) {
+        if (!length(from)) 
+            return (data.frame())
 
-        items <- paste("{",sapply(as(from, "list"),
-                    function(x) paste(x, collapse =", ")),"}", sep="")
+        items <- labels(as(from, "itemMatrix"))$elements
 
-        if(!length(from@transactionInfo)) return(data.frame(items = items))
+        if (!length(from@transactionInfo)) 
+            return(data.frame(items = items))
         data.frame(items = items, from@transactionInfo)
-
-
-    })
+    }
+)
 
 ## no t for associations
 setMethod("t", signature(x = "transactions"),
-    function(x)
-        stop("Object not transposable! Use as() for coercion to tidLists.")
-    )
+    function(x) stop("Object not transposable! Use as() for coercion to tidLists."))
 
 ##*****************************************************
 ## subset + combine
 
-setMethod("[", signature(x = "transactions",            # ] 
-        i = "ANY", j = "ANY", drop = "ANY"),
+## drop is unused
+setMethod("[", signature(x = "transactions", i = "ANY", j = "ANY", drop = "ANY"),
     function(x, i, j, ..., drop) {
-
-        if(missing(j) && missing(i)) return(x)
-
-        if(missing(i)) {
-            new("transactions", as(x, "itemMatrix")[, j,..., drop = FALSE],
-                transactionInfo = x@transactionInfo)
-        }else if(missing(j)) {
-            new("transactions", as(x, "itemMatrix")[i,,..., drop = FALSE],
-                transactionInfo = x@transactionInfo[i,, drop = FALSE])
-        }else{
-            new("transactions", as(x, "itemMatrix")[i, j,..., drop = FALSE],
-                transactionInfo = x@transactionInfo[i,, drop = FALSE])
+        ## i and j are reversed
+        if (!missing(i)) {
+            if (length(x@transactionInfo))
+                x@transactionInfo <- x@transactionInfo[i,, drop = FALSE]
+            x <- new("transactions", as(x, "itemMatrix")[i,, ..., drop],
+                     transactionInfo = x@transactionInfo)
         }
-    })
+        if (!missing(j))
+            x <- new("transactions", as(x, "itemMatrix")[,j, ..., drop],
+                     transactionInfo = x@transactionInfo)
+        x
+    }
+)
 
 setMethod("c", signature(x = "transactions"),
     function(x, ..., recursive = FALSE){
-
         args <- list(...)
         if (recursive)
             args <- unlist(args)
         for (y in args) {
-            if (!inherits(y, "transactions"))
+            if (!is(y, "transactions"))
                 stop("can only combine transactions")
             x <- new("transactions", c(as(x, "itemMatrix"), 
                                        as(y, "itemMatrix")),
                      transactionInfo = .combineMeta(x, y, "transactionInfo"))
         }
         x
-    })
-
+    }
+)
 
 ##*****************************************************
 ## show / summary
-
 
 setMethod("show", signature(object = "transactions"),
     function(object) {
         cat("transactions in sparse format with\n",
             length(object), "transactions (rows) and\n",
             nitems(object), "items (columns)\n")
-    })
+    }
+)
 
 setMethod("image", signature(x = "transactions"),
     function(x, ...)
-    image(as(x, "itemMatrix"), xlab = "Items (Columns)", 
-        ylab = "Transactions (Rows)")
+        image(as(x, "itemMatrix"), xlab = "Items (Columns)", 
+                                   ylab = "Transactions (Rows)", ...)
 )
 
 setMethod("summary", signature(object = "transactions"),
-    function(object, ...)
-    new("summary.transactions", summary(as(object,"itemMatrix")),
-        transactionInfo = head(transactionInfo(object), 3)
-    )
+    function(object) {
+        ## fixme: the dispatch does not work correctly in R
+        ## results in a "table"
+        ## ss <- summary(as(object, "itemMatrix"))
+        
+        ss <- getMethod("summary", "itemMatrix")(as(object, "itemMatrix"))
+        new("summary.transactions", ss,
+            transactionInfo = head(object@transactionInfo, 3))
+    }
 )
 
 setMethod("show", signature(object = "summary.transactions"),
@@ -162,36 +161,34 @@ setMethod("show", signature(object = "summary.transactions"),
         cat("transactions as ")
         show(as(object,"summary.itemMatrix"))
 
-        if(length(names(object@transactionInfo)) > 0) {
+        if (length(object@transactionInfo)) {
             cat("\nincludes extended transaction information - examples:\n")
-            print(object@transactionInfo)}
-    })
-
-
+            print(object@transactionInfo)
+        }
+    }
+)
 
 ##*****************************************************
 ## accessors
 
-
 setMethod("transactionInfo", signature(x = "transactions"),
-    function(x) x@transactionInfo
-)
+    function(x) x@transactionInfo)
 
 setReplaceMethod("transactionInfo", signature(x = "transactions"),
     function(x, value) {
         x@transactionInfo <- value
+        validObject(x)
         x
-    })
+    }
+)
 
 setMethod("labels", signature(object = "transactions"),
-    function(object, ...) {
+    function(object) {
+        ## make transaction labels
+        if (!length(i <- object@transactionInfo[["transactionID"]]))
+            i <- seq_len(length(object))
+        list(items = itemLabels(object), transactionID = as.character(i))
+    }
+)
 
-        ## check if transaction labels exist
-        transactionID <- 
-        if(length(object@transactionInfo) != 0)   
-            as(object@transactionInfo[["transactionID"]], "character")
-        else as(1 : length(object), "character")
-
-        list(items = itemLabels(object), transactionID = transactionID)
-    })
-
+###

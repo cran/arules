@@ -1,0 +1,385 @@
+
+R version 2.4.1 Patched (2007-03-31 r41272)
+Copyright (C) 2007 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library("arules")
+Loading required package: stats4
+Loading required package: Matrix
+Loading required package: lattice
+** fixing ngCMatrix validation
+> 
+> data <- list(
++   c("a","b","c"),
++   c("a","b"),
++   c("a","b","d"),
++   c("b","e"),
++   c("a","d"),
++   c("d","e"),
++   c("a","b","d","e","f","g")
++     )
+> names(data) <- paste("Tr",c(1:7), sep = "")
+> 
+> 
+> 
+> 
+> ##################################################
+> ### test transactions
+> 
+> t <- as(data, "transactions")
+> t
+transactions in sparse format with
+ 7 transactions (rows) and
+ 7 items (columns)
+> summary(t)
+transactions as itemMatrix in sparse format with
+ 7 rows (elements/itemsets/transactions) and
+ 7 columns (items)
+
+most frequent items:
+      a       b       d       e       c (Other) 
+      5       5       4       3       1       2 
+
+element (itemset/transaction) length distribution:
+sizes
+2 3 6 
+4 2 1 
+
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  2.000   2.000   2.000   2.857   3.000   6.000 
+
+includes extended item information - examples:
+  labels
+1      a
+2      b
+3      c
+
+includes extended transaction information - examples:
+  transactionID
+1           Tr1
+2           Tr2
+3           Tr3
+> inspect(t[1:2])
+  items transactionID
+1 {a,                
+   b,                
+   c}             Tr1
+2 {a,                
+   b}             Tr2
+> 
+> m <- as(t, "matrix")
+> m
+    a b c d e f g
+Tr1 1 1 1 0 0 0 0
+Tr2 1 1 0 0 0 0 0
+Tr3 1 1 0 1 0 0 0
+Tr4 0 1 0 0 1 0 0
+Tr5 1 0 0 1 0 0 0
+Tr6 0 0 0 1 1 0 0
+Tr7 1 1 0 1 1 1 1
+> as(as(m, "transactions"), "list")
+$Tr1
+[1] "a" "b" "c"
+
+$Tr2
+[1] "a" "b"
+
+$Tr3
+[1] "a" "b" "d"
+
+$Tr4
+[1] "b" "e"
+
+$Tr5
+[1] "a" "d"
+
+$Tr6
+[1] "d" "e"
+
+$Tr7
+[1] "a" "b" "d" "e" "f" "g"
+
+> 
+> as(t, "list")
+$Tr1
+[1] "a" "b" "c"
+
+$Tr2
+[1] "a" "b"
+
+$Tr3
+[1] "a" "b" "d"
+
+$Tr4
+[1] "b" "e"
+
+$Tr5
+[1] "a" "d"
+
+$Tr6
+[1] "d" "e"
+
+$Tr7
+[1] "a" "b" "d" "e" "f" "g"
+
+> LIST(t, decode = FALSE)
+[[1]]
+[1] 1 2 3
+
+[[2]]
+[1] 1 2
+
+[[3]]
+[1] 1 2 4
+
+[[4]]
+[1] 2 5
+
+[[5]]
+[1] 1 4
+
+[[6]]
+[1] 4 5
+
+[[7]]
+[1] 1 2 4 5 6 7
+
+> 
+> 
+> 
+> 
+> 
+> ##########################################################################
+> ### compare transactions with missing "c", "f", "g"
+> 
+> t <- as(data, "transactions")[2:6]
+> t_comp <- as(data[2:6], "transactions")
+> 
+> as(t, "ngCMatrix")
+7 x 5 sparse Matrix of class "ngCMatrix"
+              
+[1,] | | . | .
+[2,] | | | . .
+[3,] . . . . .
+[4,] . | . | |
+[5,] . . | . |
+[6,] . . . . .
+[7,] . . . . .
+> as(t_comp, "ngCMatrix")
+4 x 5 sparse Matrix of class "ngCMatrix"
+              
+[1,] | | . | .
+[2,] | | | . .
+[3,] . | . | |
+[4,] . . | . |
+> 
+> 
+> ### test apriori and eclat
+> fsets <- apriori(t, parameter = list(target = "frequ", supp = 0.2))
+
+parameter specification:
+ confidence minval smax arem  aval originalSupport support minlen maxlen
+        0.8    0.1    1 none FALSE            TRUE     0.2      1      5
+            target   ext
+ frequent itemsets FALSE
+
+algorithmic control:
+ filter tree heap memopt load sort verbose
+    0.1 TRUE TRUE  FALSE TRUE    2    TRUE
+
+apriori - find association rules with the apriori algorithm
+version 4.21 (2004.05.09)        (c) 1996-2004   Christian Borgelt
+set item appearances ...[0 item(s)] done [0.00s].
+set transactions ...[4 item(s), 5 transaction(s)] done [0.00s].
+sorting and recoding items ... [4 item(s)] done [0.00s].
+creating transaction tree ... done [0.00s].
+checking subsets of size 1 2 3 done [0.00s].
+writing ... [10 set(s)] done [0.00s].
+creating S4 object  ... done [0.00s].
+> esets <- eclat(t, parameter = list(target = "frequ", supp = 0.2, tidList = TRUE))
+
+parameter specification:
+ tidLists support minlen maxlen            target   ext
+     TRUE     0.2      1      5 frequent itemsets FALSE
+
+algorithmic control:
+ sparse sort verbose
+      7   -2    TRUE
+
+eclat - find frequent item sets with the eclat algorithm
+version 2.6 (2004.08.16)         (c) 2002-2004   Christian Borgelt
+create itemset ... 
+set transactions ...[4 item(s), 5 transaction(s)] done [0.00s].
+sorting and recoding items ... [4 item(s)] done [0.00s].
+creating bit matrix ... [4 row(s), 5 column(s)] done [0.00s].
+writing  ... [6 set(s)] done [0.00s].
+Creating S4 object  ... done [0.00s].
+> fsets_comp <- apriori(t_comp, parameter = list(target = "frequ", supp = 0.2))
+
+parameter specification:
+ confidence minval smax arem  aval originalSupport support minlen maxlen
+        0.8    0.1    1 none FALSE            TRUE     0.2      1      5
+            target   ext
+ frequent itemsets FALSE
+
+algorithmic control:
+ filter tree heap memopt load sort verbose
+    0.1 TRUE TRUE  FALSE TRUE    2    TRUE
+
+apriori - find association rules with the apriori algorithm
+version 4.21 (2004.05.09)        (c) 1996-2004   Christian Borgelt
+set item appearances ...[0 item(s)] done [0.00s].
+set transactions ...[4 item(s), 5 transaction(s)] done [0.00s].
+sorting and recoding items ... [4 item(s)] done [0.00s].
+creating transaction tree ... done [0.00s].
+checking subsets of size 1 2 3 done [0.00s].
+writing ... [10 set(s)] done [0.00s].
+creating S4 object  ... done [0.01s].
+> esets_comp <- eclat(t_comp, parameter = list(target = "frequ", supp = 0.2))
+
+parameter specification:
+ tidLists support minlen maxlen            target   ext
+    FALSE     0.2      1      5 frequent itemsets FALSE
+
+algorithmic control:
+ sparse sort verbose
+      7   -2    TRUE
+
+eclat - find frequent item sets with the eclat algorithm
+version 2.6 (2004.08.16)         (c) 2002-2004   Christian Borgelt
+create itemset ... 
+set transactions ...[4 item(s), 5 transaction(s)] done [0.00s].
+sorting and recoding items ... [4 item(s)] done [0.00s].
+creating bit matrix ... [4 row(s), 5 column(s)] done [0.00s].
+writing  ... [6 set(s)] done [0.00s].
+Creating S4 object  ... done [0.00s].
+> 
+> as(items(fsets), "ngCMatrix")
+7 x 10 sparse Matrix of class "ngCMatrix"
+                        
+[1,] . . . | . . . | | |
+[2,] . | . . | . | | . |
+[3,] . . . . . . . . . .
+[4,] . . | . . | | . | |
+[5,] | . . . | | . . . .
+[6,] . . . . . . . . . .
+[7,] . . . . . . . . . .
+> as(items(fsets_comp), "ngCMatrix")
+4 x 10 sparse Matrix of class "ngCMatrix"
+                        
+[1,] . . . | . . . | | |
+[2,] . | . . | . | | . |
+[3,] . . | . . | | . | |
+[4,] | . . . | | . . . .
+> 
+> as(items(esets), "ngCMatrix")
+7 x 6 sparse Matrix of class "ngCMatrix"
+                
+[1,] | | | . . .
+[2,] . | . | . .
+[3,] . . . . . .
+[4,] | . . . | .
+[5,] . . . . . |
+[6,] . . . . . .
+[7,] . . . . . .
+> as(items(esets_comp), "ngCMatrix")
+4 x 6 sparse Matrix of class "ngCMatrix"
+                
+[1,] | | | . . .
+[2,] . | . | . .
+[3,] | . . . | .
+[4,] . . . . . |
+> 
+> 
+> 
+> 
+> ##########################################################################
+> ### test tidLists
+> 
+> tl <- (as(t,"tidLists"))
+> tl
+tidLists in sparse format with
+ 7 items/itemsets (rows) and
+ 5 transactions (columns)
+> as(tl, "list")
+$a
+[1] "Tr2" "Tr3" "Tr5"
+
+$b
+[1] "Tr2" "Tr3" "Tr4"
+
+$c
+character(0)
+
+$d
+[1] "Tr3" "Tr5" "Tr6"
+
+$e
+[1] "Tr4" "Tr6"
+
+$f
+character(0)
+
+$g
+character(0)
+
+> as(tl, "matrix")
+    Tr2   Tr3   Tr4   Tr5   Tr6
+a  TRUE  TRUE FALSE  TRUE FALSE
+b  TRUE  TRUE  TRUE FALSE FALSE
+c FALSE FALSE FALSE FALSE FALSE
+d FALSE  TRUE FALSE  TRUE  TRUE
+e FALSE FALSE  TRUE FALSE  TRUE
+f FALSE FALSE FALSE FALSE FALSE
+g FALSE FALSE FALSE FALSE FALSE
+> inspect(as(tl, "transactions"))
+  items transactionID
+1 {a,                
+   b}             Tr2
+2 {a,                
+   b,                
+   d}             Tr3
+3 {b,                
+   e}             Tr4
+4 {a,                
+   d}             Tr5
+5 {d,                
+   e}             Tr6
+> 
+> summary(tl)
+tidLists in sparse format with
+ 7 items/itemsets (rows) and
+ 5 transactions (columns)
+
+most frequent transactions:
+      a       b       d       e       c (Other) 
+      3       3       3       2       0       0 
+
+item frequency distribution:
+sizes
+0 2 3 
+3 1 3 
+
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  0.000   0.000   2.000   1.571   3.000   3.000 
+
+includes extended item information - examples:
+  labels
+1      a
+2      b
+3      c
+> 
