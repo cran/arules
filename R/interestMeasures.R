@@ -131,7 +131,7 @@ setMethod("interestMeasure",  signature(x = "rules"),
 ## Michael Hahsler, Kurt Hornik, and Thomas Reutterer. 
 ## Implications of probabilistic data modeling for rule mining. 
 ## Report 14, Research Report Series, Department of Statistics and 
-## Mathematics, Wirschaftsuniversität Wien, Augasse 2-6, 1090 Wien, 
+## Mathematics, Wirtschaftsuniversitaet Wien, Augasse 2-6, 1090 Wien, 
 ## Austria, March 2005.
 
 ## hyperlift(X => Y) = c_X,Y / Q_d[C_X,Y] 
@@ -176,7 +176,7 @@ setMethod("interestMeasure",  signature(x = "rules"),
 ## Michael Hahsler, Kurt Hornik, and Thomas Reutterer. 
 ## Implications of probabilistic data modeling for rule mining. 
 ## Report 14, Research Report Series, Department of Statistics and 
-## Mathematics, Wirschaftsuniversität Wien, Augasse 2-6, 1090 Wien, 
+## Mathematics, Wirtschaftsuniversitaet Wien, Augasse 2-6, 1090 Wien, 
 ## Austria, March 2005.
 
 

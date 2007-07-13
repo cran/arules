@@ -127,9 +127,7 @@ setMethod("summary", signature(object = "itemsets"),
     function(object, ...) {
         new("summary.itemsets", 
             length   = length(object),
-        ## fixme: R - Namespace
-        ##  items    = summary(object@items,  ...),
-            items    = getMethod("summary", "itemMatrix")(object@items,  ...),
+            items    = summary(object@items,  ...),
             quality  = if (length(object@quality)) summary(object@quality)
                        else                        summary(NULL),
             tidLists = !is.null(object@tidLists))
