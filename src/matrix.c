@@ -97,11 +97,12 @@ SEXP R_crosstab_ngCMatrix(SEXP x, SEXP y, SEXP t) {
 	    PROTECT(y = R_transpose_ngCMatrix(y));
 	
 	if (INTEGER(getAttrib(x, install("Dim")))[1] !=
-	    INTEGER(getAttrib(y, install("Dim")))[1])
+	    INTEGER(getAttrib(y, install("Dim")))[1]) {
 	    if (LOGICAL(t)[0] == FALSE) 
 		error("the number of rows of 'x' and 'y' do not conform");
 	    else
 		error("the number of columns of 'x' and 'y' do not conform");
+	}
 
 	nc = INTEGER(getAttrib(y, install("Dim")))[0];
 	py = getAttrib(y, install("p"));

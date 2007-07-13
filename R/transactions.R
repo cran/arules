@@ -145,15 +145,10 @@ setMethod("image", signature(x = "transactions"),
 )
 
 setMethod("summary", signature(object = "transactions"),
-    function(object) {
-        ## fixme: the dispatch does not work correctly in R
-        ## results in a "table"
-        ## ss <- summary(as(object, "itemMatrix"))
-        
-        ss <- getMethod("summary", "itemMatrix")(as(object, "itemMatrix"))
-        new("summary.transactions", ss,
+    function(object)
+        new("summary.transactions",
+            summary(as(object, "itemMatrix")),
             transactionInfo = head(object@transactionInfo, 3))
-    }
 )
 
 setMethod("show", signature(object = "summary.transactions"),
