@@ -106,7 +106,7 @@ data("AdultUCI")
   \url{http://www.ics.uci.edu/~mlearn/MLRepository.html}
 }
 \references{
-  Blake, C.L. \& Merz, C.J. (1998):
+  A. Asuncion \& D. J. Newman (2007):
   UCI Repository of Machine Learning Databases.
   Irvine, CA: University of California, Department of Information and
   Computer Science.

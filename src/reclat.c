@@ -290,7 +290,8 @@ SEXP reclat(SEXP x, SEXP y, SEXP dim, SEXP parms, SEXP control, SEXP itemInfo)
   }
   /* --- evaluate arguments --- */
   supp   = param.supp = *REAL(GET_SLOT(parms, install("support")));       /* minimal support 's'*/
-  target = param.target = BMtargetcode(CHAR(CHARACTER_POINTER(GET_SLOT(parms, install("target")))[0]));
+  target = param.target = BMtargetcode(translateChar(CHARACTER_POINTER(GET_SLOT(parms, install("target")))[0]));
+  /* target = param.target = BMtargetcode(CHAR(CHARACTER_POINTER(GET_SLOT(parms, install("target")))[0])); */
   min    = param.minlen = *INTEGER(GET_SLOT(parms, install("minlen")));   /* minimal rule length 'm'*/
   max    = param.maxlen = *INTEGER(GET_SLOT(parms, install("maxlen")));   /* maximal rule length 'n'*/  
   sort   = param.sort = *INTEGER(GET_SLOT(control, install("sort")));

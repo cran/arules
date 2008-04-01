@@ -302,9 +302,8 @@ int is_read_in (ITEMSET *iset, INPUT *in)
   iset->cnt = 0;                /* initialize the item counter */
   if (in->index >= in->tnb) return 1;
   for (i = in->ind[in->index]; i < in->ind[in->index+1]; i++) {
-	  d = get_item(iset, CHAR(STRING_ELT(in->x, i)));
-	  /* d = get_item(iset, (char*) CHAR(STRING_ELT(in->x, i))); */
-	  /*d = get_item(iset, CHAR(CHARACTER_POINTER(in->x)[i]));*/
+	  d = get_item(iset, translateChar(STRING_ELT(in->x, i)));
+	  /* d = get_item(iset, CHAR(STRING_ELT(in->x, i)));*/
   }
   in->index++;
       
@@ -328,8 +327,8 @@ int is_readapp_R (ITEMSET *iset, SEXP app)
   SEXP items;
 
   assert(iset && app);         /* check the function arguments */
-  def = CHAR(STRING_ELT(GET_SLOT(app, install("default")), 0));
-  /*def = CHAR(CHARACTER_POINTER(GET_SLOT(app, install("default")))[0]);*/
+  def = translateChar(STRING_ELT(GET_SLOT(app, install("default")), 0));
+  /* def = CHAR(STRING_ELT(GET_SLOT(app, install("default")), 0)); */
   set = INTEGER(GET_SLOT(app, install("set")));
   items = PROTECT(AS_CHARACTER(GET_SLOT(app, install("items"))));
   
@@ -338,8 +337,8 @@ int is_readapp_R (ITEMSET *iset, SEXP app)
   h = 0;
   for (i = 0; i < 5; i++) {
 	  for (j = 0; j < set[i]; j++) {
-		  item = nim_add(iset->nimap, CHAR(STRING_ELT(items, h)), sizeof(ITEM));
-		  /*item = nim_add(iset->nimap, CHAR(CHARACTER_POINTER(items)[h]), sizeof(ITEM));*/
+		  item = nim_add(iset->nimap, translateChar(STRING_ELT(items, h)), sizeof(ITEM));
+		  /* item = nim_add(iset->nimap, CHAR(STRING_ELT(items, h)), sizeof(ITEM)); */
 		  if (item == EXISTS) return E_DUPITEM;  /* add the new item */
 		  if (item == NULL)   return E_NOMEM;    /* to the name/id map */
 		  item->frq = 0;              /* clear the frequency counters */
@@ -920,12 +919,12 @@ SEXP rapriori(SEXP x, SEXP y, SEXP dim, SEXP parms, SEXP control, SEXP app, SEXP
 	param.filter = *REAL(GET_SLOT(control, install("filter")));    /* item usage filtering parameter 'u'*/
 	param.smax = *REAL(GET_SLOT(parms, install("smax")));          /* maximal support    'S' */
 	/* target type (sets/rules/h.edges) 't'*/  
-	target = CHAR(STRING_ELT(GET_SLOT(parms, install("target")), 0)); 
-	/*target = CHAR(CHARACTER_POINTER(GET_SLOT(parms, install("target")))[0]);*/
+	target = translateChar(STRING_ELT(GET_SLOT(parms, install("target")), 0)); 
+	/* target = CHAR(STRING_ELT(GET_SLOT(parms, install("target")), 0)); */ 
 	param.target = targetcode(target);
 	/* additional rule evaluation measure 'e'*/  
-	arem = CHAR(STRING_ELT(GET_SLOT(parms, install("arem")), 0)); 
-	/*arem = CHAR(CHARACTER_POINTER(GET_SLOT(parms, install("arem")))[0]);*/
+	arem = translateChar(STRING_ELT(GET_SLOT(parms, install("arem")), 0)); 
+	/* arem = CHAR(STRING_ELT(GET_SLOT(parms, install("arem")), 0)); */ 
 	param.arem = aremcode(arem);
 
 	param.minlen = *INTEGER(GET_SLOT(parms, install("minlen")));   /* minimal rule length 'm'*/

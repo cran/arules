@@ -1,5 +1,5 @@
 
-R version 2.4.1 Patched (2007-03-31 r41272)
+R version 2.6.1 (2007-11-26)
 Copyright (C) 2007 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 
@@ -18,9 +18,16 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > library("arules")
-Loading required package: stats4
 Loading required package: Matrix
 Loading required package: lattice
+
+Attaching package: 'Matrix'
+
+
+	The following object(s) are masked from package:stats :
+
+	 xtabs 
+
 ** fixing ngCMatrix validation
 > 
 > data <- list(
@@ -171,21 +178,21 @@ $Tr7
 > 
 > as(t, "ngCMatrix")
 7 x 5 sparse Matrix of class "ngCMatrix"
-              
-[1,] | | . | .
-[2,] | | | . .
-[3,] . . . . .
-[4,] . | . | |
-[5,] . . | . |
-[6,] . . . . .
-[7,] . . . . .
+  Tr2 Tr3 Tr4 Tr5 Tr6
+a   |   |   .   |   .
+b   |   |   |   .   .
+c   .   .   .   .   .
+d   .   |   .   |   |
+e   .   .   |   .   |
+f   .   .   .   .   .
+g   .   .   .   .   .
 > as(t_comp, "ngCMatrix")
 4 x 5 sparse Matrix of class "ngCMatrix"
-              
-[1,] | | . | .
-[2,] | | | . .
-[3,] . | . | |
-[4,] . . | . |
+  Tr2 Tr3 Tr4 Tr5 Tr6
+a   |   |   .   |   .
+b   |   |   |   .   .
+d   .   |   .   |   |
+e   .   .   |   .   |
 > 
 > 
 > ### test apriori and eclat
@@ -248,7 +255,7 @@ sorting and recoding items ... [4 item(s)] done [0.00s].
 creating transaction tree ... done [0.00s].
 checking subsets of size 1 2 3 done [0.00s].
 writing ... [10 set(s)] done [0.00s].
-creating S4 object  ... done [0.01s].
+creating S4 object  ... done [0.00s].
 > esets_comp <- eclat(t_comp, parameter = list(target = "frequ", supp = 0.2))
 
 parameter specification:
@@ -270,39 +277,39 @@ Creating S4 object  ... done [0.00s].
 > 
 > as(items(fsets), "ngCMatrix")
 7 x 10 sparse Matrix of class "ngCMatrix"
-                        
-[1,] . . . | . . . | | |
-[2,] . | . . | . | | . |
-[3,] . . . . . . . . . .
-[4,] . . | . . | | . | |
-[5,] | . . . | | . . . .
-[6,] . . . . . . . . . .
-[7,] . . . . . . . . . .
+                     
+a . . . | . . . | | |
+b . | . . | . | | . |
+c . . . . . . . . . .
+d . . | . . | | . | |
+e | . . . | | . . . .
+f . . . . . . . . . .
+g . . . . . . . . . .
 > as(items(fsets_comp), "ngCMatrix")
 4 x 10 sparse Matrix of class "ngCMatrix"
-                        
-[1,] . . . | . . . | | |
-[2,] . | . . | . | | . |
-[3,] . . | . . | | . | |
-[4,] | . . . | | . . . .
+                     
+a . . . | . . . | | |
+b . | . . | . | | . |
+d . . | . . | | . | |
+e | . . . | | . . . .
 > 
 > as(items(esets), "ngCMatrix")
 7 x 6 sparse Matrix of class "ngCMatrix"
-                
-[1,] | | | . . .
-[2,] . | . | . .
-[3,] . . . . . .
-[4,] | . . . | .
-[5,] . . . . . |
-[6,] . . . . . .
-[7,] . . . . . .
+             
+a | | | . . .
+b . | . | . .
+c . . . . . .
+d | . . . | .
+e . . . . . |
+f . . . . . .
+g . . . . . .
 > as(items(esets_comp), "ngCMatrix")
 4 x 6 sparse Matrix of class "ngCMatrix"
-                
-[1,] | | | . . .
-[2,] . | . | . .
-[3,] | . . . | .
-[4,] . . . . . |
+             
+a | | | . . .
+b . | . | . .
+d | . . . | .
+e . . . . . |
 > 
 > 
 > 
