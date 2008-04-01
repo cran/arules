@@ -45,7 +45,7 @@ setAs("data.frame", "transactions",
             return(new("transactions"))
         if (!all((p <- sapply(from, is.factor))))
             stop("column(s)", which(p), "not a factor")
-        p <- seq(dim(from)[1])
+        p <- seq(nrow(from))
         x <- lapply(from, function(x)
             tapply(p, x, eval, simplify = FALSE))
 
