@@ -43,11 +43,16 @@ as(t, "ngCMatrix")
 as(t_comp, "ngCMatrix")
 
 
-### test apriori and eclat
-fsets <- apriori(t, parameter = list(target = "frequ", supp = 0.2))
-esets <- eclat(t, parameter = list(target = "frequ", supp = 0.2, tidList = TRUE))
-fsets_comp <- apriori(t_comp, parameter = list(target = "frequ", supp = 0.2))
-esets_comp <- eclat(t_comp, parameter = list(target = "frequ", supp = 0.2))
+## test apriori and eclat
+fsets <- apriori(t, parameter = list(target = "frequ", supp = 0.2),
+    control=list(verb=FALSE))
+esets <- eclat(t, parameter = list(target = "frequ", supp = 0.2, 
+        tidList = TRUE), control =list(verb=FALSE))
+
+fsets_comp <- apriori(t_comp, parameter = list(target = "frequ", supp = 0.2),
+    control=list(verb=FALSE))
+esets_comp <- eclat(t_comp, parameter = list(target = "frequ", supp = 0.2),
+    control=list(verb=FALSE))
 
 as(items(fsets), "ngCMatrix")
 as(items(fsets_comp), "ngCMatrix")
@@ -55,7 +60,9 @@ as(items(fsets_comp), "ngCMatrix")
 as(items(esets), "ngCMatrix")
 as(items(esets_comp), "ngCMatrix")
 
-
+## compare if output is the same
+all(table(match(fsets, esets)) == 1)
+all(table(match(fsets_comp, esets_comp)) == 1)
 
 
 ##########################################################################

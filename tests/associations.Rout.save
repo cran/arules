@@ -1,6 +1,6 @@
 
-R version 2.4.1 Patched (2007-03-31 r41272)
-Copyright (C) 2007 The R Foundation for Statistical Computing
+R version 2.7.0 (2008-04-22)
+Copyright (C) 2008 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -18,10 +18,25 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > library("arules")
-Loading required package: stats4
 Loading required package: Matrix
 Loading required package: lattice
-**fixing ngCMatrix validation
+
+Attaching package: 'Matrix'
+
+
+	The following object(s) are masked from package:stats :
+
+	 xtabs 
+
+** fixing ngCMatrix validation
+
+Attaching package: 'arules'
+
+
+	The following object(s) are masked from package:base :
+
+	 %in% 
+
 > 
 > set.seed(20070611)
 > 
@@ -32,28 +47,13 @@ Loading required package: lattice
 transactions in sparse format with
  5000 transactions (rows) and
  20 items (columns)
+> inspect(t[10])
+  items   
+1 {item4, 
+   item10,
+   item13}
 > 
-> r <- apriori(t,parameter=list(supp=0.01,conf=0.1))
-
-parameter specification:
- confidence minval smax arem  aval originalSupport support minlen maxlen target
-        0.1    0.1    1 none FALSE            TRUE    0.01      1      5  rules
-   ext
- FALSE
-
-algorithmic control:
- filter tree heap memopt load sort verbose
-    0.1 TRUE TRUE  FALSE TRUE    2    TRUE
-
-apriori - find association rules with the apriori algorithm
-version 4.21 (2004.05.09)        (c) 1996-2004   Christian Borgelt
-set item appearances ...[0 item(s)] done [0.00s].
-set transactions ...[20 item(s), 5000 transaction(s)] done [0.00s].
-sorting and recoding items ... [20 item(s)] done [0.00s].
-creating transaction tree ... done [0.01s].
-checking subsets of size 1 2 3 done [0.00s].
-writing ... [586 rule(s)] done [0.00s].
-creating S4 object  ... done [0.00s].
+> r <- apriori(t,parameter=list(supp=0.01,conf=0.1),control=list(verb=FALSE))
 > r
 set of 586 rules 
 > summary(r)
@@ -668,389 +668,403 @@ summary of quality measures:
 > 
 > 
 > 
-> f <- eclat(t,parameter=list(supp=0.01))
-
-parameter specification:
- tidLists support minlen maxlen            target   ext
-    FALSE    0.01      1      5 frequent itemsets FALSE
-
-algorithmic control:
- sparse sort verbose
-      7   -2    TRUE
-
-eclat - find frequent item sets with the eclat algorithm
-version 2.6 (2004.08.16)         (c) 2002-2004   Christian Borgelt
-create itemset ... 
-set transactions ...[20 item(s), 5000 transaction(s)] done [0.01s].
-sorting and recoding items ... [20 item(s)] done [0.00s].
-creating bit matrix ... [20 row(s), 5000 column(s)] done [0.00s].
-writing  ... [253 set(s)] done [0.00s].
-Creating S4 object  ... done [0.00s].
+> f <- eclat(t,parameter=list(supp=0.01),control=list(verb=FALSE))
 > f
-set of 253 itemsets 
+set of 272 itemsets 
 > summary(f)
-set of 253 itemsets
+set of 272 itemsets
 
 most frequent items:
-  item7   item3   item1   item5  item13 (Other) 
-     35      34      32      32      30     366 
+  item7   item3  item13   item1   item5 (Other) 
+     39      37      36      35      34     405 
 
 element (itemset/transaction) length distribution:sizes
   1   2   3 
- 20 190  43 
+ 20 190  62 
 
    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-  1.000   2.000   2.000   2.091   2.000   3.000 
+  1.000   2.000   2.000   2.154   2.000   3.000 
 
 summary of quality measures:
     support       
- Min.   :0.01020  
- 1st Qu.:0.03620  
- Median :0.03920  
- Mean   :0.04721  
- 3rd Qu.:0.04160  
+ Min.   :0.01000  
+ 1st Qu.:0.03425  
+ Median :0.03870  
+ Mean   :0.04461  
+ 3rd Qu.:0.04125  
  Max.   :0.21120  
 
 includes transaction ID lists: FALSE 
 > as(f,"data.frame")
-                    items support
-1   {item2,item16,item17}  0.0108
-2    {item2,item5,item15}  0.0104
-3    {item2,item3,item15}  0.0106
-4           {item1,item2}  0.0378
-5          {item2,item15}  0.0380
-6           {item2,item3}  0.0356
-7           {item2,item5}  0.0418
-8          {item2,item16}  0.0374
-9          {item2,item13}  0.0370
-10          {item2,item7}  0.0330
-11          {item2,item9}  0.0358
-12         {item2,item20}  0.0354
-13         {item2,item14}  0.0388
-14         {item2,item11}  0.0330
-15          {item2,item4}  0.0344
-16          {item2,item6}  0.0376
-17         {item2,item17}  0.0402
-18         {item2,item12}  0.0366
-19         {item2,item19}  0.0344
-20         {item2,item10}  0.0362
-21         {item2,item18}  0.0374
-22          {item2,item8}  0.0320
-23   {item7,item8,item20}  0.0110
-24          {item1,item8}  0.0394
-25         {item8,item15}  0.0384
-26          {item3,item8}  0.0338
-27          {item5,item8}  0.0370
-28         {item8,item16}  0.0370
-29         {item8,item13}  0.0396
-30          {item7,item8}  0.0408
-31          {item8,item9}  0.0390
-32         {item8,item20}  0.0386
-33         {item8,item14}  0.0364
-34         {item8,item11}  0.0380
-35          {item4,item8}  0.0382
-36          {item6,item8}  0.0392
-37         {item8,item17}  0.0350
-38         {item8,item12}  0.0344
-39         {item8,item19}  0.0400
-40         {item8,item10}  0.0380
-41         {item8,item18}  0.0324
-42  {item4,item16,item18}  0.0102
-43  {item5,item13,item18}  0.0102
-44         {item1,item18}  0.0362
-45        {item15,item18}  0.0394
-46         {item3,item18}  0.0408
-47         {item5,item18}  0.0372
-48        {item16,item18}  0.0420
-49        {item13,item18}  0.0402
-50         {item7,item18}  0.0378
-51         {item9,item18}  0.0360
-52        {item18,item20}  0.0376
-53        {item14,item18}  0.0408
-54        {item11,item18}  0.0368
-55         {item4,item18}  0.0382
-56         {item6,item18}  0.0356
-57        {item17,item18}  0.0360
-58        {item12,item18}  0.0362
-59        {item18,item19}  0.0320
-60        {item10,item18}  0.0362
-61  {item7,item10,item12}  0.0102
-62         {item1,item10}  0.0418
-63        {item10,item15}  0.0398
-64         {item3,item10}  0.0388
-65         {item5,item10}  0.0402
-66        {item10,item16}  0.0402
-67        {item10,item13}  0.0396
-68         {item7,item10}  0.0404
-69         {item9,item10}  0.0368
-70        {item10,item20}  0.0380
-71        {item10,item14}  0.0366
-72        {item10,item11}  0.0374
-73         {item4,item10}  0.0370
-74         {item6,item10}  0.0374
-75        {item10,item17}  0.0374
-76        {item10,item12}  0.0398
-77        {item10,item19}  0.0360
-78  {item7,item19,item20}  0.0108
-79  {item7,item15,item19}  0.0114
-80         {item1,item19}  0.0394
-81        {item15,item19}  0.0412
-82         {item3,item19}  0.0406
-83         {item5,item19}  0.0412
-84        {item16,item19}  0.0380
-85        {item13,item19}  0.0410
-86         {item7,item19}  0.0448
-87         {item9,item19}  0.0378
-88        {item19,item20}  0.0364
-89        {item14,item19}  0.0386
-90        {item11,item19}  0.0380
-91         {item4,item19}  0.0346
-92         {item6,item19}  0.0386
-93        {item17,item19}  0.0384
-94        {item12,item19}  0.0376
-95   {item3,item4,item12}  0.0110
-96  {item1,item11,item12}  0.0104
-97   {item3,item7,item12}  0.0110
-98         {item1,item12}  0.0408
-99        {item12,item15}  0.0376
-100        {item3,item12}  0.0414
-101        {item5,item12}  0.0412
-102       {item12,item16}  0.0406
-103       {item12,item13}  0.0386
-104        {item7,item12}  0.0384
-105        {item9,item12}  0.0370
-106       {item12,item20}  0.0398
-107       {item12,item14}  0.0358
-108       {item11,item12}  0.0402
-109        {item4,item12}  0.0394
-110        {item6,item12}  0.0398
-111       {item12,item17}  0.0394
-112 {item1,item11,item17}  0.0102
-113  {item7,item9,item17}  0.0108
-114        {item1,item17}  0.0372
-115       {item15,item17}  0.0414
-116        {item3,item17}  0.0382
-117        {item5,item17}  0.0406
-118       {item16,item17}  0.0426
-119       {item13,item17}  0.0370
-120        {item7,item17}  0.0402
-121        {item9,item17}  0.0428
-122       {item17,item20}  0.0394
-123       {item14,item17}  0.0398
-124       {item11,item17}  0.0390
-125        {item4,item17}  0.0390
-126        {item6,item17}  0.0370
-127  {item4,item6,item20}  0.0102
-128         {item1,item6}  0.0420
-129        {item6,item15}  0.0416
-130         {item3,item6}  0.0414
-131         {item5,item6}  0.0406
-132        {item6,item16}  0.0396
-133        {item6,item13}  0.0368
-134         {item6,item7}  0.0350
-135         {item6,item9}  0.0392
-136        {item6,item20}  0.0412
-137        {item6,item14}  0.0400
-138        {item6,item11}  0.0420
-139         {item4,item6}  0.0402
-140 {item4,item14,item15}  0.0106
-141  {item3,item4,item14}  0.0102
-142   {item1,item4,item7}  0.0106
-143   {item3,item4,item7}  0.0106
-144         {item1,item4}  0.0440
-145        {item4,item15}  0.0422
-146         {item3,item4}  0.0428
-147         {item4,item5}  0.0380
-148        {item4,item16}  0.0426
-149        {item4,item13}  0.0400
-150         {item4,item7}  0.0400
-151         {item4,item9}  0.0382
-152        {item4,item20}  0.0406
-153        {item4,item14}  0.0426
-154        {item4,item11}  0.0384
-155 {item5,item11,item20}  0.0102
-156 {item9,item11,item20}  0.0108
-157 {item5,item11,item13}  0.0118
-158 {item3,item11,item16}  0.0104
-159  {item1,item5,item11}  0.0112
-160  {item3,item5,item11}  0.0110
-161        {item1,item11}  0.0442
-162       {item11,item15}  0.0444
-163        {item3,item11}  0.0406
-164        {item5,item11}  0.0422
-165       {item11,item16}  0.0394
-166       {item11,item13}  0.0416
-167        {item7,item11}  0.0406
-168        {item9,item11}  0.0404
-169       {item11,item20}  0.0434
-170       {item11,item14}  0.0380
-171  {item1,item7,item14}  0.0120
-172 {item7,item13,item14}  0.0108
-173 {item1,item13,item14}  0.0102
-174 {item3,item13,item14}  0.0102
-175 {item5,item13,item14}  0.0106
-176        {item1,item14}  0.0446
-177       {item14,item15}  0.0428
-178        {item3,item14}  0.0424
-179        {item5,item14}  0.0400
-180       {item14,item16}  0.0378
-181       {item13,item14}  0.0408
-182        {item7,item14}  0.0398
-183        {item9,item14}  0.0402
-184       {item14,item20}  0.0408
-185  {item7,item9,item20}  0.0106
-186 {item5,item15,item20}  0.0112
-187 {item3,item15,item20}  0.0102
-188        {item1,item20}  0.0420
-189       {item15,item20}  0.0444
-190        {item3,item20}  0.0386
-191        {item5,item20}  0.0410
-192       {item16,item20}  0.0406
-193       {item13,item20}  0.0398
-194        {item7,item20}  0.0436
-195        {item9,item20}  0.0420
-196   {item1,item7,item9}  0.0116
-197  {item7,item9,item13}  0.0104
-198  {item3,item9,item16}  0.0122
-199         {item1,item9}  0.0442
-200        {item9,item15}  0.0422
-201         {item3,item9}  0.0440
-202         {item5,item9}  0.0392
-203        {item9,item16}  0.0430
-204        {item9,item13}  0.0392
-205         {item7,item9}  0.0434
-206  {item3,item7,item13}  0.0110
-207   {item1,item3,item7}  0.0102
-208         {item1,item7}  0.0422
-209        {item7,item15}  0.0388
-210         {item3,item7}  0.0458
-211         {item5,item7}  0.0390
-212        {item7,item16}  0.0416
-213        {item7,item13}  0.0412
-214  {item1,item5,item13}  0.0104
-215  {item3,item5,item13}  0.0102
-216        {item1,item13}  0.0394
-217       {item13,item15}  0.0432
-218        {item3,item13}  0.0432
-219        {item5,item13}  0.0458
-220       {item13,item16}  0.0416
-221  {item1,item5,item16}  0.0108
-222  {item1,item3,item16}  0.0104
-223        {item1,item16}  0.0436
-224       {item15,item16}  0.0400
-225        {item3,item16}  0.0446
-226        {item5,item16}  0.0400
-227  {item1,item5,item15}  0.0114
-228         {item1,item5}  0.0454
-229        {item5,item15}  0.0438
-230         {item3,item5}  0.0420
-231         {item1,item3}  0.0426
-232        {item3,item15}  0.0440
-233        {item1,item15}  0.0408
-234               {item1}  0.2112
-235              {item15}  0.2068
-236               {item3}  0.2046
-237               {item5}  0.2020
-238              {item16}  0.2050
-239              {item13}  0.2004
-240               {item7}  0.1986
-241               {item9}  0.2020
-242              {item20}  0.1984
-243              {item14}  0.2034
-244              {item11}  0.2004
-245               {item4}  0.2010
-246               {item6}  0.2014
-247              {item17}  0.2004
-248              {item12}  0.1992
-249              {item19}  0.1960
-250              {item10}  0.1946
-251              {item18}  0.1890
-252               {item8}  0.1848
-253               {item2}  0.1812
+                     items support
+1    {item2,item16,item17}  0.0108
+2     {item2,item9,item17}  0.0100
+3     {item2,item5,item15}  0.0104
+4     {item2,item3,item15}  0.0106
+5            {item1,item2}  0.0378
+6           {item2,item15}  0.0380
+7            {item2,item3}  0.0356
+8            {item2,item5}  0.0418
+9           {item2,item16}  0.0374
+10          {item2,item13}  0.0370
+11           {item2,item7}  0.0330
+12           {item2,item9}  0.0358
+13          {item2,item20}  0.0354
+14          {item2,item14}  0.0388
+15          {item2,item11}  0.0330
+16           {item2,item4}  0.0344
+17           {item2,item6}  0.0376
+18          {item2,item17}  0.0402
+19          {item2,item12}  0.0366
+20          {item2,item19}  0.0344
+21          {item2,item10}  0.0362
+22          {item2,item18}  0.0374
+23           {item2,item8}  0.0320
+24    {item7,item8,item19}  0.0100
+25    {item7,item8,item20}  0.0110
+26           {item1,item8}  0.0394
+27          {item8,item15}  0.0384
+28           {item3,item8}  0.0338
+29           {item5,item8}  0.0370
+30          {item8,item16}  0.0370
+31          {item8,item13}  0.0396
+32           {item7,item8}  0.0408
+33           {item8,item9}  0.0390
+34          {item8,item20}  0.0386
+35          {item8,item14}  0.0364
+36          {item8,item11}  0.0380
+37           {item4,item8}  0.0382
+38           {item6,item8}  0.0392
+39          {item8,item17}  0.0350
+40          {item8,item12}  0.0344
+41          {item8,item19}  0.0400
+42          {item8,item10}  0.0380
+43          {item8,item18}  0.0324
+44   {item4,item16,item18}  0.0102
+45   {item7,item13,item18}  0.0100
+46   {item5,item13,item18}  0.0102
+47          {item1,item18}  0.0362
+48         {item15,item18}  0.0394
+49          {item3,item18}  0.0408
+50          {item5,item18}  0.0372
+51         {item16,item18}  0.0420
+52         {item13,item18}  0.0402
+53          {item7,item18}  0.0378
+54          {item9,item18}  0.0360
+55         {item18,item20}  0.0376
+56         {item14,item18}  0.0408
+57         {item11,item18}  0.0368
+58          {item4,item18}  0.0382
+59          {item6,item18}  0.0356
+60         {item17,item18}  0.0360
+61         {item12,item18}  0.0362
+62         {item18,item19}  0.0320
+63         {item10,item18}  0.0362
+64   {item7,item10,item12}  0.0102
+65   {item3,item10,item13}  0.0100
+66          {item1,item10}  0.0418
+67         {item10,item15}  0.0398
+68          {item3,item10}  0.0388
+69          {item5,item10}  0.0402
+70         {item10,item16}  0.0402
+71         {item10,item13}  0.0396
+72          {item7,item10}  0.0404
+73          {item9,item10}  0.0368
+74         {item10,item20}  0.0380
+75         {item10,item14}  0.0366
+76         {item10,item11}  0.0374
+77          {item4,item10}  0.0370
+78          {item6,item10}  0.0374
+79         {item10,item17}  0.0374
+80         {item10,item12}  0.0398
+81         {item10,item19}  0.0360
+82   {item1,item11,item19}  0.0100
+83   {item7,item19,item20}  0.0108
+84   {item7,item15,item19}  0.0114
+85   {item5,item13,item19}  0.0100
+86          {item1,item19}  0.0394
+87         {item15,item19}  0.0412
+88          {item3,item19}  0.0406
+89          {item5,item19}  0.0412
+90         {item16,item19}  0.0380
+91         {item13,item19}  0.0410
+92          {item7,item19}  0.0448
+93          {item9,item19}  0.0378
+94         {item19,item20}  0.0364
+95         {item14,item19}  0.0386
+96         {item11,item19}  0.0380
+97          {item4,item19}  0.0346
+98          {item6,item19}  0.0386
+99         {item17,item19}  0.0384
+100        {item12,item19}  0.0376
+101   {item3,item4,item12}  0.0110
+102  {item1,item11,item12}  0.0104
+103   {item3,item7,item12}  0.0110
+104         {item1,item12}  0.0408
+105        {item12,item15}  0.0376
+106         {item3,item12}  0.0414
+107         {item5,item12}  0.0412
+108        {item12,item16}  0.0406
+109        {item12,item13}  0.0386
+110         {item7,item12}  0.0384
+111         {item9,item12}  0.0370
+112        {item12,item20}  0.0398
+113        {item12,item14}  0.0358
+114        {item11,item12}  0.0402
+115         {item4,item12}  0.0394
+116         {item6,item12}  0.0398
+117        {item12,item17}  0.0394
+118  {item1,item11,item17}  0.0102
+119 {item11,item15,item17}  0.0100
+120   {item7,item9,item17}  0.0108
+121         {item1,item17}  0.0372
+122        {item15,item17}  0.0414
+123         {item3,item17}  0.0382
+124         {item5,item17}  0.0406
+125        {item16,item17}  0.0426
+126        {item13,item17}  0.0370
+127         {item7,item17}  0.0402
+128         {item9,item17}  0.0428
+129        {item17,item20}  0.0394
+130        {item14,item17}  0.0398
+131        {item11,item17}  0.0390
+132         {item4,item17}  0.0390
+133         {item6,item17}  0.0370
+134   {item4,item6,item20}  0.0102
+135  {item6,item11,item15}  0.0100
+136  {item6,item13,item15}  0.0100
+137   {item3,item6,item15}  0.0100
+138          {item1,item6}  0.0420
+139         {item6,item15}  0.0416
+140          {item3,item6}  0.0414
+141          {item5,item6}  0.0406
+142         {item6,item16}  0.0396
+143         {item6,item13}  0.0368
+144          {item6,item7}  0.0350
+145          {item6,item9}  0.0392
+146         {item6,item20}  0.0412
+147         {item6,item14}  0.0400
+148         {item6,item11}  0.0420
+149          {item4,item6}  0.0402
+150  {item4,item14,item15}  0.0106
+151   {item3,item4,item14}  0.0102
+152   {item4,item9,item16}  0.0100
+153    {item1,item4,item7}  0.0106
+154    {item3,item4,item7}  0.0106
+155   {item4,item7,item16}  0.0100
+156          {item1,item4}  0.0440
+157         {item4,item15}  0.0422
+158          {item3,item4}  0.0428
+159          {item4,item5}  0.0380
+160         {item4,item16}  0.0426
+161         {item4,item13}  0.0400
+162          {item4,item7}  0.0400
+163          {item4,item9}  0.0382
+164         {item4,item20}  0.0406
+165         {item4,item14}  0.0426
+166         {item4,item11}  0.0384
+167  {item5,item11,item20}  0.0102
+168 {item11,item13,item20}  0.0100
+169  {item9,item11,item20}  0.0108
+170  {item7,item11,item13}  0.0100
+171  {item5,item11,item13}  0.0118
+172  {item3,item11,item16}  0.0104
+173   {item1,item5,item11}  0.0112
+174   {item3,item5,item11}  0.0110
+175         {item1,item11}  0.0442
+176        {item11,item15}  0.0444
+177         {item3,item11}  0.0406
+178         {item5,item11}  0.0422
+179        {item11,item16}  0.0394
+180        {item11,item13}  0.0416
+181         {item7,item11}  0.0406
+182         {item9,item11}  0.0404
+183        {item11,item20}  0.0434
+184        {item11,item14}  0.0380
+185 {item14,item15,item20}  0.0100
+186   {item1,item7,item14}  0.0120
+187  {item7,item13,item14}  0.0108
+188  {item1,item13,item14}  0.0102
+189  {item3,item13,item14}  0.0102
+190  {item5,item13,item14}  0.0106
+191         {item1,item14}  0.0446
+192        {item14,item15}  0.0428
+193         {item3,item14}  0.0424
+194         {item5,item14}  0.0400
+195        {item14,item16}  0.0378
+196        {item13,item14}  0.0408
+197         {item7,item14}  0.0398
+198         {item9,item14}  0.0402
+199        {item14,item20}  0.0408
+200   {item1,item9,item20}  0.0100
+201   {item7,item9,item20}  0.0106
+202 {item15,item16,item20}  0.0100
+203  {item5,item15,item20}  0.0112
+204   {item3,item5,item20}  0.0100
+205  {item3,item15,item20}  0.0102
+206         {item1,item20}  0.0420
+207        {item15,item20}  0.0444
+208         {item3,item20}  0.0386
+209         {item5,item20}  0.0410
+210        {item16,item20}  0.0406
+211        {item13,item20}  0.0398
+212         {item7,item20}  0.0436
+213         {item9,item20}  0.0420
+214    {item1,item7,item9}  0.0116
+215   {item7,item9,item13}  0.0104
+216   {item1,item9,item16}  0.0100
+217   {item3,item9,item16}  0.0122
+218          {item1,item9}  0.0442
+219         {item9,item15}  0.0422
+220          {item3,item9}  0.0440
+221          {item5,item9}  0.0392
+222         {item9,item16}  0.0430
+223         {item9,item13}  0.0392
+224          {item7,item9}  0.0434
+225   {item3,item7,item13}  0.0110
+226    {item1,item3,item7}  0.0102
+227          {item1,item7}  0.0422
+228         {item7,item15}  0.0388
+229          {item3,item7}  0.0458
+230          {item5,item7}  0.0390
+231         {item7,item16}  0.0416
+232         {item7,item13}  0.0412
+233   {item1,item5,item13}  0.0104
+234   {item3,item5,item13}  0.0102
+235         {item1,item13}  0.0394
+236        {item13,item15}  0.0432
+237         {item3,item13}  0.0432
+238         {item5,item13}  0.0458
+239        {item13,item16}  0.0416
+240   {item1,item5,item16}  0.0108
+241   {item1,item3,item16}  0.0104
+242         {item1,item16}  0.0436
+243        {item15,item16}  0.0400
+244         {item3,item16}  0.0446
+245         {item5,item16}  0.0400
+246   {item1,item5,item15}  0.0114
+247          {item1,item5}  0.0454
+248         {item5,item15}  0.0438
+249          {item3,item5}  0.0420
+250          {item1,item3}  0.0426
+251         {item3,item15}  0.0440
+252         {item1,item15}  0.0408
+253                {item1}  0.2112
+254               {item15}  0.2068
+255                {item3}  0.2046
+256                {item5}  0.2020
+257               {item16}  0.2050
+258               {item13}  0.2004
+259                {item7}  0.1986
+260                {item9}  0.2020
+261               {item20}  0.1984
+262               {item14}  0.2034
+263               {item11}  0.2004
+264                {item4}  0.2010
+265                {item6}  0.2014
+266               {item17}  0.2004
+267               {item12}  0.1992
+268               {item19}  0.1960
+269               {item10}  0.1946
+270               {item18}  0.1890
+271                {item8}  0.1848
+272                {item2}  0.1812
 > inspect(subset(f, subset = items %in% "item7"))
    items    support
 1  {item2,         
     item7}   0.0330
 2  {item7,         
     item8,         
-    item20}  0.0110
+    item19}  0.0100
 3  {item7,         
-    item8}   0.0408
+    item8,         
+    item20}  0.0110
 4  {item7,         
-    item18}  0.0378
+    item8}   0.0408
 5  {item7,         
+    item13,        
+    item18}  0.0100
+6  {item7,         
+    item18}  0.0378
+7  {item7,         
     item10,        
     item12}  0.0102
-6  {item7,         
+8  {item7,         
     item10}  0.0404
-7  {item7,         
+9  {item7,         
     item19,        
     item20}  0.0108
-8  {item7,         
+10 {item7,         
     item15,        
     item19}  0.0114
-9  {item7,         
+11 {item7,         
     item19}  0.0448
-10 {item3,         
+12 {item3,         
     item7,         
     item12}  0.0110
-11 {item7,         
+13 {item7,         
     item12}  0.0384
-12 {item7,         
+14 {item7,         
     item9,         
     item17}  0.0108
-13 {item7,         
+15 {item7,         
     item17}  0.0402
-14 {item6,         
+16 {item6,         
     item7}   0.0350
-15 {item1,         
+17 {item1,         
     item4,         
     item7}   0.0106
-16 {item3,         
+18 {item3,         
     item4,         
     item7}   0.0106
-17 {item4,         
+19 {item4,         
+    item7,         
+    item16}  0.0100
+20 {item4,         
     item7}   0.0400
-18 {item7,         
+21 {item7,         
+    item11,        
+    item13}  0.0100
+22 {item7,         
     item11}  0.0406
-19 {item1,         
+23 {item1,         
     item7,         
     item14}  0.0120
-20 {item7,         
+24 {item7,         
     item13,        
     item14}  0.0108
-21 {item7,         
+25 {item7,         
     item14}  0.0398
-22 {item7,         
+26 {item7,         
     item9,         
     item20}  0.0106
-23 {item7,         
+27 {item7,         
     item20}  0.0436
-24 {item1,         
+28 {item1,         
     item7,         
     item9}   0.0116
-25 {item7,         
+29 {item7,         
     item9,         
     item13}  0.0104
-26 {item7,         
+30 {item7,         
     item9}   0.0434
-27 {item3,         
+31 {item3,         
     item7,         
     item13}  0.0110
-28 {item1,         
+32 {item1,         
     item3,         
     item7}   0.0102
-29 {item1,         
+33 {item1,         
     item7}   0.0422
-30 {item7,         
-    item15}  0.0388
-31 {item3,         
-    item7}   0.0458
-32 {item5,         
-    item7}   0.0390
-33 {item7,         
-    item16}  0.0416
 34 {item7,         
+    item15}  0.0388
+35 {item3,         
+    item7}   0.0458
+36 {item5,         
+    item7}   0.0390
+37 {item7,         
+    item16}  0.0416
+38 {item7,         
     item13}  0.0412
-35 {item7}   0.1986
+39 {item7}   0.1986
 > 

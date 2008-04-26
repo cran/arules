@@ -1,6 +1,6 @@
 
-R version 2.4.1 Patched (2007-03-31 r41272)
-Copyright (C) 2007 The R Foundation for Statistical Computing
+R version 2.6.2 (2008-02-08)
+Copyright (C) 2008 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -18,10 +18,25 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > library("arules")
-Loading required package: stats4
 Loading required package: Matrix
 Loading required package: lattice
+
+Attaching package: 'Matrix'
+
+
+	The following object(s) are masked from package:stats :
+
+	 xtabs 
+
 ** fixing ngCMatrix validation
+
+Attaching package: 'arules'
+
+
+	The following object(s) are masked from package:base :
+
+	 %in% 
+
 > 
 > 
 > data <- list(
@@ -41,24 +56,7 @@ Loading required package: lattice
 > # associations in databases. IEEE Transactions on Knowledge and 
 > # Data Engineering, 15(1):57-69, Jan/Feb 2003.
 > 
-> fsets <- eclat(trans, parameter = list(supp = 0))
-
-parameter specification:
- tidLists support minlen maxlen            target   ext
-    FALSE       0      1      5 frequent itemsets FALSE
-
-algorithmic control:
- sparse sort verbose
-      7   -2    TRUE
-
-eclat - find frequent item sets with the eclat algorithm
-version 2.6 (2004.08.16)         (c) 2002-2004   Christian Borgelt
-create itemset ... 
-set transactions ...[7 item(s), 5 transaction(s)] done [0.00s].
-sorting and recoding items ... [7 item(s)] done [0.00s].
-creating bit matrix ... [7 row(s), 5 column(s)] done [0.00s].
-writing  ... [20 set(s)] done [0.00s].
-Creating S4 object  ... done [0.01s].
+> fsets <- eclat(trans, parameter = list(supp = 0), control=list(verb=FALSE))
 > 
 > quality(fsets) <- cbind(quality(fsets), 
 +   allConfidence = interestMeasure(fsets, method = "allConfidence"))
@@ -112,27 +110,8 @@ Creating S4 object  ... done [0.01s].
 > # large, dense databases. Data Mining and Knowledge Discovery, 4(2/3):217-240,
 > # 2000
 > 
-> rules <- apriori(trans, parameter=list(supp=0.01, conf = 0.5))
-
-parameter specification:
- confidence minval smax arem  aval originalSupport support minlen maxlen target
-        0.5    0.1    1 none FALSE            TRUE    0.01      1      5  rules
-   ext
- FALSE
-
-algorithmic control:
- filter tree heap memopt load sort verbose
-    0.1 TRUE TRUE  FALSE TRUE    2    TRUE
-
-apriori - find association rules with the apriori algorithm
-version 4.21 (2004.05.09)        (c) 1996-2004   Christian Borgelt
-set item appearances ...[0 item(s)] done [0.00s].
-set transactions ...[7 item(s), 5 transaction(s)] done [0.00s].
-sorting and recoding items ... [7 item(s)] done [0.00s].
-creating transaction tree ... done [0.00s].
-checking subsets of size 1 2 3 4 done [0.00s].
-writing ... [30 rule(s)] done [0.00s].
-creating S4 object  ... done [0.00s].
+> rules <- apriori(trans, parameter=list(supp=0.01, conf = 0.5), 
++         control=list(verb=FALSE))
 >  
 > quality(rules) <- cbind(quality(rules),
 +   improvement = interestMeasure(rules, method = "improvement"))

@@ -1,0 +1,254 @@
+%PDF-1.1
+%Å‚Å„ÅœÅ”\r
+1 0 obj
+<<
+/CreationDate (D:20080421111844)
+/ModDate (D:20080421111844)
+/Title (R Graphics Output)
+/Producer (R 2.6.2)
+/Creator (R)
+>>
+endobj
+2 0 obj
+<<
+/Type /Catalog
+/Pages 3 0 R
+>>
+endobj
+5 0 obj
+<<
+/Type /Font
+/Subtype /Type1
+/Name /F1
+/BaseFont /ZapfDingbats
+>>
+endobj
+6 0 obj
+<<
+/Type /Page
+/Parent 3 0 R
+/Contents 7 0 R
+/Resources 4 0 R
+>>
+endobj
+7 0 obj
+<<
+/Length 8 0 R
+>>
+stream
+q
+Q q
+0.745 0.745 0.745 rg
+0.000 0.000 0.000 RG
+0.75 w
+[] 0 d
+1 J
+1 j
+10.00 M
+77.07 128.22 10.48 50.35 re B
+89.64 128.22 10.48 129.33 re B
+102.22 128.22 10.48 68.36 re B
+114.80 128.22 10.48 17.01 re B
+127.37 128.22 10.48 178.11 re B
+139.95 128.22 10.48 20.16 re B
+152.53 128.22 10.48 82.02 re B
+165.10 128.22 10.48 58.49 re B
+177.68 128.22 10.48 43.46 re B
+190.26 128.22 10.48 13.88 re B
+202.83 128.22 10.48 35.15 re B
+215.41 128.22 10.48 118.15 re B
+227.99 128.22 10.48 84.67 re B
+240.56 128.22 10.48 30.25 re B
+253.14 128.22 10.48 30.92 re B
+265.72 128.22 10.48 32.51 re B
+278.29 128.22 10.48 16.39 re B
+290.87 128.22 10.48 25.73 re B
+303.45 128.22 10.48 32.84 re B
+316.02 128.22 10.48 28.27 re B
+328.60 128.22 10.48 104.77 re B
+341.18 128.22 10.48 67.49 re B
+353.76 128.22 10.48 38.14 re B
+366.33 128.22 10.48 26.43 re B
+378.91 128.22 10.48 24.20 re B
+391.49 128.22 10.48 220.43 re B
+404.06 128.22 10.48 83.72 re B
+416.64 128.22 10.48 173.04 re B
+429.22 128.22 10.48 234.35 re B
+441.79 128.22 10.48 244.74 re B
+454.37 128.22 10.48 31.06 re B
+466.95 128.22 10.48 148.81 re B
+479.52 128.22 10.48 67.44 re B
+492.10 128.22 10.48 232.25 re B
+504.68 128.22 10.48 128.35 re B
+517.25 128.22 10.48 41.34 re B
+BT
+0.000 0.000 0.000 rg
+/F2 1 Tf 0.00 12.00 -12.00 0.00 12.96 185.16 Tm (item frequency \(relative\)) Tj
+ET
+Q q
+0.000 0.000 0.000 RG
+0.75 w
+[] 0 d
+1 J
+1 j
+10.00 M
+59.04 128.22 m 59.04 333.62 l S
+59.04 128.22 m 51.84 128.22 l S
+59.04 179.57 m 51.84 179.57 l S
+59.04 230.92 m 51.84 230.92 l S
+59.04 282.27 m 51.84 282.27 l S
+59.04 333.62 m 51.84 333.62 l S
+BT
+0.000 0.000 0.000 rg
+/F2 1 Tf 0.00 12.00 -12.00 0.00 41.76 119.88 Tm (0.0) Tj
+/F2 1 Tf 0.00 12.00 -12.00 0.00 41.76 171.23 Tm (0.2) Tj
+/F2 1 Tf 0.00 12.00 -12.00 0.00 41.76 222.58 Tm (0.4) Tj
+/F2 1 Tf 0.00 12.00 -12.00 0.00 41.76 273.93 Tm (0.6) Tj
+/F2 1 Tf 0.00 12.00 -12.00 0.00 41.76 325.28 Tm (0.8) Tj
+ET
+Q q
+BT
+0.000 0.000 0.000 rg
+/F2 1 Tf 5.66 5.66 -5.66 5.66 55.41 83.70 Tm (age=Young) Tj
+/F2 1 Tf 5.66 5.66 -5.66 5.66 51.01 66.72 Tm (age=Middle-aged) Tj
+/F2 1 Tf 5.66 5.66 -5.66 5.66 79.84 82.86 Tm (age=Senior) Tj
+/F2 1 Tf 5.66 5.66 -5.66 5.66 67.43 57.98 Tm (workclass=Local-gov) Tj
+/F2 1 Tf 5.66 5.66 -5.66 5.66 88.89 65.71 Tm (workclass=Private) Tj
+/F2 1 Tf 5.66 5.66 -5.66 5.66 72.78 38.00 Tm (workclass=Self-emp-not-inc) Tj
+/F2 1 Tf 5.66 5.66 -5.66 5.66 108.97 61.69 Tm (education=HS-grad) Tj
+/F2 1 Tf 5.66 5.66 -5.66 5.66 107.97 48.11 Tm (education=Some-college) Tj
+/F2 1 Tf 5.66 5.66 -5.66 5.66 131.93 58.44 Tm (education=Bachelors) Tj
+/F2 1 Tf 5.66 5.66 -5.66 5.66 149.54 63.47 Tm (education=Masters) Tj
+/F2 1 Tf 5.66 5.66 -5.66 5.66 149.13 50.49 Tm (marital-status=Divorced) Tj
+/F2 1 Tf 5.66 5.66 -5.66 5.66 132.33 22.20 Tm (marital-status=Married-civ-spouse) Tj
+/F2 1 Tf 5.66 5.66 -5.66 5.66 159.13 35.33 Tm (marital-status=Never-married) Tj
+/F2 1 Tf 5.66 5.66 -5.66 5.66 183.97 48.69 Tm (occupation=Adm-clerical) Tj
+/F2 1 Tf 5.66 5.66 -5.66 5.66 199.26 51.29 Tm (occupation=Craft-repair) Tj
+/F2 1 Tf 5.66 5.66 -5.66 5.66 197.93 37.57 Tm (occupation=Exec-managerial) Tj
+/F2 1 Tf 5.66 5.66 -5.66 5.66 205.27 32.25 Tm (occupation=Machine-op-inspct) Tj
+/F2 1 Tf 5.66 5.66 -5.66 5.66 231.41 45.71 Tm (occupation=Other-service) Tj
+/F2 1 Tf 5.66 5.66 -5.66 5.66 243.80 45.61 Tm (occupation=Prof-specialty) Tj
+/F2 1 Tf 5.66 5.66 -5.66 5.66 277.96 67.10 Tm (occupation=Sales) Tj
+/F2 1 Tf 5.66 5.66 -5.66 5.66 280.42 57.10 Tm (relationship=Husband) Tj
+/F2 1 Tf 5.66 5.66 -5.66 5.66 281.23 45.32 Tm (relationship=Not-in-family) Tj
+/F2 1 Tf 5.66 5.66 -5.66 5.66 301.70 53.12 Tm (relationship=Own-child) Tj
+/F2 1 Tf 5.66 5.66 -5.66 5.66 314.30 53.25 Tm (relationship=Unmarried) Tj
+/F2 1 Tf 5.66 5.66 -5.66 5.66 358.06 83.34 Tm (race=Black) Tj
+/F2 1 Tf 5.66 5.66 -5.66 5.66 370.01 82.71 Tm (race=White) Tj
+/F2 1 Tf 5.66 5.66 -5.66 5.66 380.66 80.79 Tm (sex=Female) Tj
+/F2 1 Tf 5.66 5.66 -5.66 5.66 399.67 87.23 Tm (sex=Male) Tj
+/F2 1 Tf 5.66 5.66 -5.66 5.66 388.70 64.83 Tm (capital-gain=None) Tj
+/F2 1 Tf 5.66 5.66 -5.66 5.66 401.94 65.43 Tm (capital-loss=None) Tj
+/F2 1 Tf 5.66 5.66 -5.66 5.66 391.31 42.22 Tm (hours-per-week=Part-time) Tj
+/F2 1 Tf 5.66 5.66 -5.66 5.66 405.15 43.48 Tm (hours-per-week=Full-time) Tj
+/F2 1 Tf 5.66 5.66 -5.66 5.66 414.78 40.42 Tm (hours-per-week=Over-time) Tj
+/F2 1 Tf 5.66 5.66 -5.66 5.66 422.85 35.96 Tm (native-country=United-States) Tj
+/F2 1 Tf 5.66 5.66 -5.66 5.66 477.17 76.69 Tm (income=small) Tj
+/F2 1 Tf 5.66 5.66 -5.66 5.66 489.79 77.89 Tm (income=large) Tj
+ET
+Q q
+Q q
+0.000 0.000 0.000 RG
+0.75 w
+[] 0 d
+1 J
+1 j
+10.00 M
+82.31 178.82 m
+94.88 257.91 l
+107.46 195.19 l
+120.04 144.70 l
+132.61 306.46 l
+145.19 148.52 l
+157.77 211.19 l
+170.34 185.40 l
+182.92 170.40 l
+195.50 142.18 l
+208.07 163.09 l
+220.65 245.86 l
+233.23 212.94 l
+245.80 157.71 l
+258.38 160.35 l
+270.96 160.21 l
+283.53 144.10 l
+296.11 154.10 l
+308.69 160.66 l
+321.27 157.15 l
+333.84 231.86 l
+346.42 194.36 l
+359.00 168.07 l
+371.57 155.16 l
+384.15 152.84 l
+396.73 347.76 l
+409.30 213.34 l
+421.88 299.86 l
+434.46 363.76 l
+447.03 372.98 l
+459.61 159.30 l
+472.19 278.44 l
+484.76 194.85 l
+497.34 358.64 l
+509.92 258.17 l
+522.49 169.44 l
+S
+Q
+endstream
+endobj
+8 0 obj
+5110
+endobj
+3 0 obj
+<<
+/Type /Pages
+/Kids [
+6 0 R
+]
+/Count 1
+/MediaBox [0 0 576 432]
+>>
+endobj
+4 0 obj
+<<
+/ProcSet [/PDF /Text]
+/Font << /F1 5 0 R /F2 10 0 R >>
+/ExtGState << >>
+>>
+endobj
+9 0 obj
+<<
+/Type /Encoding
+/BaseEncoding /WinAnsiEncoding
+/Differences [ 45/minus 96/quoteleft
+144/dotlessi /grave /acute /circumflex /tilde /macron /breve /dotaccent
+/dieresis /.notdef /ring /cedilla /.notdef /hungarumlaut /ogonek /caron /space]
+>>
+endobj
+10 0 obj <<
+/Type /Font
+/Subtype /Type1
+/Name /F2
+/BaseFont /Helvetica
+/Encoding 9 0 R
+>> endobj
+xref
+0 11
+0000000000 65535 f 
+0000000021 00000 n 
+0000000163 00000 n 
+0000005558 00000 n 
+0000005641 00000 n 
+0000000212 00000 n 
+0000000295 00000 n 
+0000000375 00000 n 
+0000005538 00000 n 
+0000005734 00000 n 
+0000005991 00000 n 
+trailer
+<<
+/Size 11
+/Info 1 0 R
+/Root 2 0 R
+>>
+startxref
+6088
+%%EOF

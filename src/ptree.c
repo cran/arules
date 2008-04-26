@@ -138,7 +138,7 @@ SEXP R_pncount(SEXP R_x, SEXP R_t, SEXP R_s, SEXP R_o, SEXP R_v) {
 	error("'o' not of type logical");
     if (TYPEOF(R_v) != LGLSXP)
 	error("'v' not of type logical");
-    int i, j, c, f, l, k, n, nr, np, ni;
+    int i, j, c, f, l, k, n, nr, np, ni, e;
     int *x, *o = NULL;
     double s, t = 0;
     SEXP px, ix, pt, it;
@@ -362,14 +362,15 @@ SEXP R_pncount(SEXP R_x, SEXP R_t, SEXP R_s, SEXP R_o, SEXP R_v) {
     }
 
     cpn = npn = 0;
-    
+   
+    e = LENGTH(pt) - 1;
     f = 0;
     for (i = 1; i < LENGTH(px); i++) {
 	l = INTEGER(px)[i];
 	n = l-f;
 	if (n == 0) {
 	    if (LOGICAL(R_s)[0] == TRUE)
-		INTEGER(r)[i-1] = 0;
+		INTEGER(r)[i-1] = e;
 	    continue;
 	}
 	x = INTEGER(ix)+f;
@@ -475,7 +476,7 @@ SEXP R_pnindex(SEXP R_x, SEXP R_y, SEXP R_v) {
 	error("'y' not of class ngCMatrix");
     if (TYPEOF(R_v) != LGLSXP)
 	error("'v' not of type logical");
-    int i, k, f, l, n, nr;
+    int i, k, f, l, n, nr, e;
     int *x;
     SEXP r, px, ix, py, iy;
     
@@ -516,12 +517,15 @@ SEXP R_pnindex(SEXP R_x, SEXP R_y, SEXP R_v) {
 	error("node allocation failed");
     }
    
-    f = 0;
+    f = e = 0;
     for (i = 1; i < LENGTH(px); i++) {
 	l = INTEGER(px)[i];
 	n = l-f;
-	if (n == 0) 
+	if (n == 0) {
+	    if (e == 0)
+		e = i;
 	    continue;
+	}
 	x = INTEGER(ix)+f;
 	pnadd(nb[*x], x, n);
 	if (npn) {
@@ -537,7 +541,7 @@ SEXP R_pnindex(SEXP R_x, SEXP R_y, SEXP R_v) {
     PROTECT(r = allocVector(INTSXP, LENGTH(py)-1));
   
     if (isNull(R_y)) {
-
+	e = 0;
 	cpn = 0;
 	npn = 1;
     
@@ -551,7 +555,7 @@ SEXP R_pnindex(SEXP R_x, SEXP R_y, SEXP R_v) {
 	l = INTEGER(py)[i];
 	n = l-f;
 	if (n == 0) {
-	    INTEGER(r)[i-1] = 0;
+	    INTEGER(r)[i-1] = e;
 	    continue;
 	}
 	x = INTEGER(iy)+f;
@@ -605,12 +609,12 @@ SEXP R_pnclosed(SEXP R_x, SEXP R_c, SEXP R_v) {
     if (!inherits(R_x, "ngCMatrix"))
 	error("'x' not of class ngCMatrix");
     if (TYPEOF(R_c) != INTSXP)
-	error("'x' not of storage type integer");
+	error("'c' not of storage type integer");
     if (LENGTH(R_c) != INTEGER(GET_SLOT(R_x, install("Dim")))[1])
 	error("'x' and 'c' not the same length");
     if (TYPEOF(R_v) != LGLSXP)
 	error("'v' not of type logical");
-    int i, k, f, l, n, nr;
+    int i, k, f, l, n, nr, e;
     int *x;
     SEXP r, px, ix;
     
@@ -659,7 +663,7 @@ SEXP R_pnclosed(SEXP R_x, SEXP R_c, SEXP R_v) {
 	R_CheckUserInterrupt();
     }
 
-    f = 0;
+    f = e = 0;
     for (i = 1; i < LENGTH(px); i++) {
 	l = INTEGER(px)[i];
 	n = l-f;
@@ -667,6 +671,8 @@ SEXP R_pnclosed(SEXP R_x, SEXP R_c, SEXP R_v) {
 	    continue;
 	x   = INTEGER(ix)+f;
 	pnc = INTEGER(R_c)[i-1];
+	if (pnc > e)
+	    e = pnc;
 	pnsmax(nb[*x], x, n, n);
 	f = l;
 	R_CheckUserInterrupt();
@@ -681,7 +687,7 @@ SEXP R_pnclosed(SEXP R_x, SEXP R_c, SEXP R_v) {
 	l = INTEGER(px)[i];
 	n = l-f;
 	if (n == 0) {
-	    LOGICAL(r)[i-1] = FALSE;
+	    LOGICAL(r)[i-1] = (INTEGER(R_c)[i-1] > e) ? TRUE : FALSE;
 	    continue;
 	}
 	x = INTEGER(ix)+f;
@@ -707,7 +713,7 @@ SEXP R_pnclosed(SEXP R_x, SEXP R_c, SEXP R_v) {
     return r;
 }
 
-// index a set of itemset into a set of 
+// index a set of itemsets into a set of 
 // rules.
 //
 // note that missing itemsets are coded 

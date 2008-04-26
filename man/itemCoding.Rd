@@ -35,7 +35,7 @@ encode(x, \ldots)
 \S4method{encode}{numeric}(x, itemLabels, itemMatrix = TRUE)
 
 recode(x, \ldots)
-\S4method{recode}{itemMatrix}(x, itemLabels = NULL, match = NULL, \ldots)
+\S4method{recode}{itemMatrix}(x, itemLabels = NULL, match = NULL)
 }
 \arguments{
     \item{x}{ a vector or a list of vectors of character strings 

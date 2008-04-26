@@ -1,6 +1,6 @@
 
 ##***************************************************************
-## read/write for transactions
+## read/write functions
 
 ## for convenience [ceeboo 2007]
 .rm.duplicates <- function(x) {
@@ -51,9 +51,16 @@ function(file, format = c("basket", "single"), sep = NULL, cols = NULL, rm.dupli
     as(entries, "transactions")
 }
 
-## write
+## write transactions and associations
 
 setMethod("WRITE", signature(x = "transactions"),
-    function(x, ...) write.table(as(x, "data.frame"), ...)
+    function(x, file = "", ...) 
+    write.table(as(x, "data.frame"), file = file, ...)
+)
+
+
+setMethod("WRITE", signature(x = "associations"),
+    function(x, file = "", ...) 
+    write.table(as(x, "data.frame"), file = file, ...)
 )
 

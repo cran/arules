@@ -13,7 +13,13 @@ setMethod("is.closed", signature(x = "itemsets"),
         support <- quality(x)$support
         if(is.null(support)) stop(sQuote("x"), 
             " does not contain support information")
-        
+
+        ## Check if the set of itemsets is unique in order to
+        ## avoid the problem that the same itemset could have
+        ## different support counts.
+        if (any(is.na(match(x, unique(x), nomatch = NA))))
+            stop("itemsets not unique")
+
         ## since R_pnclosed only supports abs. support counts
         size <- attr(quality(x),"size.data")
         if (!is.null(size)) 

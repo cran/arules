@@ -1,6 +1,6 @@
 
-R version 2.4.1 Patched (2007-03-31 r41272)
-Copyright (C) 2007 The R Foundation for Statistical Computing
+R version 2.6.2 (2008-02-08)
+Copyright (C) 2008 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -18,10 +18,25 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > library("arules")
-Loading required package: stats4
 Loading required package: Matrix
 Loading required package: lattice
+
+Attaching package: 'Matrix'
+
+
+	The following object(s) are masked from package:stats :
+
+	 xtabs 
+
 ** fixing ngCMatrix validation
+
+Attaching package: 'arules'
+
+
+	The following object(s) are masked from package:base :
+
+	 %in% 
+
 > 
 > data <- list(
 +     c("A", "B"),
@@ -106,24 +121,7 @@ Loading required package: lattice
 > 
 > ### is.closed
 > db <- as(data, "transactions")
-> is <- eclat(db, parameter = list(supp = 0))
-
-parameter specification:
- tidLists support minlen maxlen            target   ext
-    FALSE       0      1      5 frequent itemsets FALSE
-
-algorithmic control:
- sparse sort verbose
-      7   -2    TRUE
-
-eclat - find frequent item sets with the eclat algorithm
-version 2.6 (2004.08.16)         (c) 2002-2004   Christian Borgelt
-create itemset ... 
-set transactions ...[7 item(s), 5 transaction(s)] done [0.00s].
-sorting and recoding items ... [7 item(s)] done [0.00s].
-creating bit matrix ... [7 row(s), 5 column(s)] done [0.00s].
-writing  ... [26 set(s)] done [0.00s].
-Creating S4 object  ... done [0.00s].
+> is <- eclat(db, parameter = list(supp = 0), control = list(verbose = FALSE))
 > 
 > quality(is) <- cbind(quality(is),
 +     isClosed = is.closed(is))

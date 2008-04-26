@@ -17,18 +17,19 @@ t <- as(data, "transactions")
 # test the apriori interface
 
 ### rules
-r <- apriori(t, parameter=list(supp=0.25, conf=0))
+r <- apriori(t, parameter=list(supp=0.25, conf=0), control=list(verb=FALSE))
 r
 summary(r)
 inspect(SORT(r, by = "lift")[1:2])
 
 ### test appearance
 r <- apriori(t, parameter=list(supp=0.25, conf=0),
-     appearance=list(rhs=c("a","b"), default= "lhs"))
+     appearance=list(rhs=c("a","b"), default= "lhs"), control=list(verb=FALSE))
 inspect(r)
 
 ### test lhs.support
-r <- apriori(t, parameter=list(supp=0.25, conf=0, originalSupp=FALSE, ext=TRUE))
+r <- apriori(t, parameter=list(supp=0.25, conf=0, originalSupp=FALSE, ext=TRUE),
+    control=list(verb=FALSE))
 inspect(r[1:2])
 
 
@@ -37,7 +38,7 @@ inspect(r[1:2])
 ##########################################################
 # test the eclat interface
 
-f <- eclat(t)
+f <- eclat(t, control=list(verb=FALSE))
 f
 summary(f)
 inspect(f[1:2])
@@ -49,7 +50,7 @@ f.sub <- subset(f, subset=items %in% "a")
 labels(f.sub)
 
 ### test tidlists
-f <- eclat(t, parameter = list(tidLists = TRUE))
+f <- eclat(t, parameter = list(tidLists = TRUE), control=list(verb=FALSE))
 f
 summary(f)
 tl <- tidLists(f)

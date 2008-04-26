@@ -15,7 +15,7 @@
   its left operand.
   }
 \usage{
-match(x,  table, nomatch = NA, incomparables = FALSE)
+match(x,  table, nomatch = NA_integer_, incomparables = NULL)
 %\S4method{match}{rules}(x,  table, nomatch = NA, incomparables = FALSE)
 %\S4method{match}{itemsets}(x,  table, nomatch = NA, incomparables = FALSE)
 %\S4method{match}{itemMatrix}(x,  table, nomatch = NA, incomparables = FALSE)

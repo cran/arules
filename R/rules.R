@@ -134,7 +134,7 @@ setMethod("duplicated", signature(x = "rules"),
         duplicated(.joinedList(x), incomparables = incomparables))
 
 setMethod("match", signature(x = "rules", table = "rules"),
-    function(x, table, nomatch = NA, incomparables = FALSE)
+    function(x, table, nomatch = NA_integer_, incomparables = NULL)
         match(.joinedList(x), .joinedList(table),
               nomatch = nomatch, incomparables = incomparables))
 

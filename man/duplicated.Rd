@@ -11,7 +11,7 @@
   which elements are duplicates.
   
   Note that \code{duplicated} can also be used to find transactions with
-  identical items and identical rules and itemsets in collections stored in
+  identical items and identical rules and itemsets stored in
   \code{rules} and \code{itemsets}.
 }
 \usage{
