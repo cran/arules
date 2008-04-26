@@ -6,7 +6,11 @@ setMethod("is.maximal", signature(x = "itemsets"),
 
 setMethod("is.maximal", signature(x = "itemMatrix"),
     function(x) {
-    .Call("R_pncount", x@data, x@data, TRUE, TRUE, FALSE) == 1
+        ## 
+        u <- unique(x)
+        m <- .Call("R_pncount", u@data, u@data, TRUE, TRUE, FALSE) == 1
+        i <- match(x, u)
+        m[i]
 })
 
 

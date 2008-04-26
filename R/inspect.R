@@ -192,11 +192,10 @@ setMethod("inspect", signature(x = "itemMatrix"),
         if(n_of_itemsets == 0) return()
         ## Nothing to inspect here ...
 
-        items <- unlist(as(x, "list"))
+        items <- unlist(lapply(as(x, "list"), 
+                FUN = function(x) if(length(x) == 0) "" else x))
 
-        ## number of rows + fix empty itemsets
         n_of_items <- size(x)
-        items[n_of_items == 0] <- ""
         n_of_items[n_of_items == 0] <- 1
 
         ## calculate begin and end positions

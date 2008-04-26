@@ -18,7 +18,7 @@ trans <- as(data, "transactions")
 # associations in databases. IEEE Transactions on Knowledge and 
 # Data Engineering, 15(1):57-69, Jan/Feb 2003.
 
-fsets <- eclat(trans, parameter = list(supp = 0))
+fsets <- eclat(trans, parameter = list(supp = 0), control=list(verb=FALSE))
 
 quality(fsets) <- cbind(quality(fsets), 
   allConfidence = interestMeasure(fsets, method = "allConfidence"))
@@ -32,7 +32,8 @@ inspect(fsets[order(size(fsets))])
 # large, dense databases. Data Mining and Knowledge Discovery, 4(2/3):217-240,
 # 2000
 
-rules <- apriori(trans, parameter=list(supp=0.01, conf = 0.5))
+rules <- apriori(trans, parameter=list(supp=0.01, conf = 0.5), 
+        control=list(verb=FALSE))
  
 quality(rules) <- cbind(quality(rules),
   improvement = interestMeasure(rules, method = "improvement"))

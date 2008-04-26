@@ -34,7 +34,7 @@ inspect(is)
 
 ### is.closed
 db <- as(data, "transactions")
-is <- eclat(db, parameter = list(supp = 0))
+is <- eclat(db, parameter = list(supp = 0), control = list(verbose = FALSE))
 
 quality(is) <- cbind(quality(is),
     isClosed = is.closed(is))

@@ -76,14 +76,3 @@ setMethod("labels", signature(object = "associations"),
         stop(paste("Method duplicated not implemented for class", class(object),"\n"))
     })
 
-
-##****************************************************
-## writing associations to disk
-
-
-setMethod("WRITE", signature(x = "associations"),
-    function(x, ...) {
-        write.table(as(x, "data.frame"), ...)
-    })
-
-###

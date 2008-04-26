@@ -1,6 +1,6 @@
 
-R version 2.6.1 (2007-11-26)
-Copyright (C) 2007 The R Foundation for Statistical Computing
+R version 2.7.0 (2008-04-22)
+Copyright (C) 2008 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -29,6 +29,14 @@ Attaching package: 'Matrix'
 	 xtabs 
 
 ** fixing ngCMatrix validation
+
+Attaching package: 'arules'
+
+
+	The following object(s) are masked from package:base :
+
+	 %in% 
+
 > 
 > data <- list(
 +   c("a","b","c"),
@@ -195,85 +203,16 @@ d   .   |   .   |   |
 e   .   .   |   .   |
 > 
 > 
-> ### test apriori and eclat
-> fsets <- apriori(t, parameter = list(target = "frequ", supp = 0.2))
-
-parameter specification:
- confidence minval smax arem  aval originalSupport support minlen maxlen
-        0.8    0.1    1 none FALSE            TRUE     0.2      1      5
-            target   ext
- frequent itemsets FALSE
-
-algorithmic control:
- filter tree heap memopt load sort verbose
-    0.1 TRUE TRUE  FALSE TRUE    2    TRUE
-
-apriori - find association rules with the apriori algorithm
-version 4.21 (2004.05.09)        (c) 1996-2004   Christian Borgelt
-set item appearances ...[0 item(s)] done [0.00s].
-set transactions ...[4 item(s), 5 transaction(s)] done [0.00s].
-sorting and recoding items ... [4 item(s)] done [0.00s].
-creating transaction tree ... done [0.00s].
-checking subsets of size 1 2 3 done [0.00s].
-writing ... [10 set(s)] done [0.00s].
-creating S4 object  ... done [0.00s].
-> esets <- eclat(t, parameter = list(target = "frequ", supp = 0.2, tidList = TRUE))
-
-parameter specification:
- tidLists support minlen maxlen            target   ext
-     TRUE     0.2      1      5 frequent itemsets FALSE
-
-algorithmic control:
- sparse sort verbose
-      7   -2    TRUE
-
-eclat - find frequent item sets with the eclat algorithm
-version 2.6 (2004.08.16)         (c) 2002-2004   Christian Borgelt
-create itemset ... 
-set transactions ...[4 item(s), 5 transaction(s)] done [0.00s].
-sorting and recoding items ... [4 item(s)] done [0.00s].
-creating bit matrix ... [4 row(s), 5 column(s)] done [0.00s].
-writing  ... [6 set(s)] done [0.00s].
-Creating S4 object  ... done [0.00s].
-> fsets_comp <- apriori(t_comp, parameter = list(target = "frequ", supp = 0.2))
-
-parameter specification:
- confidence minval smax arem  aval originalSupport support minlen maxlen
-        0.8    0.1    1 none FALSE            TRUE     0.2      1      5
-            target   ext
- frequent itemsets FALSE
-
-algorithmic control:
- filter tree heap memopt load sort verbose
-    0.1 TRUE TRUE  FALSE TRUE    2    TRUE
-
-apriori - find association rules with the apriori algorithm
-version 4.21 (2004.05.09)        (c) 1996-2004   Christian Borgelt
-set item appearances ...[0 item(s)] done [0.00s].
-set transactions ...[4 item(s), 5 transaction(s)] done [0.00s].
-sorting and recoding items ... [4 item(s)] done [0.00s].
-creating transaction tree ... done [0.00s].
-checking subsets of size 1 2 3 done [0.00s].
-writing ... [10 set(s)] done [0.00s].
-creating S4 object  ... done [0.00s].
-> esets_comp <- eclat(t_comp, parameter = list(target = "frequ", supp = 0.2))
-
-parameter specification:
- tidLists support minlen maxlen            target   ext
-    FALSE     0.2      1      5 frequent itemsets FALSE
-
-algorithmic control:
- sparse sort verbose
-      7   -2    TRUE
-
-eclat - find frequent item sets with the eclat algorithm
-version 2.6 (2004.08.16)         (c) 2002-2004   Christian Borgelt
-create itemset ... 
-set transactions ...[4 item(s), 5 transaction(s)] done [0.00s].
-sorting and recoding items ... [4 item(s)] done [0.00s].
-creating bit matrix ... [4 row(s), 5 column(s)] done [0.00s].
-writing  ... [6 set(s)] done [0.00s].
-Creating S4 object  ... done [0.00s].
+> ## test apriori and eclat
+> fsets <- apriori(t, parameter = list(target = "frequ", supp = 0.2),
++     control=list(verb=FALSE))
+> esets <- eclat(t, parameter = list(target = "frequ", supp = 0.2, 
++         tidList = TRUE), control =list(verb=FALSE))
+> 
+> fsets_comp <- apriori(t_comp, parameter = list(target = "frequ", supp = 0.2),
++     control=list(verb=FALSE))
+> esets_comp <- eclat(t_comp, parameter = list(target = "frequ", supp = 0.2),
++     control=list(verb=FALSE))
 > 
 > as(items(fsets), "ngCMatrix")
 7 x 10 sparse Matrix of class "ngCMatrix"
@@ -294,24 +233,28 @@ d . . | . . | | . | |
 e | . . . | | . . . .
 > 
 > as(items(esets), "ngCMatrix")
-7 x 6 sparse Matrix of class "ngCMatrix"
-             
-a | | | . . .
-b . | . | . .
-c . . . . . .
-d | . . . | .
-e . . . . . |
-f . . . . . .
-g . . . . . .
+7 x 10 sparse Matrix of class "ngCMatrix"
+                     
+a . . | | . | | . . .
+b | . | . | | . | . .
+c . . . . . . . . . .
+d . | | | | . . . | .
+e | | . . . . . . . |
+f . . . . . . . . . .
+g . . . . . . . . . .
 > as(items(esets_comp), "ngCMatrix")
-4 x 6 sparse Matrix of class "ngCMatrix"
-             
-a | | | . . .
-b . | . | . .
-d | . . . | .
-e . . . . . |
+4 x 10 sparse Matrix of class "ngCMatrix"
+                     
+a . . | | . | | . . .
+b | . | . | | . | . .
+d . | | | | . . . | .
+e | | . . . . . . . |
 > 
-> 
+> ## compare if output is the same
+> all(table(match(fsets, esets)) == 1)
+[1] TRUE
+> all(table(match(fsets_comp, esets_comp)) == 1)
+[1] TRUE
 > 
 > 
 > ##########################################################################

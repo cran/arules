@@ -28,7 +28,7 @@
 \description{
 The \code{rules} class represents a set of rules.
 
-Note that the class can also contain a collection of rules with duplicated
+Note that the class can also represent a multiset of rules with duplicated
 elements. Duplicated elements can be removed with \code{\link{unique}}.
 
 }
@@ -69,7 +69,8 @@ elements. Duplicated elements can be removed with \code{\link{unique}}.
       \code{\linkS4class{itemMatrix}}}
     \item{generatingItemsets}{\code{signature(x = "rules")};
       returns a collection of the itemsets which generated the rules (one 
-      itemset for each rule). Note that the collection can contain duplicated
+      itemset for each rule). Note that the collection can be a multiset and 
+      contain duplicated
       elements. Use \code{unique} to remove duplicates and obtain a 
       proper set.}  
     \item{labels}{\code{signature(object = "rules")};

@@ -237,7 +237,7 @@ setMethod("unique", signature(x = "itemMatrix"),
 ## checks if the item labels conform
 ## and uses more efficient C code
 setMethod("match", signature(x = "itemMatrix", table = "itemMatrix"),
-    function(x, table, nomatch = NA, incomparables = FALSE) {
+    function(x, table, nomatch = NA_integer_, incomparables = NULL) {
         k <- match(itemLabels(x), itemLabels(table))
         n <- which(is.na(k))
         if (length(n)) {
@@ -249,8 +249,8 @@ setMethod("match", signature(x = "itemMatrix", table = "itemMatrix"),
         if (x@data@Dim[1] <  table@data@Dim[1])
             x@data@Dim[1] <- table@data@Dim[1]
         i <- .Call("R_pnindex", table@data, x@data, FALSE)
-        match(i, seq(length(table)), nomatch = nomatch, 
-                                     incomparables = incomparables)
+        match(i, seq_len(length(table)), nomatch = nomatch, 
+                                         incomparables = incomparables)
     }
 )
 

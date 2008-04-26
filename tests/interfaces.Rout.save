@@ -1,6 +1,6 @@
 
-R version 2.4.1 Patched (2007-03-31 r41272)
-Copyright (C) 2007 The R Foundation for Statistical Computing
+R version 2.6.2 (2008-02-08)
+Copyright (C) 2008 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -18,10 +18,25 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > library("arules")
-Loading required package: stats4
 Loading required package: Matrix
 Loading required package: lattice
-**fixing ngCMatrix validation
+
+Attaching package: 'Matrix'
+
+
+	The following object(s) are masked from package:stats :
+
+	 xtabs 
+
+** fixing ngCMatrix validation
+
+Attaching package: 'arules'
+
+
+	The following object(s) are masked from package:base :
+
+	 %in% 
+
 > 
 > data <- list(
 +     c("a","b","c"),
@@ -40,27 +55,7 @@ Loading required package: lattice
 > # test the apriori interface
 > 
 > ### rules
-> r <- apriori(t, parameter=list(supp=0.25, conf=0))
-
-parameter specification:
- confidence minval smax arem  aval originalSupport support minlen maxlen target
-          0    0.1    1 none FALSE            TRUE    0.25      1      5  rules
-   ext
- FALSE
-
-algorithmic control:
- filter tree heap memopt load sort verbose
-    0.1 TRUE TRUE  FALSE TRUE    2    TRUE
-
-apriori - find association rules with the apriori algorithm
-version 4.21 (2004.05.09)        (c) 1996-2004   Christian Borgelt
-set item appearances ...[0 item(s)] done [0.00s].
-set transactions ...[5 item(s), 7 transaction(s)] done [0.00s].
-sorting and recoding items ... [5 item(s)] done [0.00s].
-creating transaction tree ... done [0.00s].
-checking subsets of size 1 2 3 done [0.00s].
-writing ... [18 rule(s)] done [0.00s].
-creating S4 object  ... done [0.00s].
+> r <- apriori(t, parameter=list(supp=0.25, conf=0), control=list(verb=FALSE))
 > r
 set of 18 rules 
 > summary(r)
@@ -89,27 +84,7 @@ summary of quality measures:
 > 
 > ### test appearance
 > r <- apriori(t, parameter=list(supp=0.25, conf=0),
-+      appearance=list(rhs=c("a","b"), default= "lhs"))
-
-parameter specification:
- confidence minval smax arem  aval originalSupport support minlen maxlen target
-          0    0.1    1 none FALSE            TRUE    0.25      1      5  rules
-   ext
- FALSE
-
-algorithmic control:
- filter tree heap memopt load sort verbose
-    0.1 TRUE TRUE  FALSE TRUE    2    TRUE
-
-apriori - find association rules with the apriori algorithm
-version 4.21 (2004.05.09)        (c) 1996-2004   Christian Borgelt
-set item appearances ...[2 item(s)] done [0.00s].
-set transactions ...[5 item(s), 7 transaction(s)] done [0.00s].
-sorting and recoding items ... [5 item(s)] done [0.00s].
-creating transaction tree ... done [0.00s].
-checking subsets of size 1 2 done [0.00s].
-writing ... [6 rule(s)] done [0.00s].
-creating S4 object  ... done [0.00s].
++      appearance=list(rhs=c("a","b"), default= "lhs"), control=list(verb=FALSE))
 > inspect(r)
   lhs    rhs   support confidence      lift
 1 {}  => {b} 0.7142857  0.7142857 1.0000000
@@ -120,27 +95,8 @@ creating S4 object  ... done [0.00s].
 6 {e} => {b} 0.2857143  0.6666667 0.9333333
 > 
 > ### test lhs.support
-> r <- apriori(t, parameter=list(supp=0.25, conf=0, originalSupp=FALSE, ext=TRUE))
-
-parameter specification:
- confidence minval smax arem  aval originalSupport support minlen maxlen target
-          0    0.1    1 none FALSE           FALSE    0.25      1      5  rules
-  ext
- TRUE
-
-algorithmic control:
- filter tree heap memopt load sort verbose
-    0.1 TRUE TRUE  FALSE TRUE    2    TRUE
-
-apriori - find association rules with the apriori algorithm
-version 4.21 (2004.05.09)        (c) 1996-2004   Christian Borgelt
-set item appearances ...[0 item(s)] done [0.00s].
-set transactions ...[5 item(s), 7 transaction(s)] done [0.00s].
-sorting and recoding items ... [5 item(s)] done [0.00s].
-creating transaction tree ... done [0.00s].
-checking subsets of size 1 2 3 4 done [0.00s].
-writing ... [42 rule(s)] done [0.00s].
-creating S4 object  ... done [0.00s].
+> r <- apriori(t, parameter=list(supp=0.25, conf=0, originalSupp=FALSE, ext=TRUE),
++     control=list(verb=FALSE))
 > inspect(r[1:2])
   lhs    rhs   support confidence lhs.support lift
 1 {}  => {c} 0.4285714  0.4285714           1    1
@@ -152,24 +108,7 @@ creating S4 object  ... done [0.00s].
 > ##########################################################
 > # test the eclat interface
 > 
-> f <- eclat(t)
-
-parameter specification:
- tidLists support minlen maxlen            target   ext
-    FALSE     0.1      1      5 frequent itemsets FALSE
-
-algorithmic control:
- sparse sort verbose
-      7   -2    TRUE
-
-eclat - find frequent item sets with the eclat algorithm
-version 2.6 (2004.08.16)         (c) 2002-2004   Christian Borgelt
-create itemset ... 
-set transactions ...[5 item(s), 7 transaction(s)] done [0.00s].
-sorting and recoding items ... [5 item(s)] done [0.00s].
-creating bit matrix ... [5 row(s), 7 column(s)] done [0.00s].
-writing  ... [20 set(s)] done [0.00s].
-Creating S4 object  ... done [0.00s].
+> f <- eclat(t, control=list(verb=FALSE))
 > f
 set of 20 itemsets 
 > summary(f)
@@ -216,24 +155,7 @@ includes transaction ID lists: FALSE
  [7] "{a,b,e}"   "{a,e}"     "{a,b}"     "{a}"      
 > 
 > ### test tidlists
-> f <- eclat(t, parameter = list(tidLists = TRUE))
-
-parameter specification:
- tidLists support minlen maxlen            target   ext
-     TRUE     0.1      1      5 frequent itemsets FALSE
-
-algorithmic control:
- sparse sort verbose
-      7   -2    TRUE
-
-eclat - find frequent item sets with the eclat algorithm
-version 2.6 (2004.08.16)         (c) 2002-2004   Christian Borgelt
-create itemset ... 
-set transactions ...[5 item(s), 7 transaction(s)] done [0.00s].
-sorting and recoding items ... [5 item(s)] done [0.00s].
-creating bit matrix ... [5 row(s), 7 column(s)] done [0.00s].
-writing  ... [20 set(s)] done [0.00s].
-Creating S4 object  ... done [0.00s].
+> f <- eclat(t, parameter = list(tidLists = TRUE), control=list(verb=FALSE))
 > f
 set of 20 itemsets 
 > summary(f)

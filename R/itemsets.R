@@ -116,7 +116,7 @@ setMethod("duplicated", signature(x = "itemsets"),
         duplicated(x@items, incomparables = incomparables))
 
 setMethod("match", signature(x = "itemsets", table = "itemsets"),
-    function(x,  table, nomatch = NA, incomparables = FALSE)
+    function(x,  table, nomatch = NA_integer_, incomparables = NULL)
         match(x@items, table@items, nomatch = nomatch,
               incomparables = incomparables))
 

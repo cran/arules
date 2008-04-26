@@ -24,7 +24,7 @@
   The \code{itemsets} class represents a set of itemsets and the associated
   quality measures. 
   
-  Note that the class can also contain a collection of itemsets with duplicated
+  Note that the class can also represent a multiset of itemsets with duplicated
   elements. Duplicated elements can be removed with \code{\link{unique}}.
 }
 \section{Objects from the Class}{
