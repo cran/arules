@@ -36,9 +36,13 @@ apriori <-  function(data, parameter = NULL, appearance = NULL, control = NULL)
         data@itemInfo,
         PACKAGE = "arules")                  
 
-    ## so quality knows the transaction size (to calculate absolute 
-    ## counts from support)
-    attr(result@quality, "size.data") <- length(data)
+    ## add some reflectance
+    call <- match.call()
+    result@info <- list(data = call$data,
+        ntransactions = length(data),
+        support = parameter@support,
+        confidence = parameter@confidence    
+    )    
 
     if (is(result, "rules"))  { 
       ## validate sparse Matrix (this takes care of sorting vector i)

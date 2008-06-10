@@ -306,17 +306,7 @@ setMethod("show", signature(object = "itemMatrix"),
         cat("itemMatrix in sparse format with\n", 
             length(object), "rows (elements/transactions) and\n", 
             nitems(object), "columns (items)\n")
-    }
-)
-
-## NOTE Matrix coerces to dgTMatrix and the method for
-##      this class uses levelplot
-
-setMethod("image", signature(x = "itemMatrix"),
-    function(x, xlab = "Items (Columns)", ylab = "Elements (Rows)", ...) {
-        ## due to a bug somewhere we have to use this hack
-        x <- as(as(t(x@data), "dgCMatrix"), "dgTMatrix")
-        image(x, sub = NULL, ylab = ylab, xlab = xlab, colorkey = FALSE, ...)
+        invisible(NULL)
     }
 )
 
@@ -329,6 +319,7 @@ setMethod("summary", signature(object = "itemMatrix"),
             
         new("summary.itemMatrix", 
             Dim           = dim(object),
+            density       = .density_Matrix(object@data),
             itemSummary   = isum,
             lengths       = table(sizes),
             lengthSummary = summary(sizes),
@@ -341,7 +332,8 @@ setMethod("show", signature(object = "summary.itemMatrix"),
     function(object) {
         cat("itemMatrix in sparse format with\n",
             object@Dim[1], "rows (elements/itemsets/transactions) and\n",
-            object@Dim[2], "columns (items)\n")
+            object@Dim[2], "columns (items) and a density of",
+            object@density, "\n")
 
         cat("\nmost frequent items:\n")
         print(object@itemSummary)
@@ -355,9 +347,8 @@ setMethod("show", signature(object = "summary.itemMatrix"),
             cat("\nincludes extended item information - examples:\n")
             print(object@itemInfo)
         }
+        invisible(NULL)
     }
 )
-
-## removed unused ... from function arguments [ceeboo 2007]
 
 ###

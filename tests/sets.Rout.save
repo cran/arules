@@ -1,5 +1,5 @@
 
-R version 2.6.2 (2008-02-08)
+R version 2.7.0 (2008-04-22)
 Copyright (C) 2008 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 
@@ -28,7 +28,6 @@ Attaching package: 'Matrix'
 
 	 xtabs 
 
-** fixing ngCMatrix validation
 
 Attaching package: 'arules'
 

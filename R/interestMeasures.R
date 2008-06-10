@@ -5,51 +5,39 @@
 ## measures for itemsets
 
 setMethod("interestMeasure",  signature(x = "itemsets"),
-    function(x, method, transactions = NULL, ...) {
+    function(x, method, transactions = NULL, reuse = TRUE, ...) {
 
-        builtin_methods <- c("allConfidence", "crossSupportRatio")
-
-        if(is.na(ind <- pmatch(tolower(method),
-                    tolower(builtin_methods))))
-        stop(gettextf("Value '%s' is an invalid method.", method), domain = NA)
+        builtin_methods <- c("support", "allConfidence", "crossSupportRatio")
+        
+        ## check and expand method
+        if(any(is.na(ind <- pmatch(tolower(method),
+                        tolower(builtin_methods)))))
+        stop(gettextf("Value '%s' is an invalid method.", 
+                method[is.na(ind)][1]), domain = NA)
 
         method <- builtin_methods[ind]
 
-        return(.basicItemsetMeasures(x, method, transactions))
+        ## deal with multiple methods
+        if(length(method) > 1) return(as.data.frame(sapply(method, FUN = 
+            function(m) interestMeasure(x,m, transactions, reuse, ...))))
+
+        ## first see if we already have it:
+        if(reuse && !is.null(quality(x)[[method]])) return(quality(x)[[method]])
+        
+        ## calculate measures
+        if(method == "support") return(support(x, transactions))
+
+        return(.basicItemsetMeasures(x, method, transactions, reuse))
     })
 
 
 
-.basicItemsetMeasures <- function(x, method, transactions = NULL) {
+.basicItemsetMeasures <- function(x, method, transactions = NULL, 
+    reuse = TRUE) {
 
-    if(is.null(quality(x)$support)) stop("The following measure in the quality slot of x is missing: support.")
-    num_items <- nitems(items(x))
-
-    if(is.null(transactions)) {
-        ## get the support of all singleton itemsets from the itemsets
-        ## only workes from a full set of frequent itemsets!
-
-        single_items <- x[size(items(x)) == 1]
-
-        ## get the col numbers we have support for
-        single_support <- quality(single_items)$support
-        single_itemIDs <- unlist(LIST(items(single_items), 
-                decode = FALSE))
-
-        itemSupport <- numeric(length = length(single_itemIDs))
-        itemSupport[single_itemIDs] <- single_support 
-
-        ## we have to check for NA later to see if we really got all
-        ## needed item supports
-
-    }else{
-        ## get item support from the transactions
-
-        itemSupport <- itemFrequency(transactions, type = "relative")  
-        if (length(itemSupport) != num_items) 
-        stop("number of items in itemsets and transactions do not match.")
-
-    }
+    itemSupport <- itemFrequency(transactions)  
+    if (length(itemSupport) != nitems(items(x))) 
+    stop("number of items in itemsets and transactions do not match.")
 
     ## create an itemset list
     itemset_list <- LIST(items(x), decode = FALSE)
@@ -65,7 +53,7 @@ setMethod("interestMeasure",  signature(x = "itemsets"),
     ## all-confidence(Z) = supp(Z) / max(supp(i elem Z))
 
     if(method == "allConfidence") 
-    measure <-  quality(x)$support /
+    measure <- interestMeasure(x, "support", transactions, reuse) /
     sapply(itemset_list, function(i) max(itemSupport[i]))
 
 
@@ -85,40 +73,54 @@ setMethod("interestMeasure",  signature(x = "itemsets"),
     sapply(itemset_list, function(i) min(itemSupport[i])) /
     sapply(itemset_list, function(i) max(itemSupport[i]))
 
-
-    ## check for insufficient item support (NAs) 
-    if(any(is.na(measure))) warning("some values are missing because 'x' does not contain all needed item supports. provide transactions.")
-
     return(measure)
 }
 
 ## measures for rules
 
 setMethod("interestMeasure",  signature(x = "rules"),
-    function(x, method, transactions = NULL, ...) {
+    function(x, method, transactions = NULL, reuse = TRUE, ...) {
 
-        builtin_methods <- c("leverage", "hyperLift", "hyperConfidence", 
-            "improvement", "chiSquare", 
-            "cosine", "conviction", "gini", "oddsRatio", "phi") 
+        builtin_methods <- c("support", "coverage", "confidence", "lift",
+            "leverage", "hyperLift", "hyperConfidence", "improvement",
+            "chiSquare", "cosine", "conviction", "gini", "oddsRatio", "phi",
+            "doc", "RLD"
+        ) 
 
-        if(is.na(ind <- pmatch(tolower(method),
-                    tolower(builtin_methods))))
-        stop(gettextf("Value '%s' is an invalid method.", method), domain = NA)
+        ## check and expand method
+        if(any(is.na(ind <- pmatch(tolower(method),
+                        tolower(builtin_methods)))))
+        stop(gettextf("Value '%s' is an invalid method.", 
+                method[is.na(ind)][1]), domain = NA)
 
         method <- builtin_methods[ind]
 
-        if(is.null(quality(x)$support)) stop("The following measure in the quality slot of x is missing: support.")
-        if(is.null(quality(x)$confidence)) stop("The following measure in the quality slot of x is missing: confidence.")
+        ## deal with multiple methods
+        if(length(method) > 1) return(as.data.frame(sapply(method, FUN = 
+            function(m) interestMeasure(x,m, transactions, reuse, ...))))
 
-        if(method == "improvement") return(.improvement(x))
+        ## first see if we already have it:
+        if(reuse && !is.null(quality(x)[[method]])) return(quality(x)[[method]])
 
-        ## all other methods need transactions!
-        if (is.null(transactions)) stop("For this method you need to specify the transactions used to mine 'x'.")
-
-        if(method == "hyperLift") return(.hyperLift(x, transactions, ...))
-        if(method == "hyperConfidence") 
-        return(.hyperConfidence(x, transactions, ...))
-
+        ## calculate measure 
+        if(method == "support") return(support(generatingItemsets(x), 
+                transactions, type = "relative"))
+        if(method == "coverage") return(coverage(x, transactions))
+        if(method == "confidence") return(
+            interestMeasure(x, "support", transactions, reuse)/
+            interestMeasure(x, "coverage", transactions, reuse))
+        if(method == "lift") return(
+            interestMeasure(x, "support", transactions, reuse)/
+            (interestMeasure(x, "coverage", transactions, reuse) 
+            * support(rhs(x), transactions)))
+        if(method == "improvement") return(.improvement(x, transactions, reuse))
+        if(method == "hyperLift") return(
+            .hyperLift(x, transactions, reuse, ...))
+        if(method == "hyperConfidence") return(
+            .hyperConfidence(x, transactions, reuse, ...))
+        if(method == "RLD") return(.RLD(x, transactions, reuse, ...))
+        
+        
         ## all other methods are implemented here
         return(.basicRuleMeasure(x, method, transactions))
 
@@ -138,31 +140,24 @@ setMethod("interestMeasure",  signature(x = "rules"),
 ##
 ## where Q_d[C_X,Y] = qhyper(d, m = c_Y, n = length(trans.) - c_Y, k = c_X)
 ##
-## c_X,Y = supp(X,Y) * length(transactions)
-## c_X = supp(X,Y) / conf(X => Y) * length(transactions)
-## c_Y = itemFrequency(transactions, type = "absolute") reordered for consequents
+## c_X,Y = count(X => Y)
+## c_X = count(X)
+## c_Y = count(Y)
 ##
 ## this implements only hyperlift for rules with a single item in the consequent
 
 
-.hyperLift <- function(x, transactions, d = 0.99) {
+.hyperLift <- function(x, transactions, reuse, d = 0.99) {
 
-    c_XY <-  quality(x)$support * length(transactions)
-    c_X <- c_XY / quality(x)$confidence
+    counts <- .getCounts(x, transactions, reuse)
 
-    ## cons <- unlist(LIST(rhs(x), decode = FALSE))
-    ## that's low-level but way faster!
-    cons <- x@rhs@data@i+1
+    t <- counts$N
+    c_XY <- counts$f11
+    c_X <- counts$f1x
+    c_Y <- counts$fx1
+    t <- length(transactions)
 
-    ## check that the consequents are all singletons
-    if (length(cons) != length(x)) stop("this implementation only works for
-        rules with one item in the rhs.")
-
-    c_Y <- itemFrequency(transactions, type = "absolute")[cons]
-    names(c_Y) <- NULL
-
-    Q <- qhyper(d, m = c_Y, n = length(transactions) - c_Y, k = c_X, 
-        lower.tail = TRUE)
+    Q <- qhyper(d, m = c_Y, n = t - c_Y, k = c_X, lower.tail = TRUE)
     hyperlift <- c_XY / Q
 
     hyperlift
@@ -180,30 +175,18 @@ setMethod("interestMeasure",  signature(x = "rules"),
 ## Austria, March 2005.
 
 
-.hyperConfidence <- function(x, transactions, complements = TRUE, 
+.hyperConfidence <- function(x, transactions, reuse = TRUE, complements = TRUE, 
     significance = FALSE) {
 
     ## significance: return significance levels instead of
     ##   confidence levels
 
-    t <- length(transactions)
-    c_XY <-  quality(x)$support * t 
-    c_X <- c_XY / quality(x)$confidence
+    counts <- .getCounts(x, transactions, reuse)
 
-
-    ## calculate c_Y from lift or count it from transactions
-    if(!is.null(quality(x)$lift)) 
-    c_Y <- quality(x)$confidence / quality(x)$lift * t
-    else {
-        ##cons <- unlist(LIST(rhs(x), decode = FALSE))
-        ## that's low-level but way faster!
-        cons <- x@rhs@data@i+1
-
-        ## check that the consequents are all singletons
-        if (length(cons) != length(x)) stop("this implementation only works for
-            rules with one item in the rhs.")
-        c_Y <- itemFrequency(transactions, type = "absolute")[cons]
-    }
+    t <- counts$N
+    c_XY <- counts$f11
+    c_X <- counts$f1x
+    c_Y <- counts$fx1
 
     if(complements == TRUE)
     ## c_XY - 1 so we get P[C_XY < c_XY] instead of P[C_XY <= c_XY]
@@ -223,9 +206,11 @@ setMethod("interestMeasure",  signature(x = "rules"),
 ## difference between its confidence and the confidence of any
 ## proper sub-rule with the same consequent.
 
-.improvement <- function(x) {
+.improvement <- function(x, transactions = NULL, reuse = TRUE) {
 
-    conf <- quality(x)$confidence
+    
+    conf <- interestMeasure(x, "confidence", transactions, reuse)
+    #conf <- quality(x)$confidence
     imp <- numeric(length(x))
 
     ## find sets of rules w/the same rhs 
@@ -249,36 +234,62 @@ setMethod("interestMeasure",  signature(x = "rules"),
     return(imp)
 }
 
+## count helpers
+.getCounts <- function(x, transactions, reuse = TRUE){
+    N <- length(transactions)
+    f11 <- interestMeasure(x, "support", transactions, reuse) * N
+    f1x <- interestMeasure(x, "coverage", transactions, reuse) * N
+    fx1 <- .rhsSupport(x, transactions, reuse) * N
+    f0x <- N - f1x
+    fx0 <- N - fx1
+    f10 <- f1x - f11
+    f01 <- fx1 - f11
+    f00 <- f0x - f01
+    list(f11 = f11, f1x = f1x, fx1 = fx1, 
+        f0x = f0x, fx0= fx0, 
+        f10 = f10, f01 = f01, f00=f00, 
+        N = N)
+}
+
+.rhsSupport <- function(x, transactions, reuse = TRUE){
+    
+    if(is.null(transactions)) stop("transactions missing.")
+    N <- length(transactions)
+    
+    q <- quality(x)
+    if(reuse && !is.null(q$confidence) && !is.null(q$lift)) 
+        rhsSupport <- q$confidence / q$lift
+    else rhsSupport <- support(rhs(x), transactions)
+
+    ## for consequents with only one item this might be faster
+    ## cons <- unlist(LIST(rhs(x), decode = FALSE))
+    ## that's low-level but way faster!
+    #cons <- x@rhs@data@i+1
+    ## check that the consequents are all singletons
+    #if (length(cons) != length(x)) stop("this implementation only works for
+        #    rules with one item in the rhs.")
+    #c_Y <- itemFrequency(transactions, type = "absolute")[cons]
+    #names(c_Y) <- NULL
+    
+    rhsSupport
+}
+
 
 ## more measures
 ## see Tan et al. Introduction to Data Mining, 2006
 
-.basicRuleMeasure <- function(x, method, transactions) {
+.basicRuleMeasure <- function(x, method, transactions, reuse = TRUE) {
 
-    N <- length(transactions)
-    f11 <-  quality(x)$support * N
-    f1x <- f11 / quality(x)$confidence
-
-    ## calculate fx1 from lift or count it from transactions
-    if(!is.null(quality(x)$lift)) 
-    fx1 <- quality(x)$confidence / quality(x)$lift * N
-    else {
-        ##cons <- unlist(LIST(rhs(x), decode = FALSE))
-        ## that's low-level but way faster!
-        cons <- x@rhs@data@i+1
-
-        ## check that the consequents are all singletons
-        if (length(cons) != length(x)) stop("this implementation only works for
-            rules with one item in the rhs.")
-        fx1 <- itemFrequency(transactions, type = "absolute")[cons]
-    }
-
-    f0x <- N - f1x
-    fx0 <- N - fx1
-
-    f10 <- f1x - f11
-    f01 <- fx1 - f11
-    f00 <- f0x - f01
+    counts <- .getCounts(x, transactions, reuse)
+    N   <- counts$N
+    f1x <- counts$f1x
+    fx1 <- counts$fx1
+    f11 <- counts$f11
+    f0x <- counts$f0x 
+    fx0 <- counts$fx0
+    f10 <- counts$f10
+    f01 <- counts$f01
+    f00 <- counts$f00
 
     if(method == "cosine") return(f11 / sqrt(f1x*fx1))
     if(method == "conviction") return(f1x*fx0 /(N*f10))
@@ -289,6 +300,11 @@ setMethod("interestMeasure",  signature(x = "rules"),
     if(method == "oddsRatio") return(f11*f00/(f10*f01))
     if(method == "phi") return((N*f11-f1x*fx1) / sqrt(f1x*fx1*f0x*fx0))
     if(method == "leverage") return(f11/N - (f1x*fx1/N^2))
+    
+    ## difference in confidence (conf(X -> Y) - conf(not X -> Y))
+    ## Heike Hofmann and Adalbert Wilhelm. Visual comparison of association 
+    ## rules. Computational Statistics, 16(3):399–415, 2001.
+    if(method == "doc") return((f11/f1x)-(f01/f0x))
 
 
     ## this one is from Bing Liu, Wynne Hsu, and Yiming Ma (1999) 
@@ -316,3 +332,27 @@ setMethod("interestMeasure",  signature(x = "rules"),
     stop("Specified method not implemented.")
 }
 
+
+## RLD see Kenett and Salini 2008
+## RLD code contributed by Silvia Salini
+.RLD <- function(x, transactions, reuse = TRUE) {
+
+    counts <- .getCounts(x, transactions, reuse)
+    N   <- counts$N
+    f11 <- counts$f11
+    f10 <- counts$f10
+    f01 <- counts$f01
+    f00 <- counts$f00
+
+    RLD <- numeric(length(x))
+    for(i in 1:length(x)) {
+        D <- (f11[i]*f00[i]-f10[i]*f01[i])/N
+        if (D > 0) 
+            if (f01[i] < f10[i]) RLD[i] <- D/(D+f01[i])
+            else RLD[i] <- D/(D+f10[i])
+        else 
+            if (f11[i] < f00[i]) RLD[i] <- D/(D-f11[i])
+            else RLD[i] <- D/(D-f00[i]) 
+    }
+    RLD
+}

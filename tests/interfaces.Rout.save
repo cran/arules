@@ -1,5 +1,5 @@
 
-R version 2.6.2 (2008-02-08)
+R version 2.7.0 (2008-04-22)
 Copyright (C) 2008 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 
@@ -28,7 +28,6 @@ Attaching package: 'Matrix'
 
 	 xtabs 
 
-** fixing ngCMatrix validation
 
 Attaching package: 'arules'
 
@@ -76,6 +75,10 @@ summary of quality measures:
  Mean   :0.3810   Mean   :0.6447   Mean   :1.1735  
  3rd Qu.:0.4286   3rd Qu.:0.8000   3rd Qu.:1.4000  
  Max.   :0.7143   Max.   :1.0000   Max.   :1.7500  
+
+mining info:
+ data ntransactions support confidence
+    t             7    0.25          0
 > inspect(SORT(r, by = "lift")[1:2])
   lhs    rhs   support confidence lift
 1 {a,                                 
@@ -135,6 +138,10 @@ summary of quality measures:
  Max.   :0.7143  
 
 includes transaction ID lists: FALSE 
+
+mining info:
+ data ntransactions support
+    t             7     0.1
 > inspect(f[1:2])
   items   support
 1 {a,            
@@ -182,6 +189,10 @@ summary of quality measures:
  Max.   :0.7143  
 
 includes transaction ID lists: TRUE 
+
+mining info:
+ data ntransactions support
+    t             7     0.1
 > tl <- tidLists(f)
 > tl
 tidLists in sparse format with

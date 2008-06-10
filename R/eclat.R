@@ -48,9 +48,13 @@ eclat <-  function(data, parameter = NULL, control = NULL)
     
     ## make sure quality is a data.frame
     result@quality <- as.data.frame(result@quality,)
-## 
-    attr(result@quality, "size.data") <- length(data)
-
+    
+    ## add some reflectance 
+    call <- match.call()
+    result@info <- list(data = call$data,
+        ntransactions = length(data),
+        support = parameter@support
+    ) 
     
     ## make sure tid list itemInfo is ok
     if (!is.null(result@tidLists)) {

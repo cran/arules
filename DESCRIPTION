@@ -1,6 +1,6 @@
 Package: arules
-Version: 0.6-5
-Date: 2008-04-26
+Version: 0.6-6
+Date: 2008-06-10
 Title: Mining Association Rules and Frequent Itemsets
 Author: Michael Hahsler, Christian Buchta, Bettina Gruen and Kurt Hornik
 Maintainer: Michael Hahsler <michael@hahsler.net> 
@@ -11,11 +11,11 @@ Description: Provides the infrastructure for representing,
     by C. Borgelt.
 Classification/ACM: G.4 Mathematical Software,
     H.2.8 Database Applications (Data Mining),
-    I.5.1 Pattern Recogition Models
+    I.5.1 Pattern Recognition Models
 URL: http://R-Forge.R-project.org/projects/arules/
 Depends: R (>= 2.7.0), stats, methods, Matrix (>= 0.999375-9)
 Imports: stats, Matrix
 Suggests: pmml
 License: GPL-2
 LazyLoad: yes
-Packaged: Sat Apr 26 13:34:22 2008; hahsler
+Packaged: Tue Jun 10 21:33:26 2008; hahsler

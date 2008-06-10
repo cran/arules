@@ -32,9 +32,10 @@ set.seed <- 1234
 @
 %% ------------------------------------------------------------------
 %% ------------------------------------------------------------------
-\title{Introduction to \pkg{arules} -- Mining 
-    Association Rules and Frequent Item Sets}
-\author{Michael Hahsler and Bettina Gr{\"u}n and Kurt Hornik}
+\title{Introduction to \pkg{arules} -- 
+A computational environment for mining association rules and frequent item sets}
+\author{Michael Hahsler and Bettina Gr{\"u}n and Kurt Hornik 
+and Christian Buchta}
 \maketitle
 \sloppy
 %% ------------------------------------------------------------------
@@ -54,6 +55,11 @@ set.seed <- 1234
 
 %% ------------------------------------------------------------------
 %% ------------------------------------------------------------------
+\clearpage
+\tableofcontents
+\clearpage
+%% ------------------------------------------------------------------
+%% ------------------------------------------------------------------
 
 \section{Introduction}
 
@@ -61,7 +67,7 @@ Mining frequent itemsets and association rules is a popular and well
 researched method for discovering interesting relations between
 variables in large databases. \cite{arules:Piatetsky-Shapiro:1991}
 describes analyzing and presenting strong rules discovered in databases
-using different measures of interest.  Based on the concept of strong
+using different measures of interestingness.  Based on the concept of strong
 rules, \cite{arules:Agrawal+Imielinski+Swami:1993} introduced the
 problem of mining association rules from transaction data as follows:
 
@@ -76,7 +82,7 @@ where $X, Y \subseteq I$ and $X \cap Y = \emptyset$.  The sets of items
 (left-hand-side or LHS) and \emph{consequent} (right-hand-side or RHS)
 of the rule.
 
-\begin{figure}
+\begin{figure}[b]
 \centering
   \begin{tabular}{|c|l|}
   \hline
@@ -169,7 +175,9 @@ In the last decade, research on algorithms to solve the frequent itemset
 problem has been abundant.  \cite{arules:Goethals+Zaki:2004} compare the
 currently fastest algorithms.  Among these algorithms are the
 implementations of the Apriori and Eclat algorithms by
-\cite{arules:Borgelt:2003} interfaced in the \pkg{arules} environment.
+\cite{arules:Borgelt:2003}
+interfaced in
+the \pkg{arules} environment.
 The two algorithms use very different mining strategies.  Apriori,
 developed by \cite{arules:Agrawal+Srikant:1994}, is a level-wise,
 breadth-first algorithm which counts transactions.  In contrast, Eclat
@@ -179,7 +187,8 @@ The algorithms can be used to mine frequent itemsets, maximal frequent
 itemsets and closed frequent itemsets.  The implementation of Apriori
 can additionally be used to generate association rules.
 
-This paper presents \pkg{arules}, an extension package for
+This paper presents \pkg{arules}\footnote{The \pkg{arules} package can be obtained from \url{http://CRAN.R-Project.org} and the maintainer can be contacted at 
+\url{michael@hahsler.net}.}, an extension package for
 \proglang{R}~\citep{arules:R:2005} which provides the infrastructure
 needed to create and manipulate input data sets for the mining
 algorithms and for analyzing the resulting itemsets and rules.  Since it
@@ -637,7 +646,7 @@ The result of mining transaction data in \pkg{arules} are
 describing the relationship between some items (e.g., as an itemset or a
 rule) which have assigned values for different measures of quality.
 Such measures can be measures of significance (e.g., support), or
-measures of interest (e.g., confidence, lift), or other measures (e.g.,
+measures of interestingness (e.g., confidence, lift), or other measures (e.g.,
 revenue covered by the association).
 
 All types of association have a common functionality in \pkg{arules} comprising
@@ -662,7 +671,7 @@ the following methods:
   use \func{save} and \func{load} from the
   \pkg{base} package. Package \pkg{pmml}~\citep{arules:Williams:2008} 
   includes functionality to
-  save associations in PMML (Predictive Modelling Markup Language).
+  save associations in PMML (Predictive Model Markup Language).
 \end{itemize}
 
 The associations currently implemented in package~\pkg{arules} are sets
@@ -705,7 +714,9 @@ common functionality described above.
 
 In package \pkg{arules} we interface free reference implementations of
 Apriori and Eclat by Christian Borgelt
-\citep{arules:Borgelt+Kruse:2002,arules:Borgelt:2003}.  The code is
+\citep{arules:Borgelt+Kruse:2002,arules:Borgelt:2003}\footnote{Christian
+Borgelt provides the source code for Apriori and Eclat at
+\url{http://www.borgelt.net/fpm.html}.}.  The code is
 called directly from \proglang{R} by the functions \func{apriori} and
 \func{eclat} and the data objects are directly passed from \proglang{R} to
 the \proglang{C} code and back without writing to external files.
@@ -731,7 +742,7 @@ values or a named list with names equal to slot names to change the
 default values) can be passed.  In these classes, each slot specifies a
 different parameter and the values.  The default values are equal to the
 defaults of the stand-alone \proglang{C} programs
-\citep{arules:Borgelt:2004} except that the standard definition of the
+\citep{arules:Borgelt:1996} except that the standard definition of the
 support of a rule \citep{arules:Agrawal+Imielinski+Swami:1993} is
 employed for the specified minimum support required (Borgelt defines the
 support of a rule as the support of its antecedent).
@@ -740,7 +751,7 @@ For \func{apriori} the appearance feature implemented by Christian
 Borgelt can also be used.  With argument \code{appearance} of function
 \func{apriori} one can specify which items have to or must not appear in
 itemsets or rules.  For more information on this feature we refer to the
-Apriori manual~\citep{arules:Borgelt:2004}.
+Apriori manual~\citep{arules:Borgelt:1996}.
 
 The output of the functions \func{apriori} and \func{eclat} is an object
 of a class extending \class{associations} which contains the sets of mined
@@ -944,15 +955,18 @@ in \proglang{R}
 (e.g., sampling with or without replacement and probability weights).
 
 
-%\subsection{Random transactions}
-%The function \func{random.transactions} can be used to create a random 
-%transaction data set of given size and with given marginal probabilities 
-%for the items.
-%Each transaction is the result of one independent Bernoulli trial for each 
-%item resulting in a data set 
-%which only contains noise and no structure.
-%Such data sets can be
-%used to test how well interest measures are able to suppress noise.
+\subsection{Generating synthetic transaction data}
+Synthetic data can be used to evaluate and compare different mining algorithms
+and to study the behavior of measures of interestingness. 
+
+In \pkg{arules} the function \func{random.transactions} can be used to create 
+synthetic transaction data. Currently there are two methods available.  The
+first method reimplements the well known generator for transaction data for
+mining association rules developed by~\cite{arules:Agrawal+Srikant:1994}. The
+second method implements a simple probabilistic model where each transaction is
+the result of one independent Bernoulli trial for each item
+(see~\citep{arules:Hahsler+Hornik+Reutterer:2005}).
+
 
 %% ------------------------------------------------------------------
 %% ------------------------------------------------------------------
@@ -987,9 +1001,8 @@ usage if the set contains many itemsets.
 \func{interestMeasure}
 which can be used to calculate
 a broad variety of interest measures for itemsets and rules. 
-All measures are calculated
-using the quality information available from the
-sets of itemsets or rules (i.e., support, confidence, lift) and,
+To speed up the calculation, we try to reuse the quality information available 
+from the sets of itemsets or rules (i.e., support, confidence, lift) and, only
 if necessary, missing information is obtained from the
 transactions used to mine the associations.
 
@@ -997,15 +1010,20 @@ For example, available measures for itemsets are:
 \begin{itemize}
 \item All-confidence~\citep{arules:Omiecinski:2003}
 \item Cross-support ratio~\citep{arules:Xiong+Tan+Kumar:2003}
+\item Support
 \end{itemize}
 
 For rules the following measures are implemented:
 \begin{itemize}
 \item Chi square measure~\citep{arules:Liu+Hsu+Ma:1999}
 \item Conviction~\citep{arules:Brin+Motwani+Ullman+Tsur:1997} 
+\item Confidence
+\item Difference of Confidence (DOC)~\citep{arules:Hofmann+Wilhelm:2001}
 \item Hyper-lift and hyper-confidence~\citep{arules:Hahsler+Hornik:2007} 
 \item Leverage~\citep{arules:Piatetsky-Shapiro:1991} 
+\item Lift
 \item Improvement~\citep{arules:Bayardo+Agrawal+Gunopulos:2000} 
+\item Support
 \item Several measures from \cite{arules:Tan+Kumar+Srivastava2004} 
   (e.g., cosine, Gini index, $\phi$-coefficient, odds ratio)
 \end{itemize}
@@ -1660,20 +1678,8 @@ necessarily frequent itemsets as used in an association rule context).
 Such algorithms include implementations of the $\chi^2$-test based
 algorithm by \cite{arules:Silverstein+Brin+Motwani:1998} or the baseline
 frequency approach by \cite{arules:DuMouchel+Pregibon2001}.
-
-Another interesting extension would be to interface synthetic data 
-generators for fast evaluation and comparison of different mining algorithms.
-The best known generator for
-transaction data for mining association rules
-was developed by~\cite{arules:Agrawal+Srikant:1994}.
-Alternatively data can be generated by simple probabilistic models 
-as done by
-\cite{arules:Hahsler+Hornik+Reutterer:2005}.
-
-%Finally, similarity measures between itemsets and rules can be
-%implemented for \pkg{arules}. With such measures distance based
-Finally, the impelentation of distance based
-clustering could be used for visualization of associations 
+Also, the impelentation of distance based
+clustering in \pkg{arules} could be used for visualization of associations 
 \citep[see e.g.,][]{arules:Strehl+Gosh:2003}.
 
 \section*{Acknowledgments}

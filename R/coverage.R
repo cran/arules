@@ -4,15 +4,14 @@
 ## return coverage (LHS support) for rules 
 
 setMethod("coverage", signature(x = "rules"),
-    function(x) {
+    function(x, transactions = NULL) {
         q <- quality(x)
 
-        if(any(!c("support", "confidence") %in% names(q)))
-        stop(sQuote("x"), 
-            " is missing support or confidence in its quality slot!")
-
-        q$support / q$confidence
-
+        if(all(c("support", "confidence") %in% names(q))) 
+            return(q$support / q$confidence)
+        
+        ## we need to calculate lhs-support    
+        return(support(lhs(x), transactions))
     }
 )
 

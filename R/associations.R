@@ -8,7 +8,7 @@
 ##************************************************
 ## common methods
 
-## accessors for quality
+## accessors for quality and info
 setMethod("quality", signature(x = "associations"),
     function(x) {
         x@quality
@@ -18,6 +18,18 @@ setReplaceMethod("quality", signature(x = "associations"),
     function(x, value) {
         x@quality <- value
         validObject(x)
+        x
+    })
+
+setMethod("info", signature(x = "associations"),
+    function(x) {
+        x@info
+    })
+
+setReplaceMethod("info", signature(x = "associations"),
+    function(x, value) {
+        x@info <- value
+        ## no need validObject(x)
         x
     })
 
@@ -49,6 +61,7 @@ setMethod("unique", signature(x = "associations"),
 setMethod("show", signature(object = "associations"),
     function(object) {
         cat("set of",length(object),class(object),"\n")
+        invisible(NULL)
     })
 
 ## no t for associations

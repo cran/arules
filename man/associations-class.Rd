@@ -9,6 +9,10 @@
 \alias{quality<-,associations-method}
 \alias{quality}
 \alias{quality,associations-method}
+\alias{info<-}
+\alias{info<-,associations-method}
+\alias{info}
+\alias{info,associations-method}
 \alias{items,associations-method}
 \alias{labels,associations-method}
 \alias{length,associations-method}
@@ -30,11 +34,20 @@
       measures (e.g., interest measures as support or confidence).  Each
       quality measure is a named vector with the same length as the
       number of elements in the set of associations and each vector
-      element belongs to the association with the same index.}
+      element belongs to the association with the same index.} 
+    \item{\code{info}:}{a list which is used to store algorithm specific
+      mining information. Typically it contains a least the elements
+      \code{"data"} (name of the transaction data set), 
+      \code{"ntransactions"} (length of the data set), 
+      \code{"support"} (the minimum support used for mining).} 
   }
 }
 \section{Methods}{
   \describe{
+    \item{info<-}{\code{signature(x = "associations")};
+      replaces the info list.}
+    \item{info}{\code{signature(x = "associations")};
+      returns the info list.}
     \item{items}{\code{signature(x = "associations")};
       dummy method. This method has to be implemented by all subclasses
       of \code{associations} and return the items which make up each
@@ -54,7 +67,7 @@
 %      argument \code{by} (default: \code{by = "support", decreasing =
 %	TRUE}).}
     \item{quality<-}{\code{signature(x = "associations")};
-      replaces the quality \code{data.frame}.  The lengths of the vectors
+      replaces the quality data.frame.  The lengths of the vectors
       in the data.frame have to equal the number of associations
       in the set.}
     \item{quality}{\code{signature(x = "associations")};

@@ -1,7 +1,7 @@
 \name{support}
 \alias{support}
-\alias{support,itemMatrix,transactions-method}
-\alias{support,associations,transactions-method}
+\alias{support,itemMatrix-method}
+\alias{support,associations-method}
 \title{Support Counting for Itemsets}
 \description{
    Provides the generic function and the needed S4 method to count support for
@@ -10,9 +10,9 @@
 }
 \usage{
 support(x, transactions, ...)
-\S4method{support}{itemMatrix,transactions}(x, transactions, 
+\S4method{support}{itemMatrix}(x, transactions, 
     type= c("relative", "absolute"), control = NULL)
-\S4method{support}{associations,transactions}(x, transactions, 
+\S4method{support}{associations}(x, transactions, 
     type= c("relative", "absolute"), control = NULL)
 
 }
@@ -37,17 +37,19 @@ support(x, transactions, ...)
    for a single or a few itemsets is needed, one might not want to 
    mine the database for all frequent itemsets.
    
+   If in control \code{method = "ptree"} is used, 
+   the counters for the itemsets are 
+   organized in a prefix tree. The transactions are sequencially processed
+   and the corresponding counters in the prefix tree are incremented 
+   (see Hahsler et al, 2008). This method is used by default since it is 
+   typically significantly faster than tid list intersection.
+   
    If in control \code{method = "tidlists"} is used,
    support is counted using transaction ID list intersection
    which is used by several fast mining algorithms
    (e.g., by Eclat). However, Support is determined for each itemset
    individually which is slow for a large number of long itemsets
    in dense data. 
-   
-   If in control \code{method = "ptree"} is used, 
-   the counters for the itemsets are 
-   organized in a prefix tree. The transactions are sequencially processed
-   and the corresponding counters in the prefix tree are incremented. 
    
    If in control \code{reduce = TRUE} is used, unused items are removed from
    the data before creating rules. This might be slower for large transaction
@@ -62,6 +64,10 @@ support(x, transactions, ...)
 \code{\link{itemMatrix-class}}, 
 \code{\link{associations-class}}, 
 \code{\link{transactions-class}}
+}
+\references{
+Michael Hahsler, Christian Buchta, and Kurt Hornik. Selective association 
+rule generation. \emph{Computational Statistics}, 23(2):303-315, April 2008.
 }
 \examples{
 data("Income")

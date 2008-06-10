@@ -2,12 +2,14 @@
 #include <R_ext/Utils.h>
 #include <Rdefines.h>
 
-/* sparse matrix tools to ease some of the pains 
- * with package Matrix.
+/* sparse matrix matrix tools.
  *
- * Version: 0.1-3 experimental
+ * ngCMatrix objects represent indicator matrices
+ * in column spares format.
  *
- * ceeboo 2006, 2007
+ * Version: 0.1-4
+ *
+ * ceeboo 2006, 2007, 2008
  */
 
 SEXP R_transpose_ngCMatrix(SEXP x) {
@@ -21,7 +23,8 @@ SEXP R_transpose_ngCMatrix(SEXP x) {
     px = getAttrib(x, install("p"));
     ix = getAttrib(x, install("i"));
 	
-    PROTECT(r = allocVector(VECSXP, 0));
+    // use new-style S4 object
+    PROTECT(r = NEW_OBJECT(MAKE_CLASS("ngCMatrix")));
 
     setAttrib(r, install("p"), (pr = allocVector(INTSXP, nr+1)));
     setAttrib(r, install("i"), (ir = allocVector(INTSXP, LENGTH(ix))));
@@ -34,7 +37,7 @@ SEXP R_transpose_ngCMatrix(SEXP x) {
 	INTEGER(pr)[k] += INTEGER(pr)[k-1];
     l = LENGTH(ix)-1;
     for (i = LENGTH(px)-2; i > -1; i--) {
-	f = (i) ? INTEGER(px)[i] - 1 : -1;
+	f = INTEGER(px)[i] - 1;
 	for (k = l; k > f; k--)
 	    INTEGER(ir)[--INTEGER(pr)[INTEGER(ix)[k]]] = i;
 	l = f;
@@ -54,18 +57,18 @@ SEXP R_transpose_ngCMatrix(SEXP x) {
 	SET_STRING_ELT(pr, 1, STRING_ELT(ix, 0));
     }
 
-    setAttrib(r, install("factors"), allocVector(VECSXP, 0));
-    setAttrib(r, R_ClassSymbol, getAttrib(x, R_ClassSymbol));
-    
-    SET_S4_OBJECT(r);
     UNPROTECT(1);
 
     return r;
 }
 
-/* crossprod in package Matrix does not do what we 
- * want, or what we get if we use a full storage
+/* crossprod in package Matrix performs logical
+ * AND. we need a table of counts in full storage
  * representation.
+ *
+ * if argument y holds R_NilValue computes the auto
+ * crosstab of x. if option t holds FALSE computes
+ * the equivalent of tcrossprod.
  */
 
 SEXP R_crosstab_ngCMatrix(SEXP x, SEXP y, SEXP t) {
@@ -145,8 +148,8 @@ SEXP R_crosstab_ngCMatrix(SEXP x, SEXP y, SEXP t) {
 	SET_VECTOR_ELT(ix, 1, d2);
 	if (!isNull(n1) || !isNull(n2)) {
 	    setAttrib(ix, R_NamesSymbol, (iy = allocVector(STRSXP, 2)));
-	    SET_STRING_ELT(iy, 0, (isNull(n1)) ? mkChar("") : STRING_ELT(n1, 0));
-	    SET_STRING_ELT(iy, 1, (isNull(n2)) ? mkChar("") : STRING_ELT(n2, 0));
+	    SET_STRING_ELT(iy, 0, (isNull(n1)) ? R_BlankString : STRING_ELT(n1, 0));
+	    SET_STRING_ELT(iy, 1, (isNull(n2)) ? R_BlankString : STRING_ELT(n2, 0));
 	}
     }
 
@@ -196,8 +199,6 @@ SEXP R_colSums_ngCMatrix(SEXP x) {
     return r;
 }
 
-//
-
 SEXP R_colSubset_ngCMatrix(SEXP x, SEXP s) {
     if (!inherits(x, "ngCMatrix") && !inherits(x, "sgCMatrix"))
 	error("'x' not of class 'ngCMatrix'");
@@ -205,9 +206,12 @@ SEXP R_colSubset_ngCMatrix(SEXP x, SEXP s) {
     SEXP r, dx, px, ix, pr, ir;
     
     dx = getAttrib(x, install("Dimnames"));
-   
+
     r = CONS(dx, ATTRIB(x));
     SET_TAG(r, R_DimNamesSymbol);
+    // NOTE that we temporarily change a read-only object.
+    //      this is safe as long as the object cannot be
+    //      accessed concurrently.
     SET_ATTRIB(x, r);
 
     PROTECT(s = arraySubscript(1, s, getAttrib(x, install("Dim")), getAttrib, (STRING_ELT), x));
@@ -226,7 +230,7 @@ SEXP R_colSubset_ngCMatrix(SEXP x, SEXP s) {
 
     ix = getAttrib(x, install("i"));
     
-    PROTECT(r = allocVector(VECSXP, 0));
+    PROTECT(r = NEW_OBJECT(MAKE_CLASS(inherits(x, "ngCMatrix") ? "ngCMatrix" : "sgCMatrix")));
     setAttrib(r, install("p"), (pr = allocVector(INTSXP, LENGTH(s)+1)));
     setAttrib(r, install("i"), (ir = allocVector(INTSXP, n)));
     
@@ -256,10 +260,6 @@ SEXP R_colSubset_ngCMatrix(SEXP x, SEXP s) {
 	    SET_VECTOR_ELT(ir, 1, R_NilValue);
     }
     
-    setAttrib(r, install("factors"), allocVector(VECSXP, 0));
-    setAttrib(r, R_ClassSymbol, getAttrib(x, R_ClassSymbol));
-
-    SET_S4_OBJECT(r);
     UNPROTECT(2);
 
     return r;
@@ -371,7 +371,7 @@ SEXP R_cbind_ngCMatrix(SEXP x, SEXP y) {
     ix = getAttrib(x, install("i"));
     iy = getAttrib(y, install("i"));
 
-    PROTECT(r = allocVector(VECSXP, 0));
+    PROTECT(r = NEW_OBJECT(MAKE_CLASS(inherits(x, "ngCMatrix") ? "ngCMatrix" : "sgCMatrix")));
     setAttrib(r, install("p"), (pr = allocVector(INTSXP, LENGTH(px)+LENGTH(py)-1)));
     setAttrib(r, install("i"), (ir = allocVector(INTSXP, LENGTH(ix)+LENGTH(iy))));
 
@@ -424,16 +424,11 @@ SEXP R_cbind_ngCMatrix(SEXP x, SEXP y) {
 		SET_STRING_ELT(s, k+n, STRING_ELT(sy, k));
     }
     
-    // fixme
     if (isNull((ix = getAttrib(ix, R_NamesSymbol))))
 	setAttrib(ir, R_NamesSymbol, getAttrib(iy, R_NamesSymbol));
     else
 	setAttrib(ir, R_NamesSymbol, ix);
 
-    setAttrib(r, install("factors"), allocVector(VECSXP, 0));
-    setAttrib(r, R_ClassSymbol, getAttrib(x, R_ClassSymbol));
-
-    SET_S4_OBJECT(r);
     UNPROTECT(1);
 
     return r;
@@ -444,11 +439,11 @@ SEXP R_cbind_ngCMatrix(SEXP x, SEXP y) {
 // rows is allowed to increase.
 
 SEXP R_recode_ngCMatrix(SEXP x, SEXP s) {
-    if (!inherits(x, "ngCMatrix"))
+    if (!inherits(x, "ngCMatrix") && !inherits(x, "sgCMatrix"))
 	error("'x' not of class ngCMatrix");
     if (TYPEOF(s) != INTSXP)
 	error("'s' not of storage type integer");
-    int i, k, f, l, nr;
+    int i, k, f, l, c, nr;
     SEXP r, px, ix, ir;
 
     nr = INTEGER(getAttrib(x, install("Dim")))[0];
@@ -460,15 +455,21 @@ SEXP R_recode_ngCMatrix(SEXP x, SEXP s) {
   
     nr = 0;
     for (i = 0; i < LENGTH(r); i++) {
-	if (INTEGER(r)[i] == nr)
+	if ((l = INTEGER(r)[i]) <= nr)
 	    error("invalid index");
-	nr = INTEGER(r)[i];
+	nr = l;
     }
+    if (nr == NA_INTEGER)
+	error("invalid index");
+
+    UNPROTECT(1);
 
     px = getAttrib(x, install("p"));
     ix = getAttrib(x, install("i"));
 
-    PROTECT(r = allocVector(VECSXP, 0));
+    c  = inherits(x, "ngCMatrix");
+
+    PROTECT(r = NEW_OBJECT(MAKE_CLASS(c ? "ngCMatrix" : "sgCMatrix")));
     setAttrib(r, install("p"), px);
     setAttrib(r, install("i"), (ir = allocVector(INTSXP, LENGTH(ix))));
 
@@ -479,7 +480,8 @@ SEXP R_recode_ngCMatrix(SEXP x, SEXP s) {
 	    continue;
 	for (k = f; k < l; k++) 
 	    INTEGER(ir)[k] = INTEGER(s)[INTEGER(ix)[k]]-1;
-	R_isort(INTEGER(ir)+f, l-f);
+	if (c)
+	    R_isort(INTEGER(ir)+f, l-f);
 	f = l;
     }
 
@@ -488,16 +490,21 @@ SEXP R_recode_ngCMatrix(SEXP x, SEXP s) {
     INTEGER(ir)[1] = LENGTH(px)-1;
 
     setAttrib(r, install("Dimnames"), (ir = allocVector(VECSXP, 2)));
-    ix = getAttrib(x, install("Dimnames"));
-    // fixme
-    SET_VECTOR_ELT(ir, 0, R_NilValue);
-    SET_VECTOR_ELT(ir, 1, VECTOR_ELT(ix, 1));
+    px = getAttrib(x, install("Dimnames"));
+    if (isNull((ix = VECTOR_ELT(px, 0))))
+	SET_VECTOR_ELT(ir, 0, ix);
+    else {
+	SEXP t;
+	SET_VECTOR_ELT(ir, 0, (t = allocVector(STRSXP, nr)));
+	for (k = 0; k < nr; k++) 
+	    SET_STRING_ELT(t, k, R_BlankString);
+	for (k = 0; k < LENGTH(s); k++)
+	    SET_STRING_ELT(t, INTEGER(s)[k]-1, STRING_ELT(ix, k));
+    }
+    SET_VECTOR_ELT(ir, 1, VECTOR_ELT(px, 1));
+    setAttrib(ir, R_NamesSymbol, getAttrib(px, R_NamesSymbol));
 
-    setAttrib(r, install("factors"), getAttrib(x, install("factors")));
-    setAttrib(r, R_ClassSymbol, getAttrib(x, R_ClassSymbol));
-
-    SET_S4_OBJECT(r);
-    UNPROTECT(2);
+    UNPROTECT(1);
 
     return r;
 }
@@ -526,7 +533,7 @@ SEXP R_or_ngCMatrix(SEXP x, SEXP y) {
     py = getAttrib(y, install("p"));
     iy = getAttrib(y, install("i"));
 
-    PROTECT(r = allocVector(VECSXP, 0));
+    PROTECT(r = NEW_OBJECT(MAKE_CLASS("ngCMatrix")));
     setAttrib(r, install("p"), (pr = allocVector(INTSXP, LENGTH(px))));
 
     n = LENGTH(ix) + LENGTH(iy);
@@ -586,17 +593,14 @@ SEXP R_or_ngCMatrix(SEXP x, SEXP y) {
     else
 	setAttrib(ir, R_NamesSymbol, ix);
 
-    setAttrib(r, install("factors"), getAttrib(x, install("factors")));
-    setAttrib(r, R_ClassSymbol, getAttrib(x, R_ClassSymbol));
-
-    SET_S4_OBJECT(r);
     UNPROTECT(1);
 
     return r;
 
 }
 
-// package Matrix does not check thoroughly
+// check if the internal represention is compatible
+// with the implementations above.
 
 SEXP R_valid_ngCMatrix(SEXP x) {
     if (!inherits(x, "ngCMatrix"))

@@ -7,14 +7,18 @@
    calculate the coverage (support of the left-hand-side) of rules.
    }
 \usage{
-coverage(x)
+coverage(x, transactions = NULL)
 }
 \arguments{
   \item{x}{ the set of rules. }
+  \item{transactions}{ the data set used to generate 'x'. Only needed if
+  the quality slot of 'x' does not contain support and confidence. }
 }
 \details{
   Coverage is calculated from the rules quality measures 
-  (support and confidence) stored in the quality slot. 
+  (support and confidence) stored in the quality slot or, if these
+  values are not present, as the 
+  support of the LHS.
 }
 \value{
    A numeric vector of the same length as \code{x} containing

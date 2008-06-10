@@ -1,11 +1,13 @@
 .onLoad <- function(lib, pkg) {
-    require("methods", character = TRUE, quietly = TRUE)
-    ## 
-    require("Matrix", character = TRUE, quietly = TRUE)
-    cat("** fixing ngCMatrix validation\n")
-    setValidity("ngCMatrix",
-        function(object) .Call("R_valid_ngCMatrix", object),
-                 where = .GlobalEnv)
+    require("methods", character.only = TRUE, quietly = TRUE)
+    
+    ## FIXME: do we still need that? If yes, then the test should
+    ##        be done at the level of itemMatrix
+    ## require("Matrix", character.only = TRUE, quietly = TRUE)
+    ##cat("** fixing ngCMatrix validation\n")
+    ##setValidity("ngCMatrix",
+    ##    function(object) .Call("R_valid_ngCMatrix", object),
+    ##       where = .GlobalEnv)
 }
 
 
@@ -40,6 +42,7 @@ setClass("itemMatrix",
 setClass("summary.itemMatrix",
     representation(
         Dim           = "integer",
+        density       = "numeric",
         itemSummary   = "integer",
         lengths       = "table",
         lengthSummary = "table",
@@ -265,7 +268,7 @@ setClass("ECcontrol",
 ## associations
 
 setClass("associations",
-    representation(quality = "data.frame", "VIRTUAL"))
+    representation(quality = "data.frame", info = "list", "VIRTUAL"))
 
 setClass("itemsets",
     representation(
@@ -275,7 +278,7 @@ setClass("itemsets",
 
     contains = "associations",
     
-    prototype(tidLists = NULL, quality = data.frame()),
+    prototype(tidLists = NULL, quality = data.frame(), info = list()),
     
     validity = function(object) {
         ## if tidLists exists, check dimensions
@@ -302,7 +305,7 @@ setClass("rules",
     ),
     contains = "associations",
     
-    prototype(quality = data.frame()),
+    prototype(quality = data.frame(), info = list()),
     
     validity = function(object) {
         ## check dimensions
@@ -319,7 +322,8 @@ setClass("rules",
 )
 
 setClass("summary.associations",
-    representation(length  ="integer", quality = "table", "VIRTUAL"))
+    representation(length  ="integer", quality = "table", 
+        info = "list" , "VIRTUAL"))
 
 setClass("summary.itemsets",
     representation(tidLists = "logical", items = "summary.itemMatrix"),

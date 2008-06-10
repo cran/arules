@@ -1,0 +1,266 @@
+
+R version 2.7.0 Patched (2008-05-14 r45692)
+Copyright (C) 2008 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> 
+> library(arules)
+Loading required package: Matrix
+Loading required package: lattice
+
+Attaching package: 'Matrix'
+
+
+	The following object(s) are masked from package:stats :
+
+	 xtabs 
+
+
+Attaching package: 'arules'
+
+
+	The following object(s) are masked from package:base :
+
+	 %in% 
+
+> 
+> e <- new("ngCMatrix")
+> e
+0 x 0 sparse Matrix of class "ngCMatrix"
+<0 x 0 matrix>
+> 
+> x <- new("ngCMatrix", p   = as.integer(c(0,3,5,7,7,10)),
++                       i   = as.integer(c(1,2,4,1,2,0,4,0,2,5)),
++                       Dim = as.integer(c(6,5)))
+> 
+> rownames(x) <- paste("I", 1:6, sep = "")
+> colnames(x) <- paste("T", 1:5, sep = "")
+> 
+> x
+6 x 5 sparse Matrix of class "ngCMatrix"
+   T1 T2 T3 T4 T5
+I1  .  .  |  .  |
+I2  |  |  .  .  .
+I3  |  |  .  .  |
+I4  .  .  .  .  .
+I5  |  .  |  .  .
+I6  .  .  .  .  |
+> 
+> ##
+> unclass(x)
+<S4 Type Object>
+attr(,"i")
+ [1] 1 2 4 1 2 0 4 0 2 5
+attr(,"p")
+[1]  0  3  5  7  7 10
+attr(,"Dim")
+[1] 6 5
+attr(,"Dimnames")
+attr(,"Dimnames")[[1]]
+[1] "I1" "I2" "I3" "I4" "I5" "I6"
+
+attr(,"Dimnames")[[2]]
+[1] "T1" "T2" "T3" "T4" "T5"
+
+attr(,"factors")
+list()
+> 
+> ##
+> getValidity(getClassDef("CsparseMatrix"))(x)
+[1] TRUE
+> .Call("R_valid_ngCMatrix", x)
+[1] TRUE
+> 
+> .Call("R_valid_ngCMatrix", e)
+[1] TRUE
+> 
+> ## 
+> .Call("R_transpose_ngCMatrix", x)
+5 x 6 sparse Matrix of class "ngCMatrix"
+   I1 I2 I3 I4 I5 I6
+T1  .  |  |  .  |  .
+T2  .  |  |  .  .  .
+T3  |  .  .  .  |  .
+T4  .  .  .  .  .  .
+T5  |  .  |  .  .  |
+> all.equal(getMethod("t", "CsparseMatrix", where = "Matrix")(x),
++           .Call("R_transpose_ngCMatrix", x))
+[1] TRUE
+> 
+> .Call("R_transpose_ngCMatrix", e)
+0 x 0 sparse Matrix of class "ngCMatrix"
+<0 x 0 matrix>
+> 
+> ## column subset
+> s <- c(1,1,3,4)
+> .Call("R_colSubset_ngCMatrix", x, s)
+6 x 4 sparse Matrix of class "ngCMatrix"
+   T1 T1 T3 T4
+I1  .  .  |  .
+I2  |  |  .  .
+I3  |  |  .  .
+I4  .  .  .  .
+I5  |  |  |  .
+I6  .  .  .  .
+> all.equal(x[,s], .Call("R_colSubset_ngCMatrix", x, s))
+[1] TRUE
+> 
+> s <- paste("T", s, sep = "")
+> .Call("R_colSubset_ngCMatrix", x, s)
+6 x 4 sparse Matrix of class "ngCMatrix"
+   T1 T1 T3 T4
+I1  .  .  |  .
+I2  |  |  .  .
+I3  |  |  .  .
+I4  .  .  .  .
+I5  |  |  |  .
+I6  .  .  .  .
+> all.equal(x[,s], .Call("R_colSubset_ngCMatrix", x, s))
+[1] TRUE
+> 
+> #
+> .Call("R_colSubset_ngCMatrix", e, integer())
+0 x 0 sparse Matrix of class "ngCMatrix"
+<0 x 0 matrix>
+> 
+> ## row subset
+> s <- c(1,1,3,4)
+> .Call("R_rowSubset_ngCMatrix", x, s)
+4 x 5 sparse Matrix of class "ngCMatrix"
+   T1 T2 T3 T4 T5
+I1  .  .  |  .  |
+I1  .  .  |  .  |
+I3  |  |  .  .  |
+I4  .  .  .  .  .
+> all.equal(x[s,], .Call("R_rowSubset_ngCMatrix", x, s))
+[1] TRUE
+> 
+> s <- paste("I", s, sep = "")
+> .Call("R_rowSubset_ngCMatrix", x, s)
+4 x 5 sparse Matrix of class "ngCMatrix"
+   T1 T2 T3 T4 T5
+I1  .  .  |  .  |
+I1  .  .  |  .  |
+I3  |  |  .  .  |
+I4  .  .  .  .  .
+> all.equal(x[s,], .Call("R_rowSubset_ngCMatrix", x, s))
+[1] TRUE
+> 
+> #
+> .Call("R_rowSubset_ngCMatrix", e, integer())
+0 x 0 sparse Matrix of class "ngCMatrix"
+<0 x 0 matrix>
+> 
+> ## reorder
+> .Call("R_recode_ngCMatrix", x, 6:1)
+6 x 5 sparse Matrix of class "ngCMatrix"
+   T1 T2 T3 T4 T5
+I6  .  .  .  .  |
+I5  |  .  |  .  .
+I4  .  .  .  .  .
+I3  |  |  .  .  |
+I2  |  |  .  .  .
+I1  .  .  |  .  |
+> 
+> .Call("R_recode_ngCMatrix", e, integer())
+0 x 0 sparse Matrix of class "ngCMatrix"
+<0 x 0 matrix>
+> 
+> ## recode
+> .Call("R_recode_ngCMatrix", x, c(1L,3:7))
+7 x 5 sparse Matrix of class "ngCMatrix"
+   T1 T2 T3 T4 T5
+I1  .  .  |  .  |
+    .  .  .  .  .
+I2  |  |  .  .  .
+I3  |  |  .  .  |
+I4  .  .  .  .  .
+I5  |  .  |  .  .
+I6  .  .  .  .  |
+> 
+> ## cbind
+> .Call("R_cbind_ngCMatrix", e, e)
+0 x 0 sparse Matrix of class "ngCMatrix"
+<0 x 0 matrix>
+> 
+> .Call("R_cbind_ngCMatrix", x, x)
+6 x 10 sparse Matrix of class "ngCMatrix"
+   [[ suppressing 10 column names 'T1', 'T2', 'T3' ... ]]
+                      
+I1 . . | . | . . | . |
+I2 | | . . . | | . . .
+I3 | | . . | | | . . |
+I4 . . . . . . . . . .
+I5 | . | . . | . | . .
+I6 . . . . | . . . . |
+> 
+> ## logical OR
+> .Call("R_or_ngCMatrix", x, x)
+6 x 5 sparse Matrix of class "ngCMatrix"
+   T1 T2 T3 T4 T5
+I1  .  .  |  .  |
+I2  |  |  .  .  .
+I3  |  |  .  .  |
+I4  .  .  .  .  .
+I5  |  .  |  .  .
+I6  .  .  .  .  |
+> 
+> .Call("R_or_ngCMatrix", e, e)
+0 x 0 sparse Matrix of class "ngCMatrix"
+<0 x 0 matrix>
+> 
+> ## row sums
+> .Call("R_rowSums_ngCMatrix", x)
+I1 I2 I3 I4 I5 I6 
+ 2  2  3  0  2  1 
+> all.equal(rowSums(x), .Call("R_rowSums_ngCMatrix", x))
+[1] "names for current but not for target"
+> 
+> #
+> .Call("R_rowSums_ngCMatrix", e)
+integer(0)
+> 
+> ## column sums
+> .Call("R_colSums_ngCMatrix", x)
+T1 T2 T3 T4 T5 
+ 3  2  2  0  3 
+> all.equal(colSums(x), .Call("R_colSums_ngCMatrix", x))
+[1] "names for current but not for target"
+> 
+> #
+> .Call("R_colSums_ngCMatrix", e)
+integer(0)
+> 
+> ## 
+> .Call("R_crosstab_ngCMatrix", x, NULL, TRUE)
+   I1 I2 I3 I4 I5 I6
+I1  2  0  1  0  1  1
+I2  0  2  2  0  1  0
+I3  1  2  3  0  1  1
+I4  0  0  0  0  0  0
+I5  1  1  1  0  2  0
+I6  1  0  1  0  0  1
+> .Call("R_crosstab_ngCMatrix", x, NULL, FALSE)
+   T1 T2 T3 T4 T5
+T1  3  2  1  0  1
+T2  2  2  0  0  1
+T3  1  0  2  0  1
+T4  0  0  0  0  0
+T5  1  1  1  0  3
+> 
+> ###
+> 

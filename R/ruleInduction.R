@@ -82,6 +82,16 @@ setMethod("ruleInduction",  signature(x = "itemsets"),
             rules@lhs@itemInfo <- itemInfo(transactions)
             rules@rhs@itemInfo <- itemInfo(transactions)
         }
+
+        info <- x@info
+        if (is.null(info$data))
+            info <- c(x = match.call()$x, info)
+        ## aprior
+        if (is.null(info$confidence))
+            info <- c(info, confidence = confidence)
+        else
+            info$confidence <- confidence
+        rules@info <- info
         
         pt4 <-  proc.time()
         if(verbose) cat("postprocessing done [", pt4[1]-pt3[1], "s].\n", 

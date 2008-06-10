@@ -40,7 +40,7 @@ setMethod("show", signature(object = "AScontrol"),
         print(data.frame(sapply(slotNames(object), 
                     function(x) slot(object, x), simplify = FALSE), 
                         row.names = ""))
-        invisible(object)
+        invisible(NULL)
     })
 
 

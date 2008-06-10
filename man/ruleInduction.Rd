@@ -65,6 +65,7 @@ closed <- apriori(Adult,
 
 ## rule induction
 rules <- ruleInduction(closed, Adult, control = list(verbose = TRUE))
+summary(rules)
 
 ## inspect the resulting rules
 inspect(SORT(rules, by = "lift")[1:5])

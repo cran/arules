@@ -1,6 +1,8 @@
 citHeader("To cite in publications use:")
 
-meta <- packageDescription("arules")
+## R >= 2.8.0 passes package metadata to citation().
+if(!exists("meta") || is.null(meta)) meta <- packageDescription("arules")
+
 year <- sub("-.*", "", meta$Date)
 note <- sprintf("R package version %s.", meta$Version)
 
@@ -8,7 +10,7 @@ citEntry(entry = "Manual",
          title = "arules: Mining Association Rules and Frequent Itemsets",
          author = {
              personList(person(first = "Michael", last = "Hahsler",
-                               email = "hahsler@ai.wu-wien.ac.at"),
+                               email = "michael@hahsler.net"),
                         person(first = "Christian", last = "Buchta",
                                email = "Christian.Buchta@wu-wien.ac.at"),
                         person(first = "Bettina", last = "Gruen",
@@ -32,7 +34,7 @@ citEntry(entry = "article",
                        "Association Rules and Frequent Item Sets"),
          author = {
              personList(person(first = "Michael", last = "Hahsler",
-                               email = "hahsler@ai.wu-wien.ac.at"),
+                               email = "michael@hahsler.net"),
                         person(first = "Bettina", last = "Gruen",
                                email = "gruen@ci.tuwien.ac.at"),
                         person(first = "Kurt", last = "Hornik",

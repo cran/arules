@@ -76,7 +76,9 @@ setMethod("generatingItemsets", signature(x = "rules"),
     function(x)
         new("itemsets", 
             items   = items(x), 
-            quality = data.frame(support = x@quality[["support"]])))
+            quality = data.frame(support = x@quality[["support"]]),
+            info = x@info)
+    )
 
 ##****************************************************
 ## subset, combine
@@ -97,24 +99,32 @@ setMethod("[", signature(x = "rules", i = "ANY", j = "ANY", drop = "ANY"),
     }
 )
 
-# fixme: the code above suggests it is possible that rhs
-#        and/or lhs need not be present. however, the
-#        code below does.
-
 setMethod("c", signature(x = "rules"),
     function(x, ..., recursive = FALSE) {
         args <- list(...)
+        
         if (recursive)
             args <- unlist(args)
         for (y in args) {
             if (!is(y, "rules"))
                 stop("can combine rules only")
-            new("rules", lhs     = c(x@lhs, y@lhs), 
-                         rhs     = c(x@rhs, y@rhs),
-                         quality = .combineMeta(x, y, "quality"))
+
+        ## retain identical info attributes
+        info <- y@info
+        if (length(info)) {
+            k <- match(names(info), names(x@info))
+            k <- mapply(identical, info, x@info[k])
+            info <- info[k]
         }
-        x
+
+        x <- new("rules", 
+            lhs     = c(x@lhs, y@lhs), 
+            rhs     = c(x@rhs, y@rhs),
+            quality = .combineMeta(x, y, "quality"),
+            info    = info)
     }
+    x
+}
 )
 
 ## this utility function joins the lhs and rhs so it can be
@@ -151,13 +161,16 @@ setMethod("summary", signature(object = "rules"),
             lengthSummary = summary(sizes),
             quality       = 
                 if (length(object@quality)) summary(object@quality)
-                else                        summary(NULL))
+                else                        summary(NULL),
+            info          = object@info 
+        )
     }
 )
 
 setMethod("show", signature(object = "summary.rules"), 
     function(object) {
         cat("set of", object@length, "rules\n\n")
+        
         if(object@length) {
             cat("rule length distribution (lhs + rhs):")
             print(object@lengths)
@@ -167,7 +180,17 @@ setMethod("show", signature(object = "summary.rules"),
 
             cat("\nsummary of quality measures:\n")
             print(object@quality)
+
+            if(length(object@info)) {
+                info <- object@info
+                if(is(info$data, "language")) 
+                info$data <- deparse(info$data)
+
+                cat("\nmining info:\n")
+                print(data.frame(info, row.names=""))
+            }
         }
+        invisible(NULL)
     }
 )
 

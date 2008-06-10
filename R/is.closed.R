@@ -21,7 +21,7 @@ setMethod("is.closed", signature(x = "itemsets"),
             stop("itemsets not unique")
 
         ## since R_pnclosed only supports abs. support counts
-        size <- attr(quality(x),"size.data")
+        size <- x@info$ntransactions
         if (!is.null(size)) 
             isclosed <- .Call("R_pnclosed", x@items@data, 
                 as.integer(support * size), FALSE)

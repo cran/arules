@@ -33,7 +33,7 @@ setMethod("dissimilarity", signature(x = "matrix"),
 
 
         builtin_methods <- c("affinity", "jaccard", "matching", "dice", 
-            "euclidean")
+            "cosine", "euclidean")
 
         if(is.null(method)) ind <- 2      # Jaccard is standard
         else if(is.na(ind <- pmatch(tolower(method),
@@ -61,7 +61,7 @@ setMethod("dissimilarity", signature(x = "matrix"),
             }
 
             ## Euclidean is special too
-        } else if(ind == 5) {
+        } else if(ind == 6) {
             if(cross == TRUE) stop("Euclidean cross-distance not implemented.")
 
             dist <- dist(x, method = "euclidean")
@@ -86,31 +86,39 @@ setMethod("dissimilarity", signature(x = "matrix"),
             # K-centroids cluster analysis, Preprint.
             nx <- nrow(x) 
             ny <- nrow(y)
-            a_b_c <- matrix(rowSums(x), nrow = nx, ncol = ny) +
-            matrix(rowSums(y), nrow = nx, ncol = ny, byrow = TRUE) - a
+            
+            c <- matrix(rowSums(x), nrow = nx, ncol = ny) - a
+            b <- matrix(rowSums(y), nrow = nx, ncol = ny, byrow = TRUE) - a
+            
+            #a_b_c <- matrix(rowSums(x), nrow = nx, ncol = ny) +
+            #matrix(rowSums(y), nrow = nx, ncol = ny, byrow = TRUE) - a
 
 
             if(ind == 2) {
                 ## Jaccard == binary (Sneath, 1957) 
                 #dist <- dist(as(x, "matrix"), "binary")
 
-                #dist <- 1 - a/(a + b + c)
-                dist <- 1 - (a/a_b_c)
+                dist <- 1 - a/(a + b + c)
+                #dist <- 1 - (a/a_b_c)
 
             } else if(ind == 3){
                 ## Matching Coefficient (Sokal and Michener, 1958)
 
                 #we need d only here
-                d <- ncol(x) - a_b_c
+                #d <- ncol(x) - a_b_c
+                d <- ncol(x) - (a+b+c)
 
-                #dist <- 1 - (a + d) / (a + b + c + d)  
-                dist <- 1 - ((a + d) / (a_b_c + d))  
+                dist <- 1 - (a + d) / (a + b + c + d)  
+                #dist <- 1 - ((a + d) / (a_b_c + d))  
 
             } else if(ind == 4) {
                 ## Dice Coefficient (Dice, 1945)
-                #dist <- 1 - 2 * a / (2*a + b + c)
-                dist <- 1 - 2 * a / (a + a_b_c)
+                dist <- 1 - 2 * a / (2*a + b + c)
+                #dist <- 1 - 2 * a / (a + a_b_c)
 
+            } else if(ind == 5) {
+                ## Cosine
+                dist <- 1 - a / sqrt((a+b)*(a+c))
             }
         }
 
