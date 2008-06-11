@@ -21,22 +21,44 @@ trans <- as(data, "transactions")
 fsets <- eclat(trans, parameter = list(supp = 0), control=list(verb=FALSE))
 
 quality(fsets) <- cbind(quality(fsets), 
-  allConfidence = interestMeasure(fsets, method = "allConfidence"))
+  allConfidence = interestMeasure(fsets, method = "allConfidence", trans))
 
 inspect(fsets[order(size(fsets))])
 
+###################################################################
+## test all measures for itemsets
+
+measures <- c("support", "allConfidence", "crossSupportRatio")
+
+m1 <- interestMeasure(fsets, measures, trans)
+m1
+
+## now dont reuse any quality data
+m2 <- interestMeasure(fsets, measures, trans, reuse = FALSE)
+m2
+
+## compare results
+all.equal(m1, m2)
+
 
 ###################################################################
-# Test improvment
-# R. Bayardo, R. Agrawal, and D. Gunopulos. Constraint-based rule mining in
-# large, dense databases. Data Mining and Knowledge Discovery, 4(2/3):217-240,
-# 2000
+# test all measures for rules
 
 rules <- apriori(trans, parameter=list(supp=0.01, conf = 0.5), 
         control=list(verb=FALSE))
  
-quality(rules) <- cbind(quality(rules),
-  improvement = interestMeasure(rules, method = "improvement"))
+## calculate all measures
+measures <-  c("support", "coverage", "confidence", "lift",
+    "leverage", "hyperLift", "hyperConfidence", "improvement",
+    "chiSquare", "cosine", "conviction", "gini", "oddsRatio", "phi", "doc")
 
-inspect(rules)
-    
+m1 <- interestMeasure(rules, measures, trans)
+m1
+
+## now dont reuse any quality data
+m2 <- interestMeasure(rules, measures, trans, reuse = FALSE)
+m2
+
+## compare results
+all.equal(m1, m2)
+

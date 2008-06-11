@@ -19,7 +19,7 @@ setGeneric("WRITE",
     function(x, file = "", ...) standardGeneric("WRITE"))
 
 setGeneric("coverage",
-    function(x) standardGeneric("coverage"))
+    function(x, transactions = NULL) standardGeneric("coverage"))
 
 setGeneric("crossTable", function(x, ...) standardGeneric("crossTable"))
 
@@ -34,6 +34,12 @@ setGeneric("encode",
 
 setGeneric("generatingItemsets",
     function(x) standardGeneric("generatingItemsets"))
+
+setGeneric("info",
+    function(x) standardGeneric("info"))
+
+setGeneric("info<-",
+    function(x, value) standardGeneric("info<-"))
 
 setGeneric("inspect",
     function(x, ...) standardGeneric("inspect"))
@@ -90,7 +96,7 @@ setGeneric("lhs<-",
     function(x, value) standardGeneric("lhs<-"))
 
 setGeneric("interestMeasure",
-    function(x,  method, transactions = NULL, ...) 
+    function(x,  method, transactions = NULL, reuse = TRUE, ...) 
     standardGeneric("interestMeasure"))
 
 setGeneric("match",

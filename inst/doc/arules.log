@@ -1,4 +1,4 @@
-This is pdfTeXk, Version 3.141592-1.40.3 (Web2C 7.5.6) (format=pdflatex 2008.4.26)  26 APR 2008 13:34
+This is pdfTeXk, Version 3.141592-1.40.3 (Web2C 7.5.6) (format=pdflatex 2008.4.26)  10 JUN 2008 21:33
 entering extended mode
  file:line:error style messages enabled.
  %&-line parsing enabled.
@@ -268,63 +268,72 @@ LaTeX Info: Redefining \pageref on input line 27.
 \openout4 = `arules.out'.
 
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <12> on input line 34.
+(Font)              <12> on input line 35.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 34.
+(Font)              <8> on input line 35.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 34.
-LaTeX Font Info:    Try loading font information for T1+aess on input line 40.
+(Font)              <6> on input line 35.
+LaTeX Font Info:    Try loading font information for T1+aess on input line 41.
  (/usr/share/texmf-texlive/tex/latex/ae/t1aess.fd
 File: t1aess.fd 1997/11/16 Font definitions for T1/aess.
+) [1
+
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] (./arules.toc
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 3.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 3.
 )
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 63.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 63.
- [1
+\tf@toc=\write5
+\openout5 = `arules.toc'.
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2]
-<arules-classes.pdf, id=160, 514.92375pt x 410.53375pt>
-File: arules-classes.pdf Graphic file (type pdf)
+ [2
 
-<use arules-classes.pdf>
-LaTeX Font Info:    Try loading font information for T1+aett on input line 249.
+] [3
 
- (/usr/share/texmf-texlive/tex/latex/ae/t1aett.fd
+]
+LaTeX Font Info:    Try loading font information for T1+aett on input line 186.
+
+
+(/usr/share/texmf-texlive/tex/latex/ae/t1aett.fd
 File: t1aett.fd 1997/11/16 Font definitions for T1/aett.
 )
-[3 <./arules-classes.pdf>] [4] [5] [6]
-LaTeX Font Info:    Try loading font information for TS1+aer on input line 641.
+<arules-classes.pdf, id=185, 514.92375pt x 410.53375pt>
+File: arules-classes.pdf Graphic file (type pdf)
 
- (/usr/share/R/share/texmf/ts1aer.fd
+<use arules-classes.pdf> [4] [5 <./arules-classes.pdf>] [6] [7] [8]
+LaTeX Font Info:    Try loading font information for TS1+aer on input line 650.
+
+
+(/usr/share/R/share/texmf/ts1aer.fd
 File: ts1aer.fd 
 )
 LaTeX Font Info:    Font shape `TS1/aer/m/n' in size <10> not available
-(Font)              Font shape `TS1/cmr/m/n' tried instead on input line 641.
-
-[7] [8] [9] [10] [11] [12] <arules-epub.pdf, id=342, 433.62pt x 433.62pt>
+(Font)              Font shape `TS1/cmr/m/n' tried instead on input line 650.
+ [9] [10] [11] [12] [13] [14]
+<arules-epub.pdf, id=392, 433.62pt x 433.62pt>
 File: arules-epub.pdf Graphic file (type pdf)
-
-<use arules-epub.pdf> [13] [14 <./arules-epub.pdf>] [15] [16] [17]
-<arules-019.pdf, id=377, 578.16pt x 433.62pt>
+ <use arules-epub.pdf> [15]
+[16 <./arules-epub.pdf>] [17] [18] [19]
+<arules-019.pdf, id=427, 578.16pt x 433.62pt>
 File: arules-019.pdf Graphic file (type pdf)
- <use arules-019.pdf> [18 <./arules-019.pdf>] [19] [20] [21] [22] <arules-035.p
-df, id=419, 578.16pt x 433.62pt>
+ <use arules-019.pdf> [20 <./arules-019.pdf>] [21] [22] [23] [24] <arules-035.p
+df, id=468, 578.16pt x 433.62pt>
 File: arules-035.pdf Graphic file (type pdf)
 
-<use arules-035.pdf> <arules-037.pdf, id=421, 578.16pt x 433.62pt>
+<use arules-035.pdf> <arules-037.pdf, id=470, 578.16pt x 433.62pt>
 File: arules-037.pdf Graphic file (type pdf)
 
-<use arules-037.pdf> [23 <./arules-035.pdf>] [24 <./arules-037.pdf>] [25]
-(./arules.bbl [26] [27]) [28] (./arules.aux) ) 
+<use arules-037.pdf> [25 <./arules-035.pdf>] [26 <./arules-037.pdf>] [27]
+(./arules.bbl [28] [29]) [30] (./arules.aux) ) 
 Here is how much of TeX's memory you used:
- 4335 strings out of 94101
- 61983 string characters out of 1165810
- 113375 words of memory out of 1500000
- 7378 multiletter control sequences out of 10000+50000
- 55945 words of font info for 107 fonts, out of 1200000 for 2000
+ 4352 strings out of 94101
+ 62206 string characters out of 1165810
+ 114418 words of memory out of 1500000
+ 7382 multiletter control sequences out of 10000+50000
+ 56793 words of font info for 110 fonts, out of 1200000 for 2000
  637 hyphenation exceptions out of 8191
- 35i,13n,36p,264b,478s stack positions out of 5000i,500n,6000p,200000b,5000s
+ 35i,13n,36p,264b,472s stack positions out of 5000i,500n,6000p,200000b,5000s
  </home/hahsler/.texmf-var/fonts/
 pk/ljfour/jknappen/tc/tcrm1000.600pk></usr/share/texmf-texlive/fonts/type1/blue
 sky/cm/cmb10.pfb></usr/share/texmf-texlive/fonts/type1/bluesky/cm/cmbx10.pfb></
@@ -342,10 +351,10 @@ ive/fonts/type1/bluesky/cm/cmss10.pfb></usr/share/texmf-texlive/fonts/type1/blu
 esky/cm/cmss9.pfb></usr/share/texmf-texlive/fonts/type1/bluesky/cm/cmsy10.pfb><
 /usr/share/texmf-texlive/fonts/type1/bluesky/cm/cmsy7.pfb></usr/share/texmf-tex
 live/fonts/type1/bluesky/cm/cmti10.pfb></usr/share/texmf-texlive/fonts/type1/bl
-uesky/cm/cmtt10.pfb>
-Output written on arules.pdf (28 pages, 380006 bytes).
+uesky/cm/cmtt10.pfb></usr/share/texmf-texlive/fonts/type1/bluesky/cm/cmtt8.pfb>
+Output written on arules.pdf (30 pages, 402172 bytes).
 PDF statistics:
- 578 PDF objects out of 1000 (max. 8388607)
- 107 named destinations out of 1000 (max. 131072)
- 194 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 628 PDF objects out of 1000 (max. 8388607)
+ 114 named destinations out of 1000 (max. 131072)
+ 202 words of extra memory for PDF output out of 10000 (max. 10000000)
 

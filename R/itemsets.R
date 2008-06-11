@@ -92,23 +92,35 @@ setMethod("[", signature(x = "itemsets", i = "ANY", j = "ANY", drop = "ANY"),
         slot(x, name) <- 
             rbind(k[rep(1, length(x)),, drop = FALSE],  slot(y, name))
     }
+
     slot(x, name)
 }
 
-## FIXME tidList
+## FIXME: tidList not handled
 setMethod("c", signature(x = "itemsets"),
     function(x, ..., recursive = FALSE){
         args <- list(...)
+       
         if (recursive)
             args <- unlist(args)
         for (y in args) {
             if (!is(y, "itemsets"))
                 stop("can combine itemsets only")
+           
+            ## retain identical info attributes
+            info <- y@info
+            if (length(info)) {
+                k <- match(names(info), names(x@info))
+                k <- mapply(identical, info, x@info[k])
+                info <- info[k]
+            }
+
             x <- new("itemsets", items   = c(x@items, y@items), 
-                                 quality = .combineMeta(x, y, "quality"))
+                                 quality = .combineMeta(x, y, "quality"),
+                                 info    = info)
         }
         x
-    }
+}
 )
 
 setMethod("duplicated", signature(x = "itemsets"),
@@ -130,7 +142,9 @@ setMethod("summary", signature(object = "itemsets"),
             items    = summary(object@items,  ...),
             quality  = if (length(object@quality)) summary(object@quality)
                        else                        summary(NULL),
-            tidLists = !is.null(object@tidLists))
+            info     = object@info,
+            tidLists = !is.null(object@tidLists)
+        )
     }
 )
 
@@ -150,7 +164,18 @@ setMethod("show", signature(object = "summary.itemsets"),
             cat("\nsummary of quality measures:\n")
             print(object@quality)
             cat("\nincludes transaction ID lists:",object@tidLists,"\n")
+        
+            if (length(object@info)) {
+                info <- object@info  
+                if(is(info$data, "language"))
+                                  info$data <- deparse(info$data)
+
+                cat("\nmining info:\n")
+                print(data.frame(info, row.names=""))
+            }
+
         }
+        invisible(NULL)
     }
 )
 

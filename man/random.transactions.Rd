@@ -60,7 +60,7 @@ random.transactions(nItems, nTrans, method = "independent", \ldots,
       
       The patterns are created using the following function:
      
-      \code{random.patterns(nItems, nPats = 2000,  method = "agrawal", lPats = 4, corr = 0.5, cmean = 0.5, cvar = 0.1, iWeights = NULL, verbose = FALSE)}
+      \code{random.patterns(nItems, nPats = 2000,  method = "agrawal", lPats = 4, corr = 0.5, cmean = 0.5, cvar = 0.1, iWeight = NULL, verbose = FALSE)}
      
      The function returns the patterns as an \code{itemsets} objects which can 
      be supplied to \code{random.transactions} as the argument \code{patterns}.
@@ -115,5 +115,9 @@ summary(patterns)
 trans2 <- random.transactions(nItems = 1000, nTrans = 1000, 
    method = "agrawal", patterns = patterns)
 image(trans2) 
+
+## plot data with items ordered by item frequency
+image(trans2[,order(itemFrequency(trans2), decreasing=TRUE)])
+
 }
 \keyword{datagen}

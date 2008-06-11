@@ -31,7 +31,7 @@
   Common slots defined in \code{AScontrol}:
   \describe{
     \item{\code{sort}:}{ an integer scalar indicating how to 
-      sort items with respect to their frequency: (default: 1)
+      sort items with respect to their frequency: (default: 2)
       \describe{
 	\item{ 1:}{ascending}
 	\item{-1:}{descending}

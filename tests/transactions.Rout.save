@@ -28,7 +28,6 @@ Attaching package: 'Matrix'
 
 	 xtabs 
 
-** fixing ngCMatrix validation
 
 Attaching package: 'arules'
 
@@ -63,7 +62,7 @@ transactions in sparse format with
 > summary(t)
 transactions as itemMatrix in sparse format with
  7 rows (elements/itemsets/transactions) and
- 7 columns (items)
+ 7 columns (items) and a density of  0.4081633 
 
 most frequent items:
       a       b       d       e       c (Other) 

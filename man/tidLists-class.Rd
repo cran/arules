@@ -56,8 +56,8 @@
   \describe{
     \item{\code{data}:}{object of class
       \code{\link[Matrix:ngCMatrix-class]{ngCMatrix}}.}
-     \item{\code{itemInfo}:}{always an
-       empty data.frame for transaction ID lists.}
+     \item{\code{itemInfo}:}{a data.frame to store item/itemset labels (see
+	\code{\linkS4class{itemMatrix}} class).}
      \item{\code{transactionInfo}:}{a data.frame
        with vectors of the same length as the number of transactions. 
        Each vector can hold additional information e.g., store

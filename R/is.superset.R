@@ -25,8 +25,21 @@ setMethod("is.subset", signature(x = "itemMatrix"),
             return(logical(0))
         if (is.null(y)) 
             m <- .Call("R_crosstab_ngCMatrix", x@data, NULL, FALSE)
-        else
+        else {
+            ## conform
+            k <- match(itemLabels(y), itemLabels(x))
+            n <- which(is.na(k))
+            if (length(n)) {
+                k[n] <- x@data@Dim[1] + seq(length(n))
+                x@data@Dim[1] <- x@data@Dim[1] + length(n)
+            }
+            if (any(k != seq_len(length(k))))
+                y@data <- .Call("R_recode_ngCMatrix", y@data, k)
+            if (y@data@Dim[1] <  x@data@Dim[1])
+                y@data@Dim[1] <- x@data@Dim[1]
+
             m <- .Call("R_crosstab_ngCMatrix", x@data, y@data, FALSE)
+        }
         m <- m == size(x)
 
         ## fixme: what 

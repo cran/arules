@@ -1,5 +1,5 @@
 
-R version 2.6.2 (2008-02-08)
+R version 2.7.0 Patched (2008-05-09 r45655)
 Copyright (C) 2008 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 
@@ -29,7 +29,6 @@ Attaching package: 'Matrix'
 
 	 xtabs 
 
-** fixing ngCMatrix validation
 
 Attaching package: 'arules'
 
@@ -41,16 +40,16 @@ Attaching package: 'arules'
 > data(Adult)
 > 
 > all.equal(Adult, c(Adult[1:100], Adult[-(1:100)]))
-[1] "Attributes: < Component 2: Modes: S4, list >"
+[1] TRUE
+> 
 > 
 > ec <- eclat(Adult,control=list(verb=FALSE))
 > all.equal(ec, c(ec[1:100], ec[-(1:100)]))
-[1] "Attributes: < Component 2: Attributes: < Component 2: Modes: S4, list > >"
-> 
+[1] TRUE
 > 
 > i <- items(ec)
 > all.equal(i, c(i[1:100,], i[-(1:100),]))
-[1] "Attributes: < Component 2: Modes: S4, list >"
+[1] TRUE
 > 
 > ###
 > 

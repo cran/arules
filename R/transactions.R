@@ -44,7 +44,7 @@ setAs("data.frame", "transactions",
         if (!length(from))
             return(new("transactions"))
         if (!all((p <- sapply(from, is.factor))))
-            stop("column(s)", which(p), "not a factor")
+            stop("column(s) ", paste(which(!p), collapse=", "), " not a factor")
         p <- seq(nrow(from))
         x <- lapply(from, function(x)
             tapply(p, x, eval, simplify = FALSE))
@@ -135,13 +135,8 @@ setMethod("show", signature(object = "transactions"),
         cat("transactions in sparse format with\n",
             length(object), "transactions (rows) and\n",
             nitems(object), "items (columns)\n")
+        invisible(NULL)
     }
-)
-
-setMethod("image", signature(x = "transactions"),
-    function(x, ...)
-        image(as(x, "itemMatrix"), xlab = "Items (Columns)", 
-                                   ylab = "Transactions (Rows)", ...)
 )
 
 setMethod("summary", signature(object = "transactions"),
@@ -160,6 +155,7 @@ setMethod("show", signature(object = "summary.transactions"),
             cat("\nincludes extended transaction information - examples:\n")
             print(object@transactionInfo)
         }
+        invisible(NULL)
     }
 )
 

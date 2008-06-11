@@ -25,6 +25,7 @@ setMethod("show", signature(object = "tidLists"),
         cat("tidLists in sparse format with\n",
             dim(object)[1], "items/itemsets (rows) and\n",
             dim(object)[2], "transactions (columns)\n")
+        invisible(NULL)
     }
 )
 
@@ -63,16 +64,10 @@ setMethod("show", signature(object = "summary.tidLists"),
             cat("\nincludes extended item information - examples:\n")
             print(object@itemInfo)
         }
+        invisible(NULL)
     }
 )
 
-setMethod("image", signature(x = "tidLists"),
-    function(x, xlab="Transactions (Columns)", ylab="Items/itemsets (Rows)", ...) {
-        ## see itemMatrix
-        x <- as(as(t(x@data), "dgCMatrix"), "dgTMatrix")
-        image(x, sub = NULL, colorkey = FALSE, ylab = ylab, xlab = xlab, ...)
-    }
-)
 
 ## no t for associations
 setMethod("t", signature(x = "tidLists"),

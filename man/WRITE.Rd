@@ -24,7 +24,7 @@ WRITE(x, file = "",\dots)
 
   Note: To save and load associations in compact form, use \code{save} and
   \code{load} from the \pkg{base} package.  Alternatively, association can be
-  written to disk in PMML (Predictive Modelling Markup Language). This requires
+  written to disk in PMML (Predictive Model Markup Language). This requires
   the packages \pkg{pmml} and \pkg{XML}. See Examples section for usage.
 }
 \seealso{

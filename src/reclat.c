@@ -352,7 +352,8 @@ SEXP reclat(SEXP x, SEXP y, SEXP dim, SEXP parms, SEXP control, SEXP itemInfo)
   }                             /* and check it against 0 */
  
   /* --- sort and recode items --- */
-  supp = ceil(tacnt *supp);     /* sort and recode the items */
+  // FIX broken gcc compilers
+  supp = (double)(int)ceil(tacnt *supp);     /* sort and recode the items */
   if (sort != 0) {              /* sort items w.r.t. their frequency */
     if (param.verbose) Rprintf("sorting and recoding items ... ");
     t   = clock();              /* start the timer */

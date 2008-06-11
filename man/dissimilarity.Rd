@@ -37,6 +37,7 @@ dissimilarity(x, y = NULL, method = NULL, args = NULL, \ldots)
        \item{\code{"dice"}:}{ the \emph{Dice's coefficient} defined
          by Dice (1945). Similar to \emph{Jaccard} but gives double the
 	 weight to agreeing items.}
+       \item{\code{"cosine"}:}{ the \emph{cosine} distance.} 
        \item{\code{"affinity"}:}{ measure based on 
          the \code{\link{affinity}}},
          a similarity measure between items. It is defined as the

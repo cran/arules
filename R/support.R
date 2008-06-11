@@ -3,13 +3,15 @@
 ##
 ## return  support of itemsets in transactions using tid-list intersections
 
-setMethod("support", signature(x = "itemMatrix", 
-        transactions = "transactions"), 
+setMethod("support", signature(x = "itemMatrix"), 
     function(x, transactions, type= c("relative", "absolute"), control = NULL) {
+        
+        if(!is(transactions, "transactions")) stop("transactions missing.")
+
         type <- match.arg(type)
         
-        verbose <- if(is.null(control$v))   FALSE      else control$v
-        method  <- if(is.null(control$m))   "tidlists" else control$m
+        verbose <- if(is.null(control$v))   FALSE       else control$v
+        method  <- if(is.null(control$m))   "ptree"     else control$m
         
         methods <- c("ptree", "tidlists")
 
@@ -17,6 +19,23 @@ setMethod("support", signature(x = "itemMatrix",
         if(is.na(method)) error("unknown method")
 
         if(verbose) cat("using method:", method, "\n")
+
+        ## conform
+        k <- match(itemLabels(transactions), itemLabels(x))
+        n <- which(is.na(k))
+        if (length(n)) {
+            k[n] <- x@data@Dim[1] + seq(length(n))
+            x@data@Dim[1] <- x@data@Dim[1] + length(n)
+            ## may not be needed
+            x@itemInfo <-
+            transactions@itemInfo <-
+                rbind(x@itemInfo, transactions@itemInfo[n,, drop = FALSE])
+        }
+        if (any(k != seq_len(length(k))))
+            transactions@data <-
+                .Call("R_recode_ngCMatrix", transactions@data, k)
+        if (transactions@data@Dim[1] <  x@data@Dim[1])
+            transactions@data@Dim[1] <- x@data@Dim[1]
 
         tm <- system.time(
             supports <- 
@@ -81,8 +100,7 @@ support.ptree <- function(x, transactions, control = NULL) {
     }
 
 ## wrapper method for associations
-setMethod("support", signature(x = "associations", 
-        transactions = "transactions"),
+setMethod("support", signature(x = "associations"),
     function(x, transactions, type= c("relative", "absolute"), control = NULL) 
     support(items(x), transactions = transactions, type = type, 
         control = control)

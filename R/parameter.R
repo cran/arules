@@ -55,7 +55,7 @@ setMethod("show", signature(object = "ASparameter"),
                     function(x) slot(object, x), 
                     simplify = FALSE), row.names = ""))
         
-        invisible(object)
+        invisible(NULL)
     })
 
 
