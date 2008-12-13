@@ -53,7 +53,10 @@ ruleInduction(x, ...)
 \value{
    An object of class \code{rules}.
 }
-%fixme: references are missing
+\references{
+Michael Hahsler, Christian Buchta, and Kurt Hornik. Selective association rule
+generation. \emph{Computational Statistics,} 23(2):303-315, April 2008 
+}
 \seealso{ \code{\link{itemsets-class}}, \code{\link{rules-class}}
 \code{\link{transactions-class}}}
 \examples{
