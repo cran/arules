@@ -253,7 +253,8 @@ random.patterns <- function(
 
     ## create itemMatrix w/o recoding
     new("itemsets", 
-        items   = encode(patterns, as.character(1:nItems)), 
+        items   = encode(patterns, 
+            paste("item",as.character(1:nItems), sep="")), 
         quality = data.frame(pWeights = pWeights, pCorrupts = pCorrupts))
 }
 

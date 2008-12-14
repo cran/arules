@@ -26,6 +26,15 @@ dissimilarity(x, y = NULL, method = NULL, args = NULL, \ldots)
   \item{method}{ the distance measure to be used. Implemented measures
   are (defaults to \code{"jaccard"}):
    \describe{
+       \item{\code{"affinity"}:}{ measure based on 
+         the \code{\link{affinity}},
+         a similarity measure between items. It is defined as the
+         average \emph{affinity} between the items in two transactions 
+         (see Aggarwal et al. (2002)).}
+       \item{\code{"cosine"}:}{ the \emph{cosine} distance.} 
+       \item{\code{"dice"}:}{ the \emph{Dice's coefficient} defined
+         by Dice (1945). Similar to \emph{Jaccard} but gives double the
+	     weight to agreeing items.}
        \item{\code{"jaccard"}:}{ the number of items which occur in both 
          elements divided by the total number of items in the 
          elements (Sneath, 1957). 
@@ -33,17 +42,10 @@ dissimilarity(x, y = NULL, method = NULL, args = NULL, \ldots)
          also called: \emph{binary, asymmetric binary,} etc. }
        \item{\code{"matching"}:}{ the \emph{Matching coefficient} defined
          by Sokal and Michener (1958). This coefficient gives the same
-	 weigth to presents and absence of items.}
-       \item{\code{"dice"}:}{ the \emph{Dice's coefficient} defined
-         by Dice (1945). Similar to \emph{Jaccard} but gives double the
-	 weight to agreeing items.}
-       \item{\code{"cosine"}:}{ the \emph{cosine} distance.} 
-       \item{\code{"affinity"}:}{ measure based on 
-         the \code{\link{affinity}}},
-         a similarity measure between items. It is defined as the
-         average \emph{affinity} between the items in two transactions 
-         (see Aggarwal et al. (2002)).}
- }
+	     weigth to presents and absence of items.}
+       \item{\code{"pearson"}:}{ the 1 - \emph{Pearson correlation 
+         coefficient} .} 
+ }}
   \item{args}{ a list of additional arguments for the methods.  
   
      For calculating

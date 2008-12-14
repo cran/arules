@@ -734,6 +734,21 @@ void createRules(ISTREE *istree, ARparameter *param) {
   }
 }
 
+// Sort row indexes [ceboo 2008/12]
+void sort_ngCMatrix(SEXP x) {
+    int i, f, l;
+    SEXP px, ix;
+
+    px = GET_SLOT(x, install("p"));
+    ix = GET_SLOT(x, install("i"));
+
+    f = INTEGER(px)[0];
+    for (i = 1; i < LENGTH(px); i++) {
+	l = INTEGER(px)[i];
+	R_isort(INTEGER(ix)+f, l-f);
+	f = l;
+    }
+}
 
 SEXP returnObject(RULESET *set, SEXP dim, ARparameter *param, SEXP itemInfo)
 {
@@ -777,7 +792,9 @@ SEXP returnObject(RULESET *set, SEXP dim, ARparameter *param, SEXP itemInfo)
 	INTEGER(tp)[1] = set->rnb;
 	SET_SLOT(items, install("Dim"), tp);
 	UNPROTECT(1);
-	
+
+	sort_ngCMatrix(items);
+
 	lhs = PROTECT(NEW_OBJECT(MAKE_CLASS("itemMatrix")));
         SET_SLOT(lhs , install("data"), items);
         SET_SLOT(lhs , install("itemInfo"), itemInfo);
@@ -808,7 +825,9 @@ SEXP returnObject(RULESET *set, SEXP dim, ARparameter *param, SEXP itemInfo)
 	  INTEGER(tp)[1] = set->rnb;
 	  SET_SLOT(items, install("Dim"), tp);
 	  UNPROTECT(1); 
-	  
+	 
+	  sort_ngCMatrix(items);
+
 	  rhs =  PROTECT(NEW_OBJECT(MAKE_CLASS("itemMatrix")));
 	  SET_SLOT(rhs, install("data"), items);
 	  SET_SLOT(rhs, install("itemInfo"), itemInfo);
@@ -882,7 +901,9 @@ SEXP returnObject(RULESET *set, SEXP dim, ARparameter *param, SEXP itemInfo)
 	  INTEGER(tp)[1] = set->rnb;
 	  SET_SLOT(trans, install("Dim"), duplicate(tp));
 	  UNPROTECT(1);
-	  
+	 
+	  sort_ngCMatrix(trans);
+
 	  tidLists = PROTECT(NEW_OBJECT(MAKE_CLASS("tidLists")));
 	  SET_SLOT(tidLists, install("data"), trans);
 	  UNPROTECT(1);

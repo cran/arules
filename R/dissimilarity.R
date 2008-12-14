@@ -33,7 +33,7 @@ setMethod("dissimilarity", signature(x = "matrix"),
 
 
         builtin_methods <- c("affinity", "jaccard", "matching", "dice", 
-            "cosine", "euclidean")
+            "cosine", "euclidean", "pearson")
 
         if(is.null(method)) ind <- 2      # Jaccard is standard
         else if(is.na(ind <- pmatch(tolower(method),
@@ -52,7 +52,7 @@ setMethod("dissimilarity", signature(x = "matrix"),
             ## Normalize transaction incidences by transaction length.
             x <- x / pmax(rowSums(x), 1)
 
-            if(cross == FALSE) {
+            if(!cross) {
                 dist <- 1 - as.dist(x %*% affinities %*% t(x))
             }else{
                 y <- y / pmax(rowSums(y), 1)
@@ -62,13 +62,22 @@ setMethod("dissimilarity", signature(x = "matrix"),
 
             ## Euclidean is special too
         } else if(ind == 6) {
-            if(cross == TRUE) stop("Euclidean cross-distance not implemented.")
+            if(cross) stop("Euclidean cross-distance not implemented.")
 
             dist <- dist(x, method = "euclidean")
-
+        
+            ## Pearson correlation coefficient (Note: cor is calculated 
+            ##    between columns)
+        } else if(ind == 7) {
+            if(!cross) {
+                dist <- as.dist(1 - cor(t(x), method = "pearson"))
+            } else {
+                dist <- new("ar_cross_dissimilarity", 1 - cor(t(x), 
+                        t(y), method = "pearson"))
+            }
         } else {
 
-            if(cross != TRUE) y <- x
+            if(!cross) y <- x
 
             ## prepare a, b, c, d (response table) for the rest of measures
             ## see: Gower, J. C. and P. Legendre.  1986.  Metric and 
@@ -125,7 +134,7 @@ setMethod("dissimilarity", signature(x = "matrix"),
         # in case we divided by zero
         dist[is.nan(dist)] <- 0
 
-        if(cross == FALSE) {
+        if(!cross) {
             # return a S3 "dist" object just add "ar_dissimilarity"
             dist <- as.dist(dist)
             attr(dist, "method") <- method

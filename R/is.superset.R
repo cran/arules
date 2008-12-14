@@ -42,7 +42,6 @@ setMethod("is.subset", signature(x = "itemMatrix"),
         }
         m <- m == size(x)
 
-        ## fixme: what 
         if (proper == TRUE) 
             if (is.null(y)) 
                 m <- m & outer(size(x), size(x), "<")
