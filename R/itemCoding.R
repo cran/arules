@@ -51,6 +51,9 @@ setMethod("encode", signature(x = "list"),
         if (!length(i))
             return(recode(new("itemMatrix"), itemLabels))
 
+        ## fix Matrix mess  (ceeboo 2009)
+        i <- lapply(i, sort)
+
         p <- sapply(i, length)
         names(p) <- NULL
         p <- cumsum(p)

@@ -89,6 +89,8 @@ setAs("list", "itemMatrix",
             return(new("itemMatrix"))
         if (!all(sapply(from, is.atomic)))
             stop("can coerce list with atomic components only")
+        ## fix Matrix mess (ceeboo 2009)
+        from <- lapply(from, sort)
         p <- sapply(from, length)
         names(p) <- NULL
         p <- cumsum(p)
