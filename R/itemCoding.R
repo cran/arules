@@ -26,6 +26,10 @@ setMethod("encode", signature(x = "numeric"),
         if (itemMatrix == TRUE) 
             return(encode(list(x), itemLabels, itemMatrix == TRUE))
 
+        
+        ## handle empty sets
+        if (length(x)==0) return(integer(0))
+            
         ## regular encoding
         r <- range(x)
         if (r[1] < 1 || r[2] > length(itemLabels))
