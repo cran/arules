@@ -1,6 +1,6 @@
 
-R version 2.7.0 Patched (2008-05-14 r45692)
-Copyright (C) 2008 The R Foundation for Statistical Computing
+R version 2.10.0 (2009-10-26)
+Copyright (C) 2009 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -21,14 +21,6 @@ Type 'q()' to quit R.
 > library(arules)
 Loading required package: Matrix
 Loading required package: lattice
-
-Attaching package: 'Matrix'
-
-
-	The following object(s) are masked from package:stats :
-
-	 xtabs 
-
 
 Attaching package: 'arules'
 
@@ -199,7 +191,7 @@ I6  .  .  .  .  |
 > 
 > .Call("R_cbind_ngCMatrix", x, x)
 6 x 10 sparse Matrix of class "ngCMatrix"
-   [[ suppressing 10 column names 'T1', 'T2', 'T3' ... ]]
+   [[ suppressing 10 column names ‘T1’, ‘T2’, ‘T3’ ... ]]
                       
 I1 . . | . | . . | . |
 I2 | | . . . | | . . .

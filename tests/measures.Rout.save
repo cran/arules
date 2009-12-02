@@ -1,6 +1,6 @@
 
-R version 2.7.0 (2008-04-22)
-Copyright (C) 2008 The R Foundation for Statistical Computing
+R version 2.10.0 (2009-10-26)
+Copyright (C) 2009 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -20,14 +20,6 @@ Type 'q()' to quit R.
 > library("arules")
 Loading required package: Matrix
 Loading required package: lattice
-
-Attaching package: 'Matrix'
-
-
-	The following object(s) are masked from package:stats :
-
-	 xtabs 
-
 
 Attaching package: 'arules'
 
@@ -56,6 +48,9 @@ Attaching package: 'arules'
 > # Data Engineering, 15(1):57-69, Jan/Feb 2003.
 > 
 > fsets <- eclat(trans, parameter = list(supp = 0), control=list(verb=FALSE))
+Warning in eclat(trans, parameter = list(supp = 0), control = list(verb = FALSE)) :
+  You chose a very low absolute support count of 0. You might run out of memory! Increase minimum support.
+
 > 
 > quality(fsets) <- cbind(quality(fsets), 
 +   allConfidence = interestMeasure(fsets, method = "allConfidence", trans))
@@ -166,6 +161,9 @@ Attaching package: 'arules'
 > 
 > rules <- apriori(trans, parameter=list(supp=0.01, conf = 0.5), 
 +         control=list(verb=FALSE))
+Warning in apriori(trans, parameter = list(supp = 0.01, conf = 0.5), control = list(verb = FALSE)) :
+  You chose a very low absolute support count of 0. You might run out of memory! Increase minimum support.
+
 >  
 > ## calculate all measures
 > measures <-  c("support", "coverage", "confidence", "lift",

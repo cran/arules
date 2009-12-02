@@ -103,7 +103,7 @@
   \code{\link{image}},
   \code{\link{length}},
   \code{\link{size}},
-  \code{\link[Matrix]{ngCMatrix}} (in \pkg{Matrix}),
+  \code{\link[Matrix:ngCMatrix-class]{ngCMatrix}}(in \pkg{Matrix}),
   \code{\link{itemMatrix-class}},
   \code{\link{itemsets-class}},
   \code{\link{transactions-class}}

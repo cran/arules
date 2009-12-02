@@ -65,6 +65,21 @@ setAs("itemMatrix", "matrix",
     }
 )
 
+
+setMethod("dimnames", signature(x = "itemMatrix"),
+	    function(x) list(x@itemsetInfo[["itemsetID"]], itemLabels(x)))
+
+setReplaceMethod("dimnames", signature(x = "itemMatrix",
+		value = "list"), function(x, value) {
+		if(length(x@itemsetInfo)==0) {
+			x@itemsetInfo <- data.frame(itemsetID = value[[1]])
+		}else{
+			x@itemsetInfo[["itemsetID"]] <- value[[1]]
+		}
+		itemLabels(x) <- value[[2]]
+		x
+	})
+
 setAs("itemMatrix", "list",
     function(from) LIST(from, decode = TRUE)
 )
@@ -101,10 +116,11 @@ setAs("list", "itemMatrix",
                               i   = c(i) - 1L,
                               Dim = c(length(levels(i)), length(p)))
 
+        
         new("itemMatrix", 
             data        = p,
             itemInfo    = data.frame(labels    = I(levels(i))),
-            itemsetInfo = data.frame(itemsetID = names(from)))
+            itemsetInfo = data.frame(itemsetID = labels(from)))
     }
 )
 
@@ -258,8 +274,6 @@ setMethod("match", signature(x = "itemMatrix", table = "itemMatrix"),
 
 ##*******************************************************
 ## accessors
-
-## fixme
 
 setMethod("labels", signature(object = "itemMatrix"),
     function(object, itemSep = ",", setStart = "{", setEnd = "}")

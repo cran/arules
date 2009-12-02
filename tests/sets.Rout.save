@@ -1,6 +1,6 @@
 
-R version 2.7.0 (2008-04-22)
-Copyright (C) 2008 The R Foundation for Statistical Computing
+R version 2.10.0 (2009-10-26)
+Copyright (C) 2009 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -20,14 +20,6 @@ Type 'q()' to quit R.
 > library("arules")
 Loading required package: Matrix
 Loading required package: lattice
-
-Attaching package: 'Matrix'
-
-
-	The following object(s) are masked from package:stats :
-
-	 xtabs 
-
 
 Attaching package: 'arules'
 
@@ -121,6 +113,9 @@ Attaching package: 'arules'
 > ### is.closed
 > db <- as(data, "transactions")
 > is <- eclat(db, parameter = list(supp = 0), control = list(verbose = FALSE))
+Warning in eclat(db, parameter = list(supp = 0), control = list(verbose = FALSE)) :
+  You chose a very low absolute support count of 0. You might run out of memory! Increase minimum support.
+
 > 
 > quality(is) <- cbind(quality(is),
 +     isClosed = is.closed(is))

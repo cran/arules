@@ -14,7 +14,8 @@ apriori <-  function(data, parameter = NULL, appearance = NULL, control = NULL)
     appearance <- as(appearance, "APappearance")   
     control <- as(control, "APcontrol")
     parameter <- as(parameter, "APparameter")
-   
+
+
     if(control@verbose) {
       ## print parameter
       cat("\nparameter specification:\n")
@@ -23,6 +24,12 @@ apriori <-  function(data, parameter = NULL, appearance = NULL, control = NULL)
       print(control)
       cat("\n")
     }
+    
+    ## sanity check for support (abs. support >1)
+    abs_supp <- as.integer(parameter@support * length(data))
+    if(abs_supp < 2) warning(sprintf("You chose a very low absolute support count of %d. You might run out of memory! Increase minimum support.\n", abs_supp),
+        immediate.=TRUE)
+
     
     ## call apriori
     result <- .Call("rapriori", 

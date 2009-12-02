@@ -42,7 +42,7 @@ WRITE(head(Epub))
 WRITE(Epub, file = "data.csv", sep = ",", col.names = NA)
 
 ## write rules in CSV format
-rules <- apriori(Epub, parameter=list(support=0.002, conf=0.8))
+rules <- apriori(Epub, parameter=list(support=0.0005, conf=0.8))
 WRITE(rules, file = "data.csv", sep = ",", col.names = NA)
 
 unlink("data.csv") # tidy up
