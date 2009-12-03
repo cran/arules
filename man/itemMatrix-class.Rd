@@ -11,6 +11,8 @@
 \alias{coerce,itemMatrix,ngCMatrix-method}
 \alias{coerce,itemMatrix,list-method}
 \alias{dim,itemMatrix-method}
+\alias{dimnames,itemMatrix-method}
+\alias{dimnames<-,itemMatrix,list-method}
 \alias{\%in\%,itemMatrix,character-method}
 \alias{\%pin\%}
 \alias{\%pin\%,itemMatrix,character-method}
@@ -103,6 +105,10 @@
         the methods for \code{LIST}.}
     \item{dim}{\code{signature(x = "itemMatrix")};
       returns the dimensions of the itemMatrix.}
+    \item{dimnames}{\code{signature(x = "itemMatrix")};
+      returns dimnames.}
+    \item{dimnames<-}{\code{signature(x = "itemMatrix", value = "list")};
+      repalce dimnames.}
     \item{\%in\%}{\code{signature(x = "itemMatrix", table = "character")};
       matches the strings in \code{table} against the item labels 
       in \code{x} and returns a logical vector indicating if

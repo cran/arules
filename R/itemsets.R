@@ -19,7 +19,7 @@ setAs("itemsets", "data.frame",
         if (!length(from)) 
             return (data.frame())
         if (!length(from@quality)) 
-            return(data.frame(items = labels(from)))
+            return(data.frame(itemsets = labels(from)))
         data.frame(items = labels(from), from@quality)
     }
 )

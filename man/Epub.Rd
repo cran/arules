@@ -6,12 +6,12 @@
   The \code{Epub} data set countains the download history of documents
   from the electronic publication platform of the Vienna University of
   Economics and Business Administration.
-  The data was recorded between Jan 2003 and Mar 2006.
+  The data was recorded between Jan 2003 and Dec 2008.
 }
 \usage{data(Epub)}
 \format{
   Object of class \code{\linkS4class{transactions}} with
-  3975 transactions and 465 items.
+  15729 transactions and 936 items.
   Item labels are document IDs of the from \code{"doc\_11d"}.
   Session IDs and time stamps for transactions are also provided.
 }

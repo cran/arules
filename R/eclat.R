@@ -23,6 +23,13 @@ eclat <-  function(data, parameter = NULL, control = NULL)
       cat("\n")
     }
 
+    ## sanity check for support (abs. support >1)
+    abs_supp <- as.integer(parameter@support * length(data))
+    if(abs_supp < 2) warning(sprintf("You chose a very low absolute support count of %d. You might run out of memory! Increase minimum support.\n", abs_supp), 
+        immediate.=TRUE)
+
+
+
     ## the C code of eclat dies when no item is frequent so we do this
     if(max(itemFrequency(data)) <= parameter@support) {
       if(control@verbose) cat("eclat - zero frequent items\n")

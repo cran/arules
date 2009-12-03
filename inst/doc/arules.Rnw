@@ -1067,8 +1067,8 @@ For the example,
 we look at the \code{Epub} transaction data contained in
 package \pkg{arules}.  This data set contains downloads of documents
 from the Electronic Publication platform of the Vienna University of
-Economics and Business Administration available via
-\url{http://epub.wu-wien.ac.at} from January 2003 to August 2005.
+Economics and Business available via
+\url{http://epub.wu-wien.ac.at} from January 2003 to December 2008.
 
 First, we load \pkg{arules} and the data set.
 
@@ -1126,7 +1126,7 @@ print(image(Epub2003))
 The plot is a direct visualization of the binary incidence matrix where
 the the dark dots represent the ones in the matrix.  From the plot we
 see that the items in the data set are not evenly distributed.  In fact,
-the white area to the top right side suggests, that in the beginning of
+the mostly white area to the right side suggests, that in the beginning of
 2003 only very few items were available (less than 50) and then during
 the year more items were added until it reached a number of around 300
 items. Also, we can see that there are some transactions in the data set

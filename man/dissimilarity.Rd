@@ -53,7 +53,7 @@ dissimilarity(x, y = NULL, method = NULL, args = NULL, \ldots)
      the transactions are needed and passed to the method as the first 
      element in \code{args}.}
    \item{which}{a character string indicating if the dissimilarity should be 
-     calculated between transavtions (default) or items (use \code{"items"}). }
+     calculated between transactions (default) or items (use \code{"items"}). }
    \item{\ldots}{further arguments.}
 }
 \value{

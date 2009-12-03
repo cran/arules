@@ -39,7 +39,8 @@ exportMethods(
         "coerce",           ### for setAs
         "decode", 
         "dim", 
-        "duplicated",
+        "dimnames", "dimnames<-",
+	"duplicated",
         "encode",
         "generatingItemsets",
         "image", 

@@ -1,6 +1,6 @@
 
-R version 2.7.0 (2008-04-22)
-Copyright (C) 2008 The R Foundation for Statistical Computing
+R version 2.10.0 (2009-10-26)
+Copyright (C) 2009 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -20,14 +20,6 @@ Type 'q()' to quit R.
 > library("arules")
 Loading required package: Matrix
 Loading required package: lattice
-
-Attaching package: 'Matrix'
-
-
-	The following object(s) are masked from package:stats :
-
-	 xtabs 
-
 
 Attaching package: 'arules'
 
@@ -55,6 +47,9 @@ Attaching package: 'arules'
 > 
 > ### rules
 > r <- apriori(t, parameter=list(supp=0.25, conf=0), control=list(verb=FALSE))
+Warning in apriori(t, parameter = list(supp = 0.25, conf = 0), control = list(verb = FALSE)) :
+  You chose a very low absolute support count of 1. You might run out of memory! Increase minimum support.
+
 > r
 set of 18 rules 
 > summary(r)
@@ -88,6 +83,9 @@ mining info:
 > ### test appearance
 > r <- apriori(t, parameter=list(supp=0.25, conf=0),
 +      appearance=list(rhs=c("a","b"), default= "lhs"), control=list(verb=FALSE))
+Warning in apriori(t, parameter = list(supp = 0.25, conf = 0), appearance = list(rhs = c("a",  :
+  You chose a very low absolute support count of 1. You might run out of memory! Increase minimum support.
+
 > inspect(r)
   lhs    rhs   support confidence      lift
 1 {}  => {b} 0.7142857  0.7142857 1.0000000
@@ -100,6 +98,9 @@ mining info:
 > ### test lhs.support
 > r <- apriori(t, parameter=list(supp=0.25, conf=0, originalSupp=FALSE, ext=TRUE),
 +     control=list(verb=FALSE))
+Warning in apriori(t, parameter = list(supp = 0.25, conf = 0, originalSupp = FALSE,  :
+  You chose a very low absolute support count of 1. You might run out of memory! Increase minimum support.
+
 > inspect(r[1:2])
   lhs    rhs   support confidence lhs.support lift
 1 {}  => {c} 0.4285714  0.4285714           1    1
@@ -112,6 +113,9 @@ mining info:
 > # test the eclat interface
 > 
 > f <- eclat(t, control=list(verb=FALSE))
+Warning in eclat(t, control = list(verb = FALSE)) :
+  You chose a very low absolute support count of 0. You might run out of memory! Increase minimum support.
+
 > f
 set of 20 itemsets 
 > summary(f)
@@ -163,6 +167,9 @@ mining info:
 > 
 > ### test tidlists
 > f <- eclat(t, parameter = list(tidLists = TRUE), control=list(verb=FALSE))
+Warning in eclat(t, parameter = list(tidLists = TRUE), control = list(verb = FALSE)) :
+  You chose a very low absolute support count of 0. You might run out of memory! Increase minimum support.
+
 > f
 set of 20 itemsets 
 > summary(f)

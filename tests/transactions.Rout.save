@@ -1,6 +1,6 @@
 
-R version 2.7.0 (2008-04-22)
-Copyright (C) 2008 The R Foundation for Statistical Computing
+R version 2.10.0 (2009-10-26)
+Copyright (C) 2009 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -20,14 +20,6 @@ Type 'q()' to quit R.
 > library("arules")
 Loading required package: Matrix
 Loading required package: lattice
-
-Attaching package: 'Matrix'
-
-
-	The following object(s) are masked from package:stats :
-
-	 xtabs 
-
 
 Attaching package: 'arules'
 
@@ -62,7 +54,7 @@ transactions in sparse format with
 > summary(t)
 transactions as itemMatrix in sparse format with
  7 rows (elements/itemsets/transactions) and
- 7 columns (items) and a density of  0.4081633 
+ 7 columns (items) and a density of 0.4081633 
 
 most frequent items:
       a       b       d       e       c (Other) 
@@ -205,13 +197,25 @@ e   .   .   |   .   |
 > ## test apriori and eclat
 > fsets <- apriori(t, parameter = list(target = "frequ", supp = 0.2),
 +     control=list(verb=FALSE))
+Warning in apriori(t, parameter = list(target = "frequ", supp = 0.2), control = list(verb = FALSE)) :
+  You chose a very low absolute support count of 1. You might run out of memory! Increase minimum support.
+
 > esets <- eclat(t, parameter = list(target = "frequ", supp = 0.2, 
 +         tidList = TRUE), control =list(verb=FALSE))
+Warning in eclat(t, parameter = list(target = "frequ", supp = 0.2, tidList = TRUE),  :
+  You chose a very low absolute support count of 1. You might run out of memory! Increase minimum support.
+
 > 
 > fsets_comp <- apriori(t_comp, parameter = list(target = "frequ", supp = 0.2),
 +     control=list(verb=FALSE))
+Warning in apriori(t_comp, parameter = list(target = "frequ", supp = 0.2),  :
+  You chose a very low absolute support count of 1. You might run out of memory! Increase minimum support.
+
 > esets_comp <- eclat(t_comp, parameter = list(target = "frequ", supp = 0.2),
 +     control=list(verb=FALSE))
+Warning in eclat(t_comp, parameter = list(target = "frequ", supp = 0.2),  :
+  You chose a very low absolute support count of 1. You might run out of memory! Increase minimum support.
+
 > 
 > as(items(fsets), "ngCMatrix")
 7 x 10 sparse Matrix of class "ngCMatrix"
