@@ -105,7 +105,7 @@ setMethod("interestMeasure",  signature(x = "rules"),
         ## calculate measure 
         if(method == "support") return(support(generatingItemsets(x), 
                 transactions, type = "relative"))
-        if(method == "coverage") return(coverage(x, transactions))
+        if(method == "coverage") return(coverage(x, transactions, reuse))
         if(method == "confidence") return(
             interestMeasure(x, "support", transactions, reuse)/
             interestMeasure(x, "coverage", transactions, reuse))
