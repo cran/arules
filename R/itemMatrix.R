@@ -102,8 +102,13 @@ setAs("list", "itemMatrix",
     function(from) {
         if (!length(from))
             return(new("itemMatrix"))
+        
+        ## some checks
         if (!all(sapply(from, is.atomic)))
             stop("can coerce list with atomic components only")
+        if (any(unlist(lapply(from, duplicated))))
+            stop("can not coerce list with transactions with duplicated items")
+        
         ## fix Matrix mess (ceeboo 2009)
         from <- lapply(from, sort)
         p <- sapply(from, length)

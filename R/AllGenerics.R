@@ -19,7 +19,7 @@ setGeneric("WRITE",
     function(x, file = "", ...) standardGeneric("WRITE"))
 
 setGeneric("coverage",
-    function(x, transactions = NULL) standardGeneric("coverage"))
+    function(x, transactions = NULL, reuse = TRUE) standardGeneric("coverage"))
 
 setGeneric("crossTable", function(x, ...) standardGeneric("crossTable"))
 

@@ -7,12 +7,14 @@
    calculate the coverage (support of the left-hand-side) of rules.
    }
 \usage{
-coverage(x, transactions = NULL)
+coverage(x, transactions = NULL, reuse = TRUE)
 }
 \arguments{
   \item{x}{ the set of rules. }
   \item{transactions}{ the data set used to generate 'x'. Only needed if
   the quality slot of 'x' does not contain support and confidence. }
+  \item{reuse}{ reuse support and confidence stored in 'x' or recompute
+  from transactions? }
 }
 \details{
   Coverage is calculated from the rules quality measures 
