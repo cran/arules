@@ -1,10 +1,10 @@
 \name{crossTable}
 \alias{crossTable}
 \alias{crossTable,itemMatrix-method}
-\title{Cross-tabulate jount occurences across pairs of items}
+\title{Cross-tabulate joint occurrences across pairs of items}
 \description{
   Provides the generic function \code{crossTable} and the S4 method to 
-  cross-tabulate jount occurences across pairs of items.
+  cross-tabulate joint occurrences across pairs of items.
 }
 \usage{
 crossTable(x, \ldots)

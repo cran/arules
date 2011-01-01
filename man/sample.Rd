@@ -10,7 +10,7 @@
   transactions or associations.
 }
 \usage{
-sample(x, size, replace = FALSE, prob = NULL)
+sample(x, size, replace = FALSE, prob = NULL, ...)
 %\S4method{sample}{itemMatrix}(x, size, replace = FALSE, prob = NULL)
 %\S4method{sample}{associations}(x, size, replace = FALSE, prob = NULL)
 }
@@ -20,6 +20,7 @@ sample(x, size, replace = FALSE, prob = NULL)
   \item{size}{ sample size.}
   \item{replace}{a logical. Sample with replacement? }
   \item{prob}{  a numeric vector of probability weights. }
+  \item{...}{  further arguments. }
 }
 \value{
   An object of the same class as \code{x}.

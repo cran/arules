@@ -2,7 +2,7 @@ useDynLib(arules)
 
 importFrom("stats", "predict")  ## otherwise predict in stats does not work
 importFrom("Matrix", "summary", "image") ## we need the generics 
-importFrom("Matrix", "t")
+importFrom("Matrix", "t", "crossprod")
 
 export(
         "read.transactions", 
@@ -33,7 +33,9 @@ exportMethods(
         "SORT",
         "WRITE",
         "[",
-        "coverage",
+        "aggregate",
+	"addComplement",
+	"coverage",
         "crossTable",
         "c", 
         "coerce",           ### for setAs
@@ -63,6 +65,7 @@ exportMethods(
         "length", 
         "lhs", "lhs<-",
         "match",
+        "merge",
         "interestMeasure",
         "nitems",
         "quality", "quality<-",

@@ -80,7 +80,7 @@ elements. Duplicated elements can be removed with \code{\link{unique}}.
       defined in \code{\linkS4class{itemMatrix}}} 
    \item{itemLabels}{\code{signature(object = "rules")};
       returns the item labels as a character vector.
-      The index for each lable is the column index of the item in the
+      The index for each label is the column index of the item in the
       binary matrix.}
 %   \item{length}{\code{signature(x = "rules")};
 %      returns the number of rules stored in the the set}

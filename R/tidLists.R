@@ -71,7 +71,7 @@ setMethod("show", signature(object = "summary.tidLists"),
 
 ## no t for associations
 setMethod("t", signature(x = "tidLists"),
-    function(x) stop("Object not transposable! Use as() for coercion to transactions."))
+    function(x) stop("Object not transposable! Use as(x, \"transactions\") for coercion."))
 
 ##*****************************************************
 ## subset

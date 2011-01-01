@@ -45,10 +45,13 @@ setMethod("dissimilarity", signature(x = "matrix"),
         ## affinity is special!
         if(ind == 1) {
             ## Affinity.
-            ## Play some tricks so that methods for itemsets and rules can
-            ## call us with given affinity matrix.
-            affinities <- if(is.null(args)) affinity(x)
-            else args[[1]]
+            ## for rules and itemsets we need transactions or affinities
+	    
+	    ## given affinities or transactions? Otherwise, calculate!
+	    if(!is.null(args$aff)) affinities <- args$aff
+	    else if(!is.null(args$trans)) affinities <- affinity(args$trans)
+	    else affinities <- affinity(x)
+
             ## Normalize transaction incidences by transaction length.
             x <- x / pmax(rowSums(x), 1)
 
@@ -175,13 +178,95 @@ setMethod("dissimilarity", signature(x = "itemMatrix"),
 ##*******************************************************************
 ## wrapper for associations
 setMethod("dissimilarity", signature(x = "associations"),
-    function(x, y = NULL, method = NULL, args = NULL, 
-        which = "transactions") {
+	function(x, y = NULL, method = NULL, args = NULL, 
+		which = "transactions") {
 
-        if(!is.null(y)) y <- items(y)
+	    builtin_methods <- c("gupta","toivonen")
+	    if(!is.na(ind <- pmatch(tolower(method),
+				    tolower(builtin_methods)))) {
 
-        dissimilarity(items(x), y, method = method, args = args, which = which)
-    })   
+		method <- builtin_methods[ind]
+		if(!is.null(y)) stop("Cross dissimilarities not implemented for this method!")
+		trans <- args$trans
+		if(is.null(trans)) stop("Transactions needed in args for this method!")
+
+		if(ind == 1) {
+		    ##gupta: use tidlist intersection
+
+		    ## FIXME: tidlist operations should be made functions
+		    
+		    ## calculate tidlist for rules
+		    tids <- .associationTidLists(x, trans)
+
+		    m_X <- sapply(tids, length)
+		    n <- length(x)
+
+		    m <- matrix(nrow=n,ncol=n)
+		    for(i in 1:n){
+			for(j in i:n) {
+			    m_XiXj <- length(intersect(tids[[i]], tids[[j]]))
+			    m[i,j] <- 1-m_XiXj/(m_X[i]+m_X[j]-m_XiXj) 
+			    m[j,i] <- m[i,j] ## dists are symmetric
+			}
+		    }
+
+		    dist <- as.dist(m)
+		    attr(dist, "method") <- method
+		    return(dist)
+
+		}else{
+		    ## toivonen
+		
+		    ## only one RHS allowed
+		    if(length(unique(rhs(x)))!=1) stop("Only a single RHS allowed for this method!")
+		    
+		    ## calculate tidlist for rules
+		    tids <- .associationTidLists(x, trans)
+
+		    m_X <- sapply(tids, length)
+		    n <- length(x)
+
+		    m <- matrix(nrow=n,ncol=n)
+		    for(i in 1:n) {
+			for(j in i:n) {
+			    m_XiXj <- length(intersect(tids[[i]], tids[[j]]))
+			    m[i,j] <- m_X[i]+m_X[j]-2*m_XiXj
+			    m[j,i] <- m[i,j] ## dists are symmetric
+			}
+		    }
+
+		    dist <- as.dist(m)
+		    attr(dist, "method") <- method
+		    return(dist)
+		
+		}
+	    }
+
+
+	    ## use methods for transactions
+	    if(!is.null(y)) y <- items(y)
+	    dissimilarity(items(x), y, method = method, args = args, 
+		    which = which)
+	})   
+
+
+## helper to compute tidLists for associations
+## returns a list and not a tidList object
+.associationTidLists <- function(x, trans) {
+    I <- LIST(items(x), decode=FALSE)
+    tlists <- LIST(as(trans, "tidLists"), decode = FALSE)
+
+    tids <- list()
+    for(i in 1:length(I)) {
+	v <- I[[i]]
+	tids[[i]] <- tlists[[v[1]]]
+	if(length(v)>1) for(j in 2:length(v)) {
+	    tids[[i]] <- intersect(tids[[i]], tlists[[v[j]]])
+	}
+    }
+
+    tids
+}
 
 
 ##*******************************************************************

@@ -1,7 +1,8 @@
 ## create generics
 
-setGeneric("%in%",
-    function(x, table) standardGeneric("%in%"))
+# is now a generic in R 2.11.0
+#setGeneric("%in%",
+#    function(x, table) standardGeneric("%in%"))
 
 setGeneric("%pin%",
     function(x, table) standardGeneric("%pin%"))
@@ -17,6 +18,12 @@ setGeneric("LIST",
 
 setGeneric("WRITE",
     function(x, file = "", ...) standardGeneric("WRITE"))
+
+setGeneric("addComplement",
+    function(x, labels, complementLabels=NULL) standardGeneric("addComplement"))
+
+setGeneric("aggregate",
+    function(x, ...) standardGeneric("aggregate"))
 
 setGeneric("coverage",
     function(x, transactions = NULL, reuse = TRUE) standardGeneric("coverage"))
@@ -103,6 +110,10 @@ setGeneric("match",
     function(x,  table, nomatch = NA_integer_, incomparables = NULL) 
     standardGeneric("match"))
 
+setGeneric("merge",
+    function(x,  y, ...) 
+    standardGeneric("merge"))
+
 setGeneric("nitems",
     function(x, ...) standardGeneric("nitems"))
 
@@ -130,8 +141,13 @@ setGeneric("rhs<-",
 setGeneric("ruleInduction",
     function(x, ...) standardGeneric("ruleInduction"))
 
-setGeneric("sample",
-    function(x, size, replace = FALSE, prob = NULL) standardGeneric("sample"))
+# is now a generic in R 2.11.0
+#setGeneric("sample",
+#    function(x, size, replace = FALSE, prob = NULL) standardGeneric("sample"))
+
+# is now a generic in R 2.11.0
+#setGeneric("sort",
+#    function(x, decreasing = FALSE, ...) standardGeneric("sort"))
 
 setGeneric("setdiff",
     function(x, y) standardGeneric("setdiff"))

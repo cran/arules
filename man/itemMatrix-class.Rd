@@ -22,8 +22,6 @@
 \alias{itemLabels,itemMatrix-method}
 \alias{itemLabels<-}
 \alias{itemLabels}
-\alias{labels,itemMatrix-method}
-\alias{labels}
 \alias{itemInfo<-,itemMatrix-method}
 \alias{itemInfo,itemMatrix-method}
 \alias{itemInfo<-}
@@ -32,6 +30,8 @@
 \alias{itemsetInfo,itemMatrix-method}
 \alias{itemsetInfo<-}
 \alias{itemsetInfo}
+\alias{labels,itemMatrix-method}
+\alias{labels}
 \alias{nitems}
 \alias{nitems,itemMatrix-method}
 \alias{show,itemMatrix-method}
@@ -108,7 +108,7 @@
     \item{dimnames}{\code{signature(x = "itemMatrix")};
       returns dimnames.}
     \item{dimnames<-}{\code{signature(x = "itemMatrix", value = "list")};
-      repalce dimnames.}
+      replace dimnames.}
     \item{\%in\%}{\code{signature(x = "itemMatrix", table = "character")};
       matches the strings in \code{table} against the item labels 
       in \code{x} and returns a logical vector indicating if

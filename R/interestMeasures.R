@@ -82,7 +82,8 @@ setMethod("interestMeasure",  signature(x = "rules"),
     function(x, method, transactions = NULL, reuse = TRUE, ...) {
 
         builtin_methods <- c("support", "coverage", "confidence", "lift",
-            "leverage", "hyperLift", "hyperConfidence", "improvement",
+            "leverage", "hyperLift", "hyperConfidence", "fishersExactTest", 
+	    "improvement",
             "chiSquare", "cosine", "conviction", "gini", "oddsRatio", "phi",
             "doc", "RLD"
         ) 
@@ -118,6 +119,8 @@ setMethod("interestMeasure",  signature(x = "rules"),
             .hyperLift(x, transactions, reuse, ...))
         if(method == "hyperConfidence") return(
             .hyperConfidence(x, transactions, reuse, ...))
+        if(method == "fishersExactTest") return(
+            .hyperConfidence(x, transactions, reuse, significance=TRUE,...))
         if(method == "RLD") return(.RLD(x, transactions, reuse, ...))
         
         

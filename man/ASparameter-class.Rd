@@ -38,7 +38,7 @@
     \item{\code{minlen}:}{an integer value for the
       minimal number of items per item set (default: 1)}
     \item{\code{maxlen}:}{an integer value for the
-      maximal number of items per item set (default: 5)}
+      maximal number of items per item set (default: 10)}
     \item{\code{target}:}{a character string 
       indicating the type of association mined.
       One of

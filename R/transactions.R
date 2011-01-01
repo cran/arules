@@ -83,13 +83,13 @@ setAs("transactions", "data.frame",
 
         if (!length(from@transactionInfo)) 
             return(data.frame(items = items))
-        data.frame(items = items, from@transactionInfo)
+        data.frame(transactionID = from@transactionInfo, items = items)
     }
 )
 
 ## no t for associations
 setMethod("t", signature(x = "transactions"),
-    function(x) stop("Object not transposable! Use as() for coercion to tidLists."))
+    function(x) stop("Object not transposable! Use as(x, \"tidLists\") for coercion to tidLists."))
 
 ##*****************************************************
 ## subset + combine
@@ -126,6 +126,12 @@ setMethod("c", signature(x = "transactions"),
         x
     }
 )
+
+setMethod("merge", signature(x="transactions"),
+    function(x, y, ...) {
+	m <- merge(as(x, "itemMatrix"), as(y, "itemMatrix"))
+	as(m, "transactions")
+    })
 
 ##*****************************************************
 ## show / summary

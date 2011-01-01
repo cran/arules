@@ -18,7 +18,7 @@ interestMeasure(x, method, transactions = NULL, reuse = TRUE, ...)
   \item{transactions}{ the transaction data set used to mine 
     the associations. }
   \item{reuse}{ logical indicating if information in quality slot should
-      be reuse for calculating the measures. This speedes up the process
+      be reuse for calculating the measures. This speeds up the process
       significantly since only very little (or no) transaction counting 
       is necessary if support, confidence and lift are already available.
       Use \code{reuse=FALSE} to force counting (might be very slow).}
@@ -44,13 +44,17 @@ For rules the following measures are implemented:
 \item{"chiSquare"}{ (see Liu et al. 1999). The chi-square statistic 
   to test for independence between the lhs and rhs of the rule.
   The critical value of the chi-square distribution with \eqn{1} degree of 
-  freedom (2x2 contengency table) at \eqn{\alpha=0.05}{alpha=0.05} 
+  freedom (2x2 contingency table) at \eqn{\alpha=0.05}{alpha=0.05} 
   is \eqn{3.84}; higher chi-square
   values indicate that the lhs and the rhs are not independent.  
   %Note that if
   %any cell in the contingency table has an expected value below \eqn{5}, the
   %chi-square value is set to \code{NA} 
   %since the approximation used in the chi-square test breaks down.
+  Note that the contingency table is likely to have cells with
+  low expected values and that thus
+  Fisher's Exact Test might be more appropriate 
+  (see below).
   }
 \item{"confidence"}{calculate rule confidence. Range \eqn{0\ldots1}.}
 \item{"conviction"}{ (see Brin et al. 1997) defined as 
@@ -116,6 +120,9 @@ Range: \eqn{0\ldots\infty}{0\ldots Inf}.
   by using the parameter \code{complements = FALSE}. 
   Range: \eqn{0\ldots1}.
   }
+\item{"fishersExactTest"}{Fisher's Exact Test is a statistical significance test used in the analysis of contingency tables where sample sizes are small. 
+ Returns the p-value.
+ Note that it is equal to hyperConfidence with \code{significance=TRUE}.}
 \item{"improvement"}{(see Bayardo et al. 2000)
   the  improvement of a rule is 
   the minimum difference between its confidence and the confidence of any
