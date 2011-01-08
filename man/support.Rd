@@ -39,7 +39,7 @@ support(x, transactions, ...)
    
    If in control \code{method = "ptree"} is used, 
    the counters for the itemsets are 
-   organized in a prefix tree. The transactions are sequencially processed
+   organized in a prefix tree. The transactions are sequentially processed
    and the corresponding counters in the prefix tree are incremented 
    (see Hahsler et al, 2008). This method is used by default since it is 
    typically significantly faster than tid list intersection.

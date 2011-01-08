@@ -1,27 +1,71 @@
-\documentclass[10pt,a4paper]{article}
+%\documentclass[10pt,a4paper]{article}
+\documentclass[nojss]{jss}
 
-\usepackage{a4wide}
-\setlength{\parskip}{0.5ex plus0.1ex minus0.1ex}
-\setlength{\parindent}{0em}
+\usepackage[utf8]{inputenc}
 
-\usepackage[round,longnamesfirst]{natbib}
-\usepackage{hyperref}
+%\usepackage{a4wide}
+%\setlength{\parskip}{0.5ex plus0.1ex minus0.1ex}
+%\setlength{\parindent}{0em}
+
+%\usepackage[round,longnamesfirst]{natbib}
+%\usepackage{hyperref}
 
 %%% for tabulars
 \usepackage{rotating}
 \usepackage{multirow}
 
-\newcommand{\strong}[1]{{\normalfont\fontseries{b}\selectfont #1}}
+%\newcommand{\strong}[1]{{\normalfont\fontseries{b}\selectfont #1}}
 \newcommand{\class}[1]{\mbox{\textsf{#1}}}
 \newcommand{\func}[1]{\mbox{\texttt{#1()}}}
-\newcommand{\code}[1]{\mbox{\texttt{#1}}}
-\newcommand{\pkg}[1]{\strong{#1}}
+%\newcommand{\code}[1]{\mbox{\texttt{#1}}}
+%\newcommand{\pkg}[1]{\strong{#1}}
 \newcommand{\samp}[1]{`\mbox{\texttt{#1}}'}
-\newcommand{\proglang}[1]{\textsf{#1}}
+%\newcommand{\proglang}[1]{\textsf{#1}}
 \newcommand{\set}[1]{\mathcal{#1}}
 
-\usepackage{Sweave}
+%\usepackage{Sweave}
 %% \VignetteIndexEntry{Introduction to arules}
+
+\author{Michael Hahsler\\Southern Methodist University \And
+    Bettina Gr{\"u}n\\Johannes Keppler University Linz \AND 
+    Kurt Hornik\\ Wirtschaftsuniversit\"at Wien \And
+    Christian Buchta\\ Wirtschaftsuniversit\"at Wien}
+\title{Introduction to \pkg{arules} --
+    A computational environment for mining association rules and frequent 
+    item sets}
+%% for pretty printing and a nice hypersummary also set:
+\Plainauthor{Michael Hahsler, Bettina Gr{\"u}n, Kurt Hornik, Christian Buchta} %% comma-separated
+\Plaintitle{Introduction to arules --
+    A computational environment for mining association rules and frequent 
+    item sets} %% without formatting
+\Shorttitle{Introduction to arules} %% a short title (if necessary)
+
+    %% an abstract and keywords
+\Abstract{
+  Mining frequent itemsets and association rules is a popular and well
+  researched approach for discovering interesting relationships between
+  variables in large databases.  The \proglang{R} package \pkg{arules}
+  presented in this paper provides a basic infrastructure for creating
+  and manipulating input data sets and for analyzing the resulting
+  itemsets and rules.  The package also includes interfaces to two fast
+  mining algorithms, the popular \proglang{C} implementations of Apriori
+  and Eclat by Christian Borgelt.  These algorithms can be used to mine
+  frequent itemsets, maximal frequent itemsets, closed frequent itemsets
+  and association rules.}
+\Keywords{data mining, association rules, apriori, eclat}
+\Plainkeywords{data mining, association rules, apriori, eclat} %% without formatting
+
+
+\Address{
+	Michael Hahsler\\
+	Computer Science and Engineering\\
+	Lyle School of Engineering\\
+	Southern Methodist University\\
+	P.O. Box 750122 \\
+	Dallas, TX 75275-0122\\
+	E-mail: \email{mhahsler@lyle.smu.edu}\\
+	URL: \url{http://lyle.smu.edu/~mhahsler}
+}
 
 
 \begin{document}
@@ -32,27 +76,27 @@ set.seed <- 1234
 @
 %% ------------------------------------------------------------------
 %% ------------------------------------------------------------------
-\title{Introduction to \pkg{arules} -- 
-A computational environment for mining association rules and frequent item sets}
-\author{Michael Hahsler and Bettina Gr{\"u}n and Kurt Hornik 
-and Christian Buchta}
-\maketitle
-\sloppy
-%% ------------------------------------------------------------------
-%% ------------------------------------------------------------------
-\begin{abstract}
-  Mining frequent itemsets and association rules is a popular and well
-  researched approach for discovering interesting relationships between
-  variables in large databases.  The \proglang{R} package \pkg{arules}
-  presented in this paper provides a basic infrastructure for creating
-  and manipulating input data sets and for analyzing the resulting
-  itemsets and rules.  The package also includes interfaces to two fast
-  mining algorithms, the popular \proglang{C} implementations of Apriori
-  and Eclat by Christian Borgelt.  These algorithms can be used to mine
-  frequent itemsets, maximal frequent itemsets, closed frequent itemsets
-  and association rules.
-\end{abstract}
-
+%\title{Introduction to \pkg{arules} -- 
+%A computational environment for mining association rules and frequent item sets}
+%\author{Michael Hahsler and Bettina Gr{\"u}n and Kurt Hornik 
+%and Christian Buchta}
+%\maketitle
+%\sloppy
+%%% ------------------------------------------------------------------
+%%% ------------------------------------------------------------------
+%\begin{abstract}
+%  Mining frequent itemsets and association rules is a popular and well
+%  researched approach for discovering interesting relationships between
+%  variables in large databases.  The \proglang{R} package \pkg{arules}
+%  presented in this paper provides a basic infrastructure for creating
+%  and manipulating input data sets and for analyzing the resulting
+%  itemsets and rules.  The package also includes interfaces to two fast
+%  mining algorithms, the popular \proglang{C} implementations of Apriori
+%  and Eclat by Christian Borgelt.  These algorithms can be used to mine
+%  frequent itemsets, maximal frequent itemsets, closed frequent itemsets
+%  and association rules.
+%\end{abstract}
+%
 %% ------------------------------------------------------------------
 %% ------------------------------------------------------------------
 \clearpage
@@ -96,7 +140,8 @@ of the rule.
   5 & bread, butter \\
   \hline
 \end{tabular}
-\caption{An example supermarket database with five transactions.\label{table:supermarket}}
+\caption{An example supermarket database with five transactions.}
+\label{table:supermarket}
 \end{figure}
 
 To illustrate the concepts, we use a small example from the supermarket
@@ -226,7 +271,8 @@ A previous version of this manuscript was published in the \emph{Journal
 
 %% ------------------------------------------------------------------
 %% ------------------------------------------------------------------
-\section{Data structure overview\label{sec:overview}}
+\section{Data structure overview}
+\label{sec:overview}
 
 To enable the user to represent and work with input and output data of
 association rule mining algorithms in \proglang{R}, a well-designed
@@ -239,7 +285,8 @@ Figure~\ref{fig:arules-classes}.
 \centering
 \includegraphics[width=12cm]{arules-classes}
 \caption{UML class diagram \citep[see][]{misc:Fowler:2004} of the \pkg{arules}
-package.\label{fig:arules-classes}}
+package.}
+\label{fig:arules-classes}
 \end{figure}
 
 For input data the classes \class{transactions} and \class{tidLists}
@@ -265,7 +312,8 @@ Eclat.  In this way, it is easy to extend the control classes when
 interfacing a new algorithm.
 
 
-\subsection{Representing collections of itemsets\label{sec:setrepresentation}}
+\subsection{Representing collections of itemsets}
+\label{sec:setrepresentation}
 
 From the definition of the association rule mining problem we see that
 transaction databases and sets of associations have in common that 
@@ -321,7 +369,8 @@ and additional quality information, e.g., values for various interest measures.
 %& $X_m$ 		& 0 & 1 & 1 & 0 \\
 \end{tabular}
 \caption{Example of a collection of itemsets represented as a 
-    binary incidence matrix.\label{fig:itemsetMatrix}}
+    binary incidence matrix.}
+\label{fig:itemsetMatrix}
 \end{figure}
 
 Collections of itemsets used for transaction databases and sets of
@@ -475,7 +524,8 @@ such problems in the data can be very helpful for data preparation.
 %% ------------------------------------------------------------------
 %% ------------------------------------------------------------------
 
-\subsection{Transaction data\label{sec:transactions}}
+\subsection{Transaction data}
+\label{sec:transactions}
 
 The main application of association rules is for market basket analysis
 where large transaction data sets are mined.  In this setting each
@@ -553,7 +603,8 @@ available.
 
 \caption{Example of a set of transactions represented in 
     (a) horizontal layout and in 
-    (b) vertical layout.\label{fig:transactionMatrix}}
+    (b) vertical layout.}
+\label{fig:transactionMatrix}
 \end{figure}
 
 For mining, the transaction data is first transformed into a binary
@@ -639,7 +690,8 @@ in Section~\ref{sec:example-screen}.
 
 %% ------------------------------------------------------------------
 %% ------------------------------------------------------------------
-\subsection{Associations: itemsets and sets of rules\label{sec:associations}}
+\subsection{Associations: itemsets and sets of rules}
+\label{sec:associations}
 
 The result of mining transaction data in \pkg{arules} are
 \class{associations.}  Conceptually, associations are sets of objects
@@ -710,7 +762,8 @@ common functionality described above.
 %% ------------------------------------------------------------------
 %% ------------------------------------------------------------------
 
-\section{Mining algorithm interfaces\label{sec:interfaces}}
+\section{Mining algorithm interfaces}
+\label{sec:interfaces}
 
 In package \pkg{arules} we interface free reference implementations of
 Apriori and Eclat by Christian Borgelt
@@ -783,13 +836,15 @@ The necessary steps are:
 
 
 
-\section{Auxiliary functions \label{sec:auxiliary}}
+\section{Auxiliary functions}
+\label{sec:auxiliary}
 
 In \pkg{arules} several helpful functions are implemented for
 support counting, rule induction, sampling, etc.
 In the following we will discuss some of these functions.
 
-\subsection{Counting support for itemsets\label{sec:counting}}
+\subsection{Counting support for itemsets}
+\label{sec:counting}
 
 Normally, itemset support is counted during mining the database with a
 given minimum support constraint.  During this process all frequent
@@ -823,7 +878,8 @@ the support of infrequent itemsets with a support so low that mining
 is infeasible due to combinatorial explosion.
 
 
-\subsection{Rule induction\label{sec:induction}}
+\subsection{Rule induction}
+\label{sec:induction}
 
 For convenience we introduce $\set{X} = \{X_1, X_2, \ldots, X_l\}$ for
 sets of itemsets with length $l$.  Analogously, we write $\set{R}$ for
@@ -879,7 +935,8 @@ straight forward. The exact procedure is described
 in~\cite{arules:Hahsler+Buchta+Hornik:2007}.
 
 
-\subsection{Sampling from transactions\label{sec:sample}}
+\subsection{Sampling from transactions}
+\label{sec:sample}
 
 Taking samples from large databases for mining is a powerful technique
 which is especially useful if the original database does not fit into
@@ -1052,10 +1109,12 @@ predicting memberships for new data.
 
 A small example can be found in~\cite{arules:Hahsler+Hornik:2007b}.
 
-\section{Examples\label{sec:examples}}
+\section{Examples}
+\label{sec:examples}
 
 \subsection{Example 1: Analyzing and preparing a transaction 
-data set \label{sec:example-screen}}
+data set}
+\label{sec:example-screen}
 
 In this example, 
 we show how a data set can be analyzed and manipulated
@@ -1186,7 +1245,8 @@ In the next example, we will see how a data set is created and
 rules are mined.
 
 \subsection{Example 2: Preparing and mining a 
-questionnaire data set\label{sec:example-adult}}
+questionnaire data set}
+\label{sec:example-adult}
 
 As a second example, we prepare and mine questionnaire data.  We use the
 Adult data set from the UCI machine learning repository
@@ -1396,7 +1456,8 @@ The saved data can now be easily shared and used by other applications.
 Itemsets (with \func{WRITE} also transactions) can be 
 written to a file in the same way.
 
-\subsection{Example 3: Extending arules with a new interest measure\label{sec:example-allconf}}
+\subsection{Example 3: Extending arules with a new interest measure}
+\label{sec:example-allconf}
 
 In this example, we show how easy it is to add a new interest measure,
 using \emph{all-confidence} as introduced by
@@ -1647,7 +1708,8 @@ is important, sampling can be a powerful technique.
 %% ------------------------------------------------------------------
 %% ------------------------------------------------------------------
 
-\section{Summary and outlook\label{sec:conclusion}}
+\section{Summary and outlook}
+\label{sec:conclusion}
 
 With package \pkg{arules} we
 provide the basic infrastructure which enables us to 
@@ -1678,7 +1740,7 @@ necessarily frequent itemsets as used in an association rule context).
 Such algorithms include implementations of the $\chi^2$-test based
 algorithm by \cite{arules:Silverstein+Brin+Motwani:1998} or the baseline
 frequency approach by \cite{arules:DuMouchel+Pregibon2001}.
-Also, the impelentation of distance based
+Also, the implementation of distance based
 clustering in \pkg{arules} could be used for visualization of associations 
 \citep[see e.g.,][]{arules:Strehl+Gosh:2003}.
 
@@ -1690,7 +1752,7 @@ The authors of \pkg{arules} would like to thank Christian Borgelt for the
 implementation of Apriori and Eclat.
 
 
-\bibliographystyle{abbrvnat}
+%\bibliographystyle{abbrvnat}
 \bibliography{arules,misc}
 
 \end{document}

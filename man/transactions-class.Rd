@@ -31,7 +31,8 @@
   matrix, item labels, and optionally transaction IDs and user IDs.
 }
 \section{Objects from the Class}{
-  Objects are created by coercion from objects of other classes or by
+  Objects are created by coercion from objects of other classes 
+  (see Examples section) or by
   calls of the form \code{new("transactions", ...)}.
  }
 \section{Slots}{
@@ -111,7 +112,7 @@
   \code{\link{itemMatrix-class}}
 }
 \examples{
-## 1. example: creating transactions form a list
+## example 1: creating transactions form a list
 a_list <- list(
       c("a","b","c"),
       c("a","b"),
@@ -131,7 +132,7 @@ trans <- as(a_list, "transactions")
 summary(trans)
 image(trans)
 
-## 2. example: creating transactions from a matrix
+## example 2: creating transactions from a matrix
 a_matrix <- matrix(
       c(1,1,1,0,0,
 	1,1,0,0,0,
@@ -149,26 +150,35 @@ a_matrix
 ## coerce
 trans2 <-  as(a_matrix, "transactions")
 trans2
+inspect(trans2)
 
 ## example 3: creating transactions from data.frame
-a_data.frame <- data.frame(
+a_df <- data.frame(
 	age = as.factor(c(6,8,7,6,9,5)), 
 	grade = as.factor(c(1,3,1,1,4,1)))  
 ## note: all attributes have to be factors
-a_data.frame
-
-## coerce
-trans3 <- as(a_data.frame, "transactions") 
-image(trans3)
-
-## 3. example creating from data.frame with NA
-a_df <- sample(c(LETTERS[1:5], NA),10,TRUE)
-a_df <- data.frame(X = a_df, Y = sample(a_df))
-
 a_df
 
-trans3 <- as(a_df, "transactions")
+## coerce
+trans3 <- as(a_df, "transactions") 
+image(trans3)
+
+## example 4: Creating from data.frame with NA
+a_df2 <- sample(c(LETTERS[1:5], NA),10,TRUE)
+a_df2 <- data.frame(X = a_df2, Y = sample(a_df2))
+
+a_df2
+
+trans3 <- as(a_df2, "transactions")
 trans3
 as(trans3, "data.frame")
+
+## example 5: creating transactions from a data.frame with 
+## transaction IDs and items 
+a_df3 <- data.frame(TID = c(1,1,2,2,2,3), item=c("a","b","a","b","c", "b"))
+a_df3
+trans4 <- as(split(a_df3[,"item"], a_df3[,"TID"]), "transactions")
+trans4
+LIST(trans4)
 }
 \keyword{classes}

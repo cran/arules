@@ -30,11 +30,15 @@ dissimilarity(x, y = NULL, method = NULL, args = NULL, \ldots)
          the \code{\link{affinity}},
          a similarity measure between items. It is defined as the
          average \emph{affinity} between the items in two transactions 
-         (see Aggarwal et al. (2002)).}
+         (see Aggarwal et al. (2002)). If \code{x} is not the
+	 full transaction set \code{args} needs to contain
+	 either precalculated affinities as element \code{"affinities"} or
+	 the transaction set as \code{"transactions"}.}
        \item{\code{"cosine"}:}{ the \emph{cosine} distance.} 
        \item{\code{"dice"}:}{ the \emph{Dice's coefficient} defined
          by Dice (1945). Similar to \emph{Jaccard} but gives double the
 	     weight to agreeing items.}
+       \item{\code{"euclidean"}:}{ the \emph{euclidean} distance.} 
        \item{\code{"jaccard"}:}{ the number of items which occur in both 
          elements divided by the total number of items in the 
          elements (Sneath, 1957). 
@@ -42,16 +46,30 @@ dissimilarity(x, y = NULL, method = NULL, args = NULL, \ldots)
          also called: \emph{binary, asymmetric binary,} etc. }
        \item{\code{"matching"}:}{ the \emph{Matching coefficient} defined
          by Sokal and Michener (1958). This coefficient gives the same
-	     weigth to presents and absence of items.}
+	     weight to presents and absence of items.}
        \item{\code{"pearson"}:}{ the 1 - \emph{Pearson correlation 
          coefficient} .} 
- }}
-  \item{args}{ a list of additional arguments for the methods.  
-  
-     For calculating
-     \code{"affinity"} for associations, the affinities between the items in 
-     the transactions are needed and passed to the method as the first 
-     element in \code{args}.}
+    }
+    For associations the following additional measures are available:
+    \describe{
+	\item{\code{"toivonen"}:}{Method described in Toivonen et al. (1995).
+	    For rules this measure is only defined between rules with
+	    the same consequent.
+	    The distance between two rules is defined as the number of 
+	    transactions which is 
+	    covered by only one of the two rules.
+	    The transactions used to mine the associations has to be passed on
+		via \code{args} as element \code{"transactions"}.}
+	\item{\code{"gupta"}:}{Method described in Gupta et al. (1999).
+	    The distance between two rules is defined as 1 minus the
+	    proportion of transactions which are covered by both
+	    rules in the transactions covered by each rule individually.
+	    The transactions used to mine the associations has to be passed on
+		via \code{args} as element \code{"transactions"}.}
+    }
+
+ }
+  \item{args}{ a list of additional arguments for the methods.}  
    \item{which}{a character string indicating if the dissimilarity should be 
      calculated between transactions (default) or items (use \code{"items"}). }
    \item{\ldots}{further arguments.}
@@ -89,18 +107,24 @@ plot(hclust(d_affinity))
 
 
 ## cluster rules
-rules <- apriori(Adult)
+rules <- apriori(Adult, parameter=list(support=0.3))
 rules <- subset(rules, subset = lift > 2)
 
+## use affinity
 ## we need to supply the item affinities from the dataset (sample)
 d_affinity <- dissimilarity(rules, method = "affinity", 
   args = list(affinity = affinity(s)))
 plot(hclust(d_affinity))
+
+## use gupta
+d_gupta <- dissimilarity(rules, method = "gupta", args=list(trans=Adult))
+plot(hclust(d_gupta))
+
 }
 \references{
   Sneath, P. H. A. (1957) Some thoughts on bacterial classification. 
   \emph{Journal of General Microbiology} 17, pages 184--200.
- 
+  
   Sokal, R. R. and Michener, C. D. (1958) A statistical method for evaluating 
   systematic relationships. \emph{University of Kansas Science Bulletin} 38, 
   pages 1409--1438.
@@ -109,8 +133,17 @@ plot(hclust(d_affinity))
   between species. \emph{Ecology} 26, pages 297--302.
  
   Charu C. Aggarwal, Cecilia Procopiuc, and Philip S. Yu. (2002)
-    Finding localized associations in market basket data.
-    \emph{IEEE Trans. on Knowledge and Data Engineering} 14(1):51--62.
+  Finding localized associations in market basket data.
+  \emph{IEEE Trans. on Knowledge and Data Engineering} 14(1):51--62.
+
+  Toivonen, H., Klemettinen, M., Ronkainen, P., 
+  Hatonen, K. and Mannila H. (1995) Pruning and grouping discovered
+  association rules. \emph{In Proceedings of KDD'95}.
+
+  Gupta, G., Strehl, A., and Ghosh, J. (1999) Distance based clustering 
+  of association rules. \emph{In Intelligent Engineering 
+  Systems Through Artificial Neural Networks (Proceedings 
+  of ANNIE 1999)}, pages 759-764. ASME Press.
 }
 \keyword{cluster}
 \keyword{models}

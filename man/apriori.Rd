@@ -19,7 +19,7 @@ apriori(data, parameter = NULL, appearance = NULL, control = NULL)
   \item{parameter}{object of class
     \code{\linkS4class{APparameter}} or named list.
     The default behavior is to mine rules with support 0.1, confidence
-    0.8, and maxlen 5.}
+    0.8, and maxlen 10.}
   \item{appearance}{object of class
     \code{\linkS4class{APappearance}} or named list.
     With this argument item appearance can be restricted.

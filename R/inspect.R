@@ -26,7 +26,7 @@ setMethod("inspect", signature(x = "itemsets"),
         n_of_rows <- sum(n_of_items)
         quality <- quality(x)
         ## Output.
-        out <- matrix("", nr = n_of_rows+1, nc = 2 + NCOL(quality))
+        out <- matrix("", nrow = n_of_rows+1, nc = 2 + NCOL(quality))
 
         ## Column 1: itemset nr.
         tmp <- rep.int("", n_of_rows + 1)
@@ -83,7 +83,7 @@ setMethod("inspect", signature(x = "rules"),
                 SIMPLIFY = FALSE))
         n_of_rows <- entry_end_pos[n_of_rules]
 
-        out <- matrix("", nr = n_of_rows, nc = 4 + NCOL(quality))
+        out <- matrix("", nrow = n_of_rows, nc = 4 + NCOL(quality))
 
         ## Column 1: counts.
         tmp <- rep.int("", n_of_rows)
@@ -154,7 +154,7 @@ setMethod("inspect", signature(x = "transactions"),
         n_of_rows <- sum(n_of_items)
         transactionInfo <- transactionInfo(x)
         ## Output.
-        out <- matrix("", nr = n_of_rows+1, nc = 2 + NCOL(transactionInfo))
+        out <- matrix("", nrow = n_of_rows+1, nc = 2 + NCOL(transactionInfo))
 
         ## Column 1: itemset nr.
         tmp <- rep.int("", n_of_rows + 1)
@@ -205,7 +205,7 @@ setMethod("inspect", signature(x = "itemMatrix"),
         ## prepare output
         n_of_rows <- sum(n_of_items)
         ## Output.
-        out <- matrix("", nr = n_of_rows+1, nc = 2)
+        out <- matrix("", nrow = n_of_rows+1, nc = 2)
 
         ## Column 1: itemset nr.
         tmp <- rep.int("", n_of_rows + 1)

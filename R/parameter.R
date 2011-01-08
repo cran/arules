@@ -16,7 +16,7 @@ setAs("list", "ECparameter", function(from, to) .list2object(from, to))
 ## initialize
 
 setMethod("initialize", "ASparameter",
-    function(.Object, minlen = 1, maxlen = 5, 
+    function(.Object, minlen = 1, maxlen = 10, 
         target = "frequent itemsets", ...) {
         
         if (minlen - as.integer(minlen)) stop("minlen = ", minlen, 
@@ -36,7 +36,7 @@ setMethod("initialize", "ASparameter",
     })
 
 setMethod("initialize", "APparameter",
-    function(.Object, minlen = 1, maxlen = 5, 
+    function(.Object, minlen = 1, maxlen = 10, 
         target = "rules", arem = "none", ...) {
         
         i <- pmatch(tolower(arem), .aremtypes())

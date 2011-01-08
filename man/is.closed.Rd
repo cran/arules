@@ -7,7 +7,7 @@
 \description{
 Provides the generic function and the S4 method \code{is.closed} for finding
 closed itemsets.  The closure of an itemset is its largest proper superset
-which has the same support (is containt in exactly the same transactions). An
+which has the same support (is contained in exactly the same transactions). An
 itemset is closed, if it is its own closure (Pasquier et al. 1999).
 }
 \usage{

@@ -54,13 +54,27 @@ function(file, format = c("basket", "single"), sep = NULL, cols = NULL, rm.dupli
 ## write transactions and associations
 
 setMethod("WRITE", signature(x = "transactions"),
-    function(x, file = "", ...) 
-    write.table(as(x, "data.frame"), file = file, ...)
-)
+	function(x, file = "", format = c("basket", "single"), 
+		sep=" ", quote=FALSE, ...) { 
+
+	    format <- match.arg(format)
+	    if (format == "basket") {
+		l <- LIST(x)
+		dat <- unlist(list(lapply(l, paste, collapse=sep)))
+		write(dat, file=file, ...)
+	    } else { 
+		l <- LIST(x)
+		dat <- data.frame(transactionID=rep(names(l),lapply(l, length)), 
+			item=unlist(l), row.names=NULL)
+		write.table(dat, file = file, sep=sep, quote=quote, ...)
+	    }
+	    invisible(dat)
+	}
+	)
 
 
 setMethod("WRITE", signature(x = "associations"),
-    function(x, file = "", ...) 
-    write.table(as(x, "data.frame"), file = file, ...)
+    function(x, file = "", sep= " ", quote=FALSE, ...) 
+    write.table(as(x, "data.frame"), file = file, sep=sep, quote=quote, ...)
 )
 

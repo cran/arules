@@ -31,7 +31,7 @@ subsets. Note that the method can be very slow and memory intensive  if
 returns a logical matrix with \code{length(x)} rows and \code{length(y)}
 columns.  Each logical row vector represents which elements in \code{y} are
 supersets (subsets) of the corresponding element in \code{x}.  If either
-\code{x} or \code{y} have lenght zero, \code{NULL} is returned instead of a
+\code{x} or \code{y} have length zero, \code{NULL} is returned instead of a
 matrix.
 }
 \seealso{

@@ -42,7 +42,7 @@ ruleInduction(x, ...)
   If in control \code{reduce = TRUE} is used, unused items are removed
   from the data before creating rules. This might be slower for large
   transaction data sets. However, if \code{method = "ptree"} this is
-  highly recommended as the items are further reorderd to reduce the
+  highly recommended as the items are further reordered to reduce the
   counting time.
 
   If argument \code{transactions} is missing it is assumed that \code{x}

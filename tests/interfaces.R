@@ -20,7 +20,7 @@ t <- as(data, "transactions")
 r <- apriori(t, parameter=list(supp=0.25, conf=0), control=list(verb=FALSE))
 r
 summary(r)
-inspect(SORT(r, by = "lift")[1:2])
+inspect(sort(r, by = "lift")[1:2])
 
 ### test appearance
 r <- apriori(t, parameter=list(supp=0.25, conf=0),

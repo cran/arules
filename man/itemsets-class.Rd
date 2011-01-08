@@ -74,7 +74,7 @@
 	"{item1, item2,..., itemn}"}
    \item{itemLabels}{\code{signature(object = "itemsets")};
       returns the item labels used to encode the itemsets as
-      a character vector. The index for each lable is the column
+      a character vector. The index for each label is the column
       index of the item in the binary matrix.}
     \item{summary}{\code{signature(object = "itemsets")}}
     \item{tidLists}{\code{signature(object = "itemsets")};
