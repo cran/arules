@@ -101,7 +101,7 @@ Range: \eqn{0\ldots\infty}{0\ldots Inf}.
   (represented by the random variable \eqn{C_{XY}}) with
   known parameters given by the counts  \eqn{c_X} and  \eqn{c_Y},
   we can calculate a confidence interval for the observed counts 
-  \eqn{c_{XY}} stemming from the distribution. Hyperconfidence
+  \eqn{c_{XY}} stemming from the distribution. Hyper-confidence
   reports the confidence level 
   (significance level if \code{significance=TRUE} is used) for
   \describe{
@@ -122,7 +122,7 @@ Range: \eqn{0\ldots\infty}{0\ldots Inf}.
   }
 \item{"fishersExactTest"}{Fisher's Exact Test is a statistical significance test used in the analysis of contingency tables where sample sizes are small. 
  Returns the p-value.
- Note that it is equal to hyperConfidence with \code{significance=TRUE}.}
+ Note that it is equal to hyper-confidence with \code{significance=TRUE}.}
 \item{"improvement"}{(see Bayardo et al. 2000)
   the  improvement of a rule is 
   the minimum difference between its confidence and the confidence of any

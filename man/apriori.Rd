@@ -31,6 +31,20 @@ apriori(data, parameter = NULL, appearance = NULL, control = NULL)
 \details{
   Calls the C implementation of the Apriori algorithm by Christian
   Borgelt for mining frequent itemsets, rules or hyperedges.
+
+  Note: Apriori only creates rules with one item in the RHS (Consequent)!
+
+  Note: The default value in \code{\linkS4class{APparameter}} for \code{minlen} is 1. This
+  means that rules with only one item (i.e., an empty antecedent/LHS) like
+  
+  \deqn{\{\} => \{beer\}}{{} => {beer}}
+  
+  will be created. 
+  These rules mean that no matter what other items are involved the 
+  item in the RHS will appear with the probability given by the rule's
+  confidence (which equals the support).
+  If you want to avoid these rules then use 
+  the argument \code{parameter=list(minlen=2)}.
 }
 \value{
   Returns an object of class \code{\linkS4class{rules}} or
