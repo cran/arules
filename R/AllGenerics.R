@@ -149,11 +149,11 @@ setGeneric("ruleInduction",
 #setGeneric("sort",
 #    function(x, decreasing = FALSE, ...) standardGeneric("sort"))
 
-setGeneric("setdiff",
-    function(x, y) standardGeneric("setdiff"))
+#setGeneric("setdiff",
+#    function(x, y) standardGeneric("setdiff"))
 
-setGeneric("setequal",
-    function(x, y) standardGeneric("setequal"))
+#setGeneric("setequal",
+#    function(x, y) standardGeneric("setequal"))
 
 setGeneric("support",
     function(x, transactions, ...) standardGeneric("support"))
@@ -164,8 +164,8 @@ setGeneric("size",
 setGeneric("subset",
     function(x, ...) standardGeneric("subset"))
 
-setGeneric("summary",
-    function(object, ...) standardGeneric("summary"))
+#setGeneric("summary",
+#   function(object, ...) standardGeneric("summary"))
 
 setGeneric("tidLists", function(x) standardGeneric("tidLists"))
 
@@ -175,11 +175,11 @@ setGeneric("transactionInfo",
 setGeneric("transactionInfo<-",
     function(x, value) standardGeneric("transactionInfo<-"))
 
-setGeneric("union",
-    function(x, y) standardGeneric("union"))
+#setGeneric("union",
+#    function(x, y) standardGeneric("union"))
 
-setGeneric("unique",
-    function(x, incomparables = FALSE, ...) standardGeneric("unique"))
+#setGeneric("unique",
+#    function(x, incomparables = FALSE, ...) standardGeneric("unique"))
 
 ##***************************************************************
 ## for clustering
@@ -191,7 +191,7 @@ setGeneric("dissimilarity",
     function(x, y = NULL, method = NULL, args = NULL, ...)
     standardGeneric("dissimilarity"))
 
-setGeneric("predict",
-    function(object, ...) standardGeneric("predict"))
+#setGeneric("predict",
+#    function(object, ...) standardGeneric("predict"))
 
 

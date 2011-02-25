@@ -22,7 +22,7 @@
   items) from data. 
 
   \code{recode} recodes an \code{itemMatrix} object so its coding is compatible
-  with another object.
+  with another object or the matrix follows a certain order of items.
 }
 \usage{
 decode(x, \ldots)

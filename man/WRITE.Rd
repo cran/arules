@@ -1,5 +1,8 @@
 \name{WRITE}
 \alias{WRITE}
+\alias{write}
+\alias{write.csv}
+\alias{write.table}
 \alias{WRITE,transactions-method}
 \alias{WRITE,associations-method}
 \title{
@@ -21,7 +24,9 @@ WRITE(x, file = "",\dots)
             for writing.  '""' indicates output to the console.}
  \item{format}{format to write transactions.}
  \item{sep}{the field separator string. Values within each row of x
-           are separated by this string.}
+           are separated by this string. Use \code{quote=TRUE} and 
+	   \code{sep=","} 
+	   for saving data as in csv format.}
  \item{quote}{a logical value. Quote fields?}
   \item{\dots}{further arguments passed on to \code{\link{write.table}}
   or \code{\link{write}}.}
