@@ -31,7 +31,8 @@
 }
 
 
-## this is defined in base
+## FIXME: this is defined in base and the only way to make it work 
+## is to redefine it here
 "%in%" <-  function(x, table) match(x, table, nomatch = 0) > 0
 
 

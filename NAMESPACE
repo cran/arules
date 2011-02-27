@@ -1,8 +1,11 @@
 useDynLib(arules)
 
-importFrom("stats", "predict")  ## otherwise predict in stats does not work
-importFrom("Matrix", "summary", "image") ## we need the generics 
-importFrom("Matrix", "t", "crossprod")
+importFrom("stats", "predict", "aggregate")  ## we want to add methods
+importFrom("Matrix", "summary", "image", "t") ## we need generics and methods 
+
+importClassesFrom("Matrix", "dgCMatrix", "ngCMatrix") ## we only need methods
+importMethodsFrom("Matrix", 
+    "crossprod", "rowSums", "colSums") ## we only need methods
 
 export(
         "read.transactions", 

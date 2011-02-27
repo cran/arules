@@ -22,8 +22,8 @@ setGeneric("WRITE",
 setGeneric("addComplement",
     function(x, labels, complementLabels=NULL) standardGeneric("addComplement"))
 
-setGeneric("aggregate",
-    function(x, ...) standardGeneric("aggregate"))
+#setGeneric("aggregate",
+#    function(x, ...) standardGeneric("aggregate"))
 
 setGeneric("coverage",
     function(x, transactions = NULL, reuse = TRUE) standardGeneric("coverage"))
@@ -33,8 +33,8 @@ setGeneric("crossTable", function(x, ...) standardGeneric("crossTable"))
 setGeneric("decode",
     function(x, ...) standardGeneric("decode"))
 
-setGeneric("duplicated",
-    function(x, incomparables = FALSE, ...) standardGeneric("duplicated"))
+#setGeneric("duplicated",
+#    function(x, incomparables = FALSE, ...) standardGeneric("duplicated"))
 
 setGeneric("encode",
     function(x, ...) standardGeneric("encode"))
@@ -51,8 +51,8 @@ setGeneric("info<-",
 setGeneric("inspect",
     function(x, ...) standardGeneric("inspect"))
 
-setGeneric("intersect",
-    function(x, y) standardGeneric("intersect"))
+#setGeneric("intersect",
+#    function(x, y) standardGeneric("intersect"))
 
 setGeneric("itemInfo",
     function(object) standardGeneric("itemInfo"))
@@ -84,8 +84,8 @@ setGeneric("itemFrequency",
 setGeneric("itemFrequencyPlot",
     function(x, ...) standardGeneric("itemFrequencyPlot"))
 
-setGeneric("is.element",
-    function(el, set) standardGeneric("is.element"))
+#setGeneric("is.element",
+#    function(el, set) standardGeneric("is.element"))
 
 setGeneric("is.superset",
     function(x, y = NULL, proper = FALSE) standardGeneric("is.superset"))
@@ -93,8 +93,8 @@ setGeneric("is.superset",
 setGeneric("is.subset",
     function(x, y = NULL, proper = FALSE) standardGeneric("is.subset"))
 
-setGeneric("labels",
-    function(object, ...) standardGeneric("labels"))
+#setGeneric("labels",
+#    function(object, ...) standardGeneric("labels"))
 
 setGeneric("lhs",
     function(x) standardGeneric("lhs"))
@@ -106,13 +106,13 @@ setGeneric("interestMeasure",
     function(x,  method, transactions = NULL, reuse = TRUE, ...) 
     standardGeneric("interestMeasure"))
 
-setGeneric("match",
-    function(x,  table, nomatch = NA_integer_, incomparables = NULL) 
-    standardGeneric("match"))
+#setGeneric("match",
+#    function(x,  table, nomatch = NA_integer_, incomparables = NULL) 
+#    standardGeneric("match"))
 
-setGeneric("merge",
-    function(x,  y, ...) 
-    standardGeneric("merge"))
+#setGeneric("merge",
+#    function(x,  y, ...) 
+#    standardGeneric("merge"))
 
 setGeneric("nitems",
     function(x, ...) standardGeneric("nitems"))
@@ -161,8 +161,8 @@ setGeneric("support",
 setGeneric("size",
     function(x, ...) standardGeneric("size"))
 
-setGeneric("subset",
-    function(x, ...) standardGeneric("subset"))
+#setGeneric("subset",
+#    function(x, ...) standardGeneric("subset"))
 
 #setGeneric("summary",
 #   function(object, ...) standardGeneric("summary"))
