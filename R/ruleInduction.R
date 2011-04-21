@@ -107,7 +107,7 @@ setMethod("ruleInduction",  signature(x = "itemsets"),
         info <- x@info
         if (is.null(info$data))
             info <- c(x = match.call()$x, info)
-        ## aprior
+        ## apriori
         if (is.null(info$confidence))
             info <- c(info, confidence = confidence)
         else

@@ -19,6 +19,11 @@ is.superset(is, is, proper = TRUE)
 
 is.superset(is[5], is)
 
+### sparse (should all be true)
+all(as.matrix(is.superset(is, is, sparse=TRUE)) == is.superset(is, is))
+all(as.matrix(is.superset(is, sparse=TRUE)) == is.superset(is))
+all(as.matrix(is.superset(is[5], is, sparse=TRUE)) == is.superset(is[5], is))
+all(as.matrix(is.superset(is, is, proper=TRUE, sparse=TRUE)) == is.superset(is, is, proper=TRUE))
 
 ### find subsets in is
 is.subset(is, is)

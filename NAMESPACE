@@ -12,7 +12,8 @@ export(
         "random.transactions", 
         "random.patterns",
         "apriori", 
-        "eclat"
+        "eclat",
+	"categorize"
       )
 
 exportClasses(
@@ -84,6 +85,7 @@ exportMethods(
         "subset", 
         "summary", 
         "support", 
+        "supportingTransactions", 
         "t", 
         "tidLists", 
         "transactionInfo", "transactionInfo<-",

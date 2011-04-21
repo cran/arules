@@ -42,8 +42,10 @@
     if (!length(from)) return(new(to)) 
     s <- slotNames(to)
     p <- pmatch(names(from), s)
-    if(any(is.na(p))) stop(paste("\nInvalid slot name(s) for class",
-            to, ":", paste(names(from)[is.na(p)], collapse=" ")))
+    #if(any(is.na(p))) stop(paste("\nInvalid slot name(s) for class",
+    #        to, ":", paste(names(from)[is.na(p)], collapse=" ")))
+    if(any(is.na(p))) stop(paste("\nInvalid parameter:",
+            paste(names(from)[is.na(p)], collapse=" ")), call.=FALSE)
     names(from) <- s[p]
     do.call("new", c(from, Class = to))
 }

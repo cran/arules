@@ -1,8 +1,8 @@
 
-R version 2.14.0 (2011-10-31)
-Copyright (C) 2011 The R Foundation for Statistical Computing
+R version 2.15.0 (2012-03-30)
+Copyright (C) 2012 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
-Platform: i686-pc-linux-gnu (32-bit)
+Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -21,13 +21,6 @@ Type 'q()' to quit R.
 > library("arules")
 Loading required package: Matrix
 Loading required package: lattice
-
-Attaching package: ‘Matrix’
-
-The following object(s) are masked from ‘package:base’:
-
-    det
-
 
 Attaching package: ‘arules’
 
@@ -85,7 +78,7 @@ mining info:
   lhs    rhs   support confidence lift
 1 {a,                                 
    b} => {d} 0.2857143        0.5 1.75
-2 {d} => {b} 0.2857143        1.0 1.40
+2 {b} => {d} 0.2857143        0.4 1.40
 > 
 > ### test appearance
 > r <- apriori(t, parameter=list(supp=0.25, conf=0),

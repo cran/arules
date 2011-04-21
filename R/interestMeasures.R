@@ -28,7 +28,8 @@
 setMethod("interestMeasure",  signature(x = "itemsets"),
     function(x, method, transactions = NULL, reuse = TRUE, ...) {
 
-        builtin_methods <- c("support", "allConfidence", "crossSupportRatio")
+        builtin_methods <- c("support", "allConfidence", "crossSupportRatio", 
+		"lift")
         
         ## check and expand method
         if(any(is.na(ind <- pmatch(tolower(method),
@@ -93,6 +94,10 @@ setMethod("interestMeasure",  signature(x = "itemsets"),
     measure <-  
     sapply(itemset_list, function(i) min(itemSupport[i])) /
     sapply(itemset_list, function(i) max(itemSupport[i]))
+
+    if(method == "lift")
+    measure <- interestMeasure(x, "support", transactions, reuse) /
+    sapply(itemset_list, function(i) prod(itemSupport[i]))
 
     return(measure)
 }

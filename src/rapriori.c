@@ -752,168 +752,169 @@ void sort_ngCMatrix(SEXP x) {
 
 SEXP returnObject(RULESET *set, SEXP dim, ARparameter *param, SEXP itemInfo)
 {
-	int i, len, k;
-	SEXP ans, class, tp, qual, q, rownames, names, items, lhs, rhs, trans, tidLists;
-	
-	if (param->target <= TT_CLSET)	{
-		ans = PROTECT(NEW_OBJECT(MAKE_CLASS("itemsets")));
-		len = 1; /* number of quality measures */
-	}
-	else if (param->target == TT_RULE) {
-		ans = PROTECT(NEW_OBJECT(MAKE_CLASS("rules")));
-		len = 3;
-	}
-	else {
-		/* hyperedges */
-	        ans = PROTECT(NEW_OBJECT(MAKE_CLASS("itemsets")));
-		len = 2;
-	}
-	
-	
-	if (param->aval) len++;
-	if (param->ext) len++;
-	
-	/* set items/lhs */
+    int i, len, k;
+    SEXP ans, class, tp, qual, q, rownames, names, items, lhs, rhs, trans, tidLists;
+
+    if (param->target <= TT_CLSET)	{
+	ans = PROTECT(NEW_OBJECT(MAKE_CLASS("itemsets")));
+	len = 1; /* number of quality measures */
+    }
+    else if (param->target == TT_RULE) {
+	ans = PROTECT(NEW_OBJECT(MAKE_CLASS("rules")));
+	len = 3;
+    }
+    else {
+	/* hyperedges */
+	ans = PROTECT(NEW_OBJECT(MAKE_CLASS("itemsets")));
+	len = 2;
+    }
+
+
+    if (param->aval) len++;
+    if (param->ext) len++;
+
+    /* set items/lhs */
+    items = PROTECT(NEW_OBJECT(MAKE_CLASS("ngCMatrix")));
+    tp = PROTECT(allocVector(INTSXP, set->ttotal));
+    for (i = 0; i < set->ttotal; i++) 
+	INTEGER(tp)[i] = atoi(set->body[i]);
+    SET_SLOT(items, install("i"), tp);
+    UNPROTECT(1);
+
+    tp = PROTECT(allocVector(INTSXP, set->rnb+1));
+    INTEGER(tp)[0] = 0;						     
+    for (i = 0; i < set->rnb; i++) INTEGER(tp)[i+1] = set->tnb[i];
+    SET_SLOT(items, install("p"), tp);
+    UNPROTECT(1);
+
+    tp = PROTECT(allocVector(INTSXP, 2));
+    INTEGER(tp)[0] = INTEGER(dim)[0];
+    INTEGER(tp)[1] = set->rnb;
+    SET_SLOT(items, install("Dim"), tp);
+    UNPROTECT(1);
+
+    sort_ngCMatrix(items);
+
+    lhs = PROTECT(NEW_OBJECT(MAKE_CLASS("itemMatrix")));
+    SET_SLOT(lhs , install("data"), items);
+    SET_SLOT(lhs , install("itemInfo"), itemInfo);
+
+    if (param->target == TT_RULE) 
+	SET_SLOT(ans, install("lhs"), lhs);
+    else	
+	SET_SLOT(ans, install("items"), lhs);
+    UNPROTECT(1);
+
+    /* set rhs for rules */	
+    if (param->target == TT_RULE) {
 	items = PROTECT(NEW_OBJECT(MAKE_CLASS("ngCMatrix")));
-	tp = PROTECT(allocVector(INTSXP, set->ttotal));
-	for (i = 0; i < set->ttotal; i++) 
-	  INTEGER(tp)[i] = atoi(set->body[i]);
+
+	tp = PROTECT(allocVector(INTSXP, set->rnb));
+	for (i = 0; i < set->rnb; i++) 
+	    INTEGER(tp)[i] = atoi(set->head[i]);
 	SET_SLOT(items, install("i"), tp);
 	UNPROTECT(1);
-	
+
 	tp = PROTECT(allocVector(INTSXP, set->rnb+1));
-	INTEGER(tp)[0] = 0;						     
-	for (i = 0; i < set->rnb; i++) INTEGER(tp)[i+1] = set->tnb[i];
- 	SET_SLOT(items, install("p"), tp);
+	for (i = 0; i < set->rnb+1; i++) INTEGER(tp)[i] = i;
+	SET_SLOT(items, install("p"),  tp);
 	UNPROTECT(1);
-	
+
 	tp = PROTECT(allocVector(INTSXP, 2));
 	INTEGER(tp)[0] = INTEGER(dim)[0];
 	INTEGER(tp)[1] = set->rnb;
 	SET_SLOT(items, install("Dim"), tp);
-	UNPROTECT(1);
+	UNPROTECT(1); 
 
 	sort_ngCMatrix(items);
 
-	lhs = PROTECT(NEW_OBJECT(MAKE_CLASS("itemMatrix")));
-        SET_SLOT(lhs , install("data"), items);
-        SET_SLOT(lhs , install("itemInfo"), itemInfo);
+	rhs =  PROTECT(NEW_OBJECT(MAKE_CLASS("itemMatrix")));
+	SET_SLOT(rhs, install("data"), items);
+	SET_SLOT(rhs, install("itemInfo"), itemInfo);
+	SET_SLOT(ans, install("rhs"), rhs);
+	UNPROTECT(2);
+    }
 
-	if (param->target == TT_RULE) 
-	  SET_SLOT(ans, install("lhs"), lhs);
-	else	
-	  SET_SLOT(ans, install("items"), lhs);
-        UNPROTECT(1);
-	
-	/* set rhs for rules */	
-	if (param->target == TT_RULE) {
-	  items = PROTECT(NEW_OBJECT(MAKE_CLASS("ngCMatrix")));
-	  
-	  tp = PROTECT(allocVector(INTSXP, set->rnb));
-	  for (i = 0; i < set->rnb; i++) 
-	    INTEGER(tp)[i] = atoi(set->head[i]);
-	  SET_SLOT(items, install("i"), tp);
-	  UNPROTECT(1);
-	  
-	  tp = PROTECT(allocVector(INTSXP, set->rnb+1));
-	  for (i = 0; i < set->rnb+1; i++) INTEGER(tp)[i] = i;
-	  SET_SLOT(items, install("p"),  tp);
-	  UNPROTECT(1);
-	  
-	  tp = PROTECT(allocVector(INTSXP, 2));
-	  INTEGER(tp)[0] = INTEGER(dim)[0];
-	  INTEGER(tp)[1] = set->rnb;
-	  SET_SLOT(items, install("Dim"), tp);
-	  UNPROTECT(1); 
-	 
-	  sort_ngCMatrix(items);
+    /* set quality measures */
+    qual = PROTECT(allocVector(VECSXP, len));
+    names = PROTECT(allocVector(STRSXP, len));
 
-	  rhs =  PROTECT(NEW_OBJECT(MAKE_CLASS("itemMatrix")));
-	  SET_SLOT(rhs, install("data"), items);
-	  SET_SLOT(rhs, install("itemInfo"), itemInfo);
-	  SET_SLOT(ans, install("rhs"), rhs);
-	  UNPROTECT(2);
-	}
-	
-	/* set quality measures */
-	qual = PROTECT(allocVector(VECSXP, len));
-	names = PROTECT(allocVector(STRSXP, len));
+    k=0;
+    SET_VECTOR_ELT(qual, k, q = allocVector(REALSXP, set->rnb));
+    for (i = 0; i < set->rnb; i++) REAL(q)[i] = set->supp[i];
+    SET_STRING_ELT(names, k++, mkChar("support"));
 
-	k=0;
+    if (param->target > TT_CLSET) {
 	SET_VECTOR_ELT(qual, k, q = allocVector(REALSXP, set->rnb));
-	for (i = 0; i < set->rnb; i++) REAL(q)[i] = set->supp[i];
-	SET_STRING_ELT(names, k++, mkChar("support"));
+	for (i = 0; i < set->rnb; i++) REAL(q)[i] = set->conf[i];
+	SET_STRING_ELT(names, k++, mkChar("confidence"));
+    }
 
-	if (param->target > TT_CLSET) {
-	  SET_VECTOR_ELT(qual, k, q = allocVector(REALSXP, set->rnb));
-	  for (i = 0; i < set->rnb; i++) REAL(q)[i] = set->conf[i];
-	  SET_STRING_ELT(names, k++, mkChar("confidence"));
-	}
-
-	if (param->aval) {
-	  SET_VECTOR_ELT(qual, k, q = allocVector(REALSXP, set->rnb));
-	  for (i = 0; i < set->rnb; i++) REAL(q)[i] = set->aval[i];
-	  SET_STRING_ELT(names, k++, mkChar(aremtypes[param->arem]));
-	}
-	if (param->ext) {
-	  SET_VECTOR_ELT(qual, k, q = allocVector(REALSXP, set->rnb));
-	  for (i = 0; i < set->rnb; i++) REAL(q)[i] = set->ext[i];
-	  if (param->target == TT_RULE) 
+    if (param->aval) {
+	SET_VECTOR_ELT(qual, k, q = allocVector(REALSXP, set->rnb));
+	for (i = 0; i < set->rnb; i++) REAL(q)[i] = set->aval[i];
+	SET_STRING_ELT(names, k++, mkChar(aremtypes[param->arem]));
+    }
+    if (param->ext) {
+	SET_VECTOR_ELT(qual, k, q = allocVector(REALSXP, set->rnb));
+	for (i = 0; i < set->rnb; i++) REAL(q)[i] = set->ext[i];
+	if (param->target == TT_RULE) 
 	    SET_STRING_ELT(names, k++, mkChar("lhs.support"));
-	  else SET_STRING_ELT(names, k++, mkChar("transIdenticalToItemsets"));
-	}
-	
-	if (param->target == TT_RULE) {
-	  SET_VECTOR_ELT(qual, k, q = allocVector(REALSXP, set->rnb));
-	  for (i = 0; i < set->rnb; i++) REAL(q)[i] = set->lift[i];
-	  SET_STRING_ELT(names, k++, mkChar("lift"));
-	}	
+	else SET_STRING_ELT(names, k++, mkChar("transIdenticalToItemsets"));
+    }
 
-	rownames = PROTECT(allocVector(INTSXP, set->rnb));
-	for (i = 0; i < set->rnb; i++) INTEGER(rownames)[i] = i+1;
-	setAttrib(qual, install("row.names"), rownames);
-	UNPROTECT(1);
- 	setAttrib(qual, install("names"), names);
-	UNPROTECT(1);
- 	PROTECT(class = allocVector(STRSXP, 1)); 
- 	SET_STRING_ELT(class, 0, mkChar("data.frame")); 
- 	classgets(qual, class); 
-  	SET_SLOT(ans, install("quality"), qual);
- 	UNPROTECT(3); 
+    if (param->target == TT_RULE) {
+	SET_VECTOR_ELT(qual, k, q = allocVector(REALSXP, set->rnb));
+	for (i = 0; i < set->rnb; i++) REAL(q)[i] = set->lift[i];
+	SET_STRING_ELT(names, k++, mkChar("lift"));
+    }	
 
-	
-   	/* set transaction ID list (possible with eclat) */	
-	if (param->trans) {
-	  trans = PROTECT(NEW_OBJECT(MAKE_CLASS("ngCMatrix")));
-	  
-      tp = PROTECT(allocVector(INTSXP, set->trtotal));
-	  for (i = 0; i < set->trtotal; i++) INTEGER(tp)[i] = set->trans[i];
-	  SET_SLOT(trans, install("i"), tp); 
-	  UNPROTECT(1);
-	  
-      tp = PROTECT(allocVector(INTSXP, set->rnb+1));
-	  for (i = 0; i < set->rnb+1; i++) INTEGER(tp)[i] = set->trnb[i];
-	  SET_SLOT(trans, install("p"),  tp);
-	  UNPROTECT(1);
-	  
-      tp = PROTECT(allocVector(INTSXP, 2));
-	  INTEGER(tp)[0] = set->tacnt;
-	  INTEGER(tp)[1] = set->rnb;
-	  SET_SLOT(trans, install("Dim"), duplicate(tp));
-	  UNPROTECT(1);
-	 
-	  sort_ngCMatrix(trans);
+    rownames = PROTECT(allocVector(INTSXP, set->rnb));
+    for (i = 0; i < set->rnb; i++) INTEGER(rownames)[i] = i+1;
+    setAttrib(qual, install("row.names"), rownames);
+    UNPROTECT(1);
+    setAttrib(qual, install("names"), names);
+    UNPROTECT(1);
+    PROTECT(class = allocVector(STRSXP, 1)); 
+    SET_STRING_ELT(class, 0, mkChar("data.frame")); 
+    classgets(qual, class); 
+    SET_SLOT(ans, install("quality"), qual);
+    UNPROTECT(3); 
 
-	  tidLists = PROTECT(NEW_OBJECT(MAKE_CLASS("tidLists")));
-	  SET_SLOT(tidLists, install("data"), trans);
-	  UNPROTECT(1);
-	  
-	  SET_SLOT(ans, install("tidLists"), tidLists);
-	  UNPROTECT(1);
-	}
-	
+
+    /* set transaction ID list (possible with eclat) */	
+    if (param->trans) {
+	trans = PROTECT(NEW_OBJECT(MAKE_CLASS("ngCMatrix")));
+
+	tp = PROTECT(allocVector(INTSXP, set->trtotal));
+	for (i = 0; i < set->trtotal; i++) INTEGER(tp)[i] = set->trans[i];
+	SET_SLOT(trans, install("i"), tp); 
 	UNPROTECT(1);
-	return ans;
+
+	tp = PROTECT(allocVector(INTSXP, set->rnb+1));
+	INTEGER(tp)[0] = 0;
+	for (i = 0; i < set->rnb; i++) INTEGER(tp)[i+1] = set->trnb[i];
+	SET_SLOT(trans, install("p"),  tp);
+	UNPROTECT(1);
+
+	tp = PROTECT(allocVector(INTSXP, 2));
+	INTEGER(tp)[0] = set->tacnt;
+	INTEGER(tp)[1] = set->rnb;
+	SET_SLOT(trans, install("Dim"), duplicate(tp));
+	UNPROTECT(1);
+
+	sort_ngCMatrix(trans);
+
+	tidLists = PROTECT(NEW_OBJECT(MAKE_CLASS("tidLists")));
+	SET_SLOT(tidLists, install("data"), trans);
+	UNPROTECT(1);
+
+	SET_SLOT(ans, install("tidLists"), tidLists);
+	UNPROTECT(1);
+    }
+
+    UNPROTECT(1);
+    return ans;
 }
 
 SEXP rapriori(SEXP x, SEXP y, SEXP dim, SEXP parms, SEXP control, SEXP app, SEXP itemInfo)

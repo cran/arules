@@ -122,7 +122,7 @@ data <- list(
   c("c","e"),
   c("a","b","d","e")
   )
-t <- as(data, "transactions")
+data <- as(data, "transactions")
 
 ## Mine itemsets with tidLists.
 f <- eclat(data, parameter = list(support = 0, tidLists = TRUE))
