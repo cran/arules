@@ -46,7 +46,8 @@ setMethod("is.subset", signature(x = "itemMatrix"),
 	if(sparse) return(.is.subset_sparse(x, y, proper))
 	
 	if (is.null(y)) 
-            m <- .Call("R_crosstab_ngCMatrix", x@data, NULL, FALSE)
+            m <- .Call("R_crosstab_ngCMatrix", x@data, NULL, FALSE, 
+		PACKAGE="arules")
         else {
             ## conform
             k <- match(itemLabels(y), itemLabels(x))
@@ -56,11 +57,13 @@ setMethod("is.subset", signature(x = "itemMatrix"),
                 x@data@Dim[1] <- x@data@Dim[1] + length(n)
             }
             if (any(k != seq_len(length(k))))
-                y@data <- .Call("R_recode_ngCMatrix", y@data, k)
+                y@data <- .Call("R_recode_ngCMatrix", y@data, k,
+		    PACKAGE="aruels")
             if (y@data@Dim[1] <  x@data@Dim[1])
                 y@data@Dim[1] <- x@data@Dim[1]
 
-            m <- .Call("R_crosstab_ngCMatrix", x@data, y@data, FALSE)
+            m <- .Call("R_crosstab_ngCMatrix", x@data, y@data, FALSE,
+		    PACKAGE="arules")
         }
         m <- m == size(x)
 

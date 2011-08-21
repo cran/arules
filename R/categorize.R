@@ -30,6 +30,10 @@ categorize <- function(x, breaks=4, quantile=TRUE, labels=NULL, ...) {
 	### else breaks is already values
     }
 	
-    cut(x, breaks, include.lowest=TRUE, labels, ...)
+    
+    x <- cut(x, breaks, include.lowest=TRUE, ...)
+    
+    if(!is.null(labels)) levels(x) <- labels
+    x
 }
 

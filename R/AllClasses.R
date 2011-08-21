@@ -27,7 +27,7 @@
     ## require("Matrix", character.only = TRUE, quietly = TRUE)
     ##cat("** fixing ngCMatrix validation\n")
     ##setValidity("ngCMatrix",
-    ##    function(object) .Call("R_valid_ngCMatrix", object),
+    ##    function(object) .Call("R_valid_ngCMatrix", object, PACKAGE="arules"),
     ##       where = .GlobalEnv)
 #}
 

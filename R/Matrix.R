@@ -24,7 +24,7 @@
 
 ## t in Matrix is now faster
 ##setMethod("t", signature(x = "ngCMatrix"),
-##    function(x) .Call("R_transpose_ngCMatrix", x))
+##    function(x) .Call("R_transpose_ngCMatrix", x, PACKAGE="arules"))
 
 ## overloading of [ for ngCMatrix cannot be accomplished
 ## easily as there are too many signatures to overload.
