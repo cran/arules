@@ -246,6 +246,7 @@ static void _report_R (int *ids, int cnt, int supp, int *tal, void *data)
 			  ruleset->trans = vec1;
 		  }
 		  for (i = 0; i < supp; i++) {
+			  Rprintf(" %d", tal[i]); 
 			  /*Rprintf(" %d", tal[i]); */
 			  ruleset->trans[h] = tal[i];
 			  h++;

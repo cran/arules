@@ -68,8 +68,14 @@
       items in the list are used as item labels and the item IDs and the 
       incidence matrix is produced automatically.
     }
-    \item{coerce}{\code{signature(from = "transactions", to = "matrix")}}
-    \item{coerce}{\code{signature(from = "transactions", to = "list")}}
+    \item{coerce}{\code{signature(from = "transactions", to = "matrix")};
+      coerces the transactions data set into a binary incidence matrix.
+    }
+    \item{coerce}{\code{signature(from = "transactions", to = "list")};
+      coerces the transactions data set into a list of transactions. 
+      Each transaction is a vector of character strings (names of the 
+      contained items).
+    }
     \item{coerce}{\code{signature(from = "data.frame", to = "transactions")}; 
       recodes the data frame containing only categorical variables (all
       have to be factors) into a binary transaction data set.  The needed
