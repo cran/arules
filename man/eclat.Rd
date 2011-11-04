@@ -25,6 +25,11 @@ eclat(data, parameter = NULL, control = NULL)
 \details{
   Calls the C implementation of the Eclat algorithm by Christian 
   Borgelt for mining frequent itemsets. 
+
+  Note: Since storing transaction ID lists is very memory intensive, 
+  creating transaction ID lists only works for minimum
+  support values which create a small number of itemsets. If memory allocation
+  fails the code currently runs into a segmentation fault.
 }
 \value{
   Returns an object of class \code{\linkS4class{itemsets}}.

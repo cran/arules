@@ -1,0 +1,5 @@
+Version 1.0-7
+
+* minor fixes (removed factor in dimnames for itemMatrix, warning in WRITE)
+* read.transactions now accepts column names to specify user and item 
+    columns (by F. Leisch)

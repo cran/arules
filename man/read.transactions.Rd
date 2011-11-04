@@ -7,7 +7,7 @@
 }
 \usage{
 read.transactions(file, format = c("basket", "single"), sep = NULL,
-                  cols = NULL, rm.duplicates = FALSE)
+                  cols = NULL, rm.duplicates = FALSE, encoding = "unknown")
 }
 \arguments{
   \item{file}{the file name.}
@@ -19,13 +19,17 @@ read.transactions(file, format = c("basket", "single"), sep = NULL,
     can be a regular expression; otherwise, a single character must be
     given.  The default corresponds to white space separators.}
 \item{cols}{For the \sQuote{single} format, \code{cols} is a 
-    numeric vector of length two giving the numbers of the
-    columns (fields) with the transaction and item ids, respectively.
+    numeric or character vector of length two giving the numbers or
+    names of the columns (fields) with the transaction and item ids,
+    respectively. If character, the first line of \code{file} is assumed
+    to be a header with column names.
     For the \sQuote{basket} format, \code{cols} can be a numeric scalar
     giving the number of the column (field) with the transaction ids.
-    If \code{cols = NULL}}, the data do not contain transaction ids.
+    If \code{cols = NULL}, the data do not contain transaction ids.}
 \item{rm.duplicates}{a logical value specifying if duplicate items should
     be removed from the transactions.}
+\item{encoding}{character string indicating the encoding which is passed to
+\code{readlines} (see \code{Encoding}).}
 }
 \details{
   For \sQuote{basket} format, each line in the transaction data file

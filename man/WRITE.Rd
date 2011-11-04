@@ -29,7 +29,8 @@ WRITE(x, file = "",\dots)
 	   for saving data as in csv format.}
  \item{quote}{a logical value. Quote fields?}
   \item{\dots}{further arguments passed on to \code{\link{write.table}}
-  or \code{\link{write}}.}
+  or \code{\link{write}}. Use \code{fileEncoding} to set the encoding used for
+  writing the file.}
 }
 \details{
   For associations (rules and itemsets) \code{WRITE} first uses coercion 

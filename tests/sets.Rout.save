@@ -1,6 +1,6 @@
 
-R version 2.12.1 (2010-12-16)
-Copyright (C) 2010 The R Foundation for Statistical Computing
+R version 2.14.0 (2011-10-31)
+Copyright (C) 2011 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 Platform: i686-pc-linux-gnu (32-bit)
 
@@ -22,20 +22,16 @@ Type 'q()' to quit R.
 Loading required package: Matrix
 Loading required package: lattice
 
-Attaching package: 'Matrix'
+Attaching package: ‘Matrix’
 
-The following object(s) are masked from 'package:base':
+The following object(s) are masked from ‘package:base’:
 
     det
 
 
-Attaching package: 'arules'
+Attaching package: ‘arules’
 
-The following object(s) are masked from 'package:stats':
-
-    aggregate
-
-The following object(s) are masked from 'package:base':
+The following object(s) are masked from ‘package:base’:
 
     %in%
 
