@@ -35,6 +35,9 @@ frequent item.  Cross-support patterns have a ratio smaller than a set
 threshold. Normally many found patterns are cross-support patterns which
 contain frequent as well as rare items. Such patterns often tend to be
 spurious.}
+\item{"lift"}{ probability (support) of the itemset over the product of the 
+probabilities of all items in the itemset. This is a measure of 
+dependence similar to lift for rules.}
 \item{"support"}{calculate itemset support.}
 }
 

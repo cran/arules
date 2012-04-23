@@ -108,10 +108,10 @@ setGeneric("itemFrequencyPlot",
 #    function(el, set) standardGeneric("is.element"))
 
 setGeneric("is.superset",
-    function(x, y = NULL, proper = FALSE) standardGeneric("is.superset"))
+    function(x, y = NULL, proper = FALSE, sparse = FALSE, ...) standardGeneric("is.superset"))
 
 setGeneric("is.subset",
-    function(x, y = NULL, proper = FALSE) standardGeneric("is.subset"))
+    function(x, y = NULL, proper = FALSE, sparse = FALSE, ...) standardGeneric("is.subset"))
 
 #setGeneric("labels",
 #    function(object, ...) standardGeneric("labels"))
@@ -177,6 +177,10 @@ setGeneric("ruleInduction",
 
 setGeneric("support",
     function(x, transactions, ...) standardGeneric("support"))
+
+setGeneric("supportingTransactions",
+    function(x, transactions, ...) 
+    standardGeneric("supportingTransactions"))
 
 setGeneric("size",
     function(x, ...) standardGeneric("size"))

@@ -1259,7 +1259,8 @@ age, work class, education, etc.  In the original applications of the
 data, the attributes were used to predict the income level of
 individuals.  We added the attribute \code{income} with levels
 \code{small} and \code{large}, representing an income of
-$\le$~USD~50,000 and $>$~USD~50,000, respectively.  This data is
+$\le$~USD~50,000 and $>$~USD~50,000, respectively. 
+The raw data is
 included in \pkg{arules} as the data set \code{AdultUCI}.
 
 
@@ -1299,23 +1300,24 @@ at their median into the two categories \code{Low} and \code{High}.
 
 
 <<>>=
-AdultUCI[[ "age"]] <- ordered(cut(AdultUCI[[ "age"]], c(15,25,45,65,100)),
-    labels = c("Young", "Middle-aged", "Senior", "Old"))
+AdultUCI[["age"]] <- cut(AdultUCI[["age"]], c(15,25,45,65,100), 
+    labels = c("Young", "Middle-aged", "Senior", "Old"), ordered=TRUE)
 
-AdultUCI[[ "hours-per-week"]] <- ordered(cut(AdultUCI[[ "hours-per-week"]],
-      c(0,25,40,60,168)),
-    labels = c("Part-time", "Full-time", "Over-time", "Workaholic"))
+AdultUCI[["hours-per-week"]] <- cut(AdultUCI[["hours-per-week"]],
+    c(0,25,40,60,168), labels = c("Part-time", "Full-time", 
+    "Over-time", "Workaholic"), ordered=TRUE)
 			    
-AdultUCI[[ "capital-gain"]] <- ordered(cut(AdultUCI[[ "capital-gain"]],
-      c(-Inf,0,median(AdultUCI[[ "capital-gain"]][AdultUCI[[ "capital-gain"]]>0]),Inf)),
-    labels = c("None", "Low", "High"))
+AdultUCI[["capital-gain"]] <- cut(AdultUCI[["capital-gain"]], c(-Inf,0,
+    median(AdultUCI[["capital-gain"]][AdultUCI[["capital-gain"]]>0]),Inf),
+    labels = c("None", "Low", "High"), ordered=TRUE)
 
-AdultUCI[[ "capital-loss"]] <- ordered(cut(AdultUCI[[ "capital-loss"]],
-      c(-Inf,0,
-	median(AdultUCI[[ "capital-loss"]][AdultUCI[[ "capital-loss"]]>0]),Inf)),
-    labels = c("none", "low", "high"))
+AdultUCI[["capital-loss"]] <- cut(AdultUCI[["capital-loss"]], c(-Inf,0,
+    median(AdultUCI[[ "capital-loss"]][AdultUCI[[ "capital-loss"]]>0]),Inf),
+    labels = c("none", "low", "high"), ordered=TRUE)
 @
 
+Note that more support to transform continuous variables into a categorical 
+variable is provided by \func{categorize}.  
 Now, the data can be automatically recoded as
 a binary incidence matrix by coercing the data set to
 \class{transactions}.
@@ -1440,7 +1442,7 @@ comma separated value (CSV) format.
 WRITE(rulesIncomeSmall, file = "data.csv", sep = ",", col.names = NA)
 @
 
-Alternatively, with package~\pkg{pmml}~\cite{arules:Williams:2008} the rules
+Alternatively, with package~\pkg{pmml}~\citep{arules:Williams:2008} the rules
 can be saved in PMML (Predictive Modelling Markup Language), a standardized
 XML-based representation used my many data mining tools. Note that \pkg{pmml}
 requires the package~\pkg{XML} which might not be available for all operating

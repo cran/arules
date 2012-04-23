@@ -22,29 +22,30 @@
 ## arules specific set methods: is.superset, is.subset (only for itemMatrix)
 ##
 setMethod("is.superset", signature(x = "itemMatrix"),
-    function(x, y = NULL, proper = FALSE) {
-        if (is.null(y)) 
-            t(is.subset(x, proper = proper))
-        else 
-            t(is.subset(y, x, proper))
-    }
-)
+    function(x, y = NULL, proper = FALSE, sparse = FALSE) 
+	if (is.null(y)) t(is.subset(x, NULL, proper, sparse))
+	else t(is.subset(y, x, proper, sparse))
+	    )
 
 setMethod("is.superset", signature(x = "associations"),
-    function (x, y = NULL, proper = FALSE)
-        if (is.null(y))
-            is.superset(items(x), proper = proper)
-        else 
-            is.superset(items(x), items(y), proper)
+    function (x, y = NULL, proper = FALSE, sparse = FALSE)
+	if (is.null(y)) t(is.subset(x, NULL, proper, sparse))
+	else t(is.subset(y, x, proper, sparse))
 )
 
 ## this takes about 3 times the memory but is very fast!
 ## I suspect internally it always uses a lot of memory.
 setMethod("is.subset", signature(x = "itemMatrix"),
-    function(x, y = NULL, proper = FALSE) {
+    function(x, y = NULL, proper = FALSE, sparse = FALSE) {
         if (length(x) == 0 || (!is.null(y) && length(y) == 0))
             return(logical(0))
-        if (is.null(y)) 
+        
+	## y needs to be itemMatrix
+	if(!is.null(y) && !is(y, "itemMatrix")) y <- items(y)
+	
+	if(sparse) return(.is.subset_sparse(x, y, proper))
+	
+	if (is.null(y)) 
             m <- .Call("R_crosstab_ngCMatrix", x@data, NULL, FALSE)
         else {
             ## conform
@@ -75,11 +76,49 @@ setMethod("is.subset", signature(x = "itemMatrix"),
 )
 
 setMethod("is.subset", signature(x = "associations"),
-    function(x, y = NULL, proper = FALSE) 
-        if (is.null(y)) 
-            is.subset(items(x), proper = proper)
-        else 
-            is.subset(items(x), items(y), proper)
+    function(x, y = NULL, proper = FALSE, sparse = FALSE) 
+            is.subset(items(x), y, proper, sparse)
 )
+
+### use tidlist intersection 
+.is.subset_sparse <- function(x, y = NULL, proper=FALSE) { 
+
+    if(is.null(y)) y <- x
+
+    xitems <- LIST(x, decode = FALSE)
+    ylists <- LIST(as(y, "tidLists"), decode = FALSE)
+
+    ## select tid-lists for items and do intersection
+    contained <- lapply(xitems, FUN = function(i) {
+		if(length(i)==0) ssid <- 1:nrow(y)
+		else { 
+		    tidls <- unlist(ylists[i])
+		    if(is.null(tidls)) ssid <- integer(0)
+		    else ssid <- which(tabulate(tidls) == length(i))
+		    }
+
+		if(proper) ssid <- ssid[size(y)[ssid] > length(i)]
+		ssid
+	    })
+
+    .list2ngCMatrix(contained, nrow(y))
+}
+
+
+### convert a list into a ngCMatrix
+.list2ngCMatrix <- function(from, max=NULL) {
+    from <- lapply(from, sort)
+    p <- cumsum(sapply(from, length))
+
+    i <- as.integer(unlist(from, use.names = FALSE))
+
+    if(is.null(max)) max <- max(i)
+
+    t(new("ngCMatrix", p   = c(0L, p),
+		    i   = i - 1L,
+		    Dim = c(as.integer(max), length(from))))
+}
+
+
 
 ###

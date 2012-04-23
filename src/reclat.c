@@ -212,7 +212,7 @@ static void _report_R (int *ids, int cnt, int supp, int *tal, void *data)
   if (ruleset->rnb == 0) ruleset->tnb[0] = cnt; else ruleset->tnb[ruleset->rnb] = ruleset->tnb[ruleset->rnb-1] + cnt;
   ruleset->supp[ruleset->rnb] = (abs(supp)/(double)tacnt);
   if (param.ext) ruleset->ext[ruleset->rnb] = (int)abs(supp);
-  ruleset->rnb += 1;     
+  /* ruleset->rnb += 1;   */  
   if (flags & OF_LIST) {        /* if to list the transactions, */
 	  h = ruleset->trtotal;
 	  if (supp < 0) {             /* if bit vector representation */ 
@@ -254,6 +254,7 @@ static void _report_R (int *ids, int cnt, int supp, int *tal, void *data)
 	  }
 	  ruleset->trtotal = ruleset->trnb[ruleset->rnb] = h;
   }                             /* the transaction identifiers */
+  ruleset->rnb += 1;     
 /*  free(vec);free(vec1);free(vec2);*/
 }  /* _report_R() */
   
