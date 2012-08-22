@@ -87,7 +87,8 @@ setReplaceMethod("rhs", signature(x = "rules"),
 ## get the union of rhs and lhs
 setMethod("items", signature(x = "rules"),
     function(x) {
-        x@lhs@data <- .Call("R_or_ngCMatrix", x@lhs@data, x@rhs@data)
+        x@lhs@data <- .Call("R_or_ngCMatrix", x@lhs@data, x@rhs@data, 
+		PACKAGE="arules")
         x@lhs
     }
 )

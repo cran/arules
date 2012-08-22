@@ -33,7 +33,7 @@ setMethod("itemFrequency", signature(x = "itemMatrix"),
         ## we could also use rowSums
         ##supports <- tabulate(x@data@i + 1L, nbins = x@data@Dim[1])
         
-        supports <- .Call("R_rowSums_ngCMatrix", x@data)
+        supports <- .Call("R_rowSums_ngCMatrix", x@data, PACKAGE="arules")
         
         names(supports) <- itemLabels(x)
 

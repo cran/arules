@@ -45,7 +45,7 @@ setMethod("is.closed", signature(x = "itemsets"),
         size <- x@info$ntransactions
         if (!is.null(size)) 
             isclosed <- .Call("R_pnclosed", x@items@data, 
-                as.integer(support * size), FALSE)
+                as.integer(support * size), FALSE, PACKAGE="arules")
         else {
             cat("legacy approach can take a while ...\n")
             

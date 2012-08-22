@@ -10,12 +10,20 @@ This function converts a continuous variable into a categorical variable (factor
 \usage{
 categorize(x, breaks = 4, quantile = TRUE, labels = NULL, ...)
 }
-\arguments{ 
-  \item{x}{a numeric vector (continuous variable).}
-  \item{breaks}{ number of categories or breaks for categories (quantiles or absolute values).}
-  \item{quantile}{logical; use quantile (or absolute values) to determine the category boundaries.}
-  \item{labels}{character vector; names for categories.}
-  \item{\dots}{further arguments passed on to \code{cut()}.
+\arguments{
+  \item{x}{a numeric vector (continuous variable).
+}
+  \item{breaks}{ number of categories or breaks for categories (quantiles or absolute values).
+}
+  \item{quantile}{
+logical; use quantile (or absolute values) to determine the category boundaries. 
+}
+  \item{labels}{
+character vector; names for categories.
+}
+
+  \item{\dots}{
+further arguments passed on to \code{cut()}.
 }
 }
 %\details{
