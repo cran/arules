@@ -1,0 +1,123 @@
+
+R version 2.15.2 (2012-10-26) -- "Trick or Treat"
+Copyright (C) 2012 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library("arules")
+Loading required package: Matrix
+Loading required package: lattice
+
+Attaching package: ‘Matrix’
+
+The following object(s) are masked from ‘package:stats’:
+
+    toeplitz
+
+
+Attaching package: ‘arules’
+
+The following object(s) are masked from ‘package:base’:
+
+    %in%
+
+> 
+> set.seed(20070611)
+> 
+> ### Generate random data and coerce data to itemMatrix.
+> m <- matrix(as.integer(runif(50)>0.8), ncol=5)
+> dimnames(m) <- list(paste("trans", seq(nrow(m)), sep=""), 
++ 	paste("item", seq(ncol(m)), sep=""))
+> i <- as(m, "itemMatrix")
+> i
+itemMatrix in sparse format with
+ 10 rows (elements/transactions) and
+ 5 columns (items)
+> 
+> ### number of rows
+> length(i)
+[1] 10
+> 
+> ### subsetting
+> as(i[1:5], "matrix")
+       item1 item2 item3 item4 item5
+trans1     0     0     1     0     0
+trans2     0     0     1     0     1
+trans3     0     0     0     1     0
+trans4     0     0     0     0     1
+trans5     0     0     1     0     0
+> as(i[1:5,1:2], "matrix")
+       item1 item2
+trans1     0     0
+trans2     0     0
+trans3     0     0
+trans4     0     0
+trans5     0     0
+> as(i[-1,-1], "matrix")
+        item2 item3 item4 item5
+trans2      0     1     0     1
+trans3      0     0     1     0
+trans4      0     0     0     1
+trans5      0     1     0     0
+trans6      1     1     0     0
+trans7      0     0     0     0
+trans8      0     0     0     0
+trans9      0     0     1     0
+trans10     0     0     0     0
+> as(i[rep(c(T,F), nrow(m)/2), c(T,F,F,F,T)], "matrix")
+       item1 item5
+trans1     0     0
+trans3     0     0
+trans5     0     0
+trans7     1     0
+trans9     0     0
+> 
+> ### dimnames
+> dimnames(i)
+[[1]]
+ [1] "trans1"  "trans2"  "trans3"  "trans4"  "trans5"  "trans6"  "trans7" 
+ [8] "trans8"  "trans9"  "trans10"
+
+[[2]]
+[1] "item1" "item2" "item3" "item4" "item5"
+
+> dimnames(i[1:5,1:2])
+[[1]]
+[1] "trans1" "trans2" "trans3" "trans4" "trans5"
+
+[[2]]
+[1] "item1" "item2"
+
+> dimnames(i[c("trans1", "trans10"), c("item5", "item1")])
+[[1]]
+[1] "trans1"  "trans10"
+
+[[2]]
+[1] "item5" "item1"
+
+> dimnames(i[c("trans1", "trans2"), c("item5", "item4")])
+[[1]]
+[1] "trans1" "trans2"
+
+[[2]]
+[1] "item5" "item4"
+
+> 
+> if(!is(try(i[,c(1,1)], silent=TRUE), "try-error")) stop("Test for unique items failed!")
+> 
+> 
+> 

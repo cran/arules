@@ -33,5 +33,24 @@
 ## density 
 .density_Matrix <- function(x) length(x@i)/x@Dim[1]/x@Dim[2]
 
+## helper to convert names into an integer index
+.translate_index <- function(i, labels, n) {
+    
+    if(is.numeric(i) && all(i>0)) return(as.integer(i))
+    
+    if(is.logical(i)) return(which(i))
+    
+    if(!is.null(labels)) {
+	sel <- seq(length(labels))
+	names(sel) <- labels
+    }else sel <- seq(n)    
+    
+    sel <- sel[i]
+
+    if(any(is.na(sel))) stop("subscript out of bounds")
+    sel
+}
+
+
 
 ###

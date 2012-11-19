@@ -71,7 +71,7 @@ rules <- ruleInduction(closed, Adult, control = list(verbose = TRUE))
 summary(rules)
 
 ## inspect the resulting rules
-inspect(SORT(rules, by = "lift")[1:5])
+inspect(sort(rules, by = "lift")[1:5])
 
 ## use lattice of frequent itemsets
 ec  <- eclat(Adult, parameter = list(support = 0.4))

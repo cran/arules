@@ -29,24 +29,15 @@ all.equal(getMethod("t", "CsparseMatrix", where = "Matrix")(x),
 
 .Call("R_transpose_ngCMatrix", e)
 
-## column subset
-s <- c(1,1,3,4)
-.Call("R_colSubset_ngCMatrix", x, s)
-all.equal(x[,s], .Call("R_colSubset_ngCMatrix", x, s))
-
-s <- paste("T", s, sep = "")
+## column/row subset (index can only be integer now)
+s <- as.integer(c(1,1,3,4))
 .Call("R_colSubset_ngCMatrix", x, s)
 all.equal(x[,s], .Call("R_colSubset_ngCMatrix", x, s))
 
 #
 .Call("R_colSubset_ngCMatrix", e, integer())
 
-## row subset
-s <- c(1,1,3,4)
-.Call("R_rowSubset_ngCMatrix", x, s)
-all.equal(x[s,], .Call("R_rowSubset_ngCMatrix", x, s))
-
-s <- paste("I", s, sep = "")
+s <- as.integer(c(1,1,3,4))
 .Call("R_rowSubset_ngCMatrix", x, s)
 all.equal(x[s,], .Call("R_rowSubset_ngCMatrix", x, s))
 

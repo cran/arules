@@ -23,10 +23,10 @@ categorize <- function(x, breaks=4, quantile=TRUE, labels=NULL, ...) {
     if(!is.numeric(x)) stop("categorize needs numeric input")
     
     if(length(breaks)==1){
-	if(quantile) breaks <- quantile(x, seq(0,1, length.out=breaks+1))
-	else breaks <- seq(min(x), max(x), length.out=breaks+1)
+	if(quantile) breaks <- quantile(x, seq(0,1, length.out=breaks+1), na.rm=TRUE)
+	else breaks <- seq(min(x, na.rm=TRUE), max(x, na.rm=TRUE), length.out=breaks+1)
     }else{
-	if(quantile) breaks <- quantile(x, breaks)
+	if(quantile) breaks <- quantile(x, breaks, na.rm=TRUE)
 	### else breaks is already values
     }
 	

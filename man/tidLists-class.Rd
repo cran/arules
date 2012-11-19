@@ -13,6 +13,7 @@
 \alias{coerce,tidLists,itemMatrix-method}
 \alias{coerce,itemMatrix,tidLists-method}
 \alias{dim,tidLists-method}
+\alias{dimnames,tidLists-method}
 \alias{labels,tidLists-method}
 \alias{itemLabels,tidLists-method}
 \alias{itemInfo,tidLists-method}
@@ -127,13 +128,16 @@ data <- as(data, "transactions")
 ## Mine itemsets with tidLists.
 f <- eclat(data, parameter = list(support = 0, tidLists = TRUE))
 
+tl <- tidLists(f)
+
 ## Get dimensions of the tidLists.
-dim(tidLists(f))
+dim(tl)
+dimnames(tl)
 
 ## Coerce tidLists to list.
-as(tidLists(f), "list")
+as(tl, "list")
 
 ## Inspect visually. 
-image(tidLists(f))
+image(tl)
 }
 \keyword{classes}
