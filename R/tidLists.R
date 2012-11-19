@@ -30,6 +30,13 @@
 setMethod("dim", signature(x = "tidLists"),
     function(x) rev(dim(x@data)))
 
+setMethod("dimnames", signature(x = "tidLists"),
+	function(x){
+	    colLabels <- x@transactionInfo[["transactionID"]]
+	    if(!is.null(colLabels)) colLabels <- as.character(colLabels)
+	    list(itemLabels(x), colLabels)
+	})
+
 ## number of elements (rows)
 setMethod("length", signature(x = "tidLists"),
     function(x) dim(x)[1])
@@ -99,22 +106,25 @@ setMethod("t", signature(x = "tidLists"),
 
 setMethod("[", signature(x = "tidLists", i = "ANY", j = "ANY", drop = "ANY"),
     function(x, i, j, ..., drop) {
-        ## i and j are reversed
-        if (!missing(i)) {
-            if (is.character(i))
-                i <- itemLabels(x) %in% i
-            x@data <- .Call("R_colSubset_ngCMatrix", x@data, i, 
+        
+	## i and j are reversed internally!
+	if (!missing(i)) {
+	    i <- .translate_index(i, rownames(x), nrow(x)) 
+	    x@data <- .Call("R_colSubset_ngCMatrix", x@data, i, 
 		    PACKAGE="arules")
             if (length(x@itemInfo))
                 x@itemInfo <- x@itemInfo[i,, drop = FALSE]
         }
-        if (!missing(j)) {
-            x@data <- .Call("R_rowSubset_ngCMatrix", x@data, j, 
+        
+	if (!missing(j)) {
+	    j <- .translate_index(j, colnames(x), ncol(x))
+	    x@data <- .Call("R_rowSubset_ngCMatrix", x@data, j, 
 		    PACKAGE="arules")
             if (length(x@transactionInfo))
                 x@transactionInfo <- x@transactionInfo[j,, drop = FALSE]
         }
-        validObject(x, complete = TRUE)
+        
+	validObject(x, complete = TRUE)
         x
     }
 )
@@ -143,18 +153,14 @@ setMethod("LIST", signature(from = "tidLists"),
 setAs("tidLists", "matrix",
     function(from) {
         to <- as(t(from@data), "matrix")
-        dimnames(to) <- 
-            list(from@itemInfo[["labels"]], 
-                 from@transactionInfo[["transactionID"]])
+        dimnames(to) <- dimnames(from) 
         to
     }
 )
 
 setAs("tidLists", "ngCMatrix",
     function(from) {
-        dimnames(from@data) <- 
-            list(from@transactionInfo[["transactionID"]],
-                 from@itemInfo[["labels"]])
+        dimnames(from@data) <- dimnames(from)
         from@data
     }
 )
@@ -162,9 +168,7 @@ setAs("tidLists", "ngCMatrix",
 setAs("tidLists", "dgCMatrix",
     function(from) {
         to <- as(from@data, "dgCMatrix")
-        dimnames(to) <- 
-            list(from@transactionInfo[["transactionID"]], 
-                 from@itemInfo[["labels"]])
+        dimnames(to) <- dimnames(from) 
         to
     }
 )

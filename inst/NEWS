@@ -1,3 +1,7 @@
+Changes in version 1.0-11
+    * Fixed vignette.
+    * Internal changes for dimnames and subsetting
+
 Changes in version 1.0-9 and 1.0-10
     * Added PACKAGE argument to C calls.
     * Added C routine symbols to NAMESPACE for arulesSequence

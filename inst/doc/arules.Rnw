@@ -1,7 +1,7 @@
 %\documentclass[10pt,a4paper]{article}
 \documentclass[nojss]{jss}
 
-\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
 
 %\usepackage{a4wide}
 %\setlength{\parskip}{0.5ex plus0.1ex minus0.1ex}
@@ -99,9 +99,10 @@ set.seed <- 1234
 %
 %% ------------------------------------------------------------------
 %% ------------------------------------------------------------------
-\clearpage
-\tableofcontents
-\clearpage
+%% Does not work with JSS style
+%\clearpage
+%\tableofcontents
+%\clearpage
 %% ------------------------------------------------------------------
 %% ------------------------------------------------------------------
 
@@ -711,7 +712,7 @@ the following methods:
   involved in the association (e.g., the union of the items in the LHS
   and the RHS for each rule),
  \item sorting the set using the values of different quality measures
-  (\func{SORT}),
+  (\func{sort}),
  \item subset extraction (\code{[} and \func{subset}),
  \item set operations (\func{union}, \func{intersect} and
   \func{setequal}), and
@@ -753,7 +754,7 @@ that all elements have compatible dimensions.
 It is simple to add new quality measures to existing associations.
 Since the \code{quality} slot holds a \class{data.frame}, additional
 columns with new quality measures can be added. These new measures can
-then be used to sort or select associations using \func{SORT} or
+then be used to sort or select associations using \func{sort} or
 \func{subset}.  Adding a new type of associations to \pkg{arules} is
 straightforward as well. To do so, a developer has to create a new class
 extending the virtual \class{associations} class and implement the
@@ -1413,12 +1414,12 @@ rulesIncomeLarge <- subset(rules, subset = rhs %in% "income=large" & lift > 1.2)
 
 We now have a set with rules for persons with a small income and a set
 for persons with a large income.  For comparison, we inspect for both
-sets the three rules with the highest confidence (using \func{SORT}).
+sets the three rules with the highest confidence (using \func{sort}).
 
 %%{\samepage\small
 <<subset>>=
-inspect(head(SORT(rulesIncomeSmall, by = "confidence"), n = 3))
-inspect(head(SORT(rulesIncomeLarge, by = "confidence"), n = 3))
+inspect(head(sort(rulesIncomeSmall, by = "confidence"), n = 3))
+inspect(head(sort(rulesIncomeLarge, by = "confidence"), n = 3))
 @
 %%}
 
@@ -1531,7 +1532,7 @@ per definition an all-confidence of~1).
 
 <<>>=
 fsetsEducation <- subset(fsets, subset = items %pin% "education")
-inspect(SORT(fsetsEducation[size(fsetsEducation)>1], 
+inspect(sort(fsetsEducation[size(fsetsEducation)>1], 
 	by = "allConfidence")[1 : 3])
 @
 

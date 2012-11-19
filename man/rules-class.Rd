@@ -127,6 +127,6 @@ rules <- apriori(Adult, parameter = list(support = 0.4))
 rules.sub <- subset(rules, subset = rhs \%pin\% "sex" & lift > 1.3)
 
 ## Display rules.
-inspect(SORT(rules.sub)[1:3])
+inspect(sort(rules.sub)[1:3])
 }
 \keyword{classes}

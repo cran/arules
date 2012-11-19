@@ -79,15 +79,17 @@ setAs("itemMatrix", "matrix",
         ## FIXME why coerce logical to integer?
         mode(to) <- "integer"
         
-        ## due to a bug in Matrix the dimnames get lost
-        dimnames(to) <- 
-            list(from@itemsetInfo[["itemsetID"]], itemLabels(from))
+        dimnames(to) <- dimnames(from)
         to
     }
 )
 
 setMethod("dimnames", signature(x = "itemMatrix"),
-    function(x) list(as.character(x@itemsetInfo[["itemsetID"]]), itemLabels(x)))
+    function(x) {
+	rowLabels <- x@itemsetInfo[["itemsetID"]]
+	if(!is.null(rowLabels)) rowLabels <- as.character(rowLabels)
+	list(rowLabels, itemLabels(x))
+    })
 
 setReplaceMethod("dimnames", signature(x = "itemMatrix",
 		value = "list"), 
@@ -156,8 +158,7 @@ setAs("list", "itemMatrix",
 ## handling of dimnames is broken in Matrix.
 setAs("itemMatrix", "ngCMatrix",
     function(from) {
-        dimnames(from@data) <- 
-            list(from@itemInfo[["labels"]], from@itemsetInfo[["itemsetID"]])
+        dimnames(from@data) <- rev(dimnames(from)) 
         from@data
     }
 )
@@ -165,8 +166,7 @@ setAs("itemMatrix", "ngCMatrix",
 setAs("itemMatrix", "dgCMatrix",
     function(from) {
         to <- as(from@data, "dgCMatrix")
-        dimnames(to) <-
-            list(from@itemInfo[["labels"]], from@itemsetInfo[["itemsetID"]])
+        dimnames(to) <- rev(dimnames(from))
         to
     }
 )
@@ -219,27 +219,31 @@ setMethod("%pin%", signature(x = "itemMatrix", table = "character"),
 ## taking a column subset. for strict subsets it is more
 ## efficient to do the latter first.
 
+
 setMethod("[", signature(x = "itemMatrix", i = "ANY", j = "ANY", drop = "ANY"),
     function(x, i, j, ..., drop) {
-        if (!missing(i)) {
-            x@data <- .Call("R_colSubset_ngCMatrix", x@data, i, 
+
+	## i and j are reversed internally!
+	if (!missing(i)) {
+            i <- .translate_index(i, rownames(x), nrow(x))
+	    x@data <- .Call("R_colSubset_ngCMatrix", x@data, i, 
 		    PACKAGE="arules")
-            if (length(x@itemsetInfo))
+	    if (length(x@itemsetInfo))
                 x@itemsetInfo <- x@itemsetInfo[i,, drop = FALSE]
         }
-        if (!missing(j)) {
-            ## fixed thanks to a bug report by Seth Falcon (06/31/01)
-            if (is.character(j)) 
-                j <- itemLabels(x) %in% j
-            x@data <- .Call("R_rowSubset_ngCMatrix", x@data, j, 
+        
+	if (!missing(j)) {
+            j <- .translate_index(j, colnames(x), ncol(x))
+	    x@data <- .Call("R_rowSubset_ngCMatrix", x@data, j, 
 		    PACKAGE="arules")
             if (length(x@itemInfo))
                 x@itemInfo <- x@itemInfo[j,, drop = FALSE]
         }
-        validObject(x, complete = TRUE)
-        x
-    }
-)
+	
+	## makes sure that items are still unique
+	validObject(x, complete = TRUE)
+	x
+    })
 
 ### this is rbind
 ### FIXME: labels are not sorted

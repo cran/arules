@@ -1,5 +1,5 @@
 
-R version 2.15.0 (2012-03-30)
+R version 2.15.2 (2012-10-26) -- "Trick or Treat"
 Copyright (C) 2012 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 Platform: x86_64-pc-linux-gnu (64-bit)
@@ -18,10 +18,16 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
-> 
 > library(arules)
 Loading required package: Matrix
 Loading required package: lattice
+
+Attaching package: ‘Matrix’
+
+The following object(s) are masked from ‘package:stats’:
+
+    toeplitz
+
 
 Attaching package: ‘arules’
 
@@ -42,7 +48,4 @@ The following object(s) are masked from ‘package:base’:
 > i <- items(ec)
 > all.equal(i, c(i[1:100,], i[-(1:100),]))
 [1] TRUE
-> 
-> ###
-> 
 > 

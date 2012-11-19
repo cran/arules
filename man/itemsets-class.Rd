@@ -104,7 +104,7 @@ data("Adult")
 fsets <- eclat(Adult, parameter = list(supp = 0.5))
 
 ## Display the 5 itemsets with the highest support.
-fsets.top5 <- SORT(fsets)[1:5]
+fsets.top5 <- sort(fsets)[1:5]
 inspect(fsets.top5)
 
 ## Get the itemsets as a list

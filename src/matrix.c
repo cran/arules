@@ -202,6 +202,9 @@ SEXP R_colSums_ngCMatrix(SEXP x) {
 SEXP R_colSubset_ngCMatrix(SEXP x, SEXP s) {
     if (!inherits(x, "ngCMatrix") && !inherits(x, "sgCMatrix"))
 	error("'x' not of class 'ngCMatrix'");
+    
+    if (!isInteger(s)) error("'s' is not an integer vector");
+    
     int i, j, k, n;
     SEXP r, dx, px, ix, pr, ir;
     
@@ -213,9 +216,6 @@ SEXP R_colSubset_ngCMatrix(SEXP x, SEXP s) {
     //      this is safe as long as the object cannot be
     //      accessed concurrently.
     SET_ATTRIB(x, r);
-
-    PROTECT(s = arraySubscript(1, s, getAttrib(x, install("Dim")), getAttrib, (STRING_ELT), x));
-    
     SET_ATTRIB(x, CDR(r));
 
     px = getAttrib(x, install("p"));
@@ -260,7 +260,8 @@ SEXP R_colSubset_ngCMatrix(SEXP x, SEXP s) {
 	    SET_VECTOR_ELT(ir, 1, R_NilValue);
     }
     
-    UNPROTECT(2);
+
+    UNPROTECT(1);
 
     return r;
 }

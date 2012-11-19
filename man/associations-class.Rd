@@ -80,7 +80,7 @@
   \code{\link{rules-class}}
 }
 \seealso{
-  \code{\link{SORT}},
+  \code{\link{sort}},
   \code{\link{WRITE}},
   \code{\link{length}},
   \code{\link{is.subset}},
