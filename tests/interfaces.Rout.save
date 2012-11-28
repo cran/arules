@@ -33,7 +33,7 @@ Attaching package: ‘arules’
 
 The following object(s) are masked from ‘package:base’:
 
-    %in%
+    %in%, write
 
 > 
 > data <- list(

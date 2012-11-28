@@ -1,6 +1,6 @@
 #######################################################################
 # arules - Mining Association Rules and Frequent Itemsets
-# Copyrigth (C) 2011 Michael Hahsler, Christian Buchta, 
+# Copyright (C) 2011, 2012 Michael Hahsler, Christian Buchta, 
 #			Bettina Gruen and Kurt Hornik
 #
 # This program is free software; you can redistribute it and/or modify
@@ -91,8 +91,7 @@ setMethod("encode", signature(x = "list"),
         ## item labels must be character
         new("itemMatrix", 
             data     = i,  
-            itemInfo = data.frame(labels = as.character(itemLabels),
-                                  stringsAsFactors = FALSE))
+            itemInfo = data.frame(labels = I(as.character(itemLabels))))
     }
 )
 

@@ -1,6 +1,6 @@
 #######################################################################
 # arules - Mining Association Rules and Frequent Itemsets
-# Copyrigth (C) 2011 Michael Hahsler, Christian Buchta, 
+# Copyright (C) 2011, 2012 Michael Hahsler, Christian Buchta, 
 #			Bettina Gruen and Kurt Hornik
 #
 # This program is free software; you can redistribute it and/or modify
@@ -30,14 +30,19 @@ setGeneric("%pin%",
 setGeneric("%ain%",
     function(x, table) standardGeneric("%ain%"))
 
+## Depricated!
 setGeneric("SORT",
     function(x, ...) standardGeneric("SORT"))
 
 setGeneric("LIST",
     function(from, ...) standardGeneric("LIST"))
 
+## Depricated!
 setGeneric("WRITE",
     function(x, file = "", ...) standardGeneric("WRITE"))
+
+setGeneric("write",
+    function(x, file = "", ...) standardGeneric("write"))
 
 setGeneric("addComplement",
     function(x, labels, complementLabels=NULL) standardGeneric("addComplement"))
@@ -174,6 +179,7 @@ setGeneric("ruleInduction",
 
 #setGeneric("setequal",
 #    function(x, y) standardGeneric("setequal"))
+
 
 setGeneric("support",
     function(x, transactions, ...) standardGeneric("support"))

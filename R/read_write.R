@@ -1,6 +1,6 @@
 #######################################################################
 # arules - Mining Association Rules and Frequent Itemsets
-# Copyrigth (C) 2011 Michael Hahsler, Christian Buchta, 
+# Copyright (C) 2011, 2012 Michael Hahsler, Christian Buchta, 
 #			Bettina Gruen and Kurt Hornik
 #
 # This program is free software; you can redistribute it and/or modify
@@ -90,8 +90,10 @@ function(file, format = c("basket", "single"), sep = NULL, cols = NULL, rm.dupli
 
 ## write transactions and associations
 ### FIXME: Quote does not work for basket format!
+setMethod("write", signature(x = "ANY"),
+	function(x, file = "", ...) base::write(x, file, ...))
 
-setMethod("WRITE", signature(x = "transactions"),
+setMethod("write", signature(x = "transactions"),
 	function(x, file = "", format = c("basket", "single"), 
 		sep=" ", quote=FALSE, ...) { 
 
@@ -112,8 +114,24 @@ setMethod("WRITE", signature(x = "transactions"),
 	)
 
 
-setMethod("WRITE", signature(x = "associations"),
+setMethod("write", signature(x = "associations"),
     function(x, file = "", sep= " ", quote=FALSE, ...) 
     write.table(as(x, "data.frame"), file = file, sep=sep, quote=quote, ...)
 )
+
+## WRITE is just for backward compatibility and since 
+## we want decreasing = TRUE   
+setMethod("WRITE", signature(x = "associations"),
+	function (x, file, ...) {
+	    warning("arules: 'WRITE' is deprecated use 'write' instead.")
+	    write(x, file, ...)
+	})
+
+setMethod("WRITE", signature(x = "transactions"),
+	function (x, file, ...) {
+	    warning("arules: 'WRITE' is deprecated use 'write' instead.")
+	    write(x, file, ...)
+	})
+
+
 

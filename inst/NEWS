@@ -1,3 +1,9 @@
+Changes in version 1.0-12
+    * Added read and write for PMML.
+    * 'WRITE' is now depricated, use 'write' instead
+    * Added a copy of the C subscript code from R for better performance 
+      and compartibility with arulesSequences
+
 Changes in version 1.0-11
     * Fixed vignette.
     * Internal changes for dimnames and subsetting
