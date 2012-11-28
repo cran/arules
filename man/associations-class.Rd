@@ -81,7 +81,7 @@
 }
 \seealso{
   \code{\link{sort}},
-  \code{\link{WRITE}},
+  \code{\link{write}},
   \code{\link{length}},
   \code{\link{is.subset}},
   \code{\link{is.superset}},

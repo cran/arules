@@ -1,6 +1,7 @@
 %\documentclass[10pt,a4paper]{article}
 \documentclass[nojss]{jss}
 
+\usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
 
 %\usepackage{a4wide}
@@ -58,7 +59,7 @@
 
 \Address{
 	Michael Hahsler\\
-	Computer Science and Engineering\\
+	Engineering Management, Information, and Systems\\
 	Lyle School of Engineering\\
 	Southern Methodist University\\
 	P.O. Box 750122 \\
@@ -719,12 +720,13 @@ the following methods:
  \item matching elements from two sets (\func{match}),
 % \item handling of duplicated elements for a collection
 %     of associations (\func{duplicated} and \func{unique}).
-\item \func{WRITE} for writing associations to disk in human readable form.
+\item \func{write} for writing associations to disk in human readable form.
   To save and load associations in compact form, 
   use \func{save} and \func{load} from the
-  \pkg{base} package. Package \pkg{pmml}~\citep{arules:Williams:2008} 
-  includes functionality to
-  save associations in PMML (Predictive Model Markup Language).
+  \pkg{base} package. 
+  \item \func{write.pmml} and \func{read.pmml} can be used to write and read
+associations using PMML (Predictive Model Markup Language) 
+    via package \pkg{pmml}~\citep{arules:Williams:2008}. 
 \end{itemize}
 
 The associations currently implemented in package~\pkg{arules} are sets
@@ -1433,12 +1435,12 @@ analyzed even if it is huge.
 
 Finally, the found rules can be written to disk to be shared 
 with other applications. To save rules in plain text format 
-the function \func{WRITE} is used. The 
+the function \func{write} is used. The 
 following command saves a set of rules as the file named `data.csv' in 
 comma separated value (CSV) format.
 
 <<label = write_rules, eval = FALSE>>=
-WRITE(rulesIncomeSmall, file = "data.csv", sep = ",", col.names = NA)
+write(rulesIncomeSmall, file = "data.csv", sep = ",", col.names = NA)
 @
 
 Alternatively, with package~\pkg{pmml}~\citep{arules:Williams:2008} the rules
@@ -1448,13 +1450,11 @@ requires the package~\pkg{XML} which might not be available for all operating
 systems. 
 
 <<label=pmml, eval=FALSE>>=
-library("pmml")
-rules_pmml <- pmml(rulesIncomeSmall)
-saveXML(rules_pmml, file = "data.xml")
+write.PMML(rulesIncomeSmall, file = "data.xml")
 @
 
 The saved data can now be easily shared and used by other applications. 
-Itemsets (with \func{WRITE} also transactions) can be 
+Itemsets (with \func{write} also transactions) can be 
 written to a file in the same way.
 
 \subsection{Example 3: Extending arules with a new interest measure}

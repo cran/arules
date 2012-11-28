@@ -19,6 +19,8 @@ importMethodsFrom("Matrix",
 
 export(
         "read.transactions", 
+        "read.PMML", 
+        "write.PMML", 
         "random.transactions", 
         "random.patterns",
         "apriori", 
@@ -44,8 +46,6 @@ exportMethods(
         "%ain%",
         "%pin%",
         "LIST",
-        "SORT",
-        "WRITE",
         "[",
         "aggregate",
 	"addComplement",
@@ -91,7 +91,10 @@ exportMethods(
         "setequal",
         "show", 
         "size",
+        "SORT",	    ## depricated
         "sort",
+        "WRITE",    ## depricated
+        "write",
         "subset", 
         "summary", 
         "support", 

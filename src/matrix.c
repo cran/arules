@@ -2,14 +2,18 @@
 #include <R_ext/Utils.h>
 #include <Rdefines.h>
 
+// arraySubscript.c
+SEXP int_arraySubscript(int, SEXP, const char *, const char *, SEXP,
+	Rboolean, SEXP);
+
 /* sparse matrix matrix tools.
  *
  * ngCMatrix objects represent indicator matrices
  * in column spares format.
  *
- * Version: 0.1-4
+ * Version: 0.1-5
  *
- * ceeboo 2006, 2007, 2008
+ * ceeboo 2006, 2007, 2008, 2012
  */
 
 SEXP R_transpose_ngCMatrix(SEXP x) {
@@ -202,22 +206,24 @@ SEXP R_colSums_ngCMatrix(SEXP x) {
 SEXP R_colSubset_ngCMatrix(SEXP x, SEXP s) {
     if (!inherits(x, "ngCMatrix") && !inherits(x, "sgCMatrix"))
 	error("'x' not of class 'ngCMatrix'");
-    
-    if (!isInteger(s)) error("'s' is not an integer vector");
-    
     int i, j, k, n;
     SEXP r, dx, px, ix, pr, ir;
     
     dx = getAttrib(x, install("Dimnames"));
-
+#ifdef _COMPAT_
     r = CONS(dx, ATTRIB(x));
     SET_TAG(r, R_DimNamesSymbol);
     // NOTE that we temporarily change a read-only object.
     //      this is safe as long as the object cannot be
     //      accessed concurrently.
     SET_ATTRIB(x, r);
-    SET_ATTRIB(x, CDR(r));
 
+    PROTECT(s = arraySubscript(1, s, getAttrib(x, install("Dim")), getAttrib, (STRING_ELT), x));
+    
+    SET_ATTRIB(x, CDR(r));
+#else
+    PROTECT(s = int_arraySubscript(1, s, "Dim", "Dimnames", x, TRUE, R_NilValue));
+#endif
     px = getAttrib(x, install("p"));
     
     n = 0;
@@ -260,8 +266,7 @@ SEXP R_colSubset_ngCMatrix(SEXP x, SEXP s) {
 	    SET_VECTOR_ELT(ir, 1, R_NilValue);
     }
     
-
-    UNPROTECT(1);
+    UNPROTECT(2);
 
     return r;
 }

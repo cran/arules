@@ -108,7 +108,7 @@
 \seealso{
   \code{\link{[-methods}},
   \code{\link{LIST}},
-  \code{\link{WRITE}},
+  \code{\link{write}},
   \code{\link{c}},
   \code{\link{image}},
   \code{\link{inspect}},

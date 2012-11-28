@@ -1,6 +1,6 @@
 Package: arules
-Version: 1.0-11
-Date: 2012-11-19
+Version: 1.0-12
+Date: 2012-11-28
 Title: Mining Association Rules and Frequent Itemsets
 Author: Michael Hahsler, Christian Buchta, Bettina Gruen and Kurt
         Hornik
@@ -13,7 +13,7 @@ Description: Provides the infrastructure for representing, manipulating
 Classification/ACM: G.4, H.2.8, I.5.1
 URL: http://R-Forge.R-project.org/projects/arules/,
         http://lyle.smu.edu/IDA/arules/
-Depends: R (>= 2.11.0), stats, methods, Matrix (>= 0.999375-38)
+Depends: R (>= 2.15.0), stats, methods, Matrix (>= 1.0-0)
 Suggests: pmml, arulesViz
 License: GPL-2
 Copyright: The code for apriori and eclat in src/rapriori.c was
@@ -22,6 +22,6 @@ Copyright: The code for apriori and eclat in src/rapriori.c was
         Copyright (C) Michael Hahsler, Christian Buchta, Bettina Gruen
         and Kurt Hornik.
 LazyLoad: yes
-Packaged: 2012-11-19 13:24:29 UTC; hahsler
+Packaged: 2012-11-28 14:47:00 UTC; hahsler
 Repository: CRAN
-Date/Publication: 2012-11-19 14:11:34
+Date/Publication: 2012-11-28 17:57:43
