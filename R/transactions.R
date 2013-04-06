@@ -58,14 +58,23 @@ setMethod("LIST", signature(from = "transactions"),
     }
 )
 
-## NOTES NA in levels is replaced by the string "NA"
-
+## NOTES 
+## * NA in levels is replaced by the string "NA"
+## * logicals are automatically converted to factor
 setAs("data.frame", "transactions",
     function(from) {
         if (!length(from))
             return(new("transactions"))
-        if (!all((p <- sapply(from, is.factor))))
-            stop("column(s) ", paste(which(!p), collapse=", "), " not a factor")
+        
+	## handle logical
+	if(any(p <- sapply(from, is.logical))) {
+	    for(i in which(p))
+		from[[i]] <- as.factor(from[[i]])
+	}
+	
+	## check that everything is factor
+	if (!all((p <- sapply(from, is.factor))))
+            stop("column(s) ", paste(which(!p), collapse=", "), " not logical or a factor. Use as.factor or categorize first.")
         p <- seq(nrow(from))
         x <- lapply(from, function(x)
             tapply(p, x, eval, simplify = FALSE))

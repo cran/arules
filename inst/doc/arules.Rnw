@@ -669,8 +669,12 @@ about association rule mining.
 
 The typical representation for data with categorical and quantitative
 attributes in \proglang{R} is a \class{data.frame}.  First, a domain
-expert has to create useful categories for all metric attributes.  This
-task is supported in \proglang{R} by functions such as \func{cut}.  The
+expert has to create useful categories for all metric attributes. This
+task is supported in \pkg{arules} by functions such as \func{discretize}
+which implements equal interval length, equal frequency, clustering-based
+and custom interval discretization.
+After discretization all columns in the \class{data.frame} need to be either
+logical or factors. The
 second step, the generation of binary dummy items, is automated in
 package \pkg{arules} by coercing from \class{data.frame} to
 \class{transactions}.  In this process, the original attribute names and
