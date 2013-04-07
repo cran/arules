@@ -16,12 +16,16 @@ interestMeasure(x, method, transactions = NULL, reuse = TRUE, ...)
   \item{method}{ name or vector of names of the desired interest measures 
       (see details for available measures).} 
   \item{transactions}{ the transaction data set used to mine 
-    the associations. }
+    the associations or a set of different transactions to calculate
+    interest measures from (Note: you need to set \code{reuse=FALSE} in the 
+    later case). }
   \item{reuse}{ logical indicating if information in quality slot should
       be reuse for calculating the measures. This speeds up the process
       significantly since only very little (or no) transaction counting 
       is necessary if support, confidence and lift are already available.
-      Use \code{reuse=FALSE} to force counting (might be very slow).}
+      Use \code{reuse=FALSE} to force counting (might be very slow but
+      is necessary if you use a differnt set of transactions than was used 
+      for mining).}
   \item{\dots}{ further arguments for the measure calculation. }
 }
 \details{
@@ -210,13 +214,21 @@ rules <- apriori(Income)
 ## calculate a single measure and add it to the quality slot
 quality(rules) <- cbind(quality(rules), 
 	hyperConfidence = interestMeasure(rules, method = "hyperConfidence", 
-	Income))
+	transactions = Income))
 
 inspect(head(sort(rules, by = "hyperConfidence")))
 
 ## calculate several measures
-m <- interestMeasure(rules, c("confidence", "oddsRatio", "leverage"), Income)
+m <- interestMeasure(rules, c("confidence", "oddsRatio", "leverage"), 
+	transactions = Income)
 inspect(head(rules))
 head(m)
+
+## calculate measures on a differnt set of transactions (I use a sample here)
+## Note: reuse = TRUE (default) would just retun the stored support on the
+##	data set used for mining
+newTrans <- sample(Income, 100)
+m2 <- interestMeasure(rules, "support", transactions = newTrans, reuse = FALSE) 
+head(m2)
 }
 \keyword{models}

@@ -1,3 +1,7 @@
+Changes in version 1.0-13
+    * transactions: coersion form data.frame not handles logical automatically.
+    * discretize replaces categorize and offers several additional methods
+
 Changes in version 1.0-12
     * Added read and write for PMML.
     * 'WRITE' is now depricated, use 'write' instead

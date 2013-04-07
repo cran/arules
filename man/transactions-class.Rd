@@ -107,6 +107,7 @@
 }
 \seealso{
   \code{\link{[-methods}},
+  \code{\link{discretize}},
   \code{\link{LIST}},
   \code{\link{write}},
   \code{\link{c}},
