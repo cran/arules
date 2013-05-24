@@ -58,7 +58,7 @@ setMethod("is.subset", signature(x = "itemMatrix"),
             }
             if (any(k != seq_len(length(k))))
                 y@data <- .Call("R_recode_ngCMatrix", y@data, k,
-		    PACKAGE="aruels")
+		    PACKAGE="arules")
             if (y@data@Dim[1] <  x@data@Dim[1])
                 y@data@Dim[1] <- x@data@Dim[1]
 

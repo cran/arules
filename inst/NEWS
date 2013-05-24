@@ -1,5 +1,9 @@
+Changes in version 1.0-14
+    * discretize handles now NAs correctly
+    * Bug fix in is.subset
+
 Changes in version 1.0-13
-    * transactions: coersion form data.frame not handles logical automatically.
+    * transactions: coersion form data.frame now handles logical automatically.
     * discretize replaces categorize and offers several additional methods
 
 Changes in version 1.0-12
