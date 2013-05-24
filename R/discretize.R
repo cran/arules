@@ -29,20 +29,23 @@ discretize <- function(x, method="interval", categories=3, labels=NULL,
 
     res <- switch(method,
 	    interval = {
-		categories <- seq(from=min(x), to=max(x), 
+		categories <- seq(from=min(x, na.rm=TRUE), to=max(x, na.rm=TRUE), 
 			length.out=categories+1)
 		if(onlycuts) categories else .cut2(x, cuts=categories, 
 			oneval=FALSE, ...)
 	    },
-	    frequency = .cut2(x, g=categories, onlycuts=onlycuts, ...),
-	    cluster = {
-		cl <-  kmeans(x, categories)
+	
+    frequency = .cut2(x, g=categories, onlycuts=onlycuts, ...),
+	    
+    cluster = {
+		cl <-  kmeans(na.omit(x), categories)
 		centers <- sort(cl$centers[,1])
-		categories <- as.numeric(c(min(x),  head(centers, 
-				length(centers)-1) + diff(centers)/2, max(x)))
+		categories <- as.numeric(c(min(x, na.rm=TRUE),  head(centers, 
+				length(centers)-1) + diff(centers)/2, max(x, na.rm=TRUE)))
 		if(onlycuts) categories else .cut2(x, cuts=categories, ...)
 	    },
-	    fixed = {
+	    
+    fixed = {
 		x[x<min(categories) | x>max(categories)] <- NA
 		if(onlycuts) categories else .cut2(x, cuts=categories, ...)
 		}
