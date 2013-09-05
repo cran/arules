@@ -1,5 +1,6 @@
 library("arules")
 
+options(digits=2)
 
 data <- list(
     c("A", "B"),
@@ -61,4 +62,3 @@ m2
 
 ## compare results
 all.equal(m1, m2)
-

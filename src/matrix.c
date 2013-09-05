@@ -543,7 +543,7 @@ SEXP R_or_ngCMatrix(SEXP x, SEXP y) {
     setAttrib(r, install("p"), (pr = allocVector(INTSXP, LENGTH(px))));
 
     n = LENGTH(ix) + LENGTH(iy);
-    if (n > (i = nr * (LENGTH(px) - 1)));
+    if (n > (i = nr * (LENGTH(px) - 1)))
 	n = i;
 
     setAttrib(r, install("i"), (ir = allocVector(INTSXP, n)));
