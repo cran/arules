@@ -1,5 +1,7 @@
 library("arules")
 
+options(digits=2)
+
 data <- list(
     c("a","b","c"),
     c("a","b"),
@@ -20,7 +22,7 @@ t <- as(data, "transactions")
 r <- apriori(t, parameter=list(supp=0.25, conf=0), control=list(verb=FALSE))
 r
 summary(r)
-inspect(sort(r, by = "lift")[1:2])
+inspect(sort(r, by = "lift")[1:7])
 
 ### test appearance
 r <- apriori(t, parameter=list(supp=0.25, conf=0),
@@ -58,6 +60,3 @@ tl
 summary(tl)
 
 as(tl[1:5], "list")
-
-
-

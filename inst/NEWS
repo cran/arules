@@ -1,3 +1,6 @@
+Changes in version 1.0-15 
+    * service release
+
 Changes in version 1.0-14
     * discretize handles now NAs correctly
     * Bug fix in is.subset

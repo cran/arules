@@ -10,9 +10,11 @@ useDynLib(arules,
 	R_rowSums_ngCMatrix
 	)
 
-importFrom("stats", "predict", "aggregate")  ## we want to add methods
-importFrom("Matrix", "summary", "image", "t") ## we need generics and methods 
+import("methods")
 
+importFrom("stats", "predict", "aggregate")  ## we want to add methods
+
+importFrom("Matrix", "summary", "image", "t") ## we need generics and methods 
 importClassesFrom("Matrix", "dgCMatrix", "ngCMatrix") ## we only need methods
 importMethodsFrom("Matrix", 
 	"crossprod", "rowSums", "colSums") ## we only need methods

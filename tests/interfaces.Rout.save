@@ -1,5 +1,5 @@
 
-R version 3.0.0 (2013-04-03) -- "Masked Marvel"
+R version 3.0.1 (2013-05-16) -- "Good Sport"
 Copyright (C) 2013 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -27,6 +27,8 @@ The following object is masked from ‘package:base’:
 
     %in%, write
 
+> 
+> options(digits=2)
 > 
 > data <- list(
 +     c("a","b","c"),
@@ -59,25 +61,32 @@ rule length distribution (lhs + rhs):sizes
  5 10  3 
 
    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-  1.000   1.250   2.000   1.889   2.000   3.000 
+    1.0     1.2     2.0     1.9     2.0     3.0 
 
 summary of quality measures:
-    support         confidence          lift       
- Min.   :0.2857   Min.   :0.2857   Min.   :0.9333  
- 1st Qu.:0.2857   1st Qu.:0.4071   1st Qu.:1.0000  
- Median :0.2857   Median :0.6667   Median :1.0600  
- Mean   :0.3810   Mean   :0.6447   Mean   :1.1735  
- 3rd Qu.:0.4286   3rd Qu.:0.8000   3rd Qu.:1.4000  
- Max.   :0.7143   Max.   :1.0000   Max.   :1.7500  
+    support       confidence        lift     
+ Min.   :0.29   Min.   :0.29   Min.   :0.93  
+ 1st Qu.:0.29   1st Qu.:0.41   1st Qu.:1.00  
+ Median :0.29   Median :0.67   Median :1.06  
+ Mean   :0.38   Mean   :0.64   Mean   :1.17  
+ 3rd Qu.:0.43   3rd Qu.:0.80   3rd Qu.:1.40  
+ Max.   :0.71   Max.   :1.00   Max.   :1.75  
 
 mining info:
  data ntransactions support confidence
     t             7    0.25          0
-> inspect(sort(r, by = "lift")[1:2])
-  lhs    rhs   support confidence lift
-1 {a,                                 
-   b} => {d} 0.2857143        0.5 1.75
-2 {b} => {d} 0.2857143        0.4 1.40
+> inspect(sort(r, by = "lift")[1:7])
+  lhs    rhs support confidence lift
+1 {a,                               
+   b} => {d}    0.29        0.5  1.8
+2 {b} => {d}    0.29        0.4  1.4
+3 {a} => {d}    0.29        0.4  1.4
+4 {d} => {b}    0.29        1.0  1.4
+5 {d} => {a}    0.29        1.0  1.4
+6 {b,                               
+   d} => {a}    0.29        1.0  1.4
+7 {a,                               
+   d} => {b}    0.29        1.0  1.4
 > 
 > ### test appearance
 > r <- apriori(t, parameter=list(supp=0.25, conf=0),
@@ -86,13 +95,13 @@ Warning in apriori(t, parameter = list(supp = 0.25, conf = 0), appearance = list
   You chose a very low absolute support count of 1. You might run out of memory! Increase minimum support.
 
 > inspect(r)
-  lhs    rhs   support confidence      lift
-1 {}  => {b} 0.7142857  0.7142857 1.0000000
-2 {}  => {a} 0.7142857  0.7142857 1.0000000
-3 {c} => {a} 0.2857143  0.6666667 0.9333333
-4 {d} => {b} 0.2857143  1.0000000 1.4000000
-5 {d} => {a} 0.2857143  1.0000000 1.4000000
-6 {e} => {b} 0.2857143  0.6666667 0.9333333
+  lhs    rhs support confidence lift
+1 {}  => {b}    0.71       0.71 1.00
+2 {}  => {a}    0.71       0.71 1.00
+3 {c} => {a}    0.29       0.67 0.93
+4 {d} => {b}    0.29       1.00 1.40
+5 {d} => {a}    0.29       1.00 1.40
+6 {e} => {b}    0.29       0.67 0.93
 > 
 > ### test lhs.support
 > r <- apriori(t, parameter=list(supp=0.25, conf=0, originalSupp=FALSE, ext=TRUE),
@@ -101,9 +110,9 @@ Warning in apriori(t, parameter = list(supp = 0.25, conf = 0, originalSupp = FAL
   You chose a very low absolute support count of 1. You might run out of memory! Increase minimum support.
 
 > inspect(r[1:2])
-  lhs    rhs   support confidence lhs.support lift
-1 {}  => {c} 0.4285714  0.4285714           1    1
-2 {}  => {d} 0.2857143  0.2857143           1    1
+  lhs    rhs support confidence lhs.support lift
+1 {}  => {c}    0.43       0.43           1    1
+2 {}  => {d}    0.29       0.29           1    1
 > 
 > 
 > 
@@ -129,16 +138,16 @@ element (itemset/transaction) length distribution:sizes
 5 9 5 1 
 
    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-   1.00    1.75    2.00    2.10    3.00    4.00 
+    1.0     1.8     2.0     2.1     3.0     4.0 
 
 summary of quality measures:
-    support      
- Min.   :0.1429  
- 1st Qu.:0.1429  
- Median :0.2857  
- Mean   :0.2929  
- 3rd Qu.:0.3214  
- Max.   :0.7143  
+    support    
+ Min.   :0.14  
+ 1st Qu.:0.14  
+ Median :0.29  
+ Mean   :0.29  
+ 3rd Qu.:0.32  
+ Max.   :0.71  
 
 includes transaction ID lists: FALSE 
 
@@ -146,14 +155,14 @@ mining info:
  data ntransactions support
     t             7     0.1
 > inspect(f[1:2])
-  items   support
-1 {a,            
-   b,            
-   d,            
-   e}   0.1428571
-2 {a,            
-   d,            
-   e}   0.1428571
+  items support
+1 {a,          
+   b,          
+   d,          
+   e}      0.14
+2 {a,          
+   d,          
+   e}      0.14
 > labels(f[1:2])
 [1] "{a,b,d,e}" "{a,d,e}"  
 > 
@@ -183,16 +192,16 @@ element (itemset/transaction) length distribution:sizes
 5 9 5 1 
 
    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-   1.00    1.75    2.00    2.10    3.00    4.00 
+    1.0     1.8     2.0     2.1     3.0     4.0 
 
 summary of quality measures:
-    support      
- Min.   :0.1429  
- 1st Qu.:0.1429  
- Median :0.2857  
- Mean   :0.2929  
- 3rd Qu.:0.3214  
- Max.   :0.7143  
+    support    
+ Min.   :0.14  
+ 1st Qu.:0.14  
+ Median :0.29  
+ Mean   :0.29  
+ 3rd Qu.:0.32  
+ Max.   :0.71  
 
 includes transaction ID lists: TRUE 
 
@@ -219,7 +228,7 @@ sizes
 9 6 2 1 2 
 
    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-   1.00    1.00    2.00    2.05    2.25    5.00 
+    1.0     1.0     2.0     2.0     2.2     5.0 
 
 includes extended item information - examples:
      labels
@@ -243,7 +252,4 @@ $`{a,b,d}`
 $`{a,d}`
 [1] "Tr3" "Tr7"
 
-> 
-> 
-> 
 > 
