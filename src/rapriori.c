@@ -7,7 +7,7 @@ and are copyrighted by 1996-2003 Christian Borgelt
 This program is free software; you can redistribute it and/or modify it under
 the terms of the LGPL.
 
-The R-interface was added by Bettina Grün and modified by Michael Hahsler (MFH)
+The R-interface was added by Bettina Gr?n and modified by Michael Hahsler (MFH)
 ----------------------------------------------------------------------*/
 
 #include "rapriori.h"
@@ -734,7 +734,7 @@ void createRules(ISTREE *istree, ARparameter *param) {
   }
 }
 
-// Sort row indexes [ceboo 2008/12]
+/* Sort row indexes [ceboo 2008/12] */
 void sort_ngCMatrix(SEXP x) {
     int i, f, l;
     SEXP px, ix;

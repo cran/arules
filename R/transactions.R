@@ -41,6 +41,10 @@ setAs("transactions", "matrix",
     }
 )
 
+setAs("ngCMatrix", "transactions",
+      function(from) as(as(from, "itemMatrix"), "transactions")
+)
+
 setAs("list", "transactions",
     function(from)
         new("transactions", as(from, "itemMatrix"), 

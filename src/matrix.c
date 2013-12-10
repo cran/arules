@@ -2,7 +2,7 @@
 #include <R_ext/Utils.h>
 #include <Rdefines.h>
 
-// arraySubscript.c
+/* arraySubscript.c */
 SEXP int_arraySubscript(int, SEXP, const char *, const char *, SEXP,
 	Rboolean, SEXP);
 
@@ -17,17 +17,18 @@ SEXP int_arraySubscript(int, SEXP, const char *, const char *, SEXP,
  */
 
 SEXP R_transpose_ngCMatrix(SEXP x) {
-    if (!inherits(x, "ngCMatrix"))
-	error("'x' not of class 'ngCMatrix'");
     int i, k, l, f, nr;
     SEXP r, px, ix, pr, ir;
+    
+    if (!inherits(x, "ngCMatrix"))
+	error("'x' not of class 'ngCMatrix'");
     
     nr = INTEGER(getAttrib(x, install("Dim")))[0];
     
     px = getAttrib(x, install("p"));
     ix = getAttrib(x, install("i"));
 	
-    // use new-style S4 object
+    /* use new-style S4 object */
     PROTECT(r = NEW_OBJECT(MAKE_CLASS("ngCMatrix")));
 
     setAttrib(r, install("p"), (pr = allocVector(INTSXP, nr+1)));
@@ -76,12 +77,13 @@ SEXP R_transpose_ngCMatrix(SEXP x) {
  */
 
 SEXP R_crosstab_ngCMatrix(SEXP x, SEXP y, SEXP t) {
+    int i, j, fx, lx, fy, ly, kx, ky, ki, kj, nr, nc, s = 1;
+    SEXP r, px, ix, py, iy, d1, d2, n1, n2;
+    
     if (!inherits(x, "ngCMatrix"))
 	error("'x' not of class 'ngCMatrix'");
     if (TYPEOF(t) != LGLSXP)
 	error("'t' not of storage class logical");
-    int i, j, fx, lx, fy, ly, kx, ky, ki, kj, nr, nc, s = 1;
-    SEXP r, px, ix, py, iy, d1, d2, n1, n2;
   
     if (LOGICAL(t)[0] == FALSE)
 	PROTECT(x = R_transpose_ngCMatrix(x));
@@ -166,10 +168,11 @@ SEXP R_crosstab_ngCMatrix(SEXP x, SEXP y, SEXP t) {
 }
 
 SEXP R_rowSums_ngCMatrix(SEXP x) {
-    if (!inherits(x, "ngCMatrix"))
-	error("'x' not of class 'ngCMatrix'");
     int k,  nr = INTEGER(getAttrib(x, install("Dim")))[0];
     SEXP r, ix = getAttrib(x, install("i"));
+    
+    if (!inherits(x, "ngCMatrix"))
+	error("'x' not of class 'ngCMatrix'");
 
     PROTECT(r = allocVector(INTSXP, nr));
     memset(INTEGER(r), 0, sizeof(int) * nr);
@@ -184,10 +187,11 @@ SEXP R_rowSums_ngCMatrix(SEXP x) {
 }
 
 SEXP R_colSums_ngCMatrix(SEXP x) {
-    if (!inherits(x, "ngCMatrix") && !inherits(x, "sgCMatrix"))
-	error("'x' not of class 'ngCMatrix'");
     int k, f, l;
     SEXP r, px = getAttrib(x, install("p"));
+    
+    if (!inherits(x, "ngCMatrix") && !inherits(x, "sgCMatrix"))
+	error("'x' not of class 'ngCMatrix'");
 
     PROTECT(r = allocVector(INTSXP, LENGTH(px)-1));
     
@@ -204,18 +208,19 @@ SEXP R_colSums_ngCMatrix(SEXP x) {
 }
 
 SEXP R_colSubset_ngCMatrix(SEXP x, SEXP s) {
-    if (!inherits(x, "ngCMatrix") && !inherits(x, "sgCMatrix"))
-	error("'x' not of class 'ngCMatrix'");
     int i, j, k, n;
     SEXP r, dx, px, ix, pr, ir;
+    
+    if (!inherits(x, "ngCMatrix") && !inherits(x, "sgCMatrix"))
+	error("'x' not of class 'ngCMatrix'");
     
     dx = getAttrib(x, install("Dimnames"));
 #ifdef _COMPAT_
     r = CONS(dx, ATTRIB(x));
     SET_TAG(r, R_DimNamesSymbol);
-    // NOTE that we temporarily change a read-only object.
-    //      this is safe as long as the object cannot be
-    //      accessed concurrently.
+    /* NOTE that we temporarily change a read-only object.
+     *      this is safe as long as the object cannot be
+     *     accessed concurrently.  */
     SET_ATTRIB(x, r);
 
     PROTECT(s = arraySubscript(1, s, getAttrib(x, install("Dim")), getAttrib, (STRING_ELT), x));
@@ -271,14 +276,16 @@ SEXP R_colSubset_ngCMatrix(SEXP x, SEXP s) {
     return r;
 }
 
-// R's subset functionality is a misnomer as it 
-// allows many-to-many mappings. for special cases
-// such as reordering of rows and one-to-one mappings 
-// there exist more efficient solutions (see below).
-//
-// as performing a many-to-many mapping for each
-// column is inefficient we use transposition and
-// column subsetting.
+/*
+ R's subset functionality is a misnomer as it 
+ allows many-to-many mappings. for special cases
+ such as reordering of rows and one-to-one mappings 
+ there exist more efficient solutions (see below).
+
+ as performing a many-to-many mapping for each
+ column is inefficient we use transposition and
+ column subsetting.
+*/
 
 SEXP R_rowSubset_ngCMatrix(SEXP x, SEXP s) {
     x = R_transpose_ngCMatrix(x);
@@ -290,13 +297,18 @@ SEXP R_rowSubset_ngCMatrix(SEXP x, SEXP s) {
     return x;
 }
 
-// expand into a list. the default behavior is
-// to shift the internal codes to R indexes.
-//
-// note that CHARSXP type is internal so we need
-// not provide a decoder for it.
+/*
+ expand into a list. the default behavior is
+ to shift the internal codes to R indexes.
+
+ note that CHARSXP type is internal so we need
+ not provide a decoder for it.
+*/
 
 SEXP R_asList_ngCMatrix(SEXP x, SEXP d) {
+    int i, j, k, f, l, n, m; 
+    SEXP r, px, ix, t;
+    
     if (!inherits(x, "ngCMatrix") && !inherits(x, "sgCMatrix"))
         error("'x' not of class 'ngCMatrix'");
     if (!isNull(d) && (TYPEOF(d) != LGLSXP  &&
@@ -307,8 +319,6 @@ SEXP R_asList_ngCMatrix(SEXP x, SEXP d) {
         error("'d' storage type not supported");
     if (!isNull(d) && (LENGTH(d) != INTEGER(getAttrib(x, install("Dim")))[0]))
         error("'d' length does not conform");
-    int i, j, k, f, l, n, m; 
-    SEXP r, px, ix, t;
 
     px = getAttrib(x, install("p"));
     ix = getAttrib(x, install("i"));
@@ -355,17 +365,20 @@ SEXP R_asList_ngCMatrix(SEXP x, SEXP d) {
     return r;
 }
 
-// for each row of x append the corresponding
-// row of y. thus, the number of rows must
-// conform.
+/*
+ for each row of x append the corresponding
+ row of y. thus, the number of rows must
+ conform.
+*/
 
 SEXP R_cbind_ngCMatrix(SEXP x, SEXP y) {
+    int i, k, n, nr;
+    SEXP r, pr, ir, px, ix, sx, py, iy, sy;
+    
     if (!inherits(x, "ngCMatrix") && !inherits(x, "sgCMatrix"))
 	error("'x' not of class ngCMatrix");
     if (!inherits(y, "ngCMatrix") && !inherits(y, "sgCMatrix"))
 	error("'y' not of class ngCMatrix");
-    int i, k, n, nr;
-    SEXP r, pr, ir, px, ix, sx, py, iy, sy;
     
     nr = INTEGER(getAttrib(x, install("Dim")))[0];
     if (nr != INTEGER(getAttrib(y, install("Dim")))[0])
@@ -394,7 +407,7 @@ SEXP R_cbind_ngCMatrix(SEXP x, SEXP y) {
     INTEGER(ir)[0] = nr;
     INTEGER(ir)[1] = LENGTH(pr)-1;
 
-    // c.f. cbind Matrix
+    /* c.f. cbind Matrix */
     
     setAttrib(r, install("Dimnames"), (ir = allocVector(VECSXP, 2)));
 
@@ -440,17 +453,20 @@ SEXP R_cbind_ngCMatrix(SEXP x, SEXP y) {
     return r;
 }
 
-// for row reordering this is more efficient
-// than subsetting. note that the number of
-// rows is allowed to increase.
+/*
+ for row reordering this is more efficient
+ than subsetting. note that the number of
+ rows is allowed to increase.
+*/
 
 SEXP R_recode_ngCMatrix(SEXP x, SEXP s) {
+    int i, k, f, l, c, nr;
+    SEXP r, px, ix, ir;
+    
     if (!inherits(x, "ngCMatrix") && !inherits(x, "sgCMatrix"))
 	error("'x' not of class ngCMatrix");
     if (TYPEOF(s) != INTSXP)
 	error("'s' not of storage type integer");
-    int i, k, f, l, c, nr;
-    SEXP r, px, ix, ir;
 
     nr = INTEGER(getAttrib(x, install("Dim")))[0];
     if (nr != LENGTH(s))
@@ -515,10 +531,15 @@ SEXP R_recode_ngCMatrix(SEXP x, SEXP s) {
     return r;
 }
 
-// fast but temporary memory consumption 
-// may amount to full-storage representation.
+/*
+ fast but temporary memory consumption 
+ may amount to full-storage representation.
+*/
 
 SEXP R_or_ngCMatrix(SEXP x, SEXP y) {
+    int i, kx, ky, lx, ly, n, nr;
+    SEXP r, pr, ir, px, ix, py, iy;
+    
     if (!inherits(x, "ngCMatrix"))
 	error("'x' not of class ngCMatrix");
     if (!inherits(y, "ngCMatrix"))
@@ -526,8 +547,6 @@ SEXP R_or_ngCMatrix(SEXP x, SEXP y) {
     if (INTEGER(getAttrib(x, install("Dim")))[1] !=
 	INTEGER(getAttrib(y, install("Dim")))[1])
 	error("the number of columns of 'x' and 'y' do not conform");
-    int i, kx, ky, lx, ly, n, nr;
-    SEXP r, pr, ir, px, ix, py, iy;
 
     nr = INTEGER(getAttrib(x, install("Dim")))[0];
     if (nr != INTEGER(getAttrib(y, install("Dim")))[0])
@@ -574,7 +593,7 @@ SEXP R_or_ngCMatrix(SEXP x, SEXP y) {
 
 	UNPROTECT(1);
     }
-    // fixme
+    /* fixme */
     setAttrib(r, install("Dim"), (ir = allocVector(INTSXP, 2)));
     INTEGER(ir)[0] = nr;
     INTEGER(ir)[1] = LENGTH(px)-1;
@@ -605,14 +624,17 @@ SEXP R_or_ngCMatrix(SEXP x, SEXP y) {
 
 }
 
-// check if the internal represention is compatible
-// with the implementations above.
+/*
+ check if the internal represention is compatible
+ with the implementations above.
+*/
 
 SEXP R_valid_ngCMatrix(SEXP x) {
-    if (!inherits(x, "ngCMatrix"))
-	error("'x' not of class ngCMatrix");
     int i, k, f, l, n, m;
     SEXP px, ix, dx;
+    
+    if (!inherits(x, "ngCMatrix"))
+	error("'x' not of class ngCMatrix");
 
     px = getAttrib(x, install("p"));
     ix = getAttrib(x, install("i"));
@@ -685,4 +707,3 @@ SEXP R_valid_ngCMatrix(SEXP x) {
     return ScalarLogical(TRUE);
 }
 
-//

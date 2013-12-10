@@ -1,4 +1,6 @@
 library("arules")
+library("testthat")
+
 
 data <- list(
   c("a","b","c"),
@@ -24,9 +26,9 @@ inspect(t[1:2])
 
 m <- as(t, "matrix")
 m
-as(as(m, "transactions"), "list")
 
-as(t, "list")
+expect_identical(data, as(as(m, "transactions"), "list"))
+
 LIST(t, decode = FALSE)
 
 
@@ -61,8 +63,8 @@ as(items(esets), "ngCMatrix")
 as(items(esets_comp), "ngCMatrix")
 
 ## compare if output is the same
-all(table(match(fsets, esets)) == 1)
-all(table(match(fsets_comp, esets_comp)) == 1)
+expect_true(all(table(match(fsets, esets)) == 1))
+expect_true(all(table(match(fsets_comp, esets_comp)) == 1))
 
 
 ##########################################################################

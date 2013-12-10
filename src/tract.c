@@ -30,6 +30,7 @@
             20.09.2003 empty transactions in input made possible
             18.12.2003 padding for 64 bit architecture added
             26.02.2004 item frequency counting moved to is_read
+            12/9/2013 fixed 64-bit address alignment (MFH)
 ----------------------------------------------------------------------*/
 #include <stdio.h>
 #include <stdlib.h>
@@ -40,6 +41,7 @@
 #ifdef STORAGE
 #include "storage.h"
 #endif
+
 
 /*----------------------------------------------------------------------
   Preprocessor Definitions
@@ -619,11 +621,11 @@ TATREE* _create (TRACT **tracts, int cnt, int index)
     t = (*--tracts)->items[index]; /* traverse the transactions */
     if (t != item) { item = t; n++; }
   }                             /* count the different items */
-  #ifdef ARCH64                 /* adapt to even item number */
+#ifdef ARCH64                 /* adapt to even item number */
   i = (n & 1) ? n : (n+1);      /* so that pointer addresses are */
-  #else                         /* multiples of 8 on 64 bit systems */
+#else                         /* multiples of 8 on 64 bit systems */
   i = n;                        /* on 32 bit systems, however, */
-  #endif                        /* use the exact number of items */
+#endif                        /* use the exact number of items */
   tat = (TATREE*)malloc(sizeof(TATREE) + (i-1) *sizeof(int)
                                        + n     *sizeof(TATREE*));
   if (!tat) return NULL;        /* create a transaction tree node */
@@ -673,11 +675,11 @@ void tat_delete (TATREE *tat)
   TATREE **vec;                 /* vector of child nodes */
 
   assert(tat);                  /* check the function argument */
-  #ifdef ARCH64                 /* if 64 bit architecture */
+#ifdef ARCH64                 /* if 64 bit architecture */
   i = (tat->size & 1) ? tat->size : (tat->size+1);
-  #else                         /* address must be a multiple of 8 */
+#else                         /* address must be a multiple of 8 */
   i = tat->size;                /* on 32 bit systems, however, */
-  #endif                        /* use the number of items directly */
+#endif                        /* use the number of items directly */
   vec = (TATREE**)(tat->items +i);
   for (i = tat->size; --i >= 0; )
     tat_delete(vec[i]);         /* recursively delete the subtrees */

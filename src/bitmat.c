@@ -278,10 +278,10 @@ int bm_resize (BITMAT *bm, int rowcnt, int colcnt)
 
 void bm_setcol (BITMAT *bm, int col, const int *ids, int n)
 {                               /* --- set a matrix column */
-  int b;                        /* bit mask */
+  unsigned int b;                        /* bit mask */
 
   assert(bm && ids);            /* check the function arguments */
-  b = 1 << (col & BM_MASK);     /* compute bit mask and */
+  b = 1U << (col & BM_MASK);     /* compute bit mask and */
   col >>= BM_SHIFT;             /* index for the new column */
   while (--n >= 0)              /* traverse the given indices and */
     bm->rows[*ids++][col] |= b; /* set the corresponding rows */

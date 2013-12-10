@@ -10,6 +10,7 @@
             21.08.2003 parameter 'heap' added to tas_sort, tat_create
             12.09.2003 function tas_total added
             20.09.2003 empty transactions in input made possible
+            12/9/2013 fixed 64-bit address alignment (MFH)
 ----------------------------------------------------------------------*/
 #ifndef __TRACT__
 #define __TRACT__
@@ -19,6 +20,7 @@
 #include "vecops.h"
 #include "symtab.h"
 #include "tfscan.h"
+#include "arch64.h"
 
 /*----------------------------------------------------------------------
   Preprocessor Definitions

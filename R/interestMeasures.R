@@ -23,6 +23,7 @@
 ## Functions for additional interest measures
 ##
 
+
 ## measures for itemsets
 
 setMethod("interestMeasure",  signature(x = "itemsets"),
@@ -134,9 +135,9 @@ setMethod("interestMeasure",  signature(x = "rules"),
                 transactions, type = "relative"))
         if(method == "coverage") return(coverage(x, transactions, reuse))
         if(method == "confidence") return(
-            interestMeasure(x, "support", transactions, reuse)/
+	    interestMeasure(x, "support", transactions, reuse)/
             interestMeasure(x, "coverage", transactions, reuse))
-        if(method == "lift") return(
+	if(method == "lift") return(
             interestMeasure(x, "support", transactions, reuse)/
             (interestMeasure(x, "coverage", transactions, reuse) 
             * support(rhs(x), transactions)))
@@ -151,7 +152,7 @@ setMethod("interestMeasure",  signature(x = "rules"),
         
         
         ## all other methods are implemented here
-        return(.basicRuleMeasure(x, method, transactions))
+        return(.basicRuleMeasure(x, method, transactions, reuse))
 
         stop("Specified method not implemented.")
     })
@@ -300,7 +301,7 @@ setMethod("interestMeasure",  signature(x = "rules"),
     #c_Y <- itemFrequency(transactions, type = "absolute")[cons]
     #names(c_Y) <- NULL
     
-    rhsSupport
+    return(rhsSupport)
 }
 
 
@@ -324,8 +325,7 @@ setMethod("interestMeasure",  signature(x = "rules"),
     if(method == "conviction") return(f1x*fx0 /(N*f10))
     if(method == "gini") return(
         f1x/N * ((f11/f1x)^2 + (f10/f1x)^2) - (fx1/N)^2 +
-        f0x/N * ((f01/f0x)^2 + (f00/f0x)^2) - (fx0/N)^2
-    )
+        f0x/N * ((f01/f0x)^2 + (f00/f0x)^2) - (fx0/N)^2)
     if(method == "oddsRatio") return(f11*f00/(f10*f01))
     if(method == "phi") return((N*f11-f1x*fx1) / sqrt(f1x*fx1*f0x*fx0))
     if(method == "leverage") return(f11/N - (f1x*fx1/N^2))

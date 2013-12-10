@@ -2,13 +2,15 @@
 #include <R.h>
 #include <Rinternals.h>
 
-// workaround i18n
+/* workaround i18n */
 #define _(x) (x)
 
-// copied from 2.14-2 src/main/subsript.c
-//
-// ceeboo 2012/11
-//
+/* 
+ * copied from 2.14-2 src/main/subsript.c
+ *
+ * ceeboo 2012/11
+ */
+
 #define ECALL(call, yy) if(call == R_NilValue) error(yy); else errorcall(call, yy);
 
 static SEXP nullSubscript(int n)
@@ -268,14 +270,14 @@ int_arraySubscript(int dim, SEXP s, const char *dn, const char *dnn,
     return R_NilValue;
 }
 
-// R interface
+/* R interface */
 SEXP
 R_arraySubscript(SEXP x, SEXP dim, SEXP s, SEXP dn, SEXP dnn) {
-    // FIXME
+    /* FIXME */
     return int_arraySubscript(INTEGER(dim)[0], s, 
 			      (const char *) CHAR(STRING_ELT(dn, 0)), 
 			      (const char *) CHAR(STRING_ELT(dnn, 0)), 
 			      x, TRUE, R_NilValue);
 }
 
-//
+

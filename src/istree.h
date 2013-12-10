@@ -32,10 +32,12 @@
             18.07.2003 function ist_maxfrq added (item set filter)
             11.08.2003 item set filtering generalized (ist_filter)
             09.05.2004 parameter 'aval' added to function ist_set
+            12/9/2013 fixed 64-bit address alignment (MFH)
 ----------------------------------------------------------------------*/
 #ifndef __ISTREE__
 #define __ISTREE__
 #include "tract.h"
+/*#undef ARCH64 */
 
 /*----------------------------------------------------------------------
   Preprocessor Definitions
@@ -71,30 +73,31 @@ typedef struct _isnode {        /* --- item set node --- */
   int            size;          /* size   of counter vector */
   int            offset;        /* offset of counter vector */
   int            cnts[1];       /* counter vector */
+  /* has size int cnts entries followed by chcnt ISNODE* */
 } ISNODE;                       /* (item set node) */
 
 typedef struct {                /* --- item set tree --- */
   int    tacnt;                 /* number of transactions counted */
   int    lvlvsz;                /* size of level vector */
   int    lvlcnt;                /* number of levels (tree height) */
+  int    rsdef;                 /* rule support definition */
+  int    arem;                  /* additional rule evaluation measure */
+  int    size;                  /* size of item set/rule/hyperedge */
+  int    index;                 /* index in item set node */
+  int    plen;                  /* current path length */
+  int    item;                  /* head item of previous rule */
+  int    hdonly;                /* head only item in current set */
   ISNODE **levels;              /* first node of each level */
   double supp;                  /* minimal support of an item set */
   double conf;                  /* minimal confidence of a rule */
-  int    rsdef;                 /* rule support definition */
-  int    arem;                  /* additional rule evaluation measure */
   double minval;                /* minimal evaluation measure value */
   ISNODE *curr;                 /* current node for traversal */
-  int    size;                  /* size of item set/rule/hyperedge */
   ISNODE *node;                 /* item set node for extraction */
-  int    index;                 /* index in item set node */
   ISNODE *head;                 /* head item node for extraction */
-  int    item;                  /* head item of previous rule */
   int    *buf;                  /* buffer for paths (support check) */
   int    *path;                 /* current path / (partial) item set */
-  int    plen;                  /* current path length */
-  int    hdonly;                /* head only item in current set */
-  int    memopt;                /* whether to optimize memory usage */
   int    *map;                  /* to create identifier maps */
+  int    memopt;                /* whether to optimize memory usage */
 #ifdef BENCH                    /* if benchmark version */
   int    cnt;                   /* number of counters */
   int    nec;                   /* number of necessary counters */
@@ -102,7 +105,8 @@ typedef struct {                /* --- item set tree --- */
   int    chnec;                 /* number of necessary child pointers */
   int    bytes;                 /* number of bytes used */
 #endif
-  char   apps[1];               /* item appearances */
+  char   apps[1];               /* item appearances, this will be 
+                                    allocated as an array */
 } ISTREE;                       /* (item set tree) */
 
 /*----------------------------------------------------------------------
@@ -151,4 +155,9 @@ extern void    ist_show    (ISTREE *ist);
 #define ist_gettac(t)      ((t)->tacnt)
 #define ist_height(t)      ((t)->lvlcnt)
 
+#ifdef ARCH64
+#define get_vec(t)         ((ISNODE**) (t->cnts + (((t->size) & 1)?(t->size)+1:t->size)))
+#else
+#define get_vec(t)         ((ISNODE**) (t->cnts + t->size))
+#endif
 #endif

@@ -2,24 +2,25 @@
 #include <Rdefines.h>
 #include <time.h>
 
+/*
+ support counting and rule generation for user-supplied
+ sets of itemsets. counts are stored in memory-efficient
+ prefix-trees. 
 
-// support counting and rule generation for user-supplied
-// sets of itemsets. counts are stored in memory-efficient
-// prefix-trees. 
-//
-// warning: the code is not thread-safe, but I guess so is
-// most of the R source code.
-//
-// todo: 1) optimize insertion of left nodes. 2) check for
-//	 special cases, such as all itemsets or transactions
-//	 are empty, or the set of items is empty. 3) register
-//	 pointer array for finalizing.
-//	
-// note that sgCMatrix support is for package arulesSequence.
-//
-// Version 0.2-6
-//
-// (C) ceeboo 2007
+ warning: the code is not thread-safe, but I guess so is
+ most of the R source code.
+
+ todo: 1) optimize insertion of left nodes. 2) check for
+	 special cases, such as all itemsets or transactions
+	 are empty, or the set of items is empty. 3) register
+	 pointer array for finalizing.
+	
+ note that sgCMatrix support is for package arulesSequence.
+
+ Version 0.2-6
+
+ (C) ceeboo 2007
+*/
 
 typedef struct pnode {
     int index;
@@ -28,9 +29,9 @@ typedef struct pnode {
     struct pnode *pr;
 } PN;
 
-static PN *nq, **nb = NULL;		    // node pointers
-static int npn, cpn, apn;		    // node counters
-static int *pb;				    // prefix buffer
+static PN *nq, **nb = NULL;		    /* node pointers */ 
+static int npn, cpn, apn;		    /* node counters */
+static int *pb;				    /* prefix buffer */
 
 static void pnfree(PN *p) {
     if (p == NULL)
@@ -51,7 +52,7 @@ static PN *pnadd(PN *p, int *x, int n) {
     if (n == 0)
 	return p;
     cpn++;
-    if (p == NULL) {			    // append node
+    if (p == NULL) {			    /* append node */
 	p = nq = (PN *) malloc(sizeof(PN));
 	if (p) {
 	    apn++;
@@ -62,14 +63,14 @@ static PN *pnadd(PN *p, int *x, int n) {
 	} else
 	    npn = 1;
     } else
-    if (p->index == *x) {		    // existing node
+    if (p->index == *x) {		    /* existing node */
 	nq = p;
 	p->pl = pnadd(p->pl, x+1, n-1);
     } else
-    if (p->index < *x) {		    // search right subtree
+    if (p->index < *x) {		    /* search right subtree */
 	nq = p;
 	p->pr = pnadd(p->pr, x, n);
-    } else {				    // prepend node
+    } else {				    /* prepend node */
 	PN *q = nq = (PN *) malloc(sizeof(PN));
 	if (q) {
 	    apn++;
@@ -84,7 +85,7 @@ static PN *pnadd(PN *p, int *x, int n) {
     return p;
 }
 
-// retrieve count
+/* retrieve count */
 
 static int pnget(PN *p, int *x, int n) {
     if (p == NULL || n == 0)
@@ -98,10 +99,10 @@ static int pnget(PN *p, int *x, int n) {
     }
     if (p->index < *x) 
 	return pnget(p->pr, x, n);
-    return -1;				    // set not found
+    return -1;				    /* set not found */
 }
 
-// count transaction
+/* count transaction */
 
 static void pncount(PN *p, int *x, int n) {
     if (p == NULL || n == 0)
@@ -119,25 +120,14 @@ static void pncount(PN *p, int *x, int n) {
 	pncount(p, x+1, n-1);
 }
 
-// note that we do not drop rules with zero support
-// as filtering is done later anyway. in this case, 
-// confidence and lift can either be zero or NaN, 
-// depending on the support of the left-hand side. 
+/*
+ note that we do not drop rules with zero support
+ as filtering is done later anyway. in this case, 
+ confidence and lift can either be zero or NaN, 
+ depending on the support of the left-hand side. 
+*/
 
 SEXP R_pncount(SEXP R_x, SEXP R_t, SEXP R_s, SEXP R_o, SEXP R_v) {
-    if (!inherits(R_x, "ngCMatrix"))
-	error("'x' not of class ngCMatrix");
-    if (!inherits(R_t, "ngCMatrix"))
-	error("'t' not of class ngCMatrix");
-    if (INTEGER(GET_SLOT(R_x, install("Dim")))[0] != 
-	INTEGER(GET_SLOT(R_t, install("Dim")))[0])
-	error("the number of rows of 'x' and 't' do not conform");
-    if (TYPEOF(R_s) != LGLSXP)
-	error("'s' not of type logical");
-    if (TYPEOF(R_o) != LGLSXP)
-	error("'o' not of type logical");
-    if (TYPEOF(R_v) != LGLSXP)
-	error("'v' not of type logical");
     int i, j, c, f, l, k, n, nr, np, ni, e;
     int *x, *o = NULL;
     double s, t = 0;
@@ -155,6 +145,20 @@ SEXP R_pncount(SEXP R_x, SEXP R_t, SEXP R_s, SEXP R_o, SEXP R_v) {
 	    Rprintf("preparing ... ");
     }
 #endif
+    
+    if (!inherits(R_x, "ngCMatrix"))
+	error("'x' not of class ngCMatrix");
+    if (!inherits(R_t, "ngCMatrix"))
+	error("'t' not of class ngCMatrix");
+    if (INTEGER(GET_SLOT(R_x, install("Dim")))[0] != 
+	INTEGER(GET_SLOT(R_t, install("Dim")))[0])
+	error("the number of rows of 'x' and 't' do not conform");
+    if (TYPEOF(R_s) != LGLSXP)
+	error("'s' not of type logical");
+    if (TYPEOF(R_o) != LGLSXP)
+	error("'o' not of type logical");
+    if (TYPEOF(R_v) != LGLSXP)
+	error("'v' not of type logical");
   
     nr = INTEGER(GET_SLOT(R_x, install("Dim")))[0];
     
@@ -330,7 +334,7 @@ SEXP R_pncount(SEXP R_x, SEXP R_t, SEXP R_s, SEXP R_o, SEXP R_v) {
    
     if (LOGICAL(R_s)[0] == TRUE) {
 	PROTECT(r = allocVector(INTSXP, LENGTH(px)-1));
-	// warnings
+	/* warnings */
 	pl = il = pr = ir = rs = rc = rl = pi = (SEXP)0;
     } else {
 	SEXP o, p;
@@ -386,7 +390,7 @@ SEXP R_pncount(SEXP R_x, SEXP R_t, SEXP R_s, SEXP R_o, SEXP R_v) {
 		    pb[0] = pb[k];
 		    pb[k] = j;
 		}
-		INTEGER(pi)[np] = i;	    // itemset index
+		INTEGER(pi)[np] = i;	    /* itemset index */
 		
 		REAL(rs)[np] = s;
 		REAL(rc)[np] = c / (double)   pnget(nb[pb[1]], pb+1, n-1);
@@ -455,7 +459,7 @@ SEXP R_pncount(SEXP R_x, SEXP R_t, SEXP R_s, SEXP R_o, SEXP R_v) {
     return r;
 }
 
-// index itemsets
+/* index itemsets */
 
 static void pnindex(PN *p) {
     if (p == NULL)
@@ -468,6 +472,13 @@ static void pnindex(PN *p) {
 }
 
 SEXP R_pnindex(SEXP R_x, SEXP R_y, SEXP R_v) {
+    int i, k, f, l, n, nr, e;
+    int *x;
+    SEXP r, px, ix, py, iy;
+#ifdef _TIME_H
+    clock_t t2, t1 = clock();
+#endif
+    
     if (!inherits(R_x, "ngCMatrix") && 
 	!inherits(R_x, "sgCMatrix"))
 	error("'x' not of class ngCMatrix");
@@ -476,16 +487,12 @@ SEXP R_pnindex(SEXP R_x, SEXP R_y, SEXP R_v) {
 	error("'y' not of class ngCMatrix");
     if (TYPEOF(R_v) != LGLSXP)
 	error("'v' not of type logical");
-    int i, k, f, l, n, nr, e;
-    int *x;
-    SEXP r, px, ix, py, iy;
     
 #ifdef _TIME_H
-    clock_t t2, t1 = clock();
-
     if (LOGICAL(R_v)[0] == TRUE)
 	Rprintf("indexing ... ");
 #endif
+    
     nr = INTEGER(GET_SLOT(R_x, install("Dim")))[0];
     
     px = py = GET_SLOT(R_x, install("p"));
@@ -581,10 +588,12 @@ SEXP R_pnindex(SEXP R_x, SEXP R_y, SEXP R_v) {
     return r;
 }
 
-// update all subsets to the maximum count
-// of a superset
-//
-// fixme: generalize to different uses
+/*
+ update all subsets to the maximum count
+ of a superset
+
+ FIXME: generalize to different uses
+*/
 
 static int pnc;
 
@@ -606,6 +615,13 @@ static void pnsmax(PN *p, int *x, int n, int l) {
 }
 
 SEXP R_pnclosed(SEXP R_x, SEXP R_c, SEXP R_v) {
+    int i, k, f, l, n, nr, e;
+    int *x;
+    SEXP r, px, ix;
+#ifdef _TIME_H
+    clock_t t2, t1 = clock();
+#endif
+    
     if (!inherits(R_x, "ngCMatrix"))
 	error("'x' not of class ngCMatrix");
     if (TYPEOF(R_c) != INTSXP)
@@ -614,13 +630,8 @@ SEXP R_pnclosed(SEXP R_x, SEXP R_c, SEXP R_v) {
 	error("'x' and 'c' not the same length");
     if (TYPEOF(R_v) != LGLSXP)
 	error("'v' not of type logical");
-    int i, k, f, l, n, nr, e;
-    int *x;
-    SEXP r, px, ix;
     
 #ifdef _TIME_H
-    clock_t t2, t1 = clock();
-
     if (LOGICAL(R_v)[0] == TRUE) 
 	Rprintf("checking ... ");
 #endif
@@ -713,25 +724,29 @@ SEXP R_pnclosed(SEXP R_x, SEXP R_c, SEXP R_v) {
     return r;
 }
 
-// index a set of itemsets into a set of 
-// rules.
-//
-// note that missing itemsets are coded 
-// as zero.
+/*
+ index a set of itemsets into a set of 
+ rules.
+
+ note that missing itemsets are coded 
+ as zero.
+*/
 
 SEXP R_pnrindex(SEXP R_x, SEXP R_v) {
-    if (!inherits(R_x, "ngCMatrix") && 
-	!inherits(R_x, "sgCMatrix"))
-        error("'x' not of class ngCMatrix");
-    if (TYPEOF(R_v) != LGLSXP)
-        error("'v' not of type logical");
     int i, j, k, f, l, m, n, nr;
     int *x;
     SEXP px, ix;
     SEXP r, is, ir, il;
 #ifdef _TIME_H
     clock_t t2, t1 = clock();
-
+#endif
+    
+    if (!inherits(R_x, "ngCMatrix") && 
+	!inherits(R_x, "sgCMatrix"))
+        error("'x' not of class ngCMatrix");
+    if (TYPEOF(R_v) != LGLSXP)
+        error("'v' not of type logical");
+#ifdef _TIME_H
     if (LOGICAL(R_v)[0] == TRUE) 
         Rprintf("processing ... ");
 #endif
@@ -834,6 +849,4 @@ SEXP R_pnrindex(SEXP R_x, SEXP R_v) {
  
     return r;
 }
-
-//
 

@@ -1,5 +1,5 @@
 
-R version 3.0.0 (2013-04-03) -- "Masked Marvel"
+R version 3.0.2 (2013-09-25) -- "Frisbee Sailing"
 Copyright (C) 2013 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -23,10 +23,12 @@ Loading required package: lattice
 
 Attaching package: ‘arules’
 
-The following object is masked from ‘package:base’:
+The following objects are masked from ‘package:base’:
 
     %in%, write
 
+> library("testthat")
+> 
 > 
 > data <- list(
 +   c("a","b","c"),
@@ -96,51 +98,9 @@ Tr4 0 1 0 0 1 0 0
 Tr5 1 0 0 1 0 0 0
 Tr6 0 0 0 1 1 0 0
 Tr7 1 1 0 1 1 1 1
-> as(as(m, "transactions"), "list")
-$Tr1
-[1] "a" "b" "c"
-
-$Tr2
-[1] "a" "b"
-
-$Tr3
-[1] "a" "b" "d"
-
-$Tr4
-[1] "b" "e"
-
-$Tr5
-[1] "a" "d"
-
-$Tr6
-[1] "d" "e"
-
-$Tr7
-[1] "a" "b" "d" "e" "f" "g"
-
 > 
-> as(t, "list")
-$Tr1
-[1] "a" "b" "c"
-
-$Tr2
-[1] "a" "b"
-
-$Tr3
-[1] "a" "b" "d"
-
-$Tr4
-[1] "b" "e"
-
-$Tr5
-[1] "a" "d"
-
-$Tr6
-[1] "d" "e"
-
-$Tr7
-[1] "a" "b" "d" "e" "f" "g"
-
+> expect_identical(data, as(as(m, "transactions"), "list"))
+> 
 > LIST(t, decode = FALSE)
 [[1]]
 [1] 1 2 3
@@ -253,10 +213,8 @@ d . | | | | . . . | .
 e | | . . . . . . . |
 > 
 > ## compare if output is the same
-> all(table(match(fsets, esets)) == 1)
-[1] TRUE
-> all(table(match(fsets_comp, esets_comp)) == 1)
-[1] TRUE
+> expect_true(all(table(match(fsets, esets)) == 1))
+> expect_true(all(table(match(fsets_comp, esets_comp)) == 1))
 > 
 > 
 > ##########################################################################

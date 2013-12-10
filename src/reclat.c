@@ -354,7 +354,7 @@ SEXP reclat(SEXP x, SEXP y, SEXP dim, SEXP parms, SEXP control, SEXP itemInfo)
   }                             /* and check it against 0 */
  
   /* --- sort and recode items --- */
-  // FIX broken gcc compilers
+  /* FIX broken gcc compilers */
   supp = (double)(int)ceil(tacnt *supp);     /* sort and recode the items */
   if (sort != 0) {              /* sort items w.r.t. their frequency */
     if (param.verbose) Rprintf("sorting and recoding items ... ");
@@ -413,15 +413,15 @@ SEXP reclat(SEXP x, SEXP y, SEXP dim, SEXP parms, SEXP control, SEXP itemInfo)
 	  Rprintf("[%.2fs].\n", SEC_SINCE(t));
   }
 
-  #ifdef BENCH                  /* if benchmark version */
+#ifdef BENCH                  /* if benchmark version */
   if (param.verbose) printf("memory used during search: %d bytes\n", bitmat->mem);
-  #endif                        /* print memory usage */
+#endif                        /* print memory usage */
 
   /* --- clean up --- */
   _cleanup();
-  #ifdef STORAGE                /* if storage debugging */
+#ifdef STORAGE                /* if storage debugging */
   showmem("at end of program"); /* check memory usage */
-  #endif
+#endif
   UNPROTECT(1);
   return ans;                     /* return 'ok' */
 }  /* main() */

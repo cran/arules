@@ -95,15 +95,22 @@ plot(hclust(d_jaccard, method = "ward"))
 
 ## cluster transactions for a sample of Adult
 data("Adult")
-s <- sample(Adult, 200) 
+s <- sample(Adult, 500) 
 
 ##  calculate Jaccard distances and do hclust
 d_jaccard <- dissimilarity(s)
-plot(hclust(d_jaccard))
+hc <- hclust(d_jaccard)
+plot(hc)
+
+## get 20 clusters and look at the difference of the item frequencies (bars) 
+## for the top 20 items) in cluster 1 compared to the data (line) 
+assign <- cutree(hc, 20)
+itemFrequencyPlot(s[assign==1], population=s, topN=20)
 
 ## calculate affinity-based distances and do hclust
 d_affinity <- dissimilarity(s, method = "affinity")
-plot(hclust(d_affinity))
+hc <- hclust(d_affinity)
+plot(hc)
 
 
 ## cluster rules
@@ -115,11 +122,6 @@ rules <- subset(rules, subset = lift > 2)
 d_affinity <- dissimilarity(rules, method = "affinity", 
   args = list(affinity = affinity(s)))
 plot(hclust(d_affinity))
-
-## use gupta
-d_gupta <- dissimilarity(rules, method = "gupta", args=list(trans=Adult))
-plot(hclust(d_gupta))
-
 }
 \references{
   Sneath, P. H. A. (1957) Some thoughts on bacterial classification. 

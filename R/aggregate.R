@@ -30,7 +30,7 @@ setMethod("aggregate", signature(x = "itemMatrix"),
 			    FUN = function(l) as.numeric(itemLabels == l)), 
 		    "dgCMatrix")
 
-	    x@data <- as(crossprod(aggrMat, as(x, "dgCMatrix")), "ngCMatrix")
+	    x@data <- as(crossprod(aggrMat, as(as(x, "ngCMatrix"), "dgCMatrix")), "ngCMatrix")
 	    x@itemInfo <- data.frame(labels = levels(itemLabels))
 
 	    validObject(x)

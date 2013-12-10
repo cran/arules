@@ -37,15 +37,17 @@ setAs("list", "ECparameter", function(from, to) .list2object(from, to))
 ## initialize
 
 setMethod("initialize", "ASparameter",
-    function(.Object, minlen = 1, maxlen = 10, 
+    function(.Object, minlen = 1L, maxlen = 10L, 
         target = "frequent itemsets", ...) {
+	
+        minlen <- as.integer(minlen)
+        maxlen <- as.integer(maxlen)
         
-        if (minlen - as.integer(minlen)) stop("minlen = ", minlen, 
-            " can not be coerced to integer without error.")
-        if (maxlen - as.integer(maxlen)) stop("maxlen = ", maxlen, 
-            " can not be coerced to integer without error.")
-        .Object@minlen <- as.integer(minlen)
-        .Object@maxlen <- as.integer(maxlen)
+	if(!is.finite(minlen) || minlen<1) stop("minlen needs to be finite and >0")    
+	if(!is.finite(maxlen) || maxlen<minlen) stop("maxlen needs to be finite and >minlen")    
+
+	.Object@minlen <- minlen
+        .Object@maxlen <- maxlen
         i <- pmatch(tolower(target), .types())
         if (!is.na(i)) .Object@target <- .types()[i] 
         else .Object@target = target
@@ -57,7 +59,7 @@ setMethod("initialize", "ASparameter",
     })
 
 setMethod("initialize", "APparameter",
-    function(.Object, minlen = 1, maxlen = 10, 
+    function(.Object, minlen = 1L, maxlen = 10L, 
         target = "rules", arem = "none", ...) {
         
         i <- pmatch(tolower(arem), .aremtypes())

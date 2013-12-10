@@ -23,7 +23,7 @@ bibentry(bibtype = "article",
          textVersion = {
              paste(paste("Michael Hahsler, Bettina Gruen and",
                          "Kurt Hornik (2005),",
-                         "arules -- A Computational Environment for",
+                         "arules - A Computational Environment for",
                          "Mining Association Rules and Frequent Item Sets."),
                    "Journal of Statistical Software 14/15.",
                    "URL: http://www.jstatsoft.org/v14/i15/.",

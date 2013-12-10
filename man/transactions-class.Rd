@@ -9,6 +9,7 @@
 \alias{coerce,transactions,list-method}
 \alias{coerce,data.frame,transactions-method}
 \alias{coerce,transactions,data.frame-method}
+\alias{coerce,ngCMatrix,transactions-method}
 %\alias{image,transactions-method}
 \alias{labels,transactions-method}
 \alias{show,transactions-method}
@@ -63,13 +64,13 @@
       The row names are used as item labels and the column names are
       stores as transaction IDs.
     }
+    \item{coerce}{\code{signature(from = "transactions", to = "matrix")};
+      coerces the transactions data set into a binary incidence matrix.
+    }
     \item{coerce}{\code{signature(from = "list", to = "transactions")};
       produces a transactions data set from a list.  The names of the
       items in the list are used as item labels and the item IDs and the 
       incidence matrix is produced automatically.
-    }
-    \item{coerce}{\code{signature(from = "transactions", to = "matrix")};
-      coerces the transactions data set into a binary incidence matrix.
     }
     \item{coerce}{\code{signature(from = "transactions", to = "list")};
       coerces the transactions data set into a list of transactions. 
@@ -93,6 +94,8 @@
       as a data.frame. 
       Note that this does not reverse coercion from data.frame 
       to \code{transactions}.}
+    \item{coerce}{\code{signature(from = "ngCMatrix", to = "transactions")}; 
+       Note that the ngCMatrix needs to have the items as rows!}
     \item{labels}{\code{signature(x = "transactions")};
       returns the labels (item labels and transaction IDs) 
       for the incidence matrix as a list of two vectors named \code{items}
