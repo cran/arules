@@ -94,10 +94,12 @@ setMethod("dissimilarity", signature(x = "matrix"),
             ##    between columns)
         } else if(ind == 7) {
             if(!cross) {
-                dist <- as.dist(1 - cor(t(x), method = "pearson"))
+                dist <- as.dist(1 - cor(t(x), method = "pearson", 
+				use="pairwise.complete.obs"))
             } else {
                 dist <- new("ar_cross_dissimilarity", 1 - cor(t(x), 
-                        t(y), method = "pearson"))
+                        t(y), method = "pearson", 
+			use="pairwise.complete.obs"))
             }
         } else {
 

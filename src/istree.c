@@ -51,6 +51,7 @@
             03.12.2003 bug in ist_check for rule mining fixed
             12.12.2003 padding for 64 bit architecture added
             09.05.2004 additional selection measure for sets added
+            12/9/2013 fixed 64-bit address alignment (MFH)
 ----------------------------------------------------------------------*/
 #include <stdio.h>
 #include <stdlib.h>
@@ -120,7 +121,8 @@ static void _count (ISNODE *node, int *set, int cnt, int min)
         node->cnts[i]++;        /* if the counter exists, */
       } }                       /* count the transaction */
     else if (node->chcnt > 0) { /* if there are child nodes */
-      vec = (ISNODE**)(node->cnts +node->size);
+/*      vec = (ISNODE**)(node->cnts +node->size); */
+      vec = get_vec(node);
       n   = ID(vec[0]);         /* get the child node vector */
       min--;                    /* one item less to the deepest nodes */
       while ((cnt > min) && (*set < n)) {
@@ -181,7 +183,8 @@ static void _countx (ISNODE *node, TATREE *tat, int min)
           node->cnts[i] += tat_cnt(tat_child(tat, k));
       } }                       /* count the transaction */
     else if (node->chcnt > 0) { /* if there are child nodes */
-      vec = (ISNODE**)(node->cnts +node->size);
+  /*    vec = (ISNODE**)(node->cnts +node->size); */
+      vec = get_vec(node);
       n   = ID(vec[0]);         /* get the child node vector */
       min--;                    /* one item less to the deepest nodes */
       for (k = tat_size(tat); --k >= 0; ) {
@@ -226,7 +229,8 @@ static int _stskip (ISNODE *node)
   if (node->chcnt  == 0) return  0;  /* do not skip new leaves */
   if (node->chcnt  <  0) return -1;  /* skip marked subtrees */
   if (node->offset >= 0)        /* if a pure vector is used */
-    vec = (ISNODE**)(node->cnts +node->size);
+/*    vec = (ISNODE**)(node->cnts +node->size);*/
+    vec = get_vec(node);
   else                          /* if an identifer map is used */
     vec = (ISNODE**)(node->cnts +node->size +node->size);
   for (r = -1, i = node->chcnt; --i >= 0; )
@@ -253,7 +257,8 @@ static int _check (ISNODE *node, char *marks, int supp)
           marks[n+i] = r = 1;   /* mark items in set that satisfies */
       } }                       /* the minimum support criterion */
     else if (node->chcnt > 0) { /* if there are child nodes */
-      vec = (ISNODE**)(node->cnts +node->size);
+/*      vec = (ISNODE**)(node->cnts +node->size); */
+      vec = get_vec(node);
       for (i = node->chcnt; --i >= 0; )
         if (vec[i]) r |= _check(vec[i], marks, supp);
     } }                         /* recursively process all children */
@@ -288,7 +293,8 @@ static int _getsupp (ISNODE *node, int *set, int cnt)
     c = node->chcnt & ~F_SKIP;  /* if there are no children, */
     if (c <= 0) return -1;      /* the support is less than minsupp */
     if (node->offset >= 0) {    /* if a pure vector is used */
-      vec = (ISNODE**)(node->cnts +node->size);
+/*      vec = (ISNODE**)(node->cnts +node->size); */
+      vec = get_vec(node);
       i   = *set++ -ID(vec[0]); /* compute the child vector index and */
       if (i >= c) return -1; }  /* abort if the child does not exist */
     else {                      /* if an identifier map is used */
@@ -324,7 +330,8 @@ static void _clrsupp (ISNODE *node, int *set, int cnt, int supp)
   assert(node && set && (cnt >= 0)); /* check the function arguments */
   while (--cnt > 0) {           /* follow the set/path from the node */
     if (node->offset >= 0) {    /* if a pure vector is used */
-      vec = (ISNODE**)(node->cnts +node->size);
+      /* vec = (ISNODE**)(node->cnts +node->size); */
+      vec = get_vec(node);
       i   = *set++ -ID(vec[0]);}/* compute the child vector index */
     else {                      /* if an identifier map is used */
       map = node->cnts +(n = node->size);
@@ -406,25 +413,26 @@ static ISNODE* _child (ISTREE *ist, ISNODE *node, int index,
       ist->map[n++] = k;        /* for a full rule and a rule body, */
   }                             /* note the item identifier */
   if (n <= 0) return NULL;      /* if no child is needed, abort */
-  #ifdef BENCH                  /* if benchmark version: */
+#ifdef BENCH                  /* if benchmark version: */
   ist->nec += n;                /* sum the necessary counters */
-  #endif
+#endif
 
   /* --- decide on node structure --- */
   k = ist->map[n-1] -ist->map[0] +1;
   if    (!ist->memopt) n = k;   /* check the size of a pure vector */
   else if (3*n >= 2*k) n = k;   /* use a pure vector if it is small */
   else                 k = n+n; /* enough, otherwise use an id. map */
-  #ifdef ARCH64                 /* if 64 bit architecture */
-  if ((n == k) && (k & 1)) n = ++k;
-  #endif                        /* pad to even number of counters */
-  #ifdef BENCH                  /* if benchmark version */
+#ifdef BENCH                  /* if benchmark version */
   ist->cnt   += n;              /* sum the number of counters */
   ist->bytes += sizeof(ISNODE) +(k-1) *sizeof(int) +8;
-  #endif                        /* determine the memory usage */
+#endif                        /* determine the memory usage */
 
   /* --- create child --- */
+#ifdef ARCH64               /* if 64 bit architecture */
+  curr = (ISNODE*)malloc(sizeof(ISNODE) + ((k&1)?k:(k-1)) *sizeof(int));
+#else
   curr = (ISNODE*)malloc(sizeof(ISNODE) +(k-1) *sizeof(int));
+#endif                        /* pad to even number of counters */
   if (!curr) return (void*)-1;  /* create a child node */
   curr->parent = node;          /* set pointer to parent node */
   curr->succ   = NULL;          /* and clear successor pointer */
@@ -584,8 +592,14 @@ ISTREE* ist_create (int itemcnt, double supp, double conf,
   assert((itemcnt >= 0)         /* check the function arguments */
       && (supp >= 0) && (supp <= 1) && (conf >= 0) && (conf <= 1));
 
+  n = itemcnt;                  /* on 32 bit systems, however, */
+
   /* --- allocate memory --- */ 
-  ist = (ISTREE*)malloc(sizeof(ISTREE) +(itemcnt-1) *sizeof(char));
+#ifdef ARCH64                 /* if 64 bit architecture */
+  ist = (ISTREE*)malloc(sizeof(ISTREE) +((n&1)?n:(n-1)) *sizeof(char));
+#else                         /* pad counters to even number */
+  ist = (ISTREE*)malloc(sizeof(ISTREE) +(n-1) *sizeof(char));
+#endif                        /* use the number of items directly */
   if (!ist) return NULL;        /* allocate the tree body */
   ist->levels = lvl = (ISNODE**)malloc(BLKSIZE *sizeof(ISNODE*));
   if (!lvl) { free(ist); return NULL; }
@@ -593,11 +607,7 @@ ISTREE* ist_create (int itemcnt, double supp, double conf,
   if (!buf) { free(lvl); free(ist); return NULL; }
   ist->map    = map = (int*)    malloc(itemcnt *sizeof(int));
   if (!map) { free(buf); free(lvl); free(ist); return NULL; }
-  #ifdef ARCH64                 /* if 64 bit architecture */
-  n = (itemcnt & 1) ? itemcnt+1 : itemcnt;
-  #else                         /* pad counters to even number */
-  n = itemcnt;                  /* on 32 bit systems, however, */
-  #endif                        /* use the number of items directly */
+
   lvl[0] = ist->curr = root =   /* allocate a root node */
     (ISNODE*)calloc(1, sizeof(ISNODE) +(n-1) *sizeof(int));
   if (!root){ free(map); free(buf); free(lvl); free(ist); return NULL; }
@@ -608,14 +618,14 @@ ISTREE* ist_create (int itemcnt, double supp, double conf,
   ist->supp    = supp; ist->conf  = conf;
   ist->rsdef   = rsdef & IST_BOTH;
   ist->memopt  = memopt;
-  #ifdef BENCH                  /* if benchmark version */
+#ifdef BENCH                  /* if benchmark version */
   ist->cnt     = ist->nec   = itemcnt;
   ist->chcnt   = ist->chnec = 0;
   ist->bytes   = sizeof(ISTREE) +itemcnt *sizeof(char) +8
                + BLKSIZE *sizeof(ISNODE*) +8
                + BLKSIZE *sizeof(int) +8
                + itemcnt *sizeof(int) +8;
-  #endif                        /* initialize the benchmark variables */
+#endif                        /* initialize the benchmark variables */
   ist_init(ist, 1, EM_NONE, 1); /* initialize rule extraction */
   root->parent = root->succ = NULL;
   root->offset = root->id   = 0;
@@ -732,9 +742,9 @@ int ist_addlvl (ISTREE *ist)
     }                           /* and advance end pointer */
     if (n <= 0) {               /* if no child node was created, */
       (*ndp)->chcnt = F_SKIP; continue; }       /* skip the node */
-    #ifdef BENCH                /* if benchmark version */
+#ifdef BENCH                /* if benchmark version */
     ist->chnec += n;            /* sum the number of necessary */
-    #endif                      /* child pointers */
+#endif                      /* child pointers */
     node = *ndp;                /* decide on the node structure: */
     if (node->offset >= 0) {    /* if a pure counter vector is used, */
       n = ID(last)-ID(frst)+1;  /* always add a pure child vector */
@@ -749,16 +759,17 @@ int ist_addlvl (ISTREE *ist)
     node = (ISNODE*)realloc(node, sizeof(ISNODE) +i);
     if (!node) { _cleanup(ist); return -1; }
     node->chcnt = n;            /* add a child vector to the node */
-    #ifdef BENCH                /* if benchmark version */
+#ifdef BENCH                /* if benchmark version */
     ist->chcnt += n;            /* sum the number of child pointers */
     if ((node->offset >= 0) || (node->size == n))
          ist->bytes += n * sizeof(ISNODE*);
     else ist->bytes += n *(sizeof(ISNODE*) +sizeof(int));
-    #endif                      /* determine the memory usage */
+#endif                      /* determine the memory usage */
     if ((node != *ndp) && node->parent) {
       last = node->parent;      /* adapt the ref. from the parent */
       if (last->offset >= 0) {  /* if a pure vector is used */
-        vec = (ISNODE**)(last->cnts +last->size);
+/*        vec = (ISNODE**)(last->cnts +last->size); */
+        vec = get_vec(last);
         vec[(vec[0] != *ndp) ? ID(node) -ID(vec[0]) : 0] = node; }
       else {                    /* if an identifier map is used */
         map = last->cnts +(i = last->size);
@@ -771,7 +782,8 @@ int ist_addlvl (ISTREE *ist)
     }                           /* set the new child pointer */
     *ndp = node;                /* set new (reallocated) node */
     if (node->offset >= 0) {    /* if to use pure vectors */
-      vec = (ISNODE**)(node->cnts +node->size);
+/*      vec = (ISNODE**)(node->cnts +node->size); */
+      vec = get_vec(node);
       while (--n >= 0) vec[n] = NULL;
       i = ID(frst);             /* get item identifier of first child */
       for (cur = frst; cur; cur = cur->succ) {
@@ -830,7 +842,8 @@ int ist_down (ISTREE *ist, int item)
   c = node->chcnt & ~F_SKIP;    /* if there are no child nodes, */
   if (c <= 0) return -1;        /* abort the function */
   if (node->offset >= 0) {      /* if a pure vector is used */
-    vec = (ISNODE**)(node->cnts +node->size);
+/*    vec = (ISNODE**)(node->cnts +node->size); */
+    vec = get_vec(node);
     item -= ID(vec[0]);         /* compute index in child node vector */
     if (item >= c) return -1; } /* and abort if there is no child */
   else {                        /* if an identifier map is used */
@@ -1284,7 +1297,8 @@ static void _showtree (ISNODE *node, int level)
   if      (c <= 0)              /* if there are no children, */
     vec = NULL;                 /* clear the child vector variable */
   else if (node->offset >= 0)   /* if a pure vector is used */
-    vec = (ISNODE**)(node->cnts +node->size);
+/*    vec = (ISNODE**)(node->cnts +node->size); */
+    vec = get_vec(node);
   else {                        /* if an identifier map is used */
     map = node->cnts +(n = node->size);
     vec = (ISNODE**)(map +n);   /* get id. map and child vector */

@@ -12,6 +12,7 @@ useDynLib(arules,
 
 import("methods")
 
+
 importFrom("stats", "predict", "aggregate")  ## we want to add methods
 
 importFrom("Matrix", "summary", "image", "t") ## we need generics and methods 

@@ -7,8 +7,10 @@
 \alias{coerce,matrix,itemMatrix-method}
 \alias{coerce,list,itemMatrix-method}
 \alias{coerce,itemMatrix,matrix-method}
-\alias{coerce,itemMatrix,dgCMatrix-method}
+%\alias{coerce,itemMatrix,dgCMatrix-method}
+%\alias{coerce,dgCMatrix,itemMatrix-method}
 \alias{coerce,itemMatrix,ngCMatrix-method}
+\alias{coerce,ngCMatrix,itemMatrix-method}
 \alias{coerce,itemMatrix,list-method}
 \alias{dim,itemMatrix-method}
 \alias{dimnames,itemMatrix-method}
@@ -89,20 +91,32 @@
   \describe{
     \item{coerce}{\code{signature(from = "matrix", to = "itemMatrix")};
         expects \code{from} to be a binary matrix only containing 0s and 1s.}
+    
+    \item{coerce}{\code{signature(from = "itemMatrix", to = "matrix")}; coerces
+      to a dense 0-1 matrix of \code{storage.mode} \code{"integer"} instead of 
+    \code{"double"} to save memory.}
+
     \item{coerce}{\code{signature(from = "list", to = "itemMatrix")};
       \code{from} is a list of vectors. Each vector contains one 
       set/transaction/\ldots.}
+      
+    \item{coerce}{\code{signature(from = "itemMatrix", to = "list")}; see also
+        the methods for \code{LIST}.}
+    
     \item{coerce}{\code{signature(from = "itemMatrix", to = "ngCMatrix")};
       access the sparse matrix representation. Note, the \code{ngCMatrix} 
       contains a transposed from of the itemMatrix.}
-    \item{coerce}{\code{signature(from = "itemMatrix", to = "dgCMatrix")};
-      access the sparse matrix representation. Note, the \code{dgCMatrix} 
-      contains a transposed from of the itemMatrix.}
-    \item{coerce}{\code{signature(from = "itemMatrix", to = "matrix")}; coerces
-      to a dense 0-1 matrix of \code{storage.mode} \code{"integer"} instead of 
-	  \code{"double"} to save memory.}
-    \item{coerce}{\code{signature(from = "itemMatrix", to = "list")}; see also
-        the methods for \code{LIST}.}
+    
+    \item{coerce}{\code{signature(from = "ngCMatrix", to = "itemMatrix")};
+      Note, the \code{ngCMatrix} has to be transposed with items as rows!}
+    
+%    \item{coerce}{\code{signature(from = "itemMatrix", to = "dgCMatrix")};
+%      access the sparse matrix representation. Note, the \code{dgCMatrix} 
+%      contains a transposed from of the itemMatrix.}
+%    
+%    \item{coerce}{\code{signature(from = "dgCMatrix", to = "itemMatrix")};
+%     Note, the \code{ngCMatrix} has to be transposed with items as rows!}
+    
     \item{dim}{\code{signature(x = "itemMatrix")};
       returns the dimensions of the itemMatrix.}
     \item{dimnames}{\code{signature(x = "itemMatrix")};

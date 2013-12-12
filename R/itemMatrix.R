@@ -64,12 +64,15 @@ setAs("matrix", "itemMatrix",
         ## support for "ngRMatrix" in Matrix. note that we
         ## can fail later as the row or column names need 
         ## not neccessarily be unique.
-        dn <- list(dimnames(from)[[1]], labels(from)[[2]])
+        itemInfo <- data.frame(labels = I(labels(from)[[2]])) ## colnames
+        itemsetInfo <- data.frame(itemsetID = I(labels(from)[[1]])) ## rownames
+        
         dimnames(from) <- NULL
+        
         new("itemMatrix", 
             data        = t(as(from, "ngCMatrix")),
-            itemInfo    = data.frame(labels    = I(dn[[2]])),
-            itemsetInfo = data.frame(itemsetID =   dn[[1]]))
+            itemInfo    = itemInfo,
+            itemsetInfo = itemsetInfo)
     }
 )
 
@@ -149,7 +152,7 @@ setAs("list", "itemMatrix",
         new("itemMatrix", 
             data        = p,
             itemInfo    = data.frame(labels    = I(levels(i))),
-            itemsetInfo = data.frame(itemsetID = labels(from)))
+            itemsetInfo = data.frame(itemsetID = I(labels(from))))
     }
 )
 
@@ -163,13 +166,32 @@ setAs("itemMatrix", "ngCMatrix",
     }
 )
 
-setAs("itemMatrix", "dgCMatrix",
-    function(from) {
-        to <- as(from@data, "dgCMatrix")
-        dimnames(to) <- rev(dimnames(from))
-        to
-    }
+setAs("ngCMatrix", "itemMatrix",
+      function(from) {
+        itemInfo <- data.frame(labels = I(labels(from)[[1]])) ## rownames
+        itemsetInfo <- data.frame(itemsetID = I(labels(from)[[2]])) ## colnames
+        
+        dimnames(from) <- list(NULL, NULL)
+        
+        new("itemMatrix", data=from, 
+            itemInfo=itemInfo,
+            itemsetInfo=itemsetInfo)
+      }
 )
+
+
+#setAs("itemMatrix", "dgCMatrix",
+#    function(from) {
+#        to <- as(from@data, "dgCMatrix")
+#        dimnames(to) <- rev(dimnames(from))
+#        to
+#    }
+#)
+#
+#setAs("dgCMatrix", "itemMatrix",
+#      function(from) as(as(from, "ngCMatrix"), "itemMatrix")
+#)
+
 
 ##*******************************************************
 ## find elements which contain some items (as labels or 

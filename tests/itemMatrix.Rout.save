@@ -1,5 +1,5 @@
 
-R version 3.0.0 (2013-04-03) -- "Masked Marvel"
+R version 3.0.2 (2013-09-25) -- "Frisbee Sailing"
 Copyright (C) 2013 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -23,93 +23,55 @@ Loading required package: lattice
 
 Attaching package: ‘arules’
 
-The following object is masked from ‘package:base’:
+The following objects are masked from ‘package:base’:
 
     %in%, write
 
+> library("testthat")
 > 
 > set.seed(20070611)
 > 
 > ### Generate random data and coerce data to itemMatrix.
 > m <- matrix(as.integer(runif(50)>0.8), ncol=5)
-> dimnames(m) <- list(paste("trans", seq(nrow(m)), sep=""), 
-+ 	paste("item", seq(ncol(m)), sep=""))
+> dn <- list(paste("trans", seq(nrow(m)), sep=""), 
++            paste("item", seq(ncol(m)), sep=""))
+> dimnames(m) <- dn
 > i <- as(m, "itemMatrix")
-> i
-itemMatrix in sparse format with
- 10 rows (elements/transactions) and
- 5 columns (items)
+> 
 > 
 > ### number of rows
-> length(i)
-[1] 10
+> expect_identical(length(i), 10L)
 > 
 > ### subsetting
-> as(i[1:5], "matrix")
-       item1 item2 item3 item4 item5
-trans1     0     0     1     0     0
-trans2     0     0     1     0     1
-trans3     0     0     0     1     0
-trans4     0     0     0     0     1
-trans5     0     0     1     0     0
-> as(i[1:5,1:2], "matrix")
-       item1 item2
-trans1     0     0
-trans2     0     0
-trans3     0     0
-trans4     0     0
-trans5     0     0
-> as(i[-1,-1], "matrix")
-        item2 item3 item4 item5
-trans2      0     1     0     1
-trans3      0     0     1     0
-trans4      0     0     0     1
-trans5      0     1     0     0
-trans6      1     1     0     0
-trans7      0     0     0     0
-trans8      0     0     0     0
-trans9      0     0     1     0
-trans10     0     0     0     0
-> as(i[rep(c(T,F), nrow(m)/2), c(T,F,F,F,T)], "matrix")
-       item1 item5
-trans1     0     0
-trans3     0     0
-trans5     0     0
-trans7     1     0
-trans9     0     0
+> expect_identical(as(i[1:5], "matrix"), m[1:5,])
+> expect_identical(as(i[1:5,1:2], "matrix"), m[1:5, 1:2])
+> expect_identical(as(i[-1,-1], "matrix"), m[-1,-1])
+> expect_identical(as(i[rep(c(T,F), nrow(m)/2), c(T,F,F,F,T)], "matrix"),
++                  m[rep(c(T,F), nrow(m)/2), c(T,F,F,F,T)])
 > 
 > ### dimnames
-> dimnames(i)
-[[1]]
- [1] "trans1"  "trans2"  "trans3"  "trans4"  "trans5"  "trans6"  "trans7" 
- [8] "trans8"  "trans9"  "trans10"
-
-[[2]]
-[1] "item1" "item2" "item3" "item4" "item5"
-
-> dimnames(i[1:5,1:2])
-[[1]]
-[1] "trans1" "trans2" "trans3" "trans4" "trans5"
-
-[[2]]
-[1] "item1" "item2"
-
-> dimnames(i[c("trans1", "trans10"), c("item5", "item1")])
-[[1]]
-[1] "trans1"  "trans10"
-
-[[2]]
-[1] "item5" "item1"
-
-> dimnames(i[c("trans1", "trans2"), c("item5", "item4")])
-[[1]]
-[1] "trans1" "trans2"
-
-[[2]]
-[1] "item5" "item4"
-
+> expect_identical(dimnames(i), dn)
+> expect_identical(dimnames(i[c("trans1", "trans10"), c("item5", "item4")]),
++                  dimnames(m[c("trans1", "trans10"), c("item5", "item4")]))
 > 
-> if(!is(try(i[,c(1,1)], silent=TRUE), "try-error")) stop("Test for unique items failed!")
+> # test for unique items
+> expect_error(i[,c(1,1)])
+> 
+> ### test export as sparse matrix
+> #dgc <- as(i, "dgCMatrix")
+> #expect_true(all(t(m)==dgc))
+> #expect_identical(dimnames(dgc),dimnames(t(m)))
+> 
+> ngc <- as(i, "ngCMatrix")
+> expect_true(all(t(m)==ngc))
+> expect_identical(dimnames(ngc),dimnames(t(m)))
+> 
+> #expect_identical(i, as(dgc, "itemMatrix"))
+> expect_identical(i, as(ngc, "itemMatrix"))
+> 
+> 
+> 
+> 
 > 
 > 
 > 

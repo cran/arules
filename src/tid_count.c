@@ -3,7 +3,7 @@
 #include <Rdefines.h>
 
 SEXP R_tid_support(SEXP tidLists, SEXP itemsets) {
-    // all are already ngCMatrix
+    /* all are already ngCMatrix */
 
     int n_of_trans, n_of_items, n_of_sets;
     int *t_i, * t_p, *i_i, *i_p, *buffer;
@@ -24,54 +24,54 @@ SEXP R_tid_support(SEXP tidLists, SEXP itemsets) {
     i_i = INTEGER(GET_SLOT(itemsets, install("i")));
     i_p = INTEGER(GET_SLOT(itemsets, install("p")));
 
-    // result
+    /* result */
     PROTECT(support = allocVector(INTSXP, n_of_sets));
     
-    // count buffer
+    /* count buffer */
     buffer = (int *) R_alloc(n_of_trans, sizeof(int));
     for(i = 0; i < n_of_trans; i++) buffer[i] = 0;
 
-    // go through itemsets
-    //Rprintf("doing itemset ");
+    /* go through itemsets */
+    /* Rprintf("doing itemset "); */
     for(i = 0; i < (n_of_sets); i++) {
-        //Rprintf("%d ", i);
+        /* Rprintf("%d ", i); */
         
-        // go through itemset
+        /* go through itemset */
         for(j = i_p[i]; j < i_p[i+1]; j++) {
             item = i_i[j];
-            //Rprintf("\n\titem %d\n", item);
+            /* Rprintf("\n\titem %d\n", item); */
             
-            //t_p[item];
+            /* t_p[item]; */
             
-            // add individual item tidlist
+            /*  add individual item tidlist */
             for(k = t_p[item]; k < t_p[item+1]; k++){
                 buffer[t_i[k]]++; 
             }
         }
         
-        // count support count
+        /* count support count */
         length_of_itemset = i_p[i+1]-i_p[i];
         count = 0;
         for(j = 0; j < n_of_trans; j++){
             if(buffer[j] == length_of_itemset) count++;
 
-            //clear buffer again
+            /* clear buffer again */
             buffer[j] = 0; 
         }
         INTEGER(support)[i] = count;
-        //Rprintf("(%d) ", count);
+        /* Rprintf("(%d) ", count); */
 
         if(i%100 == 0) R_CheckUserInterrupt();
     } 
         
-   //Rprintf("done...\n");
+   /* Rprintf("done...\n"); */
 
     UNPROTECT(1);
     return support;
 }
 
 SEXP R_tid_rules(SEXP tidLists, SEXP itemsets) {
-    // all are already ngCMatrix
+    /* all are already ngCMatrix */
 
     int n_of_trans, n_of_items, n_of_sets;
     int *t_i, * t_p, *i_i, *i_p, *buffer, *hits;
@@ -99,20 +99,20 @@ SEXP R_tid_rules(SEXP tidLists, SEXP itemsets) {
     i_p = INTEGER(GET_SLOT(itemsets, install("p")));
 
     
-    //get length for result
+    /* get length for result */
     n_of_rules = 0;
     length_lhs = 0;
     for(i = 0; i < n_of_sets; i++) {
         j = i_p[i+1] - i_p[i];
         if (j>1) {
-            // drop 1-itemsets
+            /* drop 1-itemsets */
             n_of_rules += j;   
             length_lhs += j*(j-1); 
         }
     }
     
     
-    // results
+    /* results */
     PROTECT(result = allocVector(VECSXP, 7));
     
     PROTECT(support = allocVector(REALSXP, n_of_rules));
@@ -138,51 +138,51 @@ SEXP R_tid_rules(SEXP tidLists, SEXP itemsets) {
     INTEGER(Dim)[0] = n_of_items;
     INTEGER(Dim)[1] = n_of_rules;
 
-    // count buffer
+    /* count buffer */
     buffer = (int *) R_alloc(n_of_trans, sizeof(int));
     for(i = 0; i < n_of_trans; i++) buffer[i] = 0;
 
-    // buffer for rule critical transactions which may increase the
-    // count of the lhs
+    /* buffer for rule critical transactions which may increase the
+       count of the lhs */ 
     hits = (int *) R_alloc(n_of_trans, sizeof(int));
 
-    // go through itemsets
-    //Rprintf("doing itemset ");
+    /* go through itemsets */
+    /* Rprintf("doing itemset "); */
     for(i = 0; i < (n_of_sets); i++) {
-        //Rprintf("%d ", i);
+        /* Rprintf("%d ", i); */
        
-        // drop 1-itemsets
+        /* drop 1-itemsets */
         if(i_p[i+1]-i_p[i] < 2) continue;
 
-        // go through itemset
+        /* go through itemset */
         for(j = i_p[i]; j < i_p[i+1]; j++) {
             item = i_i[j];
-            //Rprintf("\n\titem %d\n", item);
+            /* Rprintf("\n\titem %d\n", item); */
             
-            // add individual item tidlist
+            /* add individual item tidlist */
             for(k = t_p[item]; k < t_p[item+1]; k++){
                 buffer[t_i[k]]++; 
             }
         }
         
-        // count support count
+        /* count support count */
         length_of_itemset = i_p[i+1]-i_p[i];
         count = 0;
         l = 0;
         for(j = 0; j < n_of_trans; j++){
             if(buffer[j] >= length_of_itemset-1) {
                 if(buffer[j] == length_of_itemset) count++;
-                // now remember tids transactions which my increase the
-                // count of the lhs (buffer[j] == length_of_itemset-1)
+                /* now remember tids transactions which my increase the
+                   count of the lhs (buffer[j] == length_of_itemset-1) */
                 else hits[l++] = j; 
             }
 
-            //clear buffer again
+            /* clear buffer again */
             buffer[j] = 0;
         }
         
        
-        // go again through all items for subset support
+        /* go again through all items for subset support */
         for(j = i_p[i]; j < i_p[i+1]; j++) {
             item = i_i[j];
             
@@ -200,7 +200,7 @@ SEXP R_tid_rules(SEXP tidLists, SEXP itemsets) {
             Rprintf("\n");
             */
 
-            // we start with the max possible count and subtract matches
+            /* we start with the max possible count and subtract matches */
             subset_count = count + l;
             m = t_p[item];
             for(k = 0; k < l && m < t_p[item+1]; k++){
@@ -208,14 +208,15 @@ SEXP R_tid_rules(SEXP tidLists, SEXP itemsets) {
                 if(hits[k] == t_i[m]) subset_count--;
             }
 
-            //Rprintf("%d supp: %d lhs-supp: %d (item %d)\n", 
-            //        i, count, subset_count, item);
+            /* Rprintf("%d supp: %d lhs-supp: %d (item %d)\n", 
+                    i, count, subset_count, item); 
+	    */
 
-            // quality
+            /* quality */
             REAL(support)[n] = (double) count / dbl_n_of_trans;
             REAL(conf)[n] = (double) count / (double) subset_count;
         
-            // rule
+            /* rule */
             INTEGER(rhs_p)[n+1] = n+1;
             INTEGER(rhs_i)[n] = item;
             INTEGER(lhs_p)[n+1] = INTEGER(lhs_p)[n] +  

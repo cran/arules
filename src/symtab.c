@@ -245,7 +245,7 @@ void* st_insert (SYMTAB *tab, const char *name, int type,
   && (ste->level == tab->level))
     return EXISTS;              /* return 'symbol exists' */
 
-  #ifdef NIMAPFN                /* if name/identifier map management */
+#ifdef NIMAPFN                /* if name/identifier map management */
   if (tab->cnt >= tab->vsz) {   /* if the identifier vector is full */
     int vsz, **tmp;             /* (new) id vector and its size */
     vsz = tab->vsz +((tab->vsz > BLKSIZE) ? tab->vsz >> 1 : BLKSIZE);
@@ -253,7 +253,7 @@ void* st_insert (SYMTAB *tab, const char *name, int type,
     if (!tmp) return NULL;      /* resize the identifier vector and */
     tab->ids = tmp; tab->vsz = vsz;  /* set new vector and its size */
   }                             /* (no resizing for symbol tables */
-  #endif                        /* since then tab->vsz = MAX_INT) */
+#endif                        /* since then tab->vsz = MAX_INT) */
 
   nel = (STE*)malloc(sizeof(STE) +size +strlen(name) +1);
   if (!nel) return NULL;        /* allocate memory for new symbol */
@@ -263,12 +263,12 @@ void* st_insert (SYMTAB *tab, const char *name, int type,
   nel->level   = tab->level;    /* current visibility level */
   nel->succ    = tab->bvec[i];  /* insert new symbol at the head */
   tab->bvec[i] = nel++;         /* of the bucket list */
-  #ifdef NIMAPFN                /* if name/identifier maps are */
+#ifdef NIMAPFN                /* if name/identifier maps are */
   if (tab->ids) {               /* supported and this is such a map */
     tab->ids[tab->cnt] = (int*)nel;
     *(int*)nel = tab->cnt;      /* store the new symbol */
   }                             /* in the identifier vector */
-  #endif                        /* and set the symbol identifier */
+#endif                        /* and set the symbol identifier */
   tab->cnt++;                   /* increment the symbol counter */
   return nel;                   /* return pointer to data field */
 }  /* st_insert() */
