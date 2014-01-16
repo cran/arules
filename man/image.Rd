@@ -18,7 +18,9 @@
     xlab = "Items (Columns)",
     ylab = "Elements (Rows)", ...)
 
-\S4method{image}{transactions}(x, ...)
+\S4method{image}{transactions}(x, 
+    xlab = "Items (Columns)", 
+    ylab = "Transactions (Rows)", ...)
 
 \S4method{image}{tidLists}(x,
     xlab="Transactions (Columns)",

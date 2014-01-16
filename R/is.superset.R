@@ -36,46 +36,38 @@ setMethod("is.superset", signature(x = "associations"),
 ## this takes about 3 times the memory but is very fast!
 ## I suspect internally it always uses a lot of memory.
 setMethod("is.subset", signature(x = "itemMatrix"),
-    function(x, y = NULL, proper = FALSE, sparse = FALSE) {
-        if (length(x) == 0 || (!is.null(y) && length(y) == 0))
-            return(logical(0))
-        
-	## y needs to be itemMatrix
-	if(!is.null(y) && !is(y, "itemMatrix")) y <- items(y)
-	
-	if(sparse) return(.is.subset_sparse(x, y, proper))
-	
-	if (is.null(y)) 
-            m <- .Call("R_crosstab_ngCMatrix", x@data, NULL, FALSE, 
-		PACKAGE="arules")
-        else {
-            ## conform
-            k <- match(itemLabels(y), itemLabels(x))
-            n <- which(is.na(k))
-            if (length(n)) {
-                k[n] <- x@data@Dim[1] + seq(length(n))
-                x@data@Dim[1] <- x@data@Dim[1] + length(n)
-            }
-            if (any(k != seq_len(length(k))))
-                y@data <- .Call("R_recode_ngCMatrix", y@data, k,
-		    PACKAGE="arules")
-            if (y@data@Dim[1] <  x@data@Dim[1])
-                y@data@Dim[1] <- x@data@Dim[1]
-
-            m <- .Call("R_crosstab_ngCMatrix", x@data, y@data, FALSE,
-		    PACKAGE="arules")
-        }
-        m <- m == size(x)
-
-        if (proper == TRUE) 
-            if (is.null(y)) 
-                m <- m & outer(size(x), size(x), "<")
-            else 
-                m <- m & outer(size(x), size(y), "<")
-        ## if we were sure that x and y contain no duplicates ...
-        ## we never can be sure [ceeboo 2007]
-        m
+  function(x, y = NULL, proper = FALSE, sparse = FALSE) {
+    if (length(x) == 0 || (!is.null(y) && length(y) == 0))
+      return(logical(0))
+    
+    ## y needs to be itemMatrix and x has to conform!
+    if(!is.null(y)) { 
+      if(!is(y, "itemMatrix")) y <- items(y)
+      x <- recode(x, itemLabels(y))
     }
+    
+    if(sparse) return(.is.subset_sparse(x, y, proper))
+    
+    if (is.null(y)) m <- .Call("R_crosstab_ngCMatrix", x@data, NULL, FALSE, 
+      PACKAGE="arules")
+    else m <- .Call("R_crosstab_ngCMatrix", x@data, y@data, FALSE,
+      PACKAGE="arules")
+    
+    m <- m == size(x)
+    
+    if (proper == TRUE) 
+      if (is.null(y)) 
+        m <- m & outer(size(x), size(x), "<")
+    else 
+      m <- m & outer(size(x), size(y), "<")
+    ## if we were sure that x and y contain no duplicates ...
+    ## we never can be sure [ceeboo 2007]
+    
+    if(!is.null(y)) colnames(m) <- labels(y)$transactionID
+    rownames(m) <- labels(x)$elements
+
+    m
+  }
 )
 
 setMethod("is.subset", signature(x = "associations"),
@@ -85,26 +77,31 @@ setMethod("is.subset", signature(x = "associations"),
 
 ### use tidlist intersection 
 .is.subset_sparse <- function(x, y = NULL, proper=FALSE) { 
-
-    if(is.null(y)) y <- x
-
-    xitems <- LIST(x, decode = FALSE)
-    ylists <- LIST(as(y, "tidLists"), decode = FALSE)
-
-    ## select tid-lists for items and do intersection
-    contained <- lapply(xitems, FUN = function(i) {
-		if(length(i)==0) ssid <- 1:nrow(y)
-		else { 
-		    tidls <- unlist(ylists[i])
-		    if(is.null(tidls)) ssid <- integer(0)
-		    else ssid <- which(tabulate(tidls) == length(i))
-		    }
-
-		if(proper) ssid <- ssid[size(y)[ssid] > length(i)]
-		ssid
-	    })
-
-    .list2ngCMatrix(contained, nrow(y))
+  
+  if(is.null(y)) y <- x
+  
+  xitems <- LIST(x, decode = FALSE)
+  ylists <- LIST(as(y, "tidLists"), decode = FALSE)
+  
+  ## select tid-lists for items and do intersection
+  contained <- lapply(xitems, FUN = function(i) {
+    if(length(i)==0) ssid <- 1:nrow(y)
+    else { 
+      tidls <- unlist(ylists[i])
+      if(is.null(tidls)) ssid <- integer(0)
+      else ssid <- which(tabulate(tidls) == length(i))
+    }
+    
+    if(proper) ssid <- ssid[size(y)[ssid] > length(i)]
+    ssid
+  })
+  
+  m <- .list2ngCMatrix(contained, nrow(y))
+  
+  if(!is.null(y)) colnames(m) <- labels(y)$transactionID
+  rownames(m) <- labels(x)$elements
+  
+  m
 }
 
 

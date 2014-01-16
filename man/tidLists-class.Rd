@@ -19,6 +19,7 @@
 \alias{itemInfo,tidLists-method}
 \alias{transactionInfo,tidLists-method}
 \alias{t,tidLists-method}
+\alias{c,tidLists-method}
 \alias{show,tidLists-method}
 \alias{summary,tidLists-method}
 %
@@ -81,6 +82,7 @@
   \item{coerce}{\code{signature(from = "tidLists", to = "transactions")}}
   \item{coerce}{\code{signature(from = "itemMatrix", to = "tidLists")}}
   \item{coerce}{\code{signature(from = "transactions", to = "tidLists")}}
+  \item{c}{\code{signature(x = "tidLists")}; combine.}
   \item{dim}{\code{signature(x = "tidLists")};
       returns the dimensions of the sparse Matrix representing the 
       \code{tidLists}.}

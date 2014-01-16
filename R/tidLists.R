@@ -51,8 +51,8 @@ setMethod("size", signature(x = "tidLists"),
 setMethod("show", signature(object = "tidLists"),
     function(object) {
         cat("tidLists in sparse format with\n",
-            dim(object)[1], "items/itemsets (rows) and\n",
-            dim(object)[2], "transactions (columns)\n")
+            nrow(object), "items/itemsets (rows) and\n",
+            ncol(object), "transactions (columns)\n")
         invisible(NULL)
     }
 )
@@ -100,6 +100,32 @@ setMethod("show", signature(object = "summary.tidLists"),
 ## no t for associations
 setMethod("t", signature(x = "tidLists"),
     function(x) stop("Object not transposable! Use as(x, \"transactions\") for coercion."))
+
+##*****************************************************
+## combine
+## FIXME: Does not check for duplicated itemsets...
+
+setMethod("c", signature(x = "tidLists"),
+    function(x, ..., recursive = FALSE) {
+	args <- list(...)
+	if (recursive)
+	  args <- unlist(args)
+	
+	dat <- x@data
+	itemI <- itemInfo(x)
+	for (y in args) {
+	  if (!is(y, "tidLists")) stop("can only combine tidLists.")
+	
+	  if(ncol(x) != ncol(y)) stop("transactions not conforming.")
+	
+	  dat <- .Call("R_cbind_ngCMatrix", dat, y@data)
+	  itemI <- rbind(itemI, itemInfo(y))
+	}
+
+	x@data <- dat 
+	x@itemInfo <- itemI
+	x
+})
 
 ##*****************************************************
 ## subset
@@ -160,7 +186,7 @@ setAs("tidLists", "matrix",
 
 setAs("tidLists", "ngCMatrix",
     function(from) {
-        dimnames(from@data) <- dimnames(from)
+        dimnames(from@data) <- rev(dimnames(from))
         from@data
     }
 )
@@ -168,7 +194,6 @@ setAs("tidLists", "ngCMatrix",
 setAs("tidLists", "dgCMatrix",
     function(from) {
         to <- as(from@data, "dgCMatrix")
-        dimnames(to) <- dimnames(from) 
         to
     }
 )

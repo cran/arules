@@ -1,3 +1,11 @@
+Changes in version 1.1-1 (1/16/2014)
+    * is.superset/is.subset now makes sure that the two arguments conform using 
+        recode (number and order of items)
+    * is.superset/is.subset returns now a matrix with appropriate dimnames
+    * bug fix: fixed dimname bug in as(..., "dgCMatrix") for tidLists
+    * image: labels are now passed on correctly.
+    * tidLists has now c(). 
+
 Changes in version 1.1-0 (12/10/2013)
     * bug fix: reuse in now passed on correctly in interestMeasures 
 	      (bug reported by Ying Leung)
