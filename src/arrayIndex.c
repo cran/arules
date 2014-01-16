@@ -230,7 +230,7 @@ stringSubscript(SEXP s, int ns, int nx, SEXP names,
 */
 
 SEXP
-int_arraySubscript(int dim, SEXP s, const char *dn, const char *dnn,
+_int_arraySubscript(int dim, SEXP s, const char *dn, const char *dnn,
 		   SEXP x, Rboolean in, SEXP call)
 {
     int nd, ns, stretch = 0;
@@ -274,7 +274,7 @@ int_arraySubscript(int dim, SEXP s, const char *dn, const char *dnn,
 SEXP
 R_arraySubscript(SEXP x, SEXP dim, SEXP s, SEXP dn, SEXP dnn) {
     /* FIXME */
-    return int_arraySubscript(INTEGER(dim)[0], s, 
+    return _int_arraySubscript(INTEGER(dim)[0], s, 
 			      (const char *) CHAR(STRING_ELT(dn, 0)), 
 			      (const char *) CHAR(STRING_ELT(dnn, 0)), 
 			      x, TRUE, R_NilValue);

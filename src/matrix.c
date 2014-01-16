@@ -3,7 +3,7 @@
 #include <Rdefines.h>
 
 /* arraySubscript.c */
-SEXP int_arraySubscript(int, SEXP, const char *, const char *, SEXP,
+SEXP _int_arraySubscript(int, SEXP, const char *, const char *, SEXP,
 	Rboolean, SEXP);
 
 /* sparse matrix matrix tools.
@@ -227,7 +227,7 @@ SEXP R_colSubset_ngCMatrix(SEXP x, SEXP s) {
     
     SET_ATTRIB(x, CDR(r));
 #else
-    PROTECT(s = int_arraySubscript(1, s, "Dim", "Dimnames", x, TRUE, R_NilValue));
+    PROTECT(s = _int_arraySubscript(1, s, "Dim", "Dimnames", x, TRUE, R_NilValue));
 #endif
     px = getAttrib(x, install("p"));
     

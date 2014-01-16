@@ -116,6 +116,7 @@
 %    
 %    \item{coerce}{\code{signature(from = "dgCMatrix", to = "itemMatrix")};
 %     Note, the \code{ngCMatrix} has to be transposed with items as rows!}
+    \item{c}{\code{signature(object = "itemMatrix")}; combine. }
     
     \item{dim}{\code{signature(x = "itemMatrix")};
       returns the dimensions of the itemMatrix.}

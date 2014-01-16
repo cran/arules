@@ -19,7 +19,6 @@ Type 'q()' to quit R.
 
 > library("arules")
 Loading required package: Matrix
-Loading required package: lattice
 
 Attaching package: ‘arules’
 
@@ -42,30 +41,30 @@ The following objects are masked from ‘package:base’:
 > 
 > ### find supersets in is
 > is.superset(is, is)
-      [,1]  [,2]  [,3]  [,4]  [,5]
-[1,]  TRUE FALSE FALSE FALSE FALSE
-[2,]  TRUE  TRUE FALSE FALSE FALSE
-[3,] FALSE FALSE  TRUE FALSE FALSE
-[4,] FALSE FALSE FALSE  TRUE FALSE
-[5,]  TRUE FALSE  TRUE FALSE  TRUE
+     {A,B} {A,B,C,G} {C,D} {E,F} {A,B,C,D}
+[1,]  TRUE     FALSE FALSE FALSE     FALSE
+[2,]  TRUE      TRUE FALSE FALSE     FALSE
+[3,] FALSE     FALSE  TRUE FALSE     FALSE
+[4,] FALSE     FALSE FALSE  TRUE     FALSE
+[5,]  TRUE     FALSE  TRUE FALSE      TRUE
 > is.superset(is)
-      [,1]  [,2]  [,3]  [,4]  [,5]
-[1,]  TRUE FALSE FALSE FALSE FALSE
-[2,]  TRUE  TRUE FALSE FALSE FALSE
-[3,] FALSE FALSE  TRUE FALSE FALSE
-[4,] FALSE FALSE FALSE  TRUE FALSE
-[5,]  TRUE FALSE  TRUE FALSE  TRUE
+     {A,B} {A,B,C,G} {C,D} {E,F} {A,B,C,D}
+[1,]  TRUE     FALSE FALSE FALSE     FALSE
+[2,]  TRUE      TRUE FALSE FALSE     FALSE
+[3,] FALSE     FALSE  TRUE FALSE     FALSE
+[4,] FALSE     FALSE FALSE  TRUE     FALSE
+[5,]  TRUE     FALSE  TRUE FALSE      TRUE
 > is.superset(is, is, proper = TRUE)
-      [,1]  [,2]  [,3]  [,4]  [,5]
-[1,] FALSE FALSE FALSE FALSE FALSE
-[2,]  TRUE FALSE FALSE FALSE FALSE
-[3,] FALSE FALSE FALSE FALSE FALSE
-[4,] FALSE FALSE FALSE FALSE FALSE
-[5,]  TRUE FALSE  TRUE FALSE FALSE
+     {A,B} {A,B,C,G} {C,D} {E,F} {A,B,C,D}
+[1,] FALSE     FALSE FALSE FALSE     FALSE
+[2,]  TRUE     FALSE FALSE FALSE     FALSE
+[3,] FALSE     FALSE FALSE FALSE     FALSE
+[4,] FALSE     FALSE FALSE FALSE     FALSE
+[5,]  TRUE     FALSE  TRUE FALSE     FALSE
 > 
 > is.superset(is[5], is)
-     [,1]  [,2] [,3]  [,4] [,5]
-[1,] TRUE FALSE TRUE FALSE TRUE
+     {A,B} {A,B,C,G} {C,D} {E,F} {A,B,C,D}
+[1,]  TRUE     FALSE  TRUE FALSE      TRUE
 > 
 > ### sparse (should all be true)
 > all(as.matrix(is.superset(is, is, sparse=TRUE)) == is.superset(is, is))
@@ -79,23 +78,23 @@ The following objects are masked from ‘package:base’:
 > 
 > ### find subsets in is
 > is.subset(is, is)
-      [,1]  [,2]  [,3]  [,4]  [,5]
-[1,]  TRUE  TRUE FALSE FALSE  TRUE
-[2,] FALSE  TRUE FALSE FALSE FALSE
-[3,] FALSE FALSE  TRUE FALSE  TRUE
-[4,] FALSE FALSE FALSE  TRUE FALSE
-[5,] FALSE FALSE FALSE FALSE  TRUE
+           [,1]  [,2]  [,3]  [,4]  [,5]
+{A,B}      TRUE  TRUE FALSE FALSE  TRUE
+{A,B,C,G} FALSE  TRUE FALSE FALSE FALSE
+{C,D}     FALSE FALSE  TRUE FALSE  TRUE
+{E,F}     FALSE FALSE FALSE  TRUE FALSE
+{A,B,C,D} FALSE FALSE FALSE FALSE  TRUE
 > is.subset(is, is, proper = TRUE)
-      [,1]  [,2]  [,3]  [,4]  [,5]
-[1,] FALSE  TRUE FALSE FALSE  TRUE
-[2,] FALSE FALSE FALSE FALSE FALSE
-[3,] FALSE FALSE FALSE FALSE  TRUE
-[4,] FALSE FALSE FALSE FALSE FALSE
-[5,] FALSE FALSE FALSE FALSE FALSE
+           [,1]  [,2]  [,3]  [,4]  [,5]
+{A,B}     FALSE  TRUE FALSE FALSE  TRUE
+{A,B,C,G} FALSE FALSE FALSE FALSE FALSE
+{C,D}     FALSE FALSE FALSE FALSE  TRUE
+{E,F}     FALSE FALSE FALSE FALSE FALSE
+{A,B,C,D} FALSE FALSE FALSE FALSE FALSE
 >    
 > is.subset(is[1], is)
-     [,1] [,2]  [,3]  [,4] [,5]
-[1,] TRUE TRUE FALSE FALSE TRUE
+      [,1] [,2]  [,3]  [,4] [,5]
+{A,B} TRUE TRUE FALSE FALSE TRUE
 > 
 > ### is.maximal
 > quality(is) <- data.frame(isMaximal = is.maximal(is))
