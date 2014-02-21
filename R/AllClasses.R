@@ -338,6 +338,16 @@ setClass("rules",
             length(object@quality[[1]]) != length(object@lhs))
             return("quality does not match the number of rules")
 
+        ## check lhs and rhs
+        if(!validObject(object@lhs)) return("lhs of rules is not a valid itemMatrix")
+        if(!validObject(object@rhs)) return("rhs of rules is not a valid itemMatrix")
+      
+        ## check size of rhs
+        if(any(size(object@rhs)<1)) return("rhs is empty for at least one rule")
+      
+        ## check union
+        if(any(size(items(object)) != size(object@rhs)+size(object@lhs))) return("lhs and rhs of some rules is not distinct")
+      
         TRUE
     }
 )

@@ -42,27 +42,27 @@ setMethod("aggregate", signature(x = "itemMatrix"),
 setMethod("aggregate", signature(x = "itemsets"),
 	function(x, itemLabels) {
 
-	    items(x) <- aggregate(items(x), itemLabels)
+	    new("itemsets", items=aggregate(items(x), itemLabels))
+	    
+      ## first support value is used
 	    x <- unique(x)
-	    ## first support value is used
-
-	    validObject(x)
 	    x
-
 	})
 
 setMethod("aggregate", signature(x = "rules"),
 	function(x, itemLabels) {
 
-	    ##rhs(x) <- aggregate(rhs(x), itemLabels)
-	    x@rhs <- aggregate(rhs(x), itemLabels)
-	    lhs(x) <- aggregate(lhs(x), itemLabels)
-	    x <- unique(x)
-	    ## first support value is used
+	    rhs <- aggregate(rhs(x), itemLabels)
+	    lhs <- aggregate(lhs(x), itemLabels)
 
-	    validObject(x)
+      ## check if lhs items have to be removed
+      lhs <- itemSetdiff(lhs, rhs)
+    
+      ### remove non-unique rules
+      ## first support value is used
+      x <- new("rules", lhs=lhs, rhs=rhs)
+      x <- unique(x)
 	    x
-
 	})
 
 

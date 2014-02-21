@@ -26,27 +26,47 @@
 ##
 
 
-setMethod("union", signature(x = "ANY", y = "ANY"),
+setMethod("union", signature(x = "associations", y = "associations"),
     function(x, y) unique(c(x, y)) 
 ) 
 
-setMethod("intersect", signature(x = "ANY", y = "ANY"),
-    function(x, y) unique(y[match(x, y, 0)])
+setMethod("union", signature(x = "itemMatrix", y = "itemMatrix"),
+    function(x, y) unique(c(x, y)) 
+) 
+
+setMethod("intersect", signature(x = "associations", y = "associations"),
+    function(x, y) unique(y[match(x, y, 0L)])
 )
 
-setMethod("setequal", signature(x = "ANY", y = "ANY"),
-    function(x, y) all(c(match(x, y, 0) > 0, match(y, x, 0) > 0))
+setMethod("intersect", signature(x = "itemMatrix", y = "itemMatrix"),
+    function(x, y) unique(y[match(x, y, 0L)])
 )
 
-setMethod("setdiff", signature(x = "ANY", y = "ANY"),
+setMethod("setequal", signature(x = "associations", y = "associations"),
+    function(x, y) all(c(match(x, y, 0L) > 0L, match(y, x, 0L) > 0L))
+)
+
+setMethod("setequal", signature(x = "itemMatrix", y = "itemMatrix"),
+    function(x, y) all(c(match(x, y, 0L) > 0L, match(y, x, 0L) > 0L))
+)
+
+setMethod("setdiff", signature(x = "associations", y = "associations"),
     function(x, y) 
-    unique(if (length(x) || length(y)) x[match(x, y, 0) == 0] else x)
+    unique(if (length(x) || length(y)) x[match(x, y, 0L) == 0L] else x)
 )
 
-setMethod("is.element", signature(el = "ANY", set = "ANY"),
-    function(el, set) match(el, set, 0) > 0 
+setMethod("setdiff", signature(x = "itemMatrix", y = "itemMatrix"),
+    function(x, y) 
+    unique(if (length(x) || length(y)) x[match(x, y, 0L) == 0L] else x)
 )
 
+setMethod("is.element", signature(el = "associations", set = "associations"),
+    function(el, set) match(el, set, 0L) > 0L 
+)
+
+setMethod("is.element", signature(el = "itemMatrix", set = "itemMatrix"),
+    function(el, set) match(el, set, 0L) > 0L 
+)
 
 ## 
 

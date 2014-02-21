@@ -1,3 +1,9 @@
+Changes in version 1.1-2 (2/21/2014)
+    * discretize gained the parameter ordered.
+    * itemwise set operations itemUnion, itemSetdiff and itemIntersect added.
+    * validObject checks now rules more thoroughly
+    * aggregate removes duplicate items from the lhs
+
 Changes in version 1.1-1 (1/16/2014)
     * is.superset/is.subset now makes sure that the two arguments conform using 
         recode (number and order of items)
