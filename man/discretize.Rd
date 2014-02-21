@@ -8,8 +8,8 @@ Convert a Continuous Variable into a Categorical Variable
 This function converts a continuous variable into a categorical variable (factor) suitable for association rule mining.
 }
 \usage{
-discretize(x, method="interval", categories = 3, labels = NULL, onlycuts=FALSE, 
-    ...)
+discretize(x, method="interval", categories = 3, labels = NULL,     
+  ordered=FALSE, onlycuts=FALSE, ...)
 }
 \arguments{
   \item{x}{a numeric vector (continuous variable).}
@@ -18,7 +18,8 @@ discretize(x, method="interval", categories = 3, labels = NULL, onlycuts=FALSE,
   \item{categories}{ number of categories or a vector with boundaries 
     (all values outside the boundaries will be set to NA). }
   \item{labels}{ character vector; names for categories.}
-  \item{onlycuts}{ logical; return only computed interval boundaries. }
+  \item{ordered}{ logical; return a factor with ordered levels? }
+  \item{onlycuts}{ logical; return only computed interval boundaries? }
   \item{\dots}{further arguments are ignored. }.
 }
 %\details{

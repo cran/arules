@@ -14,6 +14,11 @@
   group (category) "baked goods". The aggregate methods
   replaces items in transactions, itemsets or rules with
   item groups as specified by the user.
+  
+  If rules are aggregated and the aggregation would
+  lead to the same item in the lhs and in the rhs then the item
+  is removed from the lhs. Rules or itemsets which are not     
+  unique after the aggregation are also removed.
 }
 \usage{
 \S4method{aggregate}{itemMatrix}(x, itemLabels)

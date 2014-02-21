@@ -30,14 +30,14 @@ setGeneric("%pin%",
 setGeneric("%ain%",
     function(x, table) standardGeneric("%ain%"))
 
-## Depricated!
+## Deprecated!
 setGeneric("SORT",
     function(x, ...) standardGeneric("SORT"))
 
 setGeneric("LIST",
     function(from, ...) standardGeneric("LIST"))
 
-## Depricated!
+## Deprecated!
 setGeneric("WRITE",
     function(x, file = "", ...) standardGeneric("WRITE"))
 
@@ -148,6 +148,14 @@ setGeneric("is.closed",
 setGeneric("is.maximal",
     function(x, ...) standardGeneric("is.maximal"))
 
+setGeneric("itemUnion",
+  function(x, y) standardGeneric("itemUnion"))
+
+setGeneric("itemSetdiff",
+  function(x, y) standardGeneric("itemSetdiff"))
+
+setGeneric("itemIntersect",
+  function(x, y) standardGeneric("itemIntersect"))
 setGeneric("quality",
     function(x) standardGeneric("quality"))
 

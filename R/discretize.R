@@ -20,39 +20,42 @@
 ### discretize continuous variables
 
 discretize <- function(x, method="interval", categories=3, labels=NULL, 
-	onlycuts = FALSE, ...) {
+  ordered =FALSE, onlycuts = FALSE, ...) {
+  
+  
+  methods = c("interval", "frequency", "cluster", "fixed")
+  
+  method <- methods[pmatch(tolower(method), methods)]
+  if(is.na(method)) stop("Unknown method!")
+  
+  res <- switch(method,
+    interval = {
+      categories <- seq(from=min(x, na.rm=TRUE), to=max(x, na.rm=TRUE), 
+        length.out=categories+1)
+      if(onlycuts) categories else .cut2(x, cuts=categories, 
+        oneval=FALSE, ...)
+    },
     
-    methods = c("interval", "frequency", "cluster", "fixed")
-    
-    method <- methods[pmatch(tolower(method), methods)]
-    if(is.na(method)) stop("Unknown method!")
-
-    res <- switch(method,
-	    interval = {
-		categories <- seq(from=min(x, na.rm=TRUE), to=max(x, na.rm=TRUE), 
-			length.out=categories+1)
-		if(onlycuts) categories else .cut2(x, cuts=categories, 
-			oneval=FALSE, ...)
-	    },
-	
     frequency = .cut2(x, g=categories, onlycuts=onlycuts, ...),
-	    
+    
     cluster = {
-		cl <-  kmeans(na.omit(x), categories)
-		centers <- sort(cl$centers[,1])
-		categories <- as.numeric(c(min(x, na.rm=TRUE),  head(centers, 
-				length(centers)-1) + diff(centers)/2, max(x, na.rm=TRUE)))
-		if(onlycuts) categories else .cut2(x, cuts=categories, ...)
-	    },
-	    
+      cl <-  kmeans(na.omit(x), categories)
+      centers <- sort(cl$centers[,1])
+      categories <- as.numeric(c(min(x, na.rm=TRUE),  head(centers, 
+        length(centers)-1) + diff(centers)/2, max(x, na.rm=TRUE)))
+      if(onlycuts) categories else .cut2(x, cuts=categories, ...)
+    },
+    
     fixed = {
-		x[x<min(categories) | x>max(categories)] <- NA
-		if(onlycuts) categories else .cut2(x, cuts=categories, ...)
-		}
-	    )
-
-    if(!is.null(labels) && !onlycuts) levels(res) <- labels
-    res
-
+      x[x<min(categories) | x>max(categories)] <- NA
+      if(onlycuts) categories else .cut2(x, cuts=categories, ...)
+    }
+  )
+    
+  if(onlycuts) return(res)
+  
+  if(ordered) res <- as.ordered(res)
+  if(!is.null(labels)) levels(res) <- labels
+  res
 }
 
