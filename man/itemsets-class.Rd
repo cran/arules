@@ -1,6 +1,7 @@
 \name{itemsets-class}
 \docType{class}
 \alias{itemsets-class}
+\alias{itemsets}
 \alias{summary.itemsets-class}
 \alias{show,summary.itemsets-method}
 %\alias{[,itemsets-method}
@@ -17,7 +18,7 @@
 %\alias{subset,itemsets-method}
 \alias{summary,itemsets-method}
 \alias{tidLists,itemsets-method}
-\alias{tidLists}
+%\alias{tidLists}
 
 \title{Class ``itemsets'' --- A Set of Itemsets}
 \description{

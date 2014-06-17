@@ -24,6 +24,24 @@
 ##
 ## a set of rules, subclass of associations
 
+## initialize (to make sure lhs and rhs agree!)
+
+setMethod("initialize", "rules",
+  function(.Object, lhs, rhs, ...) {
+    if(!identical(colnames(lhs), colnames(rhs))) {
+      warning("item labels in lhs and rhs do not match. recoding rhs!")
+      rhs <- recode(rhs, match=lhs)
+    }
+    
+    .Object@lhs <- lhs
+    .Object@rhs <- rhs
+    
+    .Object <- callNextMethod(.Object, ...)
+    
+    .Object
+  })
+
+
 
 ##************************************************
 ## dimensions

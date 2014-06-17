@@ -28,7 +28,7 @@
 %% \VignetteIndexEntry{Introduction to arules}
 
 \author{Michael Hahsler\\Southern Methodist University \And
-    Bettina Gr{\"u}n\\Johannes Keppler University Linz \AND 
+    Bettina Gr{\"u}n\\Johannes Kepler Universit\"at Linz \AND 
     Kurt Hornik\\ Wirtschaftsuniversit\"at Wien \And
     Christian Buchta\\ Wirtschaftsuniversit\"at Wien}
 \title{Introduction to \pkg{arules} --

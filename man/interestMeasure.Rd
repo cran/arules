@@ -14,7 +14,8 @@ interestMeasure(x, method, transactions = NULL, reuse = TRUE, ...)
 \arguments{
   \item{x}{ a set of itemsets or rules. }
   \item{method}{ name or vector of names of the desired interest measures 
-      (see details for available measures).} 
+      (see details for available measures). If method is missing then all 
+      available measures are calculated.} 
   \item{transactions}{ the transaction data set used to mine 
     the associations or a set of different transactions to calculate
     interest measures from (Note: you need to set \code{reuse=FALSE} in the 
@@ -48,11 +49,11 @@ dependence similar to lift for rules.}
 
 For rules the following measures are implemented:  
 \describe{
-\item{"chiSquare"}{ (see Liu et al. 1999). The chi-square statistic 
+\item{"chiSquared"}{ (see Liu et al. 1999). The chi-squared statistic 
   to test for independence between the lhs and rhs of the rule.
-  The critical value of the chi-square distribution with \eqn{1} degree of 
+  The critical value of the chi-squared distribution with \eqn{1} degree of 
   freedom (2x2 contingency table) at \eqn{\alpha=0.05}{alpha=0.05} 
-  is \eqn{3.84}; higher chi-square
+  is \eqn{3.84}; higher chi-squared
   values indicate that the lhs and the rhs are not independent.  
   %Note that if
   %any cell in the contingency table has an expected value below \eqn{5}, the
@@ -62,6 +63,8 @@ For rules the following measures are implemented:
   low expected values and that thus
   Fisher's Exact Test might be more appropriate 
   (see below).
+  
+  Called with \code{significance=TRUE}, the p-value of the test for independence is returned instead of the chi-squared statistic.
   }
 \item{"confidence"}{calculate rule confidence. Range \eqn{0\ldots1}.}
 \item{"conviction"}{ (see Brin et al. 1997) defined as 
@@ -129,7 +132,7 @@ Range: \eqn{0\ldots\infty}{0\ldots Inf}.
   }
 \item{"fishersExactTest"}{Fisher's Exact Test is a statistical significance test used in the analysis of contingency tables where sample sizes are small. 
  Returns the p-value.
- Note that it is equal to hyper-confidence with \code{significance=TRUE}.}
+ Note that it is equal to hyper-confidence with \code{significance=TRUE} (Hahsler and Hornik, 2007).}
 \item{"improvement"}{(see Bayardo et al. 2000)
   the  improvement of a rule is 
   the minimum difference between its confidence and the confidence of any
@@ -163,6 +166,9 @@ Range: \eqn{0\ldots\infty}{0\ldots Inf}.
 
    If more than one methods are specified, the result is a data.frame 
    containing the different measures for each association.
+   
+   \code{NA} is returned for rules/itemsets for which a certain measure is not 
+   defined.
 }
 \references{
 R. Bayardo, R. Agrawal, and D. Gunopulos (2000). Constraint-based rule mining
@@ -223,6 +229,10 @@ m <- interestMeasure(rules, c("confidence", "oddsRatio", "leverage"),
 	transactions = Income)
 inspect(head(rules))
 head(m)
+
+## calculate all available measures for the first 5 rules and show them as a 
+## table with the measures as rows
+t(interestMeasure(head(rules, 5), transactions = Income))
 
 ## calculate measures on a differnt set of transactions (I use a sample here)
 ## Note: reuse = TRUE (default) would just retun the stored support on the

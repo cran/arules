@@ -1,6 +1,7 @@
 \name{APappearance-class}
 \docType{class}
 \alias{APappearance-class}
+\alias{APappearance}
 \alias{coerce,list,APappearance-method}
 \alias{coerce,NULL,APappearance-method}
 \title{Class ``APappearance'' --- Specifying the `appearance' Argument of
@@ -20,14 +21,16 @@
   The list can contain the following elements:
 
   \describe{
+    \item{\code{lhs}, \code{rhs}, \code{both}, \code{items}, \code{none}:}{ 
+      character vectors giving the labels of the items
+	    which can appear in the specified place
+        (rhs, lhs or both for rules and items for itemsets).
+      The special place none specifies, that the items mentioned there cannot
+      appear in the rule/itemset.}
     \item{\code{default}:}{one of \code{"both"}, \code{"lhs"},
-      \code{"rhs"}, \code{"none"} (the default is \code{"both"}).  This
-      element specified the default appearance for all items not 
+      \code{"rhs"}, \code{"none"} (the default is \code{"both"}). 
+      Specified the default appearance for all items not 
       explicitly mentioned in the other elements of the list.}
-    \item{\code{lhs}, \code{rhs}, \code{both}, \code{none},
-      \code{items}:}{character vectors giving the labels of the items
-      which may only appear in the corresponding place of the
-      rules/itemsets.}
   }
 
   Objects can also be created by calls of the form 
@@ -52,14 +55,32 @@
   Christian Borgelt (2004)
   \emph{Apriori --- Finding Association Rules/Hyperedges with the Apriori
     Algorithm}.
-  \url{http://fuzzy.cs.uni-magdeburg.de/~borgelt/apriori.html}
+  \url{www.borgelt.net/apriori.html}
 }
 \examples{
 data("Adult")
-## Mine only rules with small or large income in the right-hand-side.
-rules <- apriori(Adult, parameter = list(confidence = 0.5), 
+
+## find only frequent itemsets which do not contain  small or large income
+is <- apriori(Adult, parameter = list(support= 0.1, target="frequent"), 
+  appearance = list(none = c("income=small", "income=large"),
+  default="both"))
+itemFrequency(items(is))["income=small"]
+itemFrequency(items(is))["income=large"]
+
+## find itemsets that only contain small or large income and young age
+is <- apriori(Adult, parameter = list(support= 0.1, target="frequent"), 
+  appearance = list(items = c("income=small", "income=large", "age=Young"),
+  default="none"))
+inspect(head(is))
+  
+## find only rules with small or large income in the right-hand-side.
+rules <- apriori(Adult, parameter = list(support=0.2, confidence = 0.5), 
   appearance = list(rhs = c("income=small", "income=large"),
   default="lhs"))
+inspect(head(rules))
+
+## for more complicated restrictions you have to mine all rules/itemsets and
+## then filter the results afterwards
 }
 \seealso{
   \code{\link{apriori}}

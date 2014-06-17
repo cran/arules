@@ -1,6 +1,7 @@
 \name{associations-class}
 \docType{class}
 \alias{associations-class}
+\alias{associations}
 %
 \alias{summary.associations-class}
 \alias{show,associations-method}

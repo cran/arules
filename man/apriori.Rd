@@ -65,6 +65,8 @@ apriori(data, parameter = NULL, appearance = NULL, control = NULL)
   Christian Borgelt (2003) Efficient Implementations of Apriori and
   Eclat.  \emph{Workshop of Frequent Item Set Mining Implementations}
   (FIMI 2003, Melbourne, FL, USA).
+
+  APRIORI Implementation: \url{www.borgelt.net/apriori.html}
 }
 \examples{
 data("Adult")

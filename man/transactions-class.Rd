@@ -1,6 +1,7 @@
 \name{transactions-class}
 \docType{class}
 \alias{transactions-class}
+\alias{transactions}
 %
 %\alias{[,transactions-method}
 \alias{coerce,matrix,transactions-method}

@@ -1,6 +1,6 @@
 
-R version 3.0.2 (2013-09-25) -- "Frisbee Sailing"
-Copyright (C) 2013 The R Foundation for Statistical Computing
+R version 3.1.0 (2014-04-10) -- "Spring Dance"
+Copyright (C) 2014 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -20,7 +20,6 @@ Type 'q()' to quit R.
 > 
 > library(arules)
 Loading required package: Matrix
-Loading required package: lattice
 
 Attaching package: ‘arules’
 
@@ -230,3 +229,6 @@ T5  1  1  1  0  3
 > 
 > ###
 > 
+> proc.time()
+   user  system elapsed 
+  2.875   0.074   2.921 

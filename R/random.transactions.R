@@ -115,7 +115,9 @@ random.transactions <- function(
     ## get info from patterns
     pWeights <- quality(patterns)$pWeights
     pCorrupts <- quality(patterns)$pCorrupts
-    nPatterns <- length(patterns)
+    
+    ## not used
+    #nPatterns <- length(patterns)
     patterns <- LIST(items(patterns), decode = FALSE)
 
 

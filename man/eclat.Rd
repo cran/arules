@@ -45,6 +45,8 @@ eclat(data, parameter = NULL, control = NULL)
   Christian Borgelt (2003) Efficient Implementations of Apriori and
   Eclat. \emph{Workshop of Frequent Item Set Mining Implementations}
   (FIMI 2003, Melbourne, FL, USA).
+
+  ECLAT Implementation: \url{http://www.borgelt.net/eclat.html}
 }
 \seealso{
   \code{\link{ECparameter-class}},

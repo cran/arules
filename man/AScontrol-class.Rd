@@ -1,8 +1,11 @@
 \name{AScontrol-classes}
 \docType{class}
 \alias{AScontrol-class}
+\alias{AScontrol}
 \alias{APcontrol-class}
+\alias{APcontrol}
 \alias{ECcontrol-class}
+\alias{ECcontrol}
 \alias{show,AScontrol-method}
 \alias{initialize,AScontrol-method}
 \alias{coerce,NULL,APcontrol-method}
@@ -85,7 +88,7 @@
   Christian Borgelt (2004)
   \emph{Apriori --- Finding Association Rules/Hyperedges with the Apriori
     Algorithm}.
-  \url{http://fuzzy.cs.uni-magdeburg.de/~borgelt/apriori.html}
+  \url{www.borgelt.net/apriori.html}
 }
 \seealso{
   \code{\link{apriori}},

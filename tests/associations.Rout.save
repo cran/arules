@@ -1,6 +1,6 @@
 
-R version 3.0.2 (2013-09-25) -- "Frisbee Sailing"
-Copyright (C) 2013 The R Foundation for Statistical Computing
+R version 3.1.0 (2014-04-10) -- "Spring Dance"
+Copyright (C) 2014 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -19,7 +19,6 @@ Type 'q()' to quit R.
 
 > library("arules")
 Loading required package: Matrix
-Loading required package: lattice
 
 Attaching package: ‘arules’
 
@@ -1066,3 +1065,38 @@ mining info:
     item13}  0.0412
 39 {item7}   0.1986
 > 
+> 
+> ### create associations manually
+> lmat <- matrix(rbind(c(1,1,0), c(0,0,1)), ncol=3)
+> rmat <- matrix(rbind(c(1,0,0), c(0,1,0)), ncol=3)
+> colnames(lmat) = c("a", "b", "c")
+> colnames(rmat) = c("c", "a", "b")
+> # Note: the column names do not agree!
+> 
+> lhs <- as(lmat, "itemMatrix")
+> rhs <- as(rmat, "itemMatrix")
+> 
+> is <- new("itemsets", items=lhs, quality=data.frame(support=c(.1,.1)))
+> inspect(is)
+  items support
+1 {a,          
+   b}       0.1
+2 {c}       0.1
+> 
+> qual <- data.frame(support=c(.5,.5), confidence=c(.5,.5), lift=c(2,1))
+> r <- new("rules", lhs=lhs, rhs=rhs, quality=qual)
+Warning message:
+In .local(.Object, ...) :
+  item labels in lhs and rhs do not match. recoding rhs!
+> inspect(r)
+  lhs    rhs support confidence lift
+1 {a,                               
+   b} => {c}     0.5        0.5    2
+2 {c} => {a}     0.5        0.5    1
+> 
+> 
+> 
+> 
+> proc.time()
+   user  system elapsed 
+  3.044   0.087   3.103 

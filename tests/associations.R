@@ -21,3 +21,24 @@ f
 summary(f)
 as(f,"data.frame")
 inspect(subset(f, subset = items %in% "item7"))
+
+
+### create associations manually
+lmat <- matrix(rbind(c(1,1,0), c(0,0,1)), ncol=3)
+rmat <- matrix(rbind(c(1,0,0), c(0,1,0)), ncol=3)
+colnames(lmat) = c("a", "b", "c")
+colnames(rmat) = c("c", "a", "b")
+# Note: the column names do not agree!
+
+lhs <- as(lmat, "itemMatrix")
+rhs <- as(rmat, "itemMatrix")
+
+is <- new("itemsets", items=lhs, quality=data.frame(support=c(.1,.1)))
+inspect(is)
+
+qual <- data.frame(support=c(.5,.5), confidence=c(.5,.5), lift=c(2,1))
+r <- new("rules", lhs=lhs, rhs=rhs, quality=qual)
+inspect(r)
+
+
+

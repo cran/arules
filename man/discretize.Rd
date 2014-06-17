@@ -5,7 +5,7 @@
 Convert a Continuous Variable into a Categorical Variable
 }
 \description{
-This function converts a continuous variable into a categorical variable (factor) suitable for association rule mining.
+This function implements several basic unsupervized methods to convert continuous variables into a categorical variables (factor) suitable for association rule mining.
 }
 \usage{
 discretize(x, method="interval", categories = 3, labels = NULL,     
@@ -30,9 +30,8 @@ discretize(x, method="interval", categories = 3, labels = NULL,
 %%  \item{comp1 }{Description of 'comp1'}
 %%  \item{comp2 }{Description of 'comp2'}
 %% ...
-A factor representing the categorized continuous variable or a vector
-with the interval boundaries.
-
+A factor representing the categorized continuous variable or, if 
+  \code{onlycuts=TRUE}, a vector with the interval boundaries.
 }
 %\references{
 %}
@@ -46,23 +45,24 @@ hist(x, breaks=20, main="Data")
 def.par <- par(no.readonly = TRUE) # save default
 layout(mat=rbind(1:2,3:4))
 
-### convert continuous variables into categories
+### convert continuous variables into categories (there are 3 types of flowers)
 ### default is equal interval width
-table(discretize(x, categories=4))
+table(discretize(x, categories=3))
 hist(x, breaks=20, main="Equal Interval length")
-abline(v=discretize(x, categories=4, onlycuts=TRUE), 
+abline(v=discretize(x, categories=3, onlycuts=TRUE), 
 col="red")
 
 ### equal frequency
-table(discretize(x, "frequency", categories=4))
+table(discretize(x, "frequency", categories=3))
+
 hist(x, breaks=20, main="Equal Frequency")
-abline(v=discretize(x, method="frequency", categories=4, onlycuts=TRUE), 
+abline(v=discretize(x, method="frequency", categories=3, onlycuts=TRUE), 
 col="red")
 
 ### k-means clustering 
-table(discretize(x, "cluster", categories=4))
+table(discretize(x, "cluster", categories=3))
 hist(x, breaks=20, main="K-Means")
-abline(v=discretize(x, method="cluster", categories=4, onlycuts=TRUE), 
+abline(v=discretize(x, method="cluster", categories=3, onlycuts=TRUE), 
 col="red")
 
 
@@ -76,12 +76,12 @@ abline(v=discretize(x, method="fixed", categories = c(-Inf,.8,Inf),
 
 par(def.par)  # reset to default
 
-### prepare the iris data set
+### prepare the iris data set for association rule mining
 for(i in 1:4) iris[,i] <- discretize(iris[,i],  "frequency", categories=3)
 
 trans <- as(iris, "transactions")
-inspect(trans[1,])
+inspect(head(trans, 1))
 
-as(trans,"matrix")[1:3,]
+as(head(trans, 3),"matrix")
 }
 \keyword{manip}

@@ -27,7 +27,7 @@
 setMethod("support", signature(x = "itemMatrix"), 
     function(x, transactions, type= c("relative", "absolute"), control = NULL) {
         
-        if(!is(transactions, "transactions")) stop("transactions missing.")
+        if(!is(transactions, "transactions")) stop("transactions missing. Please specify the transactions used to mine the itemsets!")
 
         type <- match.arg(type)
         

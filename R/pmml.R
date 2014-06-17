@@ -23,13 +23,18 @@
 ## read/write PMML
 
 write.PMML <- function(x, file) {
-    if(!require("pmml")) stop("Package 'pmml' not installed!")
+    if(!.installed("pmml")) stop("Package 'pmml' needs to be  installed!")
 
-    saveXML(pmml(x), file=file)
+    ### FIXME: Otherwise pmml does not find XML
+    #require("pmml")
+
+    XML::saveXML(pmml::pmml(x), file=file)
 }
 
 read.PMML <- function(file) {
-    doc <- xmlRoot(xmlTreeParse(file))
+    if(!.installed("XML")) stop("Package 'XML' needs to be installed!")
+
+    doc <- XML::xmlRoot(XML::xmlTreeParse(file))
 
     ## check model type
     if(is.element("AssociationModel", names(doc)))
@@ -40,18 +45,14 @@ read.PMML <- function(file) {
 
 .read.PMML.arules <- function(doc) {
 
-    ## just in case arules is not loaded  
-#    if(!require("arules")) 
-#	stop("Library arules is necessary to read Association Models!")
-
     ## extract model, items, itemsets (match item ids)
 
     model <- doc[["AssociationModel"]]
 
-    items <- t(sapply(model[names(model) == "Item"], xmlAttrs))
+    items <- t(sapply(model[names(model) == "Item"], XML::xmlAttrs))
 
     itemsets <- lapply(model[names(model) == "Itemset"], 
-	    FUN = function(x) sapply(xmlChildren(x), xmlAttrs))
+	    FUN = function(x) sapply(XML::xmlChildren(x), XML::xmlAttrs))
     itemsets <- lapply(itemsets, FUN=function(x) match(x, items[,"id"]))
 
     ## create arules itemsets object
@@ -66,12 +67,12 @@ read.PMML <- function(file) {
 	## FIXME: maybe remove "id" and "numberofItems"
 
 	quality <- t(sapply(model[names(model) == "Itemset"], 
-			FUN=function(x) xmlAttrs(x)))
+			FUN=function(x) XML::xmlAttrs(x)))
 	mode(quality) <- "numeric"
 	rownames(quality) <- NULL
 	quality <- as.data.frame(quality)
 
-	info <- xmlAttrs(doc[["AssociationModel"]]) 
+	info <- XML::xmlAttrs(doc[["AssociationModel"]]) 
 	info <- list(ntransactions=as.integer(info["numberOfTransactions"]),
 		support=as.numeric(info["minimumSupport"]),
 		confidence=as.numeric(info["minimumConfidence"])
@@ -86,7 +87,7 @@ read.PMML <- function(file) {
 
 	## rules
 	rules <- t(sapply(model[names(model) == "AssociationRule"], 
-			xmlAttrs))
+			XML::xmlAttrs))
 
 	quality <- rules[,!colnames(rules) %in% c("antecedent", "consequent")]
 	mode(quality) <- "numeric"
@@ -98,12 +99,12 @@ read.PMML <- function(file) {
 
 	## match with itemset ids!
 	itemsetIDs <- sapply(model[names(model) == "Itemset"], 
-		FUN=function(x) xmlAttrs(x)["id"])
+		FUN=function(x) XML::xmlAttrs(x)["id"])
 
 	lhs <- im[match(lhs, itemsetIDs),]
 	rhs <- im[match(rhs, itemsetIDs),]
 
-	info <- xmlAttrs(doc[["AssociationModel"]]) 
+	info <- XML::xmlAttrs(doc[["AssociationModel"]]) 
 	info <- list(ntransactions=as.integer(info["numberOfTransactions"]),
 		support=as.numeric(info["minimumSupport"]),
 		confidence=as.numeric(info["minimumConfidence"])

@@ -25,7 +25,6 @@ Write delegates to package pmml.
   \code{\link[pmml]{pmml}}.
 }
 \examples{
-    library("arules")
     data("Groceries")
 
     rules <- apriori(Groceries, parameter=list(support=0.001))
@@ -46,5 +45,4 @@ Write delegates to package pmml.
     ### clean up
     unlink("rules.xml")
 }
-
 \keyword{interface}

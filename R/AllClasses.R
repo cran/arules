@@ -345,6 +345,9 @@ setClass("rules",
         ## check size of rhs
         if(any(size(object@rhs)<1)) return("rhs is empty for at least one rule")
       
+        ## check item labels
+        if(!identical(colnames(object@lhs), colnames(object@rhs))) return("item labels in lhs and rhs do not match")
+      
         ## check union
         if(any(size(items(object)) != size(object@rhs)+size(object@lhs))) return("lhs and rhs of some rules is not distinct")
       

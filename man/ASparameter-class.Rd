@@ -1,8 +1,11 @@
 \name{ASparameter-classes}
 \docType{class}
 \alias{ASparameter-class}
+\alias{ASparameter}
 \alias{APparameter-class}
+\alias{APparameter}
 \alias{ECparameter-class}
+\alias{ECparameter}
 \alias{initialize,ASparameter-method}
 \alias{initialize,APparameter-method}
 \alias{show,ASparameter-method}
@@ -108,7 +111,7 @@
   Christian Borgelt (2004)
   \emph{Apriori --- Finding Association Rules/Hyperedges with the Apriori
     Algorithm}.
-  \url{http://fuzzy.cs.uni-magdeburg.de/~borgelt/apriori.html}
+  \url{www.borgelt.net/apriori.html}
 }
 \seealso{
   \code{\link{apriori}},

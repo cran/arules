@@ -1,6 +1,7 @@
 \name{rules-class}
 \docType{class}
 \alias{rules-class}
+\alias{rules}
 \alias{summary.rules-class}
 \alias{show,summary.rules-method}
 %\alias{[,rules-method}
@@ -23,6 +24,7 @@
 \alias{rhs}
 %\alias{subset,rules-method}
 \alias{summary,rules-method}
+\alias{initialize,rules-method}
 
 \title{Class ``rules'' --- A Set of Rules}
 \description{

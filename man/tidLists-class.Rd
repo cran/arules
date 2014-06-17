@@ -1,6 +1,7 @@
 \name{tidLists-class}
 \docType{class}
 \alias{tidLists-class}
+\alias{tidLists}
 %
 \alias{tidLists_or_NULL-class}
 %\alias{[,tidLists-method}
