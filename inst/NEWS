@@ -1,3 +1,9 @@
+Changes in version 1.1-4 (7/25/2014)
+    * fixed problem in error message generation in apriori and eclat
+	    (this fixes the trio library problem under Windows)
+    * C code: rapriori uses now STRING_ELT to be compatible with TERR (TIBCO),
+	    removed some unused variables.
+
 Changes in version 1.1-3 (6/17/2014)
     * Fixed dependency on XML and pmml
     * the interest measure chi-squared does now also report p-values 
@@ -25,8 +31,8 @@ Changes in version 1.1-0 (12/10/2013)
 	      (bug reported by Ying Leung)
     * direct coercions from and to dgCMatrix is no longer supported use 
         ngCMatrix instead
-    * coercion from ngCMatrix to itemMatrix and transactions is now posible
-    * bug fixes in C code (misaligned address on 64-bit systems)
+    * coercion from ngCMatrix to itemMatrix and transactions is now possible
+    * C code: fixed misaligned address on 64-bit systems
 
 Changes in version 1.0-15 (9/6/2013)
     * service release
@@ -36,14 +42,14 @@ Changes in version 1.0-14 (5/24/2013)
     * bug fix in is.subset
 
 Changes in version 1.0-13 (4/7/2013)
-    * transactions: coersion form data.frame now handles logical automatically.
+    * transactions: coercion form data.frame now handles logical automatically.
     * discretize replaces categorize and offers several additional methods
 
 Changes in version 1.0-12 (11/28/2012)
     * Added read and write for PMML.
-    * 'WRITE' is now depricated, use 'write' instead
-    * Added a copy of the C subscript code from R for better performance 
-      and compartibility with arulesSequences
+    * 'WRITE' is now deprecated, use 'write' instead
+    * C code: Added a copy of the C subscript code from R for 
+	better performance and compatibility with arulesSequences
 
 Changes in version 1.0-11 (11/19/2012)
     * Fixed vignette.
@@ -51,7 +57,7 @@ Changes in version 1.0-11 (11/19/2012)
 
 Changes in version 1.0-9 and 1.0-10 (9/3/2012)
     * Added PACKAGE argument to C calls.
-    * Added C routine symbols to NAMESPACE for arulesSequence
+    * C code: Added C routine symbols to NAMESPACE for arulesSequence
 
 Changes in version 1.0-8 (8/23/2012)
     * fixed memory problem in eclat with tidLists=TRUE

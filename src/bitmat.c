@@ -115,9 +115,11 @@ static int _isect2 (int *res, const int *v1, const int *v2)
     return *--res = 0;          /* is empty */
   while (1) {                   /* intersection loop */
     if      (*v1 <  *v2) {      /* skip bits that are only in v1 */
-      *v1++; if (--n1 <= 0) break; }
+      v1++; if (--n1 <= 0) break; }
+      /* *v1++; if (--n1 <= 0) break; }  (unused return value) */
     else if (*v1 >  *v2) {      /* skip bits that are only in v2 */
-      *v2++; if (--n2 <= 0) break; }
+      v2++; if (--n2 <= 0) break; }
+      /* *v2++; if (--n2 <= 0) break; }    (unused return value) */ 
     else {                      /* copy bits that */
       res[i++] = *v1++; v2++;   /* are in both vectors */
       if ((--n1 <= 0) || (--n2 <= 0)) break;

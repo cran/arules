@@ -278,8 +278,11 @@ const char* msgs(int code, ...)
 	  if (!msg) msg = errmsgs[-E_UNKNOWN];
   }
   /* if (code > 0) msg = (const char*)code; */
-  if (code > 0) sprintf(buff, "%i",code);
-  msg = buff; 
+  if (code > 0) {
+      sprintf(buff, "%i",code);
+      msg = buff; 
+  }
+
   return msg;
 }  /* msgs() */
 
@@ -295,14 +298,16 @@ void cleanup(void)
 /*--------------------------------------------------------------------*/
 int is_read_in (ITEMSET *iset, INPUT *in)
 {                               /* --- read a transaction */
-  int  i, d;                    /* loop variable, delimiter type */
+  /* MFH: removed unused d (7/26/14) */
+  /* int  i, d;  */                   /* loop variable, delimiter type */
+  int  i;                    /* loop variable, delimiter type */
   ITEM *item;                   /* pointer to item */
 
   assert(iset && in);         /* check the function arguments */
   iset->cnt = 0;                /* initialize the item counter */
   if (in->index >= in->tnb) return 1;
   for (i = in->ind[in->index]; i < in->ind[in->index+1]; i++) {
-	  d = get_item(iset, translateChar(STRING_ELT(in->x, i)));
+	  get_item(iset, translateChar(STRING_ELT(in->x, i)));
 	  /* d = get_item(iset, CHAR(STRING_ELT(in->x, i)));*/
   }
   in->index++;
@@ -926,7 +931,7 @@ SEXP rapriori(SEXP x, SEXP y, SEXP dim, SEXP parms, SEXP control, SEXP app, SEXP
 	clock_t t;
 	INPUT in;
 	SEXP ans;
-
+	
 	param.verbose = *LOGICAL(GET_SLOT(control, install("verbose")));  /* flag for verbose */
 	if (param.verbose) {
 		Rprintf("%s - %s\n", PRGNAME, DESCRIPTION);

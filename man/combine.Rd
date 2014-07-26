@@ -50,11 +50,14 @@ a2 <- Adult[101:110]
 aComb <- c(a1, a2)
 summary(aComb)
 
-## combine rules
+## combine rules (can contain the same rule multiple times)
 r1 <- apriori(Adult[1:1000])
 r2 <- apriori(Adult[1001:2000])
-rComb <- unique(c(r1, r2)) 
+rComb <- c(r1, r2) 
 rComb
 
+## union of rules (a set with only unique rules: same as unique(rComb))
+rUnion <- union(r1,r2)
+rUnion
 }
 \keyword{manip}

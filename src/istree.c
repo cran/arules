@@ -1079,7 +1079,7 @@ int ist_rule (ISTREE *ist, int *rule,
   int    item;                  /* an item identifier */
   ISNODE *node;                 /* current item set node */
   ISNODE *parent;               /* parent of the item set node */
-  ISNODE **vec;                 /* child node vector */
+  /* ISNODE **vec;  (unused) */               /* child node vector */
   int    *map, n;               /* identifier map and its size */
   int    s_rule;                /* minimal support of a rule */
   int    s_min;                 /* minimal support of a set */
@@ -1151,7 +1151,7 @@ int ist_rule (ISTREE *ist, int *rule,
       s_sub = parent->cnts[ID(node) -parent->offset];
     else {                      /* if an identifier map is used */
       map = parent->cnts +(n = parent->size);
-      vec = (ISNODE**)(map +n); /* get id. map and child vector */
+      /* vec = (ISNODE**)(map +n); (unused) *//* get id. map and child vector */
       s_sub = parent->cnts[_bsearch(map, n, ID(node))];
     }                           /* find vector index and get support */
     if (s_sub < s_rule)         /* if the subset support is too low, */
@@ -1205,7 +1205,7 @@ int ist_hedge (ISTREE *ist, int *hedge, double *supp, double *conf)
   int    item;                  /* an item identifier */
   ISNODE *node;                 /* current item set node */
   ISNODE *head;                 /* node containing the rule head */
-  ISNODE **vec;                 /* child node vector of head node */
+  /* ISNODE **vec; (unused) */                 /* child node vector of head node */
   int    *map, n;               /* identifier map and its size */
   int    *path, plen;           /* path in tree and its length */
   int    s_min;                 /* minimal support of a hyperedge */
@@ -1248,7 +1248,7 @@ int ist_hedge (ISTREE *ist, int *hedge, double *supp, double *conf)
       s_sub = head->cnts[ID(node) -head->offset];
     else {                      /* if an identifier map is used */
       map = head->cnts +(n = head->size);
-      vec = (ISNODE**)(map +n); /* get id. map and child vector */
+      /* vec = (ISNODE**)(map +n); (unused) */ /* get id. map and child vector */
       s_sub = head->cnts[_bsearch(map, n, ID(node))];
     }                           /* find index and get the support */
     *conf   = (s_sub > 0)       /* compute confidence of first rule */
