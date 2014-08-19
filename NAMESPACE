@@ -14,9 +14,10 @@ import("methods")
 importFrom("stats", "predict", "aggregate")  ## we want to add methods
 
 importFrom("Matrix", "summary", "image", "t") ## we need generics and methods 
-importClassesFrom("Matrix", "dgCMatrix", "ngCMatrix") ## we only need methods
+importFrom("Matrix", "drop0") ## we need function 
+importClassesFrom("Matrix", "dgCMatrix", "ngCMatrix")
 importMethodsFrom("Matrix", 
-  "crossprod", "rowSums", "colSums") ## we only need methods
+  "crossprod", "rowSums", "colSums")
 
 export(
   "read.transactions", 

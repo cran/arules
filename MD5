@@ -1,7 +1,7 @@
-b5c3cb1cdd13c2a80b47b391dfd52b15 *DESCRIPTION
-e70df00982f55858f604f1dcc3e3b456 *NAMESPACE
+cd1c14e229b85319c9dc3ef7bcc8e6ca *DESCRIPTION
+ef8f6fb160afd10f4d2dd54d91f030aa *NAMESPACE
 3b6db42f1d154ffb3c5aee1e7efbdc69 *R/AAADefs.R
-c28a547a87f532fec831d92d9656ae67 *R/AllClasses.R
+3b070dab52dcd0691871711185f33673 *R/AllClasses.R
 4aafe1c57244e400b4862ee980e91dc4 *R/AllGenerics.R
 c110059e7cd8aaa28a73350fd5fc7491 *R/Matrix.R
 7747bcd11c0e5e91b900e36c87ebf19e *R/addComplement.R
@@ -49,10 +49,10 @@ fb4a80b0b2cfd7d7bbc8c7098c86892c *R/support.R
 d3710494534d6b4a23a54a5832664ddb *data/Income.rda
 86a6af7e8adf1c235491d54a03753a73 *data/IncomeESL.rda
 2e867e4f1c39c5127aefb3eb2bb2d5e6 *inst/CITATION
-dd0395df2b0451c001eef14ee59bc800 *inst/NEWS
+993c08dec2af2631b229165a5f888342 *inst/NEWS
 dd20300d672d51c1735aea5a7798e3cf *inst/doc/arules.R
 b6c1b7a5971026c3a373b9d26c9bc01e *inst/doc/arules.Rnw
-9ed9aee1076875b7f14d11efb92c33e3 *inst/doc/arules.pdf
+fb86400d0427368678181894d32d940a *inst/doc/arules.pdf
 053b9f31de7e127eb51cb326ed332d43 *man/APappearance-class.Rd
 6e499bd573f84ff344d052ed2612db45 *man/AScontrol-class.Rd
 80b254fe41005cd38e4bf74aa2be59c1 *man/ASparameter-class.Rd

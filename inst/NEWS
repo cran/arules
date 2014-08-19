@@ -1,8 +1,11 @@
+Changes in version 1.1-5 (8/19/2014)
+    * Import drop0 from Matrix
+
 Changes in version 1.1-4 (7/25/2014)
-    * fixed problem in error message generation in apriori and eclat
+    * C code: fixed problem in error message generation in apriori and eclat
 	    (this fixes the trio library problem under Windows)
-    * C code: rapriori uses now STRING_ELT to be compatible with TERR (TIBCO),
-	    removed some unused variables.
+    * C code: rapriori uses now STRING_ELT to be compatible with TERR (TIBCO)
+    * C code: removed some unused variables.
 
 Changes in version 1.1-3 (6/17/2014)
     * Fixed dependency on XML and pmml

@@ -217,7 +217,7 @@ setClass("APparameter",
         if (!object@arem %in% .aremtypes()) 
         return(paste("arem =", object@arem, "not supported."))
         if (object@confidence > 1)  
-        return(paste("confidence =", object@confidene, "> 1"))
+        return(paste("confidence =", object@confidence, "> 1"))
         if (object@smax < 0) 
         return(paste("smax =", object@smax, "< 0"))
         return(TRUE)
