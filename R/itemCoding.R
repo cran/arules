@@ -129,9 +129,4 @@ setMethod("recode", signature(x = "itemMatrix"),
     }
 )	
 
-## most of the problems with this code are fixed.
-## however, its design and features are confusing!
-##
-## [ceeboo 2007].
-
 ###

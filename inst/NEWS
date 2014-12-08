@@ -1,3 +1,12 @@
+Changes in version 1.1-6 (12/07/2014)
+    * dissimilarity method "pearson" is now set to 1 (max) for neg. 
+      correlation. Also added phi correlation coefficient.
+    * discretize method "cluster" accepts now ... passed on to k-means
+	    (e.g., for nstart)
+    * merge for itemMatrix checks now for conformity
+    * as(..., "transactions"): binary attributes are now translated into items
+      only if TRUE. 
+
 Changes in version 1.1-5 (8/19/2014)
     * Import drop0 from Matrix
 

@@ -20,7 +20,8 @@ discretize(x, method="interval", categories = 3, labels = NULL,
   \item{labels}{ character vector; names for categories.}
   \item{ordered}{ logical; return a factor with ordered levels? }
   \item{onlycuts}{ logical; return only computed interval boundaries? }
-  \item{\dots}{further arguments are ignored. }.
+  \item{\dots}{for method "cluster" further arguments are passed on to
+  \code{kmeans}. }.
 }
 %\details{
 %}

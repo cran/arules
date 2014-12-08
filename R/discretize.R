@@ -39,7 +39,7 @@ discretize <- function(x, method="interval", categories=3, labels=NULL,
     frequency = .cut2(x, g=categories, onlycuts=onlycuts, ...),
     
     cluster = {
-      cl <-  kmeans(na.omit(x), categories)
+      cl <-  kmeans(na.omit(x), categories, ...)
       centers <- sort(cl$centers[,1])
       categories <- as.numeric(c(min(x, na.rm=TRUE),  head(centers, 
         length(centers)-1) + diff(centers)/2, max(x, na.rm=TRUE)))

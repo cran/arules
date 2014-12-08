@@ -47,8 +47,12 @@ dissimilarity(x, y = NULL, method = NULL, args = NULL, \ldots)
        \item{\code{"matching"}:}{ the \emph{Matching coefficient} defined
          by Sokal and Michener (1958). This coefficient gives the same
 	     weight to presents and absence of items.}
-       \item{\code{"pearson"}:}{ the 1 - \emph{Pearson correlation 
-         coefficient} .} 
+       \item{\code{"pearson"}:}{ \eqn{1 - r} if \eqn{r>1} and 
+	\eqn{1} otherwise. \eqn{r} is \emph{Pearson's correlation 
+        coefficient}.} 
+       \item{\code{"phi"}:}{ same as pearson. Pearson's correlation
+	coefficient reduces to the phi coefficient for the 2x2 contingency 
+	tables used here.} 
     }
     For associations the following additional measures are available:
     \describe{

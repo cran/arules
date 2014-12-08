@@ -16,16 +16,13 @@
   }
 \usage{
 match(x,  table, nomatch = NA_integer_, incomparables = NULL)
-%\S4method{match}{rules}(x,  table, nomatch = NA, incomparables = FALSE)
-%\S4method{match}{itemsets}(x,  table, nomatch = NA, incomparables = FALSE)
-%\S4method{match}{itemMatrix}(x,  table, nomatch = NA, incomparables = FALSE)
 
 x \%in\% table
 }
 \arguments{
   \item{x}{ an object of class \code{itemMatrix}, \code{transactions} or 
     \code{associations}.}
-  \item{table}{ a set of associations or transactions to be matched against. }
+  \item{table}{ a set of associations or transactions to be matched against.}
   \item{nomatch}{ the value to be returned in the case when no match is found. }
   \item{incomparables}{ not implemented. }
 }
@@ -53,5 +50,10 @@ plot(sort(cnts, decreasing=TRUE))
 
 ## find all transactions which are equal to transaction 10 in Adult
 which(Adult \%in\% Adult[10])
+
+## for transactions we can also match directly with itemLabels.
+## Find in the first 10 transactions the ones which 
+## contain age=Middle-aged (see help page for class itemMatrix)
+Adult[1:10] %in% "age=Middle-aged"
 }
 \keyword{manip}

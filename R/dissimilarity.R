@@ -54,7 +54,7 @@ setMethod("dissimilarity", signature(x = "matrix"),
 
 
         builtin_methods <- c("affinity", "jaccard", "matching", "dice", 
-            "cosine", "euclidean", "pearson")
+            "cosine", "euclidean", "pearson", "phi")
 
         if(is.null(method)) ind <- 2      # Jaccard is standard
         else if(is.na(ind <- pmatch(tolower(method),
@@ -91,15 +91,19 @@ setMethod("dissimilarity", signature(x = "matrix"),
             dist <- dist(x, method = "euclidean")
         
             ## Pearson correlation coefficient (Note: cor is calculated 
-            ##    between columns)
-        } else if(ind == 7) {
+            ##    between columns and we only use pos. correlation)
+	    ## Phi is the same as pearson
+        } else if(ind == 7 || ind==8) {
             if(!cross) {
-                dist <- as.dist(1 - cor(t(x), method = "pearson", 
-				use="pairwise.complete.obs"))
+                cm <- cor(t(x), method = "pearson",
+			  use="pairwise.complete.obs")
+		cm[cm < 0] <- 0
+		dist <- as.dist(1 - cm)
             } else {
-                dist <- new("ar_cross_dissimilarity", 1 - cor(t(x), 
-                        t(y), method = "pearson", 
-			use="pairwise.complete.obs"))
+		cm <- cor(t(x), t(y), method = "pearson", 
+			use="pairwise.complete.obs")
+		cm[cm < 0] <- 0
+                dist <- new("ar_cross_dissimilarity", 1 - cm) 
             }
         } else {
 

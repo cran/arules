@@ -41,9 +41,10 @@ setMethod("is.subset", signature(x = "itemMatrix"),
       return(logical(0))
     
     ## y needs to be itemMatrix and x has to conform!
-    if(!is.null(y)) { 
-      if(!is(y, "itemMatrix")) y <- items(y)
-      x <- recode(x, itemLabels(y))
+    if(!is.null(y)) {
+      if(is(y, "associations")) y <- items(y)
+      if(!is(y, "itemMatrix")) stop("y needs to be an itemMatrix.")
+      x <- recode(x, match = y)
     }
     
     if(sparse) return(.is.subset_sparse(x, y, proper))
@@ -60,8 +61,6 @@ setMethod("is.subset", signature(x = "itemMatrix"),
         m <- m & outer(size(x), size(x), "<")
     else 
       m <- m & outer(size(x), size(y), "<")
-    ## if we were sure that x and y contain no duplicates ...
-    ## we never can be sure [ceeboo 2007]
     
     if(!is.null(y)) colnames(m) <- labels(y)$transactionID
     rownames(m) <- labels(x)$elements

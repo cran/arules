@@ -30,18 +30,19 @@ apriori <-  function(data, parameter = NULL, appearance = NULL, control = NULL)
     ## prepare data
     data <- as(data, "transactions")
     items <- data@data
+    
     if (is(appearance, "list")) appearance <- 
       as(c(appearance, list(labels = itemLabels(data))), "APappearance")
     appearance <- as(appearance, "APappearance")   
+    
     control <- as(control, "APcontrol")
     parameter <- as(parameter, "APparameter")
 
-
     if(control@verbose) {
       ## print parameter
-      cat("\nparameter specification:\n")
+      cat("\nParameter specification:\n")
       print(parameter)
-      cat("\nalgorithmic control:\n")
+      cat("\nAlgorithmic control:\n")
       print(control)
       cat("\n")
     }
@@ -51,7 +52,6 @@ apriori <-  function(data, parameter = NULL, appearance = NULL, control = NULL)
     if(abs_supp < 2) warning(sprintf("You chose a very low absolute support count of %d. You might run out of memory! Increase minimum support.\n", abs_supp),
         immediate.=TRUE)
 
-    
     ## call apriori
     result <- .Call("rapriori", 
         ## transactions

@@ -303,7 +303,8 @@ setMethod("c", signature(x = "itemMatrix"),
 setMethod("merge", signature(x="itemMatrix"),
     function(x, y, ...) {
 	y <- as(y, "itemMatrix")
-	
+  if(nrow(x)!=nrow(y)) stop("The number of rows in x and y do not conform!")
+    
 	dx <- t(x@data)
 	dy <- t(y@data)
 
