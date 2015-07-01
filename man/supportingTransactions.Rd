@@ -28,6 +28,7 @@ per association in \code{x}.
 \seealso{
  \code{\link{tidLists-class}}
 }
+\author{Michael Hahsler}
 \examples{
 data <- list(
 	c("a","b","c"),

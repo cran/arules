@@ -43,6 +43,7 @@
    a single aggregated association then the quality measures of one 
    of the original associations is randomly chosen.
 }
+\author{Michael Hahsler}
 \examples{
 data("Groceries")
 

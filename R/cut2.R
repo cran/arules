@@ -39,7 +39,7 @@
 
     y <- as.integer(ifelse(is.na(x),NA,1))
     labs <- character(g)
-    cuts <- approx(cum, xx, xout=(1:g)*nnm/g,
+    cuts <- stats::approx(cum, xx, xout=(1:g)*nnm/g,
                    method='constant', rule=2, f=1)$y
     cuts[length(cuts)] <- max(xx)
     lower <- xx[1]
@@ -53,7 +53,7 @@
         s <- if(is.na(lower)) FALSE else xx >= lower
         cum.used <- if(all(s)) 0 else max(cum[!s])
         if(j==m) max(xx) else if(sum(s)<2) max(xx) else
-        approx(cum[s]-cum.used, xx[s], xout=(nnm-cum.used)/(g-j+1),
+        stats::approx(cum[s]-cum.used, xx[s], xout=(nnm-cum.used)/(g-j+1),
                method='constant', rule=2, f=1)$y
       }
       

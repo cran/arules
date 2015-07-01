@@ -36,6 +36,7 @@
 \seealso{
   \code{\link{associations-class}}
 }
+\author{Michael Hahsler}
 \examples{
 data("Adult")
 

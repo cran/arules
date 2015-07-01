@@ -7,12 +7,16 @@
   cross-tabulate joint occurrences across pairs of items.
 }
 \usage{
-crossTable(x, \ldots)
+crossTable(x, ...) 
+\S4method{crossTable}{itemMatrix}(x, measure = c("count", "support", "probability", 
+  "lift", "chiSquared"), sort = FALSE)
 }
 \arguments{
   \item{x}{ object to be cross-tabulated 
     (\code{transactions} or \code{itemMatrix}).}
-  \item{\ldots}{ further arguments (currently unused). }
+  \item{measure}{ measure to return. Default is co-occurence counts. } 
+  \item{sort}{ sort the items by support. } 
+  \item{...}{ aditional arguments. } 
 }
 \value{
   A symmetric matrix of n time n, where n is the number of items times 
@@ -26,8 +30,18 @@ crossTable(x, \ldots)
 \examples{
 data("Groceries")
 
-ct <- crossTable(Groceries)
+ct <- crossTable(Groceries, sort=TRUE)
 ct[1:5, 1:5]
 
+sp <- crossTable(Groceries, measure="support", sort=TRUE)
+sp[1:5,1:5]
+
+lift <- crossTable(Groceries, measure="lift", sort=TRUE)
+lift[1:5,1:5]
+
+chi2 <- crossTable(Groceries, measure="chiSquared", sort=TRUE)
+chi2[1:5,1:5]
+
 }
+\author{Michael Hahsler}
 \keyword{models}

@@ -17,7 +17,7 @@ itemFrequencyPlot(x, \dots)
     support = NULL, topN = NULL,
     population = NULL, popCol = "black", popLwd = 1,
     lift = FALSE, horiz = FALSE, 
-    names = TRUE, cex.names =  par("cex.axis"), 
+    names = TRUE, cex.names =  graphics::par("cex.axis"), 
     xlab = NULL, ylab = NULL, mai = NULL, \dots)
 }
 \arguments{
@@ -62,6 +62,7 @@ adding to the graph.
   \code{\link{itemFrequency}},
   \code{\link{itemMatrix-class}}
 }
+\author{Michael Hahsler}
 \examples{
 data(Adult)
 

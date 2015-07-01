@@ -85,4 +85,5 @@ inspect(head(trans, 1))
 
 as(head(trans, 3),"matrix")
 }
+\author{Michael Hahsler}
 \keyword{manip}

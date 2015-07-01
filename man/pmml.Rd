@@ -24,6 +24,7 @@ Write delegates to package pmml.
 \seealso{
   \code{\link[pmml]{pmml}}.
 }
+\author{Michael Hahsler}
 \examples{
     data("Groceries")
 

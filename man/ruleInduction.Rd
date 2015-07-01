@@ -59,6 +59,7 @@ generation. \emph{Computational Statistics,} 23(2):303-315, April 2008
 }
 \seealso{ \code{\link{itemsets-class}}, \code{\link{rules-class}}
 \code{\link{transactions-class}}}
+\author{Michael Hahsler and Christian Buchta}
 \examples{
 data("Adult")
 

@@ -1,3 +1,8 @@
+Changes in version 1.1-7 (6/29/2015)
+    * itemUnion: fixed bug for large amounts of dense rules.
+    * crossTable gained arguments measure and sort.
+    * Fixed namespace imports for non-base default packages.
+
 Changes in version 1.1-6 (12/07/2014)
     * dissimilarity method "pearson" is now set to 1 (max) for neg. 
       correlation. Also added phi correlation coefficient.

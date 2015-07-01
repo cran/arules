@@ -45,4 +45,5 @@
 \value{
   An integer scalar giving the \dQuote{length} of \code{x}.
 }
+\author{Michael Hahsler}
 \keyword{attribute}

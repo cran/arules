@@ -45,6 +45,7 @@ read.transactions(file, format = c("basket", "single"), sep = NULL,
 \seealso{
   \code{\link{transactions-class}}
 }
+\author{Michael Hahsler and Kurt Hornik}
 \examples{
 ## create a demo file using basket format for the example
 data <- paste("item1,item2","item1","item2,item3", sep="\n")

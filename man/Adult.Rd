@@ -16,7 +16,7 @@ data("AdultUCI")
 }
 \details{
   The \dQuote{Adult} database was extracted from the census bureau database
-  found at \url{http://www.census.gov/ftp/pub/DES/www/welcome.html} in 1994 by
+  found at \url{http://www.census.gov/} in 1994 by
   Ronny Kohavi and Barry Becker, Data Mining and Visualization, Silicon
   Graphics. It was originally used to predict whether income exceeds USD 50K/yr
   based on census data. We added the attribute \code{income} with levels
@@ -115,6 +115,7 @@ data("AdultUCI")
   of Naive-Bayes Classifiers: a Decision-Tree Hybrid.  \emph{Proceedings of the
   Second International Conference on Knowledge Discovery and Data Mining}. 
 }
+\author{Michael Hahsler}
 \examples{
 data("AdultUCI")
 dim(AdultUCI)

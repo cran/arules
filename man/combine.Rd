@@ -60,4 +60,5 @@ rComb
 rUnion <- union(r1,r2)
 rUnion
 }
+\author{Michael Hahsler}
 \keyword{manip}

@@ -123,6 +123,7 @@
   \code{\link{sets}},
   \code{\link{itemMatrix-class}}
 }
+\author{Michael Hahsler}
 \examples{
 ## example 1: creating transactions form a list
 a_list <- list(

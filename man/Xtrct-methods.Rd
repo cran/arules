@@ -56,6 +56,7 @@
   \code{\link{tidLists-class}}
 
 }
+\author{Michael Hahsler}
 \examples{
 data(Adult)
 Adult

@@ -49,4 +49,5 @@ data("Epub")
 image(Epub[1:1000])
 
 }
+\author{Michael Hahsler}
 \keyword{hplot}

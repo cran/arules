@@ -94,4 +94,5 @@
   \code{\link{apriori}},
   \code{\link{eclat}}
 }
+\author{Michael Hahsler and Bettina Gruen}
 \keyword{classes}

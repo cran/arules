@@ -26,6 +26,7 @@ addComplement(x, labels, complementLabels=NULL)
   \code{\link{transactions-class}},
   \code{\link{merge}}
 }
+\author{Michael Hahsler}
 \examples{
 data("Groceries")
 

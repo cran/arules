@@ -58,6 +58,7 @@ data("IncomeESL")
   (\url{http://www-stat.stanford.edu/~tibs/ElemStatLearn/};
   called \sQuote{Marketing})
 }
+\author{Michael Hahsler}
 \examples{
 data("IncomeESL")
 IncomeESL[1:3, ]

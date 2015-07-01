@@ -192,6 +192,7 @@
   \code{\link{itemsets-class}},
   \code{\link{rules-class}}
 }
+\author{Michael Hahsler}
 \examples{
 set.seed(1234)
   

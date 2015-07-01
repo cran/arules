@@ -151,5 +151,6 @@ plot(hclust(d_affinity))
   Systems Through Artificial Neural Networks (Proceedings 
   of ANNIE 1999)}, pages 759-764. ASME Press.
 }
+\author{Michael Hahsler}
 \keyword{cluster}
 \keyword{models}

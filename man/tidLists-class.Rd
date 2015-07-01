@@ -112,6 +112,7 @@
   \code{\link{itemsets-class}},
   \code{\link{transactions-class}}
 }
+\author{Michael Hahsler}
 \examples{
 ## Create transaction data set.
 data <- list(

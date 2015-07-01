@@ -18,7 +18,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 ## common definitions for arules
-.installed <- function(pkg) !is(try(installed.packages()[pkg,],
+.installed <- function(pkg) !is(try(utils::installed.packages()[pkg,],
         silent=TRUE), "try-error")
 
 .types <- function(method = "apriori") {

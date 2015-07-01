@@ -118,6 +118,7 @@ elements. Duplicated elements can be removed with \code{\link{unique}}.
 \code{\link{associations-class}},
 \code{\link{itemMatrix-class}},
 }
+\author{Michael Hahsler}
 \examples{
 data("Adult")
 

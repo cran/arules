@@ -213,6 +213,7 @@ Florida, pages 387--394.
 }
 
 \seealso{ \code{\link{itemsets-class}}, \code{\link{rules-class}} }
+\author{Michael Hahsler}
 \examples{
 data("Income")
 rules <- apriori(Income)

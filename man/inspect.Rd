@@ -26,6 +26,7 @@ inspect(x, ...)
   \code{\link{rules-class}},
   \code{\link{transactions-class}}
 }
+\author{Michael Hahsler and Kurt Hornik}
 \examples{
 data("Adult")
 rules <- apriori(Adult)

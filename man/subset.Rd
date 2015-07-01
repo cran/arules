@@ -48,6 +48,7 @@ elements which satisfy the conditions.
   \code{\link{rules-class}},
   \code{\link{transactions-class}}
 }
+\author{Michael Hahsler}
 \examples{
 data("Adult")
 rules <- apriori(Adult)

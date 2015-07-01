@@ -68,12 +68,12 @@ apriori(data, parameter = NULL, appearance = NULL, control = NULL)
 
   APRIORI Implementation: \url{www.borgelt.net/apriori.html}
 }
+\author{Michael Hahsler and Bettina Gruen}
 \examples{
 data("Adult")
 ## Mine association rules.
 rules <- apriori(Adult, 
-                 parameter = list(supp = 0.5, conf = 0.9,
-                                  target = "rules"))
+	parameter = list(supp = 0.5, conf = 0.9, target = "rules"))
 summary(rules)
 }
 \seealso{

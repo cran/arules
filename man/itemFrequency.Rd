@@ -33,6 +33,7 @@ itemFrequency(x, ...)
   \code{\link{itemMatrix-class}},
   \code{\link{transactions-class}}
 }
+\author{Michael Hahsler}
 \examples{
 data("Adult")
 itemFrequency(Adult, type = "relative")

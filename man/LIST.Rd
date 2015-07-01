@@ -48,6 +48,7 @@ LIST(from, \dots)
   \code{\link{coerce,itemMatrix,list-method}},
   \code{\link{itemMatrix-class}}
 }
+\author{Michael Hahsler}
 \examples{
 data(Adult)
 

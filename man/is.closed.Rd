@@ -28,4 +28,5 @@ Discovering frequent closed itemsets for association rules. In \emph{Proceeding
 of the 7th International Conference on Database Theory}, Lecture Notes In
 Computer Science (LNCS 1540), pages 398--416. Springer, 1999.
 }
+\author{Michael Hahsler}
 \keyword{models}

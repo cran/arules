@@ -28,6 +28,7 @@ itemIntersect(x, y)
 \seealso{  
   \code{\link{itemMatrix-class}}
 }
+\author{Michael Hahsler}
 \examples{
 data("Adult")
 

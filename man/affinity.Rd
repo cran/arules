@@ -33,6 +33,7 @@ where \eqn{sup(.)} is the support measure. This means that affinity is the
   \code{\link{ar_similarity-class}},
   \code{\link[arules]{itemMatrix-class}}
 }
+\author{Michael Hahsler}
 \examples{
 data("Adult")
 

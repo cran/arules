@@ -33,6 +33,7 @@ size(x, ...)
   \code{\link{itemMatrix-class}},
   \code{\link{transactions-class}}
 }
+\author{Michael Hahsler}
 \examples{
 data("Adult")
 summary(size(Adult))

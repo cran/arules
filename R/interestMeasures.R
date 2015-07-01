@@ -203,7 +203,7 @@ setMethod("interestMeasure",  signature(x = "rules"),
   c_Y <- counts$fx1
   t <- length(transactions)
   
-  Q <- qhyper(d, m = c_Y, n = t - c_Y, k = c_X, lower.tail = TRUE)
+  Q <- stats::qhyper(d, m = c_Y, n = t - c_Y, k = c_X, lower.tail = TRUE)
   hyperlift <- c_XY / Q
   
   hyperlift
@@ -236,11 +236,11 @@ setMethod("interestMeasure",  signature(x = "rules"),
   
   if(complements == TRUE)
     ## c_XY - 1 so we get P[C_XY < c_XY] instead of P[C_XY <= c_XY]
-    res <- phyper(c_XY - 1, m=c_Y, n=t-c_Y, k=c_X, lower.tail = !significance)
+    res <- stats::phyper(c_XY - 1, m=c_Y, n=t-c_Y, k=c_X, lower.tail = !significance)
   
   else
     ## substitutes; Pr[C_XY > c_XY]
-    res <- phyper(c_XY, m=c_Y, n=t-c_X, k=c_X, lower.tail = significance)
+    res <- stats::phyper(c_XY, m=c_Y, n=t-c_X, k=c_X, lower.tail = significance)
   
   ## todo: check resulting NaN
   res
@@ -354,7 +354,7 @@ setMethod("interestMeasure",  signature(x = "rules"),
   
   ## difference in confidence (conf(X -> Y) - conf(not X -> Y))
   ## Heike Hofmann and Adalbert Wilhelm. Visual comparison of association 
-  ## rules. Computational Statistics, 16(3):399–415, 2001.
+  ## rules. Computational Statistics, 16(3):399-415, 2001.
   if(method == "doc") return((f11/f1x)-(f01/f0x))
   
   
@@ -377,7 +377,7 @@ setMethod("interestMeasure",  signature(x = "rules"),
     ## qchisq(0.05, df =1, lower.tail=FALSE)
     ## [1] 3.841459
     if(!significance) return(chi2)
-    else return(pchisq(q=chi2, df=1, lower.tail=FALSE))
+    else return(stats::pchisq(q=chi2, df=1, lower.tail=FALSE))
   }
   
   stop("Specified method not implemented.")

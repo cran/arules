@@ -39,4 +39,5 @@ quality(rules) <- cbind(quality(rules), coverage = coverage(rules))
 
 inspect(rules)
 }
+\author{Michael Hahsler}
 \keyword{models}

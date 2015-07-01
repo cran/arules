@@ -69,6 +69,7 @@ support(x, transactions, ...)
 Michael Hahsler, Christian Buchta, and Kurt Hornik. Selective association 
 rule generation. \emph{Computational Statistics}, 23(2):303-315, April 2008.
 }
+\author{Michael Hahsler and Christian Buchta}
 \examples{
 data("Income")
 

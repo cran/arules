@@ -39,6 +39,7 @@ x \%in\% table
   \code{\link{itemsets-class}},
   \code{\link{itemMatrix-class}}
 }
+\author{Michael Hahsler}
 \examples{
 data("Adult")
 

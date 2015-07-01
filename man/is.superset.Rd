@@ -52,4 +52,5 @@ set <- eclat(Adult, parameter = list(supp = 0.8))
 is.superset(set, set)
 is.superset(set, set, sparse = TRUE)
 }
+\author{Michael Hahsler}
 \keyword{manip}

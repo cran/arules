@@ -90,4 +90,5 @@
   \code{\link{unique}},
   \code{\link{itemMatrix-class}}
 }
+\author{Michael Hahsler}
 \keyword{classes}

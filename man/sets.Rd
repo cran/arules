@@ -56,6 +56,7 @@ for each element if it is included in \code{set}.
   \code{\link{associations-class}},
   \code{\link{itemMatrix-class}}
 }
+\author{Michael Hahsler}
 \examples{
 data("Adult")
 

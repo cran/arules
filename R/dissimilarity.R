@@ -95,14 +95,18 @@ setMethod("dissimilarity", signature(x = "matrix"),
 	    ## Phi is the same as pearson
         } else if(ind == 7 || ind==8) {
             if(!cross) {
-                cm <- cor(t(x), method = "pearson",
-			  use="pairwise.complete.obs")
-		cm[cm < 0] <- 0
+                ## warnings for zero variance!
+		suppressWarnings(cm <- cor(t(x), method = "pearson"))
+                ## pairwise complete is very slow
+		#cm <- cor(t(x), method = "pearson",
+		#	  use="pairwise.complete.obs")
+		cm[cm < 0 | is.na(cm)] <- 0
 		dist <- as.dist(1 - cm)
             } else {
-		cm <- cor(t(x), t(y), method = "pearson", 
-			use="pairwise.complete.obs")
-		cm[cm < 0] <- 0
+		suppressWarnings(cm <- cor(t(x), t(y), method = "pearson")) 
+		#cm <- cor(t(x), t(y), method = "pearson", 
+		#	use="pairwise.complete.obs")
+		cm[cm < 0 | is.na(cm)] <- 0
                 dist <- new("ar_cross_dissimilarity", 1 - cm) 
             }
         } else {

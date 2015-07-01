@@ -41,6 +41,7 @@ type of measure used for calculation.
   \code{\link{dissimilarity}},
   \code{\link{affinity}}.
 }
+\author{Michael Hahsler}
 %\examples{
 %}
 \keyword{classes}

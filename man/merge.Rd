@@ -25,6 +25,7 @@ merge(x, y, ...)
   \code{\link{itemMatrix-class}},
   \code{\link{addComplement}}
 }
+\author{Michael Hahsler}
 \examples{
 data("Groceries")
 

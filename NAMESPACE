@@ -12,12 +12,13 @@ useDynLib(arules,
 
 import("methods")
 importFrom("stats", "predict", "aggregate")  ## we want to add methods
+importFrom("utils", "head")  ## we want to add methods
+import("graphics")
 
 importFrom("Matrix", "summary", "image", "t") ## we need generics and methods 
 importFrom("Matrix", "drop0") ## we need function 
 importClassesFrom("Matrix", "dgCMatrix", "ngCMatrix")
-importMethodsFrom("Matrix", 
-  "crossprod", "rowSums", "colSums")
+importMethodsFrom("Matrix", "crossprod", "rowSums", "colSums")
 
 export(
   "read.transactions", 
@@ -96,9 +97,9 @@ exportMethods(
   "setequal",
   "show", 
   "size",
-  "SORT",	    ## deprecated
+  "SORT",		    ## deprecated
   "sort",
-  "WRITE",    ## deprecated
+  "WRITE",		    ## deprecated
   "write",
   "subset", 
   "summary", 

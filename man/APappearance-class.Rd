@@ -57,6 +57,7 @@
     Algorithm}.
   \url{www.borgelt.net/apriori.html}
 }
+\author{Michael Hahsler and Bettina Gruen}
 \examples{
 data("Adult")
 

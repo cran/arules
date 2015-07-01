@@ -30,6 +30,7 @@ sample(x, size, replace = FALSE, prob = NULL, ...)
   \code{\link{transactions-class}},
   \code{\link{itemMatrix-class}}.
 }
+\author{Michael Hahsler}
 \examples{
 data("Adult")
 

@@ -73,7 +73,7 @@ random.transactions <- function(
 
     ## simulate data (create a list with indices)
     simList <- replicate(nTrans,
-        which(runif(nItems) <= iProb))
+        which(stats::runif(nItems) <= iProb))
 
     new("transactions", 
          encode(simList, paste("item", 1:nItems, sep = "")),
@@ -107,7 +107,7 @@ random.transactions <- function(
     }
 
     ## number of patterns to use is Poisson distr.
-    #lTrans <- rpois(nTrans, lTrans)
+    #lTrans <- stats::rpois(nTrans, lTrans)
 
     ## every transaction gets for sure one pattern
     lTrans <- rep(1, nTrans)
@@ -127,9 +127,9 @@ random.transactions <- function(
 
         patternToAdd <- patterns[[i]]   
         patLen <- length(patternToAdd)
-        #while (runif(1) < pCorrupts[i] && patLen > 0) patLen <- patLen -1
+        #while (stats::runif(1) < pCorrupts[i] && patLen > 0) patLen <- patLen -1
         ## faster
-        if(pCorrupts[i] > 0) patLen <- patLen - rgeom(1, 1 - pCorrupts[i])
+        if(pCorrupts[i] > 0) patLen <- patLen - stats::rgeom(1, 1 - pCorrupts[i])
 
         if(patLen < 1) return(numeric(0))
 
@@ -226,21 +226,21 @@ random.patterns <- function(
     ## iWeight are used for item selection to build PMFIs
     ## the original implementation used exponential weights (the default here).
     if(is.null(iWeight)) {
-        iWeight <- rexp(nItems, rate = 1)
+        iWeight <- stats::rexp(nItems, rate = 1)
         iWeight <- iWeight / sum(iWeight)
     }
 
 
     ## pattern lengths (we want no empty patterns)
     ## that's how they for it in the code to get no 0 lenght patterns
-    pLengths <- rpois(nPats, lPats - 1) + 1
+    pLengths <- stats::rpois(nPats, lPats - 1) + 1
 
     ## pattern weights (weights need to sum up to 1)
-    pWeights <- rexp(nPats, rate = 1)
+    pWeights <- stats::rexp(nPats, rate = 1)
     pWeights <- pWeights / sum(pWeights)
 
     ## corruption levels (cannot be neg.)
-    pCorrupts <-  rnorm(nPats, mean = cmean, sd = sqrt(cvar)) 
+    pCorrupts <-  stats::rnorm(nPats, mean = cmean, sd = sqrt(cvar)) 
     pCorrupts[pCorrupts < 0] <- 0
     pCorrupts[pCorrupts > 1] <- 1
 
@@ -255,7 +255,7 @@ random.patterns <- function(
             ## correlation: take some items from the previous pattern
             ## in the paper they say the mean of the exp dist. is corr but
             ## in the implementation they used 1 in the following way: 
-            nTake <- min(c(trunc(pLengths[i] * corr * rexp(1, rate=1) + 0.5),
+            nTake <- min(c(trunc(pLengths[i] * corr * stats::rexp(1, rate=1) + 0.5),
                     pLengths[i-1], pLengths[i])) 
 
             if(nTake > 0) {
@@ -311,7 +311,7 @@ random.patterns <- function(
 
     ## transaction lengths
     ## that's how AS do it to get no transaction of length 0
-    tLengths <- rpois(nTrans, lTrans -1) + 1;
+    tLengths <- stats::rpois(nTrans, lTrans -1) + 1;
 
     ## transactions
     transactions <- list(); 
@@ -332,10 +332,10 @@ random.patterns <- function(
 
             patLen <- length(patternToAdd)
             
-            ##while (runif(1) < pCorrupts[j] && patLen > 0) patLen <- patLen -1
+            ##while (stats::runif(1) < pCorrupts[j] && patLen > 0) patLen <- patLen -1
             ## do it the fast way -- results in a geometric distribution
             if(pCorrupts[j] >0) {
-                patLen <- patLen - rgeom(1, 1 - pCorrupts[j])
+                patLen <- patLen - stats::rgeom(1, 1 - pCorrupts[j])
                 if(patLen < 1) next
             }
 
@@ -343,7 +343,7 @@ random.patterns <- function(
             ## we depart from AS by not allowing to generate empty transactions
             if (length(trans) > 0 
                 &&(length(trans) + patLen) > tLengths[i] 
-                && runif(1) > 0.5) break 
+                && stats::runif(1) > 0.5) break 
 
             ## pick the items and add them to the transactions
             patternToAdd <- patternToAdd[sample(1:length(patternToAdd), patLen)]

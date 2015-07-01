@@ -32,6 +32,7 @@
   \code{\link{dissimilarity}},
   \code{\link{itemMatrix-class}}
 }
+\author{Michael Hahsler}
 \examples{
 data("Adult")
 

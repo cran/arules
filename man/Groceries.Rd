@@ -29,4 +29,5 @@ R. Kruse, C. Borgelt, A. Nuernberger, and W. Gaul, editors, \emph{From Data and
 Information Analysis to Knowledge Engineering, Studies in Classification, Data
 Analysis, and Knowledge Organization}, pages 598--605. Springer-Verlag.
 }
+\author{Michael Hahsler}
 \keyword{datasets}

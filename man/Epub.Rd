@@ -19,4 +19,5 @@
   Provided by Michael Hahsler from ePub-WU at
   \url{http://epub.wu-wien.ac.at}.
 }
+\author{Michael Hahsler}
 \keyword{datasets}

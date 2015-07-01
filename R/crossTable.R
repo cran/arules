@@ -24,13 +24,42 @@
 ##
 
 setMethod("crossTable", signature(x = "itemMatrix"),
-    function(x) {
-        m <- .Call("R_crosstab_ngCMatrix", x@data, NULL, TRUE,
-		PACKAGE="arules")
-        if (is.null(dimnames(m)))
-            dimnames(m) <- list(itemLabels(x), itemLabels(x))
-        m
+  function(x, measure = c("count", "support", "probability", "lift", "chiSquared"), 
+    sort = FALSE) {
+    
+    measure <- match.arg(measure)
+    
+    m <- .Call("R_crosstab_ngCMatrix", x@data, NULL, TRUE,
+      PACKAGE="arules")
+    if (is.null(dimnames(m)))
+      dimnames(m) <- list(itemLabels(x), itemLabels(x))
+    
+    if(sort) {
+      o <- order(diag(m), decreasing = TRUE)
+      m <- m[o,o]
     }
+    
+    if(measure=="count") return(m)
+    
+    p <- m/nrow(x)
+    if(measure=="support" || measure=="probability") return(p)
+    
+    if(measure=="lift") {
+      p_items <- diag(p)
+      diag(p) <- NA
+      e <- outer(p_items, p_items, "*")
+      return(p/e)
+    }
+    
+    if(measure=="chiSquared") {
+      p_items <- diag(p)
+      diag(p) <- NA
+      e <- outer(p_items, p_items, "*")
+      return((p-e)^2/e)
+    }
+    
+    stop("Unknown measure!")
+  }
 )
 
 ###

@@ -98,6 +98,7 @@
   \code{\link{associations-class}}, 
   \code{\link{tidLists-class}} 
 }
+\author{Michael Hahsler}
 \examples{
 data("Adult")
 

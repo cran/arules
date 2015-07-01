@@ -45,4 +45,5 @@ r_comb <- c(r1, r2)
 duplicated(r_comb)
 
 }
+\author{Michael Hahsler}
 \keyword{manip}

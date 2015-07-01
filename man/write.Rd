@@ -60,6 +60,7 @@ for reading/writing associations in PMML format,
  \code{\link{transactions-class}},
  \code{\link{associations-class}}
 }
+\author{Michael Hahsler}
 \examples{
 data("Epub")
 

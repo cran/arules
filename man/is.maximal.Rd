@@ -42,4 +42,5 @@ Mohammed J. Zaki, Srinivasan Parthasarathy, Mitsunori Ogihara, and Wei Li
 Technical Report 651, Computer Science Department, University of Rochester,
 Rochester, NY 14627.
 }
+\author{Michael Hahsler}
 \keyword{models}
