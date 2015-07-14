@@ -11,8 +11,8 @@ useDynLib(arules,
 )
 
 import("methods")
-importFrom("stats", "predict", "aggregate")  ## we want to add methods
-importFrom("utils", "head")  ## we want to add methods
+importFrom("stats", "predict", "aggregate", "as.dist", "cor")  ## we want to add methods
+importFrom("utils", "head", "write.table")  ## we want to add methods
 import("graphics")
 
 importFrom("Matrix", "summary", "image", "t") ## we need generics and methods 

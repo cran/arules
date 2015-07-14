@@ -193,7 +193,7 @@ I6  .  .  .  .  |
 I1 I2 I3 I4 I5 I6 
  2  2  3  0  2  1 
 > all.equal(rowSums(x), .Call("R_rowSums_ngCMatrix", x))
-[1] "names for current but not for target"
+[1] TRUE
 > 
 > #
 > .Call("R_rowSums_ngCMatrix", e)
@@ -204,8 +204,8 @@ integer(0)
 T1 T2 T3 T4 T5 
  3  2  2  0  3 
 > all.equal(colSums(x), .Call("R_colSums_ngCMatrix", x))
-[1] "names for current but not for target"
-> 
+[1] TRUE
+>
 > #
 > .Call("R_colSums_ngCMatrix", e)
 integer(0)

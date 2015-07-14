@@ -37,7 +37,7 @@ setMethod("support", signature(x = "itemMatrix"),
         methods <- c("ptree", "tidlists")
 
         method <-  methods[pmatch(method , methods)]
-        if(is.na(method)) error("unknown method")
+        if(is.na(method)) stop("unknown method")
 
         if(verbose) cat("using method:", method, "\n")
 

@@ -42,7 +42,7 @@ setMethod("ruleInduction",  signature(x = "itemsets"),
         methods <- c("apriori", "ptree", "tidlists")
     
         method <-  methods[pmatch(method , methods)]
-        if(is.na(method)) error("unknown method")
+        if(is.na(method)) stop("unknown method")
 
 
         pt1 <- proc.time()
