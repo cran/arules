@@ -72,7 +72,11 @@ eclat <-  function(data, parameter = NULL, control = NULL)
     
     ## copy itemInfo
     result@items@itemInfo <- data@itemInfo
-    
+   
+    ## empty itemsetInfo
+    result@items@itemsetInfo <- 
+      data.frame(matrix(nrow = length(result), ncol = 0))
+     
     ## make sure quality is a data.frame
     result@quality <- as.data.frame(result@quality,)
     

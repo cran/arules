@@ -5,13 +5,18 @@ useDynLib(arules,
   R_colSubset_ngCMatrix,
   R_colSums_ngCMatrix,
   R_pnindex,
+  R_pnrindex,
   R_recode_ngCMatrix,
   R_rowSubset_ngCMatrix,
-  R_rowSums_ngCMatrix
+  R_rowSums_ngCMatrix,
+  R_wcount_ngCMatrix,
+  R_weclat_ngCMatrix,
+  R_rowWSums_ngCMatrix,
+  R_hits_ngCMatrix
 )
 
 import("methods")
-importFrom("stats", "predict", "aggregate", "as.dist", "cor")  ## we want to add methods
+importFrom("stats", "predict", "aggregate", "as.dist", "cor", "rpois")  ## we want to add methods
 importFrom("utils", "head", "write.table")  ## we want to add methods
 import("graphics")
 
@@ -28,6 +33,8 @@ export(
   "random.patterns",
   "apriori", 
   "eclat",
+  "weclat",
+  "hits",
   "discretize"
 )
 

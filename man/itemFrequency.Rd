@@ -13,7 +13,7 @@
 \usage{
 itemFrequency(x, ...)
 
-\S4method{itemFrequency}{itemMatrix}(x, type)
+\S4method{itemFrequency}{itemMatrix}(x, type, weighted = FALSE)
 }
 \arguments{
   \item{x}{an object.}
@@ -22,6 +22,8 @@ itemFrequency(x, ...)
     if \code{"relative"}  frequency/support or  \code{"absolute"} 
     frequency/support (item counts) is returned. (default:  \code{"relative"}).
   }
+  \item{weighted}{ should support be weighted by transactions weights stored
+   as column \code{"weight"} in transactionInfo?} 
 }
 \value{
   \code{itemFrequency} returns a named numeric vector.  Each element is the

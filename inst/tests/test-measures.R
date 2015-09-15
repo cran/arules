@@ -1,4 +1,7 @@
 library("arules")
+library("testthat")
+
+context("measures")
 
 options(digits=2)
 
@@ -19,46 +22,45 @@ trans <- as(data, "transactions")
 # associations in databases. IEEE Transactions on Knowledge and 
 # Data Engineering, 15(1):57-69, Jan/Feb 2003.
 
-fsets <- eclat(trans, parameter = list(supp = 0), control=list(verb=FALSE))
+# complains about low support
+expect_warning(
+  fsets <- eclat(trans, parameter = list(supp = 0), control=list(verb=FALSE))
+  )
 
-quality(fsets) <- cbind(quality(fsets), 
-  allConfidence = interestMeasure(fsets, method = "allConfidence", trans))
+# add all-confidence
+quality(fsets)$allConfidence <- 
+  interestMeasure(fsets, method = "allConfidence", trans)
+#inspect(fsets[order(size(fsets))])
 
-inspect(fsets[order(size(fsets))])
+# check
+ac <- c(1.00, 0.67, 0.33, 0.33, 0.50, 0.33, 0.33, 0.50, 0.50, 0.33, 0.33, 
+  1.00, 0.33, 0.60, 0.40, 0.40, 0.20, 0.40, 0.20, 0.20)
+expect_equal(round(quality(fsets)$allConfidence, 2), ac)
 
 ###################################################################
 ## test all measures for itemsets
-
 measures <- c("support", "allConfidence", "crossSupportRatio")
-
 m1 <- interestMeasure(fsets, measures, trans)
-m1
 
-## now dont reuse any quality data
+## now recalculate the measures using the transactios
 m2 <- interestMeasure(fsets, measures, trans, reuse = FALSE)
-m2
-
-## compare results
-all.equal(m1, m2)
+expect_equal(m1, m2)
 
 
 ###################################################################
 # test all measures for rules
 
-rules <- apriori(trans, parameter=list(supp=0.01, conf = 0.5), 
-        control=list(verb=FALSE))
- 
+expect_warning(
+  rules <- apriori(trans, parameter=list(supp=0.01, conf = 0.5), 
+    control=list(verb=FALSE))
+)
+
 ## calculate all measures
 measures <-  c("support", "coverage", "confidence", "lift",
     "leverage", "hyperLift", "hyperConfidence", "improvement",
     "chiSquare", "cosine", "conviction", "gini", "oddsRatio", "phi", "doc")
 
 m1 <- interestMeasure(rules, measures, trans)
-m1
-
-## now dont reuse any quality data
 m2 <- interestMeasure(rules, measures, trans, reuse = FALSE)
-m2
+expect_equal(m1, m2)
 
-## compare results
-all.equal(m1, m2)

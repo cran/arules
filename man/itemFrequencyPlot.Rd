@@ -14,7 +14,7 @@
 \usage{
 itemFrequencyPlot(x, \dots)
 \S4method{itemFrequencyPlot}{itemMatrix}(x, type = c("relative", "absolute"), 
-    support = NULL, topN = NULL,
+    weighted = FALSE, support = NULL, topN = NULL,
     population = NULL, popCol = "black", popLwd = 1,
     lift = FALSE, horiz = FALSE, 
     names = TRUE, cex.names =  graphics::par("cex.axis"), 
@@ -27,6 +27,8 @@ itemFrequencyPlot(x, \dots)
   \item{type}{ a character string indicating whether 
 	item frequencies should be displayed 
   relative of absolute.}
+  \item{weighted}{ should support be weighted by transactions weights stored
+   as column \code{"weight"} in transactionInfo?} 
   \item{support}{a numeric value. Only display items which have a support of 
     at least \code{support}. If no population is given, support is calculated 
     from \code{x} otherwise from the population. Support is interpreted relative

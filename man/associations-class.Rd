@@ -3,9 +3,9 @@
 \alias{associations-class}
 \alias{associations}
 %
+\alias{initialize,associations-method}
 \alias{summary.associations-class}
 \alias{show,associations-method}
-%\alias{SORT,associations-method}
 \alias{quality<-}
 \alias{quality<-,associations-method}
 \alias{quality}
@@ -63,10 +63,6 @@
       dummy method. This method has to be implemented by all subclasses
       of \code{associations} and return the number of elements in the 
       association.}
-%    \item{SORT}{\code{signature(x = "associations")};
-%      sorts the associations by a quality measure specified as the
-%      argument \code{by} (default: \code{by = "support", decreasing =
-%	TRUE}).}
     \item{quality<-}{\code{signature(x = "associations")};
       replaces the quality data.frame.  The lengths of the vectors
       in the data.frame have to equal the number of associations

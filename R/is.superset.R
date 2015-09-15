@@ -62,9 +62,10 @@ setMethod("is.subset", signature(x = "itemMatrix"),
     else 
       m <- m & outer(size(x), size(y), "<")
     
-    if(!is.null(y)) colnames(m) <- labels(y)$transactionID
-    rownames(m) <- labels(x)$elements
-
+    rownames(m) <- labels(x)
+    if(is.null(y)) colnames(m) <- labels(x)
+    else colnames(m) <- labels(y)
+    
     m
   }
 )
@@ -97,8 +98,8 @@ setMethod("is.subset", signature(x = "associations"),
   
   m <- .list2ngCMatrix(contained, nrow(y))
   
-  if(!is.null(y)) colnames(m) <- labels(y)$transactionID
-  rownames(m) <- labels(x)$elements
+  if(!is.null(y)) colnames(m) <- labels(y)
+  rownames(m) <- labels(x)
   
   m
 }

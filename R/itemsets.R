@@ -49,7 +49,7 @@ setAs("itemsets", "data.frame",
 ## labels
 
 setMethod("labels", signature(object = "itemsets"),
-    function(object, ...) labels(object@items, ...)$elements)
+    function(object, ...) labels(object@items, ...))
 
 setMethod("itemLabels", signature(object = "itemsets"),
     function(object) itemLabels(object@items))
@@ -84,38 +84,18 @@ setMethod("[", signature(x = "itemsets", i = "ANY", j = "ANY", drop = "ANY"),
             stop("incorrect number of dimensions (j not possible)")
         if (missing(i)) 
             return(x)
+        
         slots <- intersect(slotNames(x), c("items", "tidLists"))
         for (sl in slots) 
             slot(x, sl) <- slot(x, sl)[i]
-        if (length(x@quality))
-            x@quality <- x@quality[i,, drop = FALSE]
+        
+        x@quality <- x@quality[i,, drop = FALSE]
+        
         validObject(x)
         x
     }
 )
 
-## FIXME this is inefficient for data.frames with many
-##       rows. we do not handle cases with non-zero 
-##       rows/columns and zero columns/rows.
-
-.combineMeta <- function(x, y, name, ...) {
-    if (length(slot(x, name))) {
-        if (length(slot(y, name)))
-            slot(x, name) <- rbind(slot(x, name), slot(y, name))
-        else {
-            k <- rbind(NA, slot(x, name))
-            slot(x, name) <- 
-                rbind(slot(x, name), k[rep(1, length(y)),, drop = FALSE])
-        }
-    } else
-    if (length(slot(y, name))) {
-        k <- rbind(NA, slot(y, name))
-        slot(x, name) <- 
-            rbind(k[rep(1, length(x)),, drop = FALSE],  slot(y, name))
-    }
-
-    slot(x, name)
-}
 
 ## FIXME: tidList not handled
 setMethod("c", signature(x = "itemsets"),

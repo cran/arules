@@ -131,5 +131,10 @@ rules.sub <- subset(rules, subset = rhs \%pin\% "sex" & lift > 1.3)
 
 ## Display rules.
 inspect(sort(rules.sub)[1:3])
+
+## Get labels for rules
+labels(rules.sub[1:3])
+labels(rules.sub[1:3], itemSep = " + ", setStart = "", setEnd="", 
+  ruleSep = " ---> ")
 }
 \keyword{classes}

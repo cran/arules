@@ -12,11 +12,7 @@
 }
 \usage{
 \S4method{sort}{associations}(x, decreasing = TRUE, na.last = NA, 
-    by = "support", ...)
-
-## deprecated since arules version 0.5-1
-\S4method{SORT}{associations}(x, by = "support", na.last = NA, 
-    decreasing = TRUE)
+    by = "support", order = FALSE, ...)
 }
 \arguments{
   \item{x}{ an object to be sorted.}
@@ -26,8 +22,12 @@
     missing values in the data are put last; if \code{FALSE}, they are put
     first; if \code{NA}, they are removed.}
   \item{by}{ a character string specifying the quality measure stored in
-    \code{x} to be used to sort \code{x}.}
-  \item{...}{Further arguments passed on to \code{order}.}
+    \code{x} to be used to sort \code{x}. If a vector of character strings
+    is specified then the additional strings are used to sort \code{x} 
+    in case of ties.}
+  \item{order}{should a order vector be returned instead of the sorted 
+    associations?}
+  \item{...}{Further arguments are ignored.}
 }
 \value{
   An object of the same class as \code{x}.
@@ -40,11 +40,14 @@
 \examples{
 data("Adult")
 
-## Mine frequent itemsets with Eclat.
-fsets <- eclat(Adult, parameter = list(supp = 0.5))
+## Mine rules with APRIORI
+rules <- apriori(Adult, parameter = list(supp = 0.6))
 
-## Print the 5 itemsets with the highest support as a data.frame.
-as(sort(fsets)[1:5], "data.frame")
+## Print the 5 rules sorted by confidence and then support as a data.frame.
+as(head(sort(rules, by = c("confidence", "support")), n=5), "data.frame")
+
+## Order of rules by decreasing support
+sort(rules, by = "confidence", order = TRUE)
 }
 \keyword{manip}
 \keyword{arith}

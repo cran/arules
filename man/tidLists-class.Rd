@@ -2,12 +2,13 @@
 \docType{class}
 \alias{tidLists-class}
 \alias{tidLists}
-%
+\alias{tidlists}
 \alias{tidLists_or_NULL-class}
-%\alias{[,tidLists-method}
+%%%
+\alias{initialize,tidLists-method}
 \alias{coerce,tidLists,matrix-method}
 \alias{coerce,tidLists,list-method}
-\alias{coerce,tidLists,dgCMatrix-method}
+\alias{coerce,list,tidLists-method}
 \alias{coerce,tidLists,ngCMatrix-method}
 \alias{coerce,tidLists,transactions-method}
 \alias{coerce,transactions,tidLists-method}
@@ -15,9 +16,11 @@
 \alias{coerce,itemMatrix,tidLists-method}
 \alias{dim,tidLists-method}
 \alias{dimnames,tidLists-method}
+\alias{dimnames<-,tidLists,list-method}
 \alias{labels,tidLists-method}
 \alias{itemLabels,tidLists-method}
 \alias{itemInfo,tidLists-method}
+\alias{inspect,tidLists-method}
 \alias{transactionInfo,tidLists-method}
 \alias{t,tidLists-method}
 \alias{c,tidLists-method}
@@ -76,24 +79,29 @@
       access the sparse matrix representation. In the
       \code{ngCMatrix} each column represents the transaction IDs
       for one item/itemset.}
-  \item{coerce}{\code{signature(from = "tidLists", to = "dgCMatrix")}}
   \item{coerce}{\code{signature(from = "tidLists", to = "list")}}
+  \item{coerce}{\code{signature(from = "list", to = "tidLists")}}
   \item{coerce}{\code{signature(from = "tidLists", to = "matrix")}}
   \item{coerce}{\code{signature(from = "tidLists", to = "itemMatrix")}}
   \item{coerce}{\code{signature(from = "tidLists", to = "transactions")}}
-  \item{coerce}{\code{signature(from = "itemMatrix", to = "tidLists")}}
+  \item{coerce}{\code{signature(from = "itemMatrix", to = "tidLists")}; this also coerces from \code{transactions}.}
   \item{coerce}{\code{signature(from = "transactions", to = "tidLists")}}
   \item{c}{\code{signature(x = "tidLists")}; combine.}
   \item{dim}{\code{signature(x = "tidLists")};
       returns the dimensions of the sparse Matrix representing the 
       \code{tidLists}.}
+  \item{dimnames, rownames, colnames}{\code{signature(x = "transactions")};
+     returns row (items/itemsets) and column 
+    (transactionIDs if available) names.}
+  \item{labels}{\code{signature(x = "transactions")};
+     returns the labels for the itemsets in each transaction 
+     (see \code{itemMatrix}).}  
+  \item{inspect}{ inspect the transaction ID lists.}
   \item{itemInfo}{ returns the slot \code{itemInfo}.}
   \item{itemLabels}{\code{signature(object = "tidLists")};
     returns the item labels as a character vector.}
   \item{labels}{\code{signature(x = "transactions")};
-    returns the labels (item labels and transaction IDs)
-    for the incidence matrix as a list of two vectors named \code{items}
-    and \code{transactionID}.}
+    returns the labels (transaction IDs).}
   \item{show}{\code{signature(object = "tidLists")}}
   \item{summary}{\code{signature(object = "tidLists")}}
   \item{transactionInfo}{\code{signature(x = "transactions")}:
@@ -128,20 +136,22 @@ data <- list(
   c("a","b","d","e")
   )
 data <- as(data, "transactions")
+data
 
-## Mine itemsets with tidLists.
-f <- eclat(data, parameter = list(support = 0, tidLists = TRUE))
+## convert transactions to transaction ID lists
+tl <- as(data, "tidLists")
+tl 
 
-tl <- tidLists(f)
-
-## Get dimensions of the tidLists.
+inspect(tl)
 dim(tl)
 dimnames(tl)
 
-## Coerce tidLists to list.
-as(tl, "list")
-
-## Inspect visually. 
+## inspect visually
 image(tl)
+
+## mine itemsets with transaction ID lists
+f <- eclat(data, parameter = list(support = 0, tidLists = TRUE))
+tl2 <- tidLists(f)
+inspect(tl2)
 }
 \keyword{classes}

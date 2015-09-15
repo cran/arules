@@ -1364,7 +1364,7 @@ itemFrequencyPlot(Adult, support = 0.1, cex.names=0.8)
 \centering
 <<echo=FALSE, fig=TRUE, width=8>>=
 <<itemFrequencyPlot>>
-@ %
+@ % 
 \caption{Item frequencies of items in the Adult data set with support greater than 10\%.}
 \label{fig:itemFrequencyPlot}
 \end{figure}
@@ -1675,17 +1675,17 @@ frequent itemsets found in the database were also found in the sample.
 <<>>=
 match <- match(itemsets, itemsetsSample, nomatch = 0)
 ## remove no matches
-sum(match>0) / length(itemsets)
+sum(match > 0) / length(itemsets)
 @
 
 Almost all frequent itemsets were found using the sample.
 The summaries of the support of the frequent itemsets 
 which were not found in the sample and the itemsets
 which were frequent in the sample although they
-were infrequent in the database give:
+were infrequent in the database, respectively, give:
 
 <<>>=
-summary(quality(itemsets[which(!match)])$support)
+summary(quality(itemsets[match == 0])$support)
 summary(quality(itemsetsSample[-match])$support)
 @
 

@@ -68,8 +68,8 @@ setAs("rules", "data.frame",
 
 setMethod("labels", signature(object = "rules"),
     function(object, ruleSep = " => ", ...)
-        paste(labels(object@lhs, ...)$elements, ruleSep,
-              labels(object@rhs, ...)$elements, sep = ""))
+        paste(labels(object@lhs, ...), ruleSep,
+              labels(object@rhs, ...), sep = ""))
 
 setMethod("itemLabels", signature(object = "rules"),
     function(object)itemLabels(lhs(object)))
@@ -128,8 +128,9 @@ setMethod("[", signature(x = "rules", i = "ANY", j = "ANY", drop = "ANY"),
         slots <- intersect(slotNames(x), c("lhs", "rhs"))
         for (s in slots) 
             slot(x, s) <- slot(x, s)[i]
-        if (length(x@quality))
-            x@quality <- x@quality[i,, drop = FALSE]
+        
+        x@quality <- x@quality[i,, drop = FALSE]
+        
         validObject(x)
         x
     }

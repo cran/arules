@@ -1,14 +1,15 @@
 \name{itemMatrix-class}
 \docType{class}
 \alias{itemMatrix-class}
+\alias{itemMatrix}
+%%%
+\alias{initialize,itemMatrix-method}
 \alias{summary.itemMatrix-class}
 \alias{show,summary.itemMatrix-method}
 \alias{print,summary.itemMatrix-method}
 \alias{coerce,matrix,itemMatrix-method}
 \alias{coerce,list,itemMatrix-method}
 \alias{coerce,itemMatrix,matrix-method}
-%\alias{coerce,itemMatrix,dgCMatrix-method}
-%\alias{coerce,dgCMatrix,itemMatrix-method}
 \alias{coerce,itemMatrix,ngCMatrix-method}
 \alias{coerce,ngCMatrix,itemMatrix-method}
 \alias{coerce,itemMatrix,list-method}
@@ -109,17 +110,15 @@
     
     \item{coerce}{\code{signature(from = "ngCMatrix", to = "itemMatrix")};
       Note, the \code{ngCMatrix} has to be transposed with items as rows!}
-    
-%    \item{coerce}{\code{signature(from = "itemMatrix", to = "dgCMatrix")};
-%      access the sparse matrix representation. Note, the \code{dgCMatrix} 
-%      contains a transposed from of the itemMatrix.}
-%    
-%    \item{coerce}{\code{signature(from = "dgCMatrix", to = "itemMatrix")};
-%     Note, the \code{ngCMatrix} has to be transposed with items as rows!}
     \item{c}{\code{signature(object = "itemMatrix")}; combine. }
     
     \item{dim}{\code{signature(x = "itemMatrix")};
       returns the dimensions of the itemMatrix.}
+    \item{dimnames, rownames, colnames}{\code{signature(x = "itemMatrix")};
+        returns row (itemsetID) and column (item) names.}
+    \item{labels}{\code{signature(x = "transactions")};
+      returns the labels for the itemsets in each transaction 
+      (see \code{itemMatrix}).} 
     \item{dimnames}{\code{signature(x = "itemMatrix")};
       returns dimnames.}
     \item{dimnames<-}{\code{signature(x = "itemMatrix", value = "list")};
@@ -157,10 +156,8 @@
     \item{itemsetInfo<-}{\code{signature(object = "itemMatrix")};
       replaces the item set/row info by a data.frame.}
     \item{labels}{\code{signature(x = "transactions")};
-      returns the labels (item labels and element names) 
-      for the matrix as a list of two vectors named \code{items}
-      and \code{elements}. The following arguments can be used to customize
-      the representation of the elements: 
+      returns labels for the itemsets. The following arguments can 
+      be used to customize the representation of the labels: 
       \code{itemSep}, 
       \code{setStart} and 
       \code{setEnd}.}
@@ -197,7 +194,7 @@
 set.seed(1234)
   
 ## Generate random data and coerce data to itemMatrix.
-m <- matrix(as.integer(runif(100000)>0.8), ncol=20)
+m <- matrix(runif(100000)>0.8, ncol=20)
 dimnames(m) <- list(NULL, paste("item", c(1:20), sep=""))
 i <- as(m, "itemMatrix")
 
@@ -214,14 +211,19 @@ as(i[1:5], "matrix")
 ## Warning: for efficiency reasons, the ngCMatrix you get is transposed!
 as(i[1:5], "ngCMatrix")
 
+## Get labels for the first 5 itemsets (first default and then with 
+## custom formating)
+labels(i[1:5])
+labels(i[1:5], itemSep = " + ", setStart = "", setEnd = "")
+
 ## create itemsets from itemMatrix  
 is <- new("itemsets", items = i[1:3])
 inspect(is)
 
 ## create rules (rhs and lhs cannot share items so I use 
-## itemSetdiff here)
-rules <- new("rules", lhs=itemSetdiff(i[4:6],i[1:3]), rhs=i[1:3])
+## itemSetdiff here). Also assign (random) support.
+rules <- new("rules", lhs=itemSetdiff(i[4:6],i[1:3]), rhs=i[1:3],
+  quality = data.frame(support = runif(3)))
 inspect(rules) 
-##  
 }
 \keyword{classes}

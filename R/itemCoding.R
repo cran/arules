@@ -91,7 +91,8 @@ setMethod("encode", signature(x = "list"),
         ## item labels must be character
         new("itemMatrix", 
             data     = i,  
-            itemInfo = data.frame(labels = I(as.character(itemLabels))))
+            itemInfo = data.frame(labels = as.character(itemLabels), 
+              stringsAsFactors = FALSE))
     }
 )
 
@@ -122,7 +123,8 @@ setMethod("recode", signature(x = "itemMatrix"),
         if (!is.null(match)) 
             itemInfo(x) <- itemInfo(match)
         else 
-            itemInfo(x) <- data.frame(labels = I(as.character(itemLabels)))
+            itemInfo(x) <- data.frame(labels = as.character(itemLabels), 
+              stringsAsFactors = FALSE)
 
         validObject(x)
         x

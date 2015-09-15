@@ -59,7 +59,7 @@ random.transactions <- function(
 ## of a transactions.
 
 .random.transactions_independent <- function(nItems, nTrans, 
-    iProb = 0.01, verbose = FALSE) {
+    lambda = 3 , iProb = 0.01, verbose = FALSE) {
 
     ## check iProb
     if(any(iProb>1 | iProb<0)) stop("Illegal probability given (>1 or <0)!")
@@ -69,12 +69,16 @@ random.transactions <- function(
 
     ## check length of iProb
     if(length(iProb) != nItems) 
-    stop("Number of items and number of given probabilities do not match!")
+      stop("Number of items and number of given probabilities do not match!")
 
     ## simulate data (create a list with indices)
     simList <- replicate(nTrans,
-        which(stats::runif(nItems) <= iProb))
+      sample(1:nItems, 
+        min(stats::rpois(1, lambda-1)+1L, nItems), prob = iProb))  
+    #  which(stats::runif(nItems) <= iProb))
 
+    ## avoid empty transactions
+    
     new("transactions", 
          encode(simList, paste("item", 1:nItems, sep = "")),
          transactionInfo = data.frame(transactionID = 

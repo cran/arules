@@ -25,11 +25,13 @@ random.transactions(nItems, nTrans, method = "independent", \ldots,
   
   Currently two simulation methods are implemented:
   \describe{
-    \item{method \code{"independent"} (see Hahsler et al., 2005)}{
-      All items are treated as independent. 
-      Each transaction is the result of \code{nItems} independent 
-      Bernoulli trials, one for each item with success 
-      probabilities given by the numeric 
+    \item{method \code{"independent"} (see Hahsler et al., 2006)}{
+      All items are treated as independent. The transaction size
+      is determined by \eqn{rpois(lambda-1)+1}, where \code{lambda} can
+      be specified (defaults to 3). Note that one subtracted from lambda 
+      and added to the size to avoid 
+      empty transactions. The items in the transactions are randomly
+      chosen using the numeric probability
       vector \code{iProb} of length \code{nItems} 
       (default: 0.01 for each item).
   }
@@ -102,7 +104,10 @@ on Very Large Data Bases, VLDB}, pages 487--499, Santiago, Chile.
 ## a success probability decreasing from 0.2 to 0.0001
 ## using the method described in Hahsler et al. (2006).
 trans <- random.transactions(nItems = 200, nTrans = 1000, 
-   iProb = seq(0.2,0.0001, length=200))
+   lambda = 5, iProb = seq(0.2,0.0001, length=200))
+
+## size distribution
+summary(size(trans))
 
 ## display random data set
 image(trans)
@@ -119,6 +124,5 @@ image(trans2)
 
 ## plot data with items ordered by item frequency
 image(trans2[,order(itemFrequency(trans2), decreasing=TRUE)])
-
 }
 \keyword{datagen}

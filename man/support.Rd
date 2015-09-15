@@ -11,9 +11,9 @@
 \usage{
 support(x, transactions, ...)
 \S4method{support}{itemMatrix}(x, transactions, 
-    type= c("relative", "absolute"), control = NULL)
+    type= c("relative", "absolute"), weighted = FALSE, control = NULL)
 \S4method{support}{associations}(x, transactions, 
-    type= c("relative", "absolute"), control = NULL)
+    type= c("relative", "absolute"), weighted = FALSE, control = NULL)
 
 }
 \arguments{
@@ -24,7 +24,9 @@ support(x, transactions, ...)
     if \code{"relative"}  support or  \code{"absolute"}
     support (counts) are returned for the itemsets in \code{x}. 
     (default:  \code{"relative"})}
-\item{control}{a named list with elements 
+  \item{weighted}{ should support be weighted by transactions weights stored
+   as column \code{"weight"} in transactionInfo?} 
+  \item{control}{a named list with elements 
     \code{method} indicating the method (\code{"tidlists"} or \code{"ptree"}),
     and the logical arguments
     \code{reduce} and

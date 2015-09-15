@@ -30,25 +30,27 @@
 ## easily as there are too many signatures to overload.
 
 
-## density 
-.density_Matrix <- function(x) length(x@i)/x@Dim[1]/x@Dim[2]
+## density for ngC/dgCMatrix 
+.density_Matrix <- function(x) length(x@i)/prod(dim(x))
 
 ## helper to convert names into an integer index
 .translate_index <- function(i, labels, n) {
-    
-    if(is.numeric(i) && all(i>0)) return(as.integer(i))
-    
-    if(is.logical(i)) return(which(i))
-    
-    if(!is.null(labels)) {
-	sel <- seq(length(labels))
-	names(sel) <- labels
-    }else sel <- seq(n)    
-    
-    sel <- sel[i]
-
-    if(any(is.na(sel))) stop("subscript out of bounds")
-    sel
+  
+  ## checking is deferred to the actual subsetting code
+  if(is.logical(i)) return(which(i))
+  
+  if(is.numeric(i)) {
+    ## deal with neg. and 0's
+    if(all(i>0)) return(as.integer(i))
+    else return(seq(n)[i])
+  }
+  
+  ## if no labels were specified we used "1", "2", etc.
+  if(is.null(labels)) labels <- seq(n)
+  sel <- structure(seq(length(labels)), names = labels)[i]
+  
+  if(any(is.na(sel))) stop("subscript out of bounds")
+  sel
 }
 
 

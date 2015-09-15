@@ -30,7 +30,8 @@
 setAs("matrix", "transactions",
   function(from)
     new("transactions", as(from, "itemMatrix"), 
-      transactionInfo = data.frame(transactionID = dimnames(from)[[1]])))
+      transactionInfo = data.frame(transactionID = dimnames(from)[[1]], 
+        stringsAsFactors = FALSE)))
 
 setAs("transactions", "matrix",
   function(from) {
@@ -48,7 +49,8 @@ setAs("ngCMatrix", "transactions",
 setAs("list", "transactions",
   function(from)
     new("transactions", as(from, "itemMatrix"), 
-      transactionInfo = data.frame(transactionID = names(from))))
+      transactionInfo = data.frame(transactionID = names(from), 
+        stringsAsFactors = FALSE)))
 
 setAs("transactions", "list",
   function(from) LIST(from, decode = TRUE))
@@ -97,16 +99,18 @@ setAs("data.frame", "transactions",
       Dim = c(dim(from)[1], length(p)))
     
     iInfo <- data.frame(
-      labels        = I(paste(v, l, sep = "=")),
-      variables     = v,
-      levels        = l
-      )
+      labels        = paste(v, l, sep = "="),
+      variables     = as.factor(v),
+      levels        = as.factor(l),
+      stringsAsFactors = FALSE
+    )
     
     ## fix labels for logicals
     logicals <- which(iInfo[,"variables"] %in% colnames(from)[logicals])
     iInfo[logicals, "labels"] <- as.character(iInfo[logicals, "variables"])
-
-    tInfo <- data.frame(transactionID = rownames(from))
+    
+    tInfo <- data.frame(transactionID = rownames(from), 
+      stringsAsFactors = FALSE)
     
     new("transactions",
       data     = t(x),
@@ -115,19 +119,27 @@ setAs("data.frame", "transactions",
     )
   }
 )
-  
+
 ## This does not reverse coercion data.frame -> transactions
 ## it is just used for output formating!
 setAs("transactions", "data.frame",
   function(from) {
-    if (!length(from)) 
-      return (data.frame())
+    if (!length(from)) return (data.frame())
     
-    items <- labels(as(from, "itemMatrix"))$elements
+    if (!length(transactionInfo(from))) 
+      return(data.frame(items = labels(from)))
     
-    if (!length(from@transactionInfo)) 
-      return(data.frame(items = items))
-    data.frame(transactionID = from@transactionInfo, items = items)
+    #cbind(transactionInfo(from), data.frame(items = labels(from)))
+    ## Deal with the case when transactionInfo contains items
+    
+    df <- cbind(data.frame(items = labels(from)), transactionInfo(from))
+    fromnames <- colnames(transactionInfo(from)) 
+    m <- match("items", fromnames)
+    if (!is.na(m)) {
+      warning("items in transactionInfo was relabeled to ransactionInfo.items!")
+      colnames(df)[m+1L] <- "transactionInfo.items"
+    }
+    df   
   }
 )
 
@@ -143,14 +155,13 @@ setMethod("[", signature(x = "transactions", i = "ANY", j = "ANY", drop = "ANY")
   function(x, i, j, ..., drop) {
     ## i and j are reversed
     if (!missing(i)) {
-      if (length(x@transactionInfo))
-        x@transactionInfo <- x@transactionInfo[i,, drop = FALSE]
       x <- new("transactions", as(x, "itemMatrix")[i,, ..., drop],
-        transactionInfo = x@transactionInfo)
+        transactionInfo = x@transactionInfo[i,, drop = FALSE])
     }
     if (!missing(j))
       x <- new("transactions", as(x, "itemMatrix")[,j, ..., drop],
         transactionInfo = x@transactionInfo)
+    
     x
   }
 )
@@ -183,8 +194,8 @@ setMethod("merge", signature(x="transactions"),
 setMethod("show", signature(object = "transactions"),
   function(object) {
     cat("transactions in sparse format with\n",
-      length(object), "transactions (rows) and\n",
-      nitems(object), "items (columns)\n")
+      nrow(object), "transactions (rows) and\n",
+      ncol(object), "items (columns)\n")
     invisible(NULL)
   }
 )
@@ -223,13 +234,43 @@ setReplaceMethod("transactionInfo", signature(x = "transactions"),
   }
 )
 
-setMethod("labels", signature(object = "transactions"),
-  function(object) {
-    ## make transaction labels
-    if (!length(i <- object@transactionInfo[["transactionID"]]))
-      i <- seq_len(length(object))
-    list(items = itemLabels(object), transactionID = as.character(i))
-  }
-)
+setMethod("dimnames", signature(x = "transactions"),
+  function(x) {
+    ## NOTE: as.character is to support old data which used I()
+    rowLabels <- transactionInfo(x)[["transactionID"]]
+    if(!is.null(rowLabels)) rowLabels <- as.character(rowLabels)
+    
+    ## NOTE: as.character is to support old data which used I()
+    colLabels <- as.character(itemInfo(x)[["labels"]])
+    
+    list(rowLabels, colLabels)
+  })
+
+setReplaceMethod("dimnames", signature(x = "transactions",
+  value = "list"), 
+  function(x, value) {
+    if(any(dim(x) != sapply(value, length) & !sapply(value, is.null))) 
+      stop("length of dimnames does not equal the dimension of the object.")
+    
+    if(!is.null(value[[1]])){ 
+      if(ncol(transactionInfo(x))==0) {
+        transactionInfo(x) <- data.frame(transactionID = value[[1]])
+      }else{
+        transactionInfo(x)[["transactionID"]] <- value[[1]]
+      }
+    } 
+    
+    if(!is.null(value[[2]])){ 
+      itemInfo(x)[["labels"]] <- value[[2]]
+    }
+     
+    x
+  })
+
+
+
+# is in itemMatrix
+#setMethod("itemLabels", signature(object = "transactions"),
+#  function(object) colnames(object))
 
 ###

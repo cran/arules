@@ -2,8 +2,8 @@
 \docType{class}
 \alias{transactions-class}
 \alias{transactions}
-%
-%\alias{[,transactions-method}
+%%%
+\alias{initialize,transactions-method}
 \alias{coerce,matrix,transactions-method}
 \alias{coerce,list,transactions-method}
 \alias{coerce,transactions,matrix-method}
@@ -13,6 +13,8 @@
 \alias{coerce,ngCMatrix,transactions-method}
 %\alias{image,transactions-method}
 \alias{labels,transactions-method}
+\alias{dimnames,transactions-method}
+\alias{dimnames<-,transactions,list-method}
 \alias{show,transactions-method}
 \alias{transactionInfo<-,transactions-method}
 \alias{transactionInfo,transactions-method}
@@ -89,19 +91,17 @@
       data frame
       as the components \code{variables} and \code{levels}.
       Note that \code{NAs} are ignored (i.e., do not generate an item).}
-%    \item{image}{\code{signature(x = "transactions")};
-%      plots an image of the transactions for visual inspection}
     \item{coerce}{\code{signature(from = "transactions", to = "data.frame")}; 
       represents the set of transactions in a printable form 
       as a data.frame. 
       Note that this does not reverse coercion from data.frame 
       to \code{transactions}.}
-    \item{coerce}{\code{signature(from = "ngCMatrix", to = "transactions")}; 
-       Note that the ngCMatrix needs to have the items as rows!}
+    \item{coerce}{\code{signature(from = "ngCMatrix", to = "transactions")};         Note that the ngCMatrix needs to have the items as rows!}
+    \item{dimnames, rownames, colnames}{\code{signature(x = "transactions")};
+        returns row (transactionID) and column (item) names.}
     \item{labels}{\code{signature(x = "transactions")};
-      returns the labels (item labels and transaction IDs) 
-      for the incidence matrix as a list of two vectors named \code{items}
-      and \code{transactionID}.}
+      returns the labels for the itemsets in each transaction 
+      (see \code{itemMatrix}).} 
     \item{transactionInfo<-}{\code{signature(x = "transactions")};
       replaces the transactionInfo data frame}
     \item{transactionInfo}{\code{signature(x = "transactions")};

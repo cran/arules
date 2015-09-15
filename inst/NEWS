@@ -1,4 +1,39 @@
-Changes in version 1.1-9 (13/9/2015)
+Changes in version 1-2-0 (09/14/2015)
+    * added support for weighted association rule mining (by C. Buchta):
+        - transactions can store weights a column called "weight" in 
+            transactionInfo.
+        - support, itemFrequency and itemFrequencyPlot gained a parameter
+            called weighted.
+        - weclat extends eclat with transaction weights.
+        - hits can be used to calculate weights from transact ions.
+    * sort can now sort by several columns (used to break ties) in quality. 
+      It also gained an order parameter to return a permutation vector
+      (order) instead.
+    * inspect gained parameters setStart, setEnd, itemSep, ruleSep and
+      linebreak to control output better.
+    * read.transactions now ignores empty items (e.g., caused by trailing 
+      commas and leading or trailing white spaces).
+    * labels now returns not a list but consistent labels for objects       
+      (transactions, itemMatrix, rules, itemsets, and tidLists). 
+    * tidLists has now an inspect method, gained coercion from "list", and
+      has now a replacement method for dimnames(). 
+    * Coercion from itemMatrix to matrix results now in a logical matrix.
+    * fixed as(transactions, "data.frame"). The column names do now have
+      no prefix (except if transactionInfo contains an item called "items").
+    * transactions has now its own dimnames function which correctly returns 
+      transactionID from transactionInfo as rownames.
+    * fixed missing row labels for is.subset().
+    * replacement method for dimnames() checks now dimensions.
+    * item labels are now internally handled as character using 
+      stringAsFactor = FALSE in data.frames and not AsIs with I(character).
+    * rules can now have no item in the RHS.
+    * We are transitioning to internally use consistently data.frames 
+      with the correct number of rows for quality, itemInfo, 
+      transactionInfo and itemsetInfo. These data.frames possibly have 
+      0 columns.
+    * arules uses now testthat (tests are in tests/testthat).
+
+Changes in version 1.1-9 (7/13/2015)
     * More work on namespace.
     * Fixed tests.
 
@@ -94,6 +129,6 @@ Changes in version 1.0-7 (11/4/2011)
 Changes prior to 1.0-7
     * many
 
-Initial release version 1.0-0 (3/24/2009)
+Initial stable release version 1.0-0 (3/24/2009)
 
-Alpha version 0.1-0 (4/15/2005)
+Alpha and beta versions starting with 0.1-0 (4/15/2005)

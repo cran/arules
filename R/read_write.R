@@ -36,7 +36,8 @@
 }
 
 read.transactions <-
-function(file, format = c("basket", "single"), sep = NULL, cols = NULL, rm.duplicates = FALSE, encoding="unknown")
+function(file, format = c("basket", "single"), sep = NULL, cols = NULL, 
+  rm.duplicates = FALSE, encoding="unknown")
 {
     format <- match.arg(format)
     if (format == "basket") {
@@ -50,8 +51,18 @@ function(file, format = c("basket", "single"), sep = NULL, cols = NULL, rm.dupli
             names(data) <- sapply(data, "[", cols)
             data <- lapply(data, "[", -cols)
         }
+        
+        
+        ## remove leading and trailing white spaces
+        data <- lapply(data, function(x) gsub("^\\s*|\\s*$", "", x))
+        
+        ## remove items with length(label) == 0
+        data <- lapply(data, function(x) x[nchar(x)>0])
+        
         if (rm.duplicates)
             data <- .rm.duplicates(data)
+        
+        
         return(as(data,"transactions"))   
     }
     

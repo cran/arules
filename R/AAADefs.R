@@ -58,4 +58,30 @@
 "%in%" <-  function(x, table) match(x, table, nomatch = 0) > 0
 
 
+## Combine Meta data (used for assoctiations and itemMatrix)
+## x, y ... two S4 objects with data.frames as meta data
+## name ... name of the slot with the data.frame
+## value: new combined data.frame
+.combineMeta <- function(x, y, name, ...) {
+    mx <- slot(x, name)
+    my <- slot(y, name)
+    
+    ## add empty data.frame if nrows is 0 or corrupt
+    if(nrow(mx) != length(x)) mx <- data.frame(matrix(nrow = nrow(x), ncol = 0))
+    if(nrow(my) != length(y)) my <- data.frame(matrix(nrow = nrow(y), ncol = 0))
+    
+    ## make column names conforming (rbind fixes order) 
+    cols <- unique(c(colnames(mx), colnames(my)))
+    
+    ## Note: rbind does not preserve rows is ncol==0!
+    if(length(cols) > 0) {
+      for(col in cols[!(cols %in% colnames(mx))]) mx[[col]] <- NA
+      for(col in cols[!(cols %in% colnames(my))]) my[[col]] <- NA
+      rbind(mx, my)
+    }else{
+      data.frame(matrix(nrow = length(x)+length(y), ncol = 0))
+    }
+}
+
+
 ###

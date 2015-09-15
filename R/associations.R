@@ -58,13 +58,19 @@ setReplaceMethod("info", signature(x = "associations"),
 ## sort + unique
 ## since R 2.4.0 sort is a generic
 setMethod("sort", signature(x = "associations"),
-  function (x, decreasing = TRUE, na.last = NA, by = "support", ...) {
-    if(length(x) == 0) return(x)
-    q <- x@quality[[by]]
+  function (x, decreasing = TRUE, na.last = NA, by = "support", order = FALSE, ...) {
+    q <- quality(x)
+    q <- q[, pmatch(by, colnames(q)), drop = FALSE]
     if(is.null(q)) stop("Unknown interest measure to sort by.")
+    if(length(x) == 0) return(x)
     
-    x[order(q, na.last = na.last, decreasing = decreasing, ...)]
+    o <- do.call(base::order, c(q, list(na.last = na.last, 
+      decreasing = decreasing)))
+    
+    if(order) o
+    else x[o]
   })
+
 
 ## SORT is just for backward compatibility and since 
 ## we want decreasing = TRUE   

@@ -17,21 +17,6 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-
-
-#.onLoad <- function(lib, pkg) {
-#    require("methods", character.only = TRUE, quietly = TRUE)
-    
-    ## FIXME: do we still need that? If yes, then the test should
-    ##        be done at the level of itemMatrix
-    ## require("Matrix", character.only = TRUE, quietly = TRUE)
-    ##cat("** fixing ngCMatrix validation\n")
-    ##setValidity("ngCMatrix",
-    ##    function(object) .Call("R_valid_ngCMatrix", object, PACKAGE="arules"),
-    ##       where = .GlobalEnv)
-#}
-
-
 ##**********************************************************
 ## itemMatrix
 
@@ -47,18 +32,31 @@ setClass("itemMatrix",
     validity= function(object) {
         ## itemInfo needs a labels column of appropriate length
         ## also the labels must be unique for matching objects.
-        if (length(object@itemInfo$labels) != nitems(object))
+        if (length(itemInfo(object)[["labels"]]) != nitems(object))
             return("item labels do not match number of columns")
-        if (length(unique(object@itemInfo$labels)) != nitems(object))
+        if (length(unique(itemInfo(object)[["labels"]])) != nitems(object))
             return("item labels not unique")
 
-        if (length(object@itemsetInfo) && 
-            length(object@itemsetInfo[[1]]) != length(object))
+        if (ncol(itemsetInfo(object)) && 
+            nrow(itemsetInfo(object)) != length(object))
             return("itemsetInfo does not match number of rows")
 
         TRUE
     }
 )
+
+setMethod(initialize, "itemMatrix", function(.Object, ...) { 
+  .Object <- callNextMethod()
+  
+  ## itemInfo has to match
+  ## fix empty data.frame in itemsetInfo
+  if(all(dim(.Object@itemsetInfo) == 0)) 
+    .Object@itemsetInfo <- data.frame(matrix(ncol = 0, nrow = nrow(.Object)))
+
+  validObject(.Object)
+  .Object
+})
+  
 
 setClass("summary.itemMatrix",
     representation(
@@ -92,6 +90,19 @@ setClass("transactions",
         TRUE
     }
 )
+
+setMethod(initialize, "transactions", function(.Object, ...) { 
+  .Object <- callNextMethod()
+  
+  ## itemInfo has to match
+  ## fix empty data.frame in transactionInfo
+  if(all(dim(.Object@transactionInfo) == 0)) 
+    .Object@transactionInfo <- data.frame(matrix(ncol = 0, nrow = nrow(.Object)))
+
+  validObject(.Object)
+  .Object
+})
+  
 
 setClass("summary.transactions",
     representation(transactionInfo = "data.frame"),
@@ -127,6 +138,19 @@ setClass("tidLists",
         TRUE
     }
 )
+
+setMethod(initialize, "tidLists", function(.Object, ...) { 
+  .Object <- callNextMethod()
+  
+  ## itemInfo has to match
+  ## fix empty data.frame in transactionInfo
+  if(all(dim(.Object@transactionInfo) == 0)) 
+    .Object@transactionInfo <- data.frame(matrix(ncol = 0, nrow = ncol(.Object)))
+
+  validObject(.Object)
+  .Object
+})
+  
 
 setClassUnion("tidLists_or_NULL", c("tidLists", "NULL"))
 
@@ -291,6 +315,17 @@ setClass("ECcontrol",
 setClass("associations",
     representation(quality = "data.frame", info = "list", "VIRTUAL"))
 
+setMethod(initialize, "associations", function(.Object, ...) { 
+  .Object <- callNextMethod()
+  
+  ## fix empty data.frame in itemsetInfo
+  if(all(dim(.Object@quality) == 0)) 
+    .Object@quality <- data.frame(matrix(ncol = 0, nrow = length(.Object)))
+
+  validObject(.Object)
+  .Object
+})
+
 setClass("itemsets",
     representation(
         items    = "itemMatrix", 
@@ -305,13 +340,13 @@ setClass("itemsets",
         ## if tidLists exists, check dimensions
         ## Note, we cannot check dim(object@tidLists)[2] here since we
         ## don't know the number of transactions in the used data set! 
-        if (length(object@tidLists) && 
-            length(object@tidLists) != length(object@items))
+        if (length(tidLists(object)) && 
+            length(tidLists(object)) != length(object))
             return("tidLists does not match number of itemsets")
 
         ## if quality exists, check dimensions
-        if (length(object@quality) && 
-            length(object@quality[[1]]) != length(object@items))
+        if (length(quality(object)) && 
+            nrow(quality(object)) != length(object))
             return("quality does not match number of itemsets")
 
         TRUE
@@ -342,8 +377,9 @@ setClass("rules",
         if(!validObject(object@lhs)) return("lhs of rules is not a valid itemMatrix")
         if(!validObject(object@rhs)) return("rhs of rules is not a valid itemMatrix")
       
+        ## Removed check so rhs can be empty... (MFH) 
         ## check size of rhs
-        if(any(size(object@rhs)<1)) return("rhs is empty for at least one rule")
+        #if(any(size(object@rhs)<1)) return("rhs is empty for at least one rule")
       
         ## check item labels
         if(!identical(colnames(object@lhs), colnames(object@rhs))) return("item labels in lhs and rhs do not match")

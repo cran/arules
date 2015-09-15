@@ -311,13 +311,13 @@ itemsetsSample
 ###################################################
 match <- match(itemsets, itemsetsSample, nomatch = 0)
 ## remove no matches
-sum(match>0) / length(itemsets)
+sum(match > 0) / length(itemsets)
 
 
 ###################################################
 ### code chunk number 42: arules.Rnw:1687-1689
 ###################################################
-summary(quality(itemsets[which(!match)])$support)
+summary(quality(itemsets[match == 0])$support)
 summary(quality(itemsetsSample[-match])$support)
 
 
