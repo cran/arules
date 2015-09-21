@@ -28,12 +28,21 @@ expect_identical(data, as(trans, "list"))
 expect_identical(transactionInfo(trans)$transactionID, names(data))
 expect_identical(sort(itemInfo(trans)$labels), sort(unique(unique(unlist(data)))))
 
+## combine
+expect_equal(c(trans, trans), as(c(data, data),"transactions"))
+
 m <- as(trans, "matrix")
 #m
 expect_identical(data, as(as(m, "transactions"), "list"))
 expect_identical(dim(m), dim(trans))
 expect_identical(nrow(m), length(trans))
 expect_identical(dimnames(m), dimnames(trans))
+
+expect_equal(c(trans, trans), as(rbind(m, m),"transactions"))
+
+## combine with missing items (needs recoding)
+expect_true(all(as(c(trans[,-2], trans[,-3]), "matrix")[1:8,"b"]) == FALSE)
+expect_true(all(as(c(trans[,-2], trans[,-3]), "matrix")[9:15,"c"]) == FALSE)
 
 l <- LIST(trans, decode = FALSE)
 expect_identical(length(l), nrow(trans))
@@ -52,3 +61,15 @@ expect_identical(t, t_comp)
 
 expect_identical(as(t, "ngCMatrix"), as(t_comp, "ngCMatrix"))
 
+## addComplement
+data("Groceries")
+
+## add a complement-items for "whole milk" and "other vegetables"
+g2 <- addComplement(Groceries, c("whole milk", "other vegetables"))
+g2 <- addComplement(g2, "coffee", "NO coffee")
+expect_equal(nitems(g2), nitems(Groceries)+3L)
+expect_identical(as.logical(as(g2[, "!whole milk"], "matrix")), 
+  !as.logical(as(g2[, "whole milk"], "matrix")))
+## NOTE: addCompliment removes additional itemInfo!
+itemInfo(Groceries) <- itemInfo(Groceries)[,"labels", drop=FALSE]
+expect_identical(g2[,1:nitems(Groceries)], Groceries)

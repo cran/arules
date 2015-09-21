@@ -169,7 +169,7 @@ setMethod("inspect", signature(x = "rules"),
       post[rhs_pos] <- itemSep
       post[entry_end_pos] <- setEnd
       tmp <- rep.int("", n_of_rows)
-      tmp[lhs_pos] <- unlist(items_rhs)
+      tmp[rhs_pos] <- unlist(items_rhs)
       out[, 4] <-
         format(c("rhs", paste(pre, tmp, post, sep = "")[-1]))
       

@@ -1,3 +1,12 @@
+Changes in version 1-2-1 (09/20/2015)
+    * Added many new interest measures.
+    * interestMeasure: the formal argument method is now called measure 
+      (method is now deprecated).
+    * Added Mushroom dataset.
+    * Moved abbreviate from arulesViz to arules.
+    * fixed undefined behavior for left shift in reclat.c 
+      (reported by B. Ripley)
+
 Changes in version 1-2-0 (09/14/2015)
     * added support for weighted association rule mining (by C. Buchta):
         - transactions can store weights a column called "weight" in 

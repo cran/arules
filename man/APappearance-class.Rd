@@ -8,7 +8,10 @@
   apriori()}
 
 \description{Specifies the restrictions on the associations mined by
-  \code{\link{apriori}}.  Note that appearance is not supported by the
+  \code{\link{apriori}}. These restrictions can implement certain aspects
+  of rule templates described by Klemettinen (1994).
+  
+  Note that appearance is not supported by the
   implementation of \code{\link{eclat}}.
 }
 
@@ -56,6 +59,12 @@
   \emph{Apriori --- Finding Association Rules/Hyperedges with the Apriori
     Algorithm}.
   \url{www.borgelt.net/apriori.html}
+
+  M. Klemettinen, H. Mannila, P. Ronkainen, H. Toivonen and A. I. Verkamo (1994).
+  Finding Interesting Rules from Large Sets of Discovered Association Rules. 
+  In \emph{Proceedings of the Third International Conference 
+    on Information and Knowledge Management,} 401--407.
+
 }
 \author{Michael Hahsler and Bettina Gruen}
 \examples{

@@ -228,7 +228,15 @@ static void _report_R (int *ids, int cnt, int supp, int *tal, void *data)
 					  _cleanup(); error(msg(E_NOMEM));}
 				  ruleset->trans = vec1;
 			  }
-			  if (tal[i >> BM_SHIFT] & (1 << (i & BM_MASK))) {
+			  /* Bug reported by Brian:  runtime error: left shift of 1 by 31 places 
+			   *   cannot be represented in type 'int'. clang-UBSAN/gcc-UBSAN
+			   * C99: If the value of the right operand is negative or is 
+			   * greater than or equal to the width of the promoted left operand, 
+			   * the behavior is undefined.
+			   * BM_MASK   0x1f  (11111) this might be 32!
+			   */
+			  //if (tal[i >> BM_SHIFT] & (1 << (i & BM_MASK))) {
+			  if (((i & BM_MASK) < 31) && (tal[i >> BM_SHIFT] & (1 << (i & BM_MASK)))) {
 				  /*Rprintf(" %d", i+1);*/
 				  ruleset->trans[h] = i;
 				  h++;

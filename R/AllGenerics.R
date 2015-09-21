@@ -128,7 +128,7 @@ setGeneric("lhs<-",
     function(x, value) standardGeneric("lhs<-"))
 
 setGeneric("interestMeasure",
-    function(x,  method, transactions = NULL, reuse = TRUE, ...) 
+    function(x,  measure, transactions = NULL, reuse = TRUE, ...) 
     standardGeneric("interestMeasure"))
 
 #setGeneric("match",

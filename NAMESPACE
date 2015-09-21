@@ -35,6 +35,7 @@ export(
   "eclat",
   "weclat",
   "hits",
+  "abbreviate",
   "discretize"
 )
 
@@ -121,3 +122,8 @@ exportMethods(
   "predict",
   "dissimilarity"
 )
+
+S3method(abbreviate, default)
+S3method(abbreviate, transactions)
+S3method(abbreviate, rules)
+S3method(abbreviate, itemsets)

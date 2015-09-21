@@ -51,3 +51,7 @@ expect_identical(dimnames(ngc),dimnames(t(m)))
 #expect_identical(i, as(dgc, "itemMatrix"))
 expect_identical(i, as(ngc, "itemMatrix"))
 
+## crossTable
+expect_equivalent(crossTable(i), crossprod(as(i, "matrix")))
+
+

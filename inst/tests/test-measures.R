@@ -29,7 +29,7 @@ expect_warning(
 
 # add all-confidence
 quality(fsets)$allConfidence <- 
-  interestMeasure(fsets, method = "allConfidence", trans)
+  interestMeasure(fsets, measure = "allConfidence", trans)
 #inspect(fsets[order(size(fsets))])
 
 # check
@@ -39,28 +39,27 @@ expect_equal(round(quality(fsets)$allConfidence, 2), ac)
 
 ###################################################################
 ## test all measures for itemsets
-measures <- c("support", "allConfidence", "crossSupportRatio")
-m1 <- interestMeasure(fsets, measures, trans)
+m1 <- interestMeasure(fsets, transactions = trans)
 
-## now recalculate the measures using the transactios
-m2 <- interestMeasure(fsets, measures, trans, reuse = FALSE)
+## now recalculate the measures using the transactions
+m2 <- interestMeasure(fsets, transactions = trans, reuse = FALSE)
 expect_equal(m1, m2)
 
 
 ###################################################################
-# test all measures for rules
+# test measures for rules
 
 expect_warning(
   rules <- apriori(trans, parameter=list(supp=0.01, conf = 0.5), 
     control=list(verb=FALSE))
 )
 
-## calculate all measures
-measures <-  c("support", "coverage", "confidence", "lift",
-    "leverage", "hyperLift", "hyperConfidence", "improvement",
-    "chiSquare", "cosine", "conviction", "gini", "oddsRatio", "phi", "doc")
+## calculate all measures (just to see if one creates an error)
+m1 <- interestMeasure(rules, transactions = trans)
 
-m1 <- interestMeasure(rules, measures, trans)
-m2 <- interestMeasure(rules, measures, trans, reuse = FALSE)
-expect_equal(m1, m2)
+## coverage
+expect_equal(coverage(rules), support(lhs(rules), trans = trans))
+expect_equal(coverage(rules, trans = trans, reuse = FALSE), 
+  support(lhs(rules), trans = trans))
 
+## FIXME: test others

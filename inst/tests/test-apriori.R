@@ -1,7 +1,6 @@
 library("arules")
 library("testthat")
 
-context("apriori & eclat interface")
 
 options(digits=2)
 
@@ -20,6 +19,7 @@ trans <- as(data, "transactions")
 
 ##########################################################
 # test the apriori interface
+context("APRIORI interface")
 
 ### rules (all warnings are for low support)
 expect_warning(
@@ -57,6 +57,8 @@ expect_true("lhs.support" %in% colnames(quality(r)))
 
 ##########################################################
 # test the eclat interface
+
+context("ECLAT interface")
 
 expect_warning(
   f <- eclat(trans, control=list(verb=FALSE))
