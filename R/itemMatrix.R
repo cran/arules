@@ -1,6 +1,6 @@
 #######################################################################
 # arules - Mining Association Rules and Frequent Itemsets
-# Copyright (C) 2011, 2012 Michael Hahsler, Christian Buchta, 
+# Copyright (C) 2011-2015 Michael Hahsler, Christian Buchta, 
 #			Bettina Gruen and Kurt Hornik
 #
 # This program is free software; you can redistribute it and/or modify
@@ -59,9 +59,13 @@ setAs("matrix", "itemMatrix",
     ## Matrix requires logical. however, it should be
     ## the responsibility of mode to avoid uneccessary
     ## coercions.
-    if (mode(from) != "logical") 
+    if (mode(from) != "logical") {
+      ## check if it is a 0-1 matrix
+      if(mode(from) != "numeric") stop("matrix is not logical or a numeric 0-1 matrix!")
+      if(any(from != 0 & from != 1)) warning("matrix contains values other than 0 and 1! Setting all entries != 0 to 1.")
       mode(from) <- "logical"
-    
+    }
+      
     ## we have to transpose since there is currently no
     ## support for "ngRMatrix" in Matrix. note that we
     ## can fail later as the row or column names need 
@@ -251,6 +255,17 @@ setMethod("[", signature(x = "itemMatrix", i = "ANY", j = "ANY", drop = "ANY"),
     
     ## i and j are reversed internally!
     if (!missing(i)) {
+      
+      ## recycling?
+      if(is.logical(i) && length(i) != ncol(x)) i <- rep(i, length.out = nrow(x))
+      
+      ## deal with NAs we do not take NAs
+      if(any(is.na(i))) {
+        warning("Subsetting with NAs. NAs are omitted!")
+        if(is.logical(i)) i[is.na(i)] <- FALSE
+        else i <- i[!is.na(i)]
+      }
+      
       i <- .translate_index(i, rownames(x), nrow(x))
       ## faster than: x@data <- x@data[,i, drop=FALSE]
       x@data <- .Call("R_colSubset_ngCMatrix", x@data, i, 
@@ -260,6 +275,17 @@ setMethod("[", signature(x = "itemMatrix", i = "ANY", j = "ANY", drop = "ANY"),
     }
     
     if (!missing(j)) {
+      
+      ## recycling?
+      if(is.logical(j) && length(j) != ncol(x)) j <- rep(j, length.out = ncol(x))
+      
+      ## deal with NAs we do not take NAs
+      if(any(is.na(j))) {
+        warning("Subsetting with NAs. NAs are omitted!")
+        if(is.logical(j)) j[is.na(j)] <- FALSE
+        else j <- j[!is.na(j)]
+      }
+      
       j <- .translate_index(j, colnames(x), ncol(x))
       ## faster than: x@data <- x@data[j,, drop=FALSE]
       x@data <- .Call("R_rowSubset_ngCMatrix", x@data, j, 

@@ -1,6 +1,6 @@
 #######################################################################
 # arules - Mining Association Rules and Frequent Itemsets
-# Copyright (C) 2011, 2012 Michael Hahsler, Christian Buchta, 
+# Copyright (C) 2011-2015 Michael Hahsler, Christian Buchta, 
 #			Bettina Gruen and Kurt Hornik
 #
 # This program is free software; you can redistribute it and/or modify
@@ -50,13 +50,12 @@ setMethod("info", signature(x = "associations"),
 setReplaceMethod("info", signature(x = "associations"),
   function(x, value) {
     x@info <- value
-    ## no need validObject(x)
+    ## no need to validObject(x)
     x
   })
 
 
 ## sort + unique
-## since R 2.4.0 sort is a generic
 setMethod("sort", signature(x = "associations"),
   function (x, decreasing = TRUE, na.last = NA, by = "support", order = FALSE, ...) {
     q <- quality(x)
@@ -71,14 +70,6 @@ setMethod("sort", signature(x = "associations"),
     else x[o]
   })
 
-
-## SORT is just for backward compatibility and since 
-## we want decreasing = TRUE   
-setMethod("SORT", signature(x = "associations"),
-  function (x, by = "support", na.last = NA, decreasing = TRUE) {
-    warning("arules: SORT is deprecated use sort instead.")
-    sort(x, decreasing, na.last, by)
-  })
 
 
 ## this needs a working implementation of duplicated for the 

@@ -1,10 +1,7 @@
 \name{write}
-\alias{WRITE}
 \alias{write}
 \alias{write.csv}
 \alias{write.table}
-\alias{WRITE,transactions-method}
-\alias{WRITE,associations-method}
 \alias{write,transactions-method}
 \alias{write,associations-method}
 \alias{write,ANY-method} % redirects to base::write
@@ -18,12 +15,8 @@
 \usage{
 write(x, file = "",\dots)
 \S4method{write}{transactions}(x, file="", format = c("basket", "single"),
-                sep=" ", quote=FALSE, ...)
-\S4method{write}{associations}(x, file="", sep=" ", quote=FALSE, ...)
-## deprecated since arules version 1.0-12
-WRITE(x, file = "",\dots)
-\S4method{WRITE}{transactions}(x, file="", ...)
-\S4method{WRITE}{associations}(x, file="", ...)
+                sep=" ", quote=TRUE, ...)
+\S4method{write}{associations}(x, file="", sep=" ", quote=TRUE, ...)
 }
 \arguments{
   \item{x}{the transactions or associations (rules, itemsets, etc.) object.}
@@ -71,12 +64,11 @@ write(head(Epub))
 write(head(Epub), format="single")
 
 ## write the formated result to file in CSV format
-write(Epub, file = "data.csv", format="single", quote=TRUE, 
-    sep = ",", col.names = NA)
+write(Epub, file = "data.csv", format="single", sep = ",")
 
 ## write rules in CSV format
 rules <- apriori(Epub, parameter=list(support=0.0005, conf=0.8))
-write(rules, file = "data.csv", quote=TRUE, sep = ",", col.names = NA)
+write(rules, file = "data.csv", sep = ",")
 
 unlink("data.csv") # tidy up
 }

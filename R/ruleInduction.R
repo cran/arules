@@ -1,6 +1,6 @@
 #######################################################################
 # arules - Mining Association Rules and Frequent Itemsets
-# Copyright (C) 2011, 2012 Michael Hahsler, Christian Buchta, 
+# Copyright (C) 2011-2015 Michael Hahsler, Christian Buchta, 
 #			Bettina Gruen and Kurt Hornik
 #
 # This program is free software; you can redistribute it and/or modify
@@ -30,27 +30,37 @@ setMethod("ruleInduction",  signature(x = "itemsets"),
     function(x, transactions, confidence = 0.8, control = NULL) {
 
         ## control args are: method, reduce and verbose
-        verbose <- if (is.null(control$v)) FALSE   else control$verbose
+        verbose <- if (is.null(control$v)) FALSE   else control$v
 
-        ## induce directly from frequent itemsets
-        if (missing(transactions))
-            return(ruleInduction.index(x, confidence, verbose))
+        method  <- if (is.null(control$m)) "ptree" else control$m
+        reduce  <- if (is.null(control$r)) FALSE   else control$r
 
-        method  <- if (is.null(control$m)) "ptree" else control$method
-        reduce  <- if (is.null(control$r)) FALSE   else control$reduce
-
-        methods <- c("apriori", "ptree", "tidlists")
+        ## FIXME: tidlists does not work correctly and is disabled for now
+        ##methods <- c("apriori", "ptree", "tidlists")
+        methods <- c("apriori", "ptree")
     
         method <-  methods[pmatch(method , methods)]
-        if(is.na(method)) stop("unknown method")
+        if(is.na(method)) stop("unknown method specify one of: ", 
+          paste(methods, collapse = ", "))
 
-
+        ## induce directly from frequent itemsets
+        if (missing(transactions)) {
+          if(method != "ptree") 
+            warning("Can only use ptree without specified transactions!")  
+          if(verbose) cat("ruleInduction: using method", method, "\n")
+          return(ruleInduction.index(x, confidence, verbose))
+        }
+        
+        if(verbose) cat("ruleInduction: using method", method, "\n")
+          
         pt1 <- proc.time()
         ## check data
         nItems <- nitems(transactions)
         if (nItems != nitems(items(x)))
         stop("Dimensions of x and transactions do not match!")
-
+        if (any(itemLabels(x) != itemLabels(transactions)))
+          stop("Item labels for x and transactions do not match!")
+        
         if(reduce && method != "ptree") {
             ifreq <- itemFrequency(items(x), type = "abs") 
             items.involved <- which(ifreq > 0)
@@ -70,8 +80,6 @@ setMethod("ruleInduction",  signature(x = "itemsets"),
         if(verbose) cat("preprocessing done [", pt2[1]-pt1[1], "s].\n", 
             sep = "")
         
-        if(verbose) cat("using method:", method, "\n")
-
         ## find rules
         rules <- 
         if(method == "ptree") ruleInduction.ptree(x, transactions, 
@@ -127,6 +135,18 @@ setMethod("ruleInduction",  signature(x = "itemsets"),
 ruleInduction.apriori <- function(x, transactions, confidence = 0.8,
         verbose = FALSE) {
 
+        empty_rules <- function(trans) {
+          em <- as(trans, "itemMatrix")[0]
+          new("rules", lhs=em, rhs=em, 
+            quality=data.frame(
+              support = numeric(0),
+              confidence = numeric(0),
+              lift = numeric(0)
+            ))
+        }
+  
+        if(length(transactions) < 1) return(empty_rules(transactions))
+  
         ## itemset sizes
         isetsSize <-  size(x)
 
@@ -181,27 +201,36 @@ ruleInduction.ptree <-
 function(x, transactions, confidence = 0.8, reduce = FALSE, verbose = FALSE) {
     r <- .Call("R_pncount", x@items@data, transactions@data, FALSE, 
 	    reduce, verbose, PACKAGE="arules")
+    
     names(r) <- c("data.lhs","data.rhs","support","confidence","lift", "itemset")
+    
+    ## quality: set NAs to 0 since they are the result of items missing 
+    ## in transactions
+    q <- as.data.frame(r[3:6])
+    q[is.na(q)] <- 0
+   
+    take <- q$confidence >= confidence
+     
     new("rules",
         lhs     = new("itemMatrix", data     = r$data.lhs, 
-                                    itemInfo = transactions@itemInfo),
+                                    itemInfo = transactions@itemInfo)[take, ],
         rhs     = new("itemMatrix", data     = r$data.rhs, 
-                                    itemInfo = transactions@itemInfo),
-        quality = data.frame(r[3:6]))[r$confidence >= confidence]
+                                    itemInfo = transactions@itemInfo)[take, ],
+        quality = q[take, ])
 }
 
 ## ptree indexing
 
 ruleInduction.index <-
 function(x, confidence = 0.8, verbose = FALSE) {
-    if (is.null(quality(x)))
-        stop("cannot induce rules because support is missing")
+    if (is.null(quality(x)$support))
+        stop("cannot induce rules because support is missing! Specify transactions.")
 
     r <- data.frame(.Call("R_pnrindex", x@items@data, verbose, PACKAGE="arules"))
     names(r) <- c("i", "li", "ri")
 
     if (!all(r$li) || !all(r$ri))
-        stop("cannot induce rules because itemsets are incomplete")
+        stop("cannot induce rules because itemsets are incomplete! Specify transactions.")
 
     r$support    <- x@quality$support[r$i]
     r$confidence <- r$support /

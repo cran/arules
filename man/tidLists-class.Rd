@@ -20,6 +20,7 @@
 \alias{labels,tidLists-method}
 \alias{itemLabels,tidLists-method}
 \alias{itemInfo,tidLists-method}
+\alias{itemInfo<-,tidLists-method}
 \alias{inspect,tidLists-method}
 \alias{transactionInfo,tidLists-method}
 \alias{t,tidLists-method}

@@ -1,6 +1,6 @@
 #######################################################################
 # arules - Mining Association Rules and Frequent Itemsets
-# Copyright (C) 2011, 2012 Michael Hahsler, Christian Buchta, 
+# Copyright (C) 2011-2015 Michael Hahsler, Christian Buchta, 
 #			Bettina Gruen and Kurt Hornik
 #
 # This program is free software; you can redistribute it and/or modify
@@ -160,6 +160,12 @@ setMethod("[", signature(x = "tidLists", i = "ANY", j = "ANY", drop = "ANY"),
     
     ## i and j are reversed internally!
     if (!missing(i)) {
+      if(any(is.na(i))) {
+        warning("Subsetting with NAs. NAs are omitted!")
+        if(is.logical(i)) i[is.na(i)] <- FALSE
+        else i <- i[!is.na(i)]
+      } 
+      
       i <- .translate_index(i, rownames(x), nrow(x)) 
       x@data <- .Call("R_colSubset_ngCMatrix", x@data, i, 
         PACKAGE="arules")
@@ -168,6 +174,12 @@ setMethod("[", signature(x = "tidLists", i = "ANY", j = "ANY", drop = "ANY"),
     }
     
     if (!missing(j)) {
+      if(any(is.na(j))) {
+        warning("Subsetting with NAs. NAs are omitted!")
+        if(is.logical(j)) j[is.na(j)] <- FALSE
+        else j <- j[!is.na(j)]
+      } 
+      
       j <- .translate_index(j, colnames(x), ncol(x))
       x@data <- .Call("R_rowSubset_ngCMatrix", x@data, j, 
         PACKAGE="arules")
@@ -287,6 +299,13 @@ setMethod("transactionInfo", signature(x = "tidLists"),
 
 setMethod("itemInfo", signature(object = "tidLists"),
   function(object) object@itemInfo)
+
+setReplaceMethod("itemInfo", signature(object = "tidLists"),
+  function(object, value) {
+    object@itemInfo <- value
+    validObject(object)
+    object
+  })
 
 setMethod("itemLabels", signature(object = "tidLists"),
   function(object) rownames(object))

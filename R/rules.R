@@ -1,6 +1,6 @@
 #######################################################################
 # arules - Mining Association Rules and Frequent Itemsets
-# Copyright (C) 2011, 2012 Michael Hahsler, Christian Buchta, 
+# Copyright (C) 2011-2015 Michael Hahsler, Christian Buchta, 
 #			Bettina Gruen and Kurt Hornik
 #
 # This program is free software; you can redistribute it and/or modify
@@ -125,6 +125,13 @@ setMethod("[", signature(x = "rules", i = "ANY", j = "ANY", drop = "ANY"),
             stop("incorrect dimension (j not possible)")
         if (missing(i))
             return(x)
+        
+        if(any(is.na(i))) {
+          warning("Subsetting with NAs. NAs are omitted!")
+          if(is.logical(i)) i[is.na(i)] <- FALSE
+          else i <- i[!is.na(i)]
+        } 
+      
         slots <- intersect(slotNames(x), c("lhs", "rhs"))
         for (s in slots) 
             slot(x, s) <- slot(x, s)[i]

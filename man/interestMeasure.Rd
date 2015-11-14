@@ -86,7 +86,7 @@ the proportion of transactions that do not contain \eqn{X}.
 
   Range: \eqn{[-.5, 1]}}
 
-\item{"chiSquared", \eqn{\chi^2}{X^2} (Liu et al. 1999)}{ 
+\item{"chiSquared", \eqn{\chi^2}{X^2} (Liu et al., 1999)}{ 
 
   The chi-squared statistic 
   to test for independence between the lhs and rhs of the rule.
@@ -113,7 +113,7 @@ the proportion of transactions that do not contain \eqn{X}.
   means a decrease of the probability that Y is not in a transaction that X 
   is in. Negative CFs have a similar interpretation.
 
-  Range: \eqn{[-1, 1]} (0 indicated independence)}
+  Range: \eqn{[-1, 1]} (0 indicates independence)}
 
 \item{"collectiveStrength"}{Collective strength (S). 
 
@@ -143,10 +143,6 @@ the proportion of transactions that do not contain \eqn{X}.
     
     Range: \eqn{[0, 1]}}
 
-\item{"descriptiveConfirm", descriptive-confirm (Kodratoff, 1999)}{
-    Defined by \eqn{supp(X \cup Y) - supp(X \cup \overline{Y})}{supp(X & Y) - supp(X & !Y)}.   
-      
-    Range: \eqn{[0, 1]}}
 
 \item{"confirmedConfidence", descriptive confirmed confidence (Kodratoff, 1999)}{
     Confidence confirmed by its negative as \eqn{conf(X \Rightarrow Y) - conf(X \Rightarrow \overline{Y})}{conf(X -> Y) - conf(X -> !Y)}.
@@ -164,16 +160,22 @@ the proportion of transactions that do not contain \eqn{X}.
     
     Range: \eqn{[-1, 1]}}
 
+\item{"counterexample", example and counterexample rate}{
+    \eqn{\frac{supp(X \cup Y) - supp(X \cup \overline{Y})}{supp(X \cup Y)}}{(supp(X & Y) - supp(X & !Y)) / supp(X & Y)}
+    
+    Range: \eqn{[0, 1]}}
+
+
+\item{"descriptiveConfirm", descriptive-confirm (Kodratoff, 1999)}{
+    Defined by \eqn{supp(X \cup Y) - supp(X \cup \overline{Y})}{supp(X & Y) - supp(X & !Y)}.   
+      
+    Range: \eqn{[0, 1]}}
+
 \item{"doc", difference of confidence (Hofmann and Wilhelm, 2001)}{
   Defined as 
   \eqn{conf(X \Rightarrow Y) - conf(\overline{X} \Rightarrow Y)}{conf(X -> Y)-conf(!X -> Y)}.
     
     Range: \eqn{[-1, 1]}}
-
-\item{"counterexample", example and counterexample rate}{
-    \eqn{\frac{supp(X \cup Y) - supp(X \cup \overline{Y})}{supp(X \cup Y)}}{(supp(X & Y) - supp(X & !Y)) / supp(X & Y)}
-    
-    Range: \eqn{[0, 1]}}
 
 \item{"fishersExactTest", Fisher's exact test (Hahsler and Hornik, 2007)}{
   Statistical significance test used in the analysis of contingency tables 
@@ -312,7 +314,7 @@ the proportion of transactions that do not contain \eqn{X}.
   Range: \eqn{[0, 1]}}
 
 
-\item{"leverage", interest, PS (Piatetsky-Shapiro 1991)}{
+\item{"leverage", PS (Piatetsky-Shapiro 1991)}{
    PS is defined as 
    \eqn{supp(X \Rightarrow Y) - supp(X)supp(Y)}{supp(X->Y) - (supp(X) supp(Y))}.
   It measures the difference of X and Y appearing together in the data set 

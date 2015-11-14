@@ -3,26 +3,37 @@
 \alias{abbreviate}
 \alias{abbreviate.transactions}
 \alias{abbreviate.rules}
+\alias{abbreviate.itemsets}
 \alias{abbreviate.itemMatrix}
+\alias{abbreviate.tidLists}
 \title{Abbreviate function for item labels in transactions, 
-itemMatrix and rules}
+itemMatrix and associations}
 \description{
-Methods to abbreviate long item labels in transactions and rules. 
+Methods to abbreviate long item labels in transactions, associations (rules and itemsets) and transaction ID lists. Note that \code{abbreviate} is not a
+  generic and this \pkg{arules} defines a generic with the R's abbreviate
+  as the default.
 }
 \usage{
-\method{abbreviate}{transactions}(data, minlength = 4, ...,method = "both.sides")
-\method{abbreviate}{rules}(data, minlength = 4, ...,method = "both.sides")
-\method{abbreviate}{itemMatrix}(data, minlength = 4, ...,method = "both.sides")
+abbreviate(...)
+\method{abbreviate}{transactions}(data, minlength = 4, ..., method = "both.sides")
+\method{abbreviate}{rules}(data, minlength = 4, ..., method = "both.sides")
+\method{abbreviate}{itemsets}(data, minlength = 4, ..., method = "both.sides")
+\method{abbreviate}{itemMatrix}(data, minlength = 4, ..., method = "both.sides")
+\method{abbreviate}{tidLists}(data, minlength = 4, ..., method = "both.sides")
 }
 \arguments{
-  \item{data}{ an object of class "transactions", "itemMatrix" and "rules"}
-  \item{minlength}{ characters allwed in abbreviation}
+  \item{data}{ an object of class "transactions", "itemMatrix", "itemsets",
+    "rules" or "tidLists". }
+  \item{minlength}{ number of characters allowed in abbreviation}
   \item{method}{ apply to level and value (both.sides) }
-  \item{\dots}{ further arguments; currently unused }
+  \item{\dots}{ further arguments passed on to the default abbreviation function. }
 }
                             
 \author{
 Sudheer Chelluboina and Michael Hahsler based on code by Martin Vodenicharov.
+}
+\seealso{
+  \code{\link[base]{abbreviate}} in base.
 }
 \examples{
 data(Adult)

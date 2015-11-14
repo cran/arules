@@ -1,6 +1,6 @@
 #######################################################################
 # arules - Mining Association Rules and Frequent Itemsets
-# Copyright (C) 2011, 2012 Michael Hahsler, Christian Buchta, 
+# Copyright (C) 2011-2015 Michael Hahsler, Christian Buchta, 
 #			Bettina Gruen and Kurt Hornik
 #
 # This program is free software; you can redistribute it and/or modify
@@ -155,9 +155,16 @@ setMethod("[", signature(x = "transactions", i = "ANY", j = "ANY", drop = "ANY")
   function(x, i, j, ..., drop) {
     ## i and j are reversed
     if (!missing(i)) {
+      if(any(is.na(i))) {
+        warning("Subsetting with NAs. NAs are omitted!")
+        if(is.logical(i)) i[is.na(i)] <- FALSE
+        else i <- i[!is.na(i)]
+      }  
+      
       x <- new("transactions", as(x, "itemMatrix")[i,, ..., drop],
         transactionInfo = x@transactionInfo[i,, drop = FALSE])
     }
+    
     if (!missing(j))
       x <- new("transactions", as(x, "itemMatrix")[,j, ..., drop],
         transactionInfo = x@transactionInfo)

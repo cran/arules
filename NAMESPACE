@@ -105,9 +105,7 @@ exportMethods(
   "setequal",
   "show", 
   "size",
-  "SORT",		    ## deprecated
   "sort",
-  "WRITE",		    ## deprecated
   "write",
   "subset", 
   "summary", 
@@ -127,3 +125,4 @@ S3method(abbreviate, default)
 S3method(abbreviate, transactions)
 S3method(abbreviate, rules)
 S3method(abbreviate, itemsets)
+S3method(abbreviate, tidLists)

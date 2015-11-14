@@ -99,7 +99,7 @@ static int pnget(PN *p, int *x, int n) {
     }
     if (p->index < *x) 
 	return pnget(p->pr, x, n);
-    return -1;				    /* set not found */
+    return 0;				    /* set not found */
 }
 
 /* count transaction */
@@ -684,6 +684,11 @@ SEXP R_pnclosed(SEXP R_x, SEXP R_c, SEXP R_v) {
 	pnc = INTEGER(R_c)[i-1];
 	if (pnc > e)
 	    e = pnc;
+	else
+	    if (pnc < 1) {
+		nbfree();
+		error("invalid count");
+	    }
 	pnsmax(nb[*x], x, n, n);
 	f = l;
 	R_CheckUserInterrupt();
@@ -698,7 +703,12 @@ SEXP R_pnclosed(SEXP R_x, SEXP R_c, SEXP R_v) {
 	l = INTEGER(px)[i];
 	n = l-f;
 	if (n == 0) {
-	    LOGICAL(r)[i-1] = (INTEGER(R_c)[i-1] > e) ? TRUE : FALSE;
+	    pnc = INTEGER(R_c)[i-1];
+	    if (pnc < e) {
+		nbfree();
+		error("invalid count");
+	    }
+	    LOGICAL(r)[i-1] = (pnc > e) ? TRUE : FALSE;
 	    continue;
 	}
 	x = INTEGER(ix)+f;

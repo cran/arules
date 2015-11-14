@@ -1,6 +1,6 @@
 #######################################################################
 # arules - Mining Association Rules and Frequent Itemsets
-# Copyright (C) 2011, 2012 Michael Hahsler, Christian Buchta, 
+# Copyright (C) 2011-2015 Michael Hahsler, Christian Buchta, 
 #			Bettina Gruen and Kurt Hornik
 #
 # This program is free software; you can redistribute it and/or modify
@@ -36,14 +36,19 @@
 }
 
 read.transactions <-
-function(file, format = c("basket", "single"), sep = NULL, cols = NULL, 
-  rm.duplicates = FALSE, encoding="unknown")
-{
+function(file, format = c("basket", "single"), sep = "", cols = NULL, 
+  rm.duplicates = FALSE, quote = "\"'", skip = 0, encoding="unknown") {
+
     format <- match.arg(format)
+    
     if (format == "basket") {
-        if (is.null(sep))
-            sep <- "[ \t]+"
-        data <- strsplit(readLines(file, encoding=encoding), split = sep)
+        data <- lapply(readLines(file, encoding=encoding), FUN = function(l) 
+          scan(text = l, what='character',
+          sep = sep, quote = quote, quiet = TRUE))
+        
+        ## skip
+        if(skip>0) data <- data[-(1:skip)]
+        
         if (!is.null(cols)) {
             if (!(is(cols, "numeric") && (length(cols) == 1)))
                 stop("'cols' must be a numeric scalar for 'basket'.")
@@ -51,7 +56,6 @@ function(file, format = c("basket", "single"), sep = NULL, cols = NULL,
             names(data) <- sapply(data, "[", cols)
             data <- lapply(data, "[", -cols)
         }
-        
         
         ## remove leading and trailing white spaces
         data <- lapply(data, function(x) gsub("^\\s*|\\s*$", "", x))
@@ -62,7 +66,6 @@ function(file, format = c("basket", "single"), sep = NULL, cols = NULL,
         if (rm.duplicates)
             data <- .rm.duplicates(data)
         
-        
         return(as(data,"transactions"))   
     }
     
@@ -71,14 +74,13 @@ function(file, format = c("basket", "single"), sep = NULL, cols = NULL,
 
     ## If cols is a character vector of length 2 we assume the file
     ## has a header with colnames (added by F. Leisch)
-    skip <- 0
     if(is(cols, "character") && (length(cols) == 2)){
-        colnames <- scan(file = file, what="", sep = sep,
-                         quiet = TRUE, nlines=1)
+        colnames <- scan(file = file, what="", sep = sep, quote = quote,
+                         quiet = TRUE, skip = skip, nlines=1)
         cols <- match(cols, colnames)
         if(any(is.na(cols)))
             stop("'cols' does not match 2 entries in header of file.")
-        skip <- 1
+        skip <- skip + 1
     }
 
     ## Else we get the numbers of the columns directly
@@ -90,12 +92,14 @@ function(file, format = c("basket", "single"), sep = NULL, cols = NULL,
     ## columns.
     what <- vector("list", length = max(cols))
     what[cols] <- ""
-    entries <- scan(file = file, sep = sep, what = what, flush = TRUE,
+    entries <- scan(file = file, sep = sep, quote = quote, what = what, flush = TRUE,
                     quiet = TRUE, skip = skip)
     
     entries <- split(entries[[cols[2]]], entries[[cols[1]]])
+    
     if (rm.duplicates)
         entries <- .rm.duplicates(entries)
+    
     as(entries, "transactions")
 }
 
@@ -106,43 +110,32 @@ setMethod("write", signature(x = "ANY"),
 
 setMethod("write", signature(x = "transactions"),
 	function(x, file = "", format = c("basket", "single"), 
-		sep=" ", quote=FALSE, ...) { 
+		sep=" ", quote=TRUE, ...) { 
 
-	    format <- match.arg(format)
-	    if (format == "basket") {
-		l <- LIST(x)
-		dat <- unlist(list(lapply(l, paste, collapse=sep)))
-		if(quote) warning("Quote not implemented for basket format!")
-		write(dat, file=file, ...)
-	    } else { 
-		l <- LIST(x)
-		dat <- data.frame(transactionID=rep(names(l),lapply(l, length)), 
-			item=unlist(l), row.names=NULL)
-		write.table(dat, file = file, sep=sep, quote=quote, ...)
-	    }
-	    invisible(dat)
+	  format <- match.arg(format)
+	  if (format == "basket") {
+	    l <- LIST(x)
+	    
+	    ## quotes?
+	    if(quote) l <- lapply(l, FUN = 
+	        function(s) paste("\"", s , "\"", sep =""))
+	    
+	    dat <- unlist(list(lapply(l, paste, collapse=sep)))
+	    write(dat, file=file, ...)
+	  } else { 
+	    l <- LIST(x)
+	    dat <- data.frame(transactionID=rep(names(l),lapply(l, length)), 
+	      item=unlist(l), row.names=NULL)
+	    write.table(dat, file = file, sep=sep, quote=quote, 
+	      row.names = FALSE, col.names = FALSE, ...)
+	  }
+	  invisible(dat)
 	}
-	)
-
-
-setMethod("write", signature(x = "associations"),
-    function(x, file = "", sep= " ", quote=FALSE, ...) 
-    write.table(as(x, "data.frame"), file = file, sep=sep, quote=quote, ...)
 )
 
-## WRITE is just for backward compatibility and since 
-## we want decreasing = TRUE   
-setMethod("WRITE", signature(x = "associations"),
-	function (x, file, ...) {
-	    warning("arules: 'WRITE' is deprecated use 'write' instead.")
-	    write(x, file, ...)
-	})
-
-setMethod("WRITE", signature(x = "transactions"),
-	function (x, file, ...) {
-	    warning("arules: 'WRITE' is deprecated use 'write' instead.")
-	    write(x, file, ...)
-	})
-
+setMethod("write", signature(x = "associations"),
+    function(x, file = "", sep= " ", quote=TRUE, ...) 
+    write.table(as(x, "data.frame"), file = file, sep=sep, quote=quote, ...)
+)
 
 

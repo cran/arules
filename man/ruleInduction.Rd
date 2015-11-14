@@ -16,7 +16,8 @@ ruleInduction(x, ...)
   \item{x}{ the set of itemsets from which rules will be induced. }
   \item{\dots}{ further arguments. }
   \item{transactions}{ the transaction data set used to mine 
-  	the itemsets. }
+  	the itemsets. Can be omitted if \code{x} contains a lattice 
+  	(complete set) of frequent itemsets together with their support counts. }
   \item{confidence}{a numeric value giving the minimum confidence for the
     rules. }  
   \item{control}{a named list with elements
@@ -41,7 +42,7 @@ ruleInduction(x, ...)
 
   If in control \code{reduce = TRUE} is used, unused items are removed
   from the data before creating rules. This might be slower for large
-  transaction data sets. However, if \code{method = "ptree"} this is
+  transaction data sets. However, for \code{method = "ptree"} this is
   highly recommended as the items are further reordered to reduce the
   counting time.
 
@@ -49,6 +50,10 @@ ruleInduction(x, ...)
   contains a lattice (complete set) of frequent itemsets together with 
   their support counts. Then rules can be induced directly without 
   support counting. This approach is very fast.
+  
+  For \code{transactions}, a set different to the data used for creating the
+  original itemsets can be used, however, the new set has to conform in terms 
+  of items and their order.
 }
 \value{
    An object of class \code{rules}.
@@ -59,25 +64,27 @@ generation. \emph{Computational Statistics,} 23(2):303-315, April 2008
 }
 \seealso{ \code{\link{itemsets-class}}, \code{\link{rules-class}}
 \code{\link{transactions-class}}}
-\author{Michael Hahsler and Christian Buchta}
+\author{Christian Buchta and Michael Hahsler}
 \examples{
 data("Adult")
 
 ## find all closed frequent itemsets
 closed <- apriori(Adult, 
 	parameter = list(target = "closed", support = 0.4))
+closed
 
 ## rule induction
 rules <- ruleInduction(closed, Adult, control = list(verbose = TRUE))
 summary(rules)
 
 ## inspect the resulting rules
-inspect(sort(rules, by = "lift")[1:5])
+inspect(head(sort(rules, by = "lift")))
 
 ## use lattice of frequent itemsets
 ec  <- eclat(Adult, parameter = list(support = 0.4))
 rec <- ruleInduction(ec)
-inspect(rec[1:5])
+rec
+inspect(head(rec))
 
 }
 \keyword{models}

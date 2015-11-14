@@ -6,8 +6,10 @@
   \code{\linkS4class{transactions}} object.
 }
 \usage{
-read.transactions(file, format = c("basket", "single"), sep = NULL,
-                  cols = NULL, rm.duplicates = FALSE, encoding = "unknown")
+read.transactions(file, format = c("basket", "single"), sep = "",
+                  cols = NULL, rm.duplicates = FALSE, 
+                  quote = "\"'", skip = 0, 
+                  encoding = "unknown")
 }
 \arguments{
   \item{file}{the file name.}
@@ -15,10 +17,8 @@ read.transactions(file, format = c("basket", "single"), sep = NULL,
     set.  One of \code{"basket"} or \code{"single"}, can be
     abbreviated.}
   \item{sep}{a character string specifying how fields are separated in
-    the data file, or \code{NULL} (default).  For basket format, this
-    can be a regular expression; otherwise, a single character must be
-    given.  The default corresponds to white space separators.}
-\item{cols}{For the \sQuote{single} format, \code{cols} is a 
+    the data file. The default (\code{""}) splits at whitespaces. }
+  \item{cols}{For the \sQuote{single} format, \code{cols} is a 
     numeric or character vector of length two giving the numbers or
     names of the columns (fields) with the transaction and item ids,
     respectively. If character, the first line of \code{file} is assumed
@@ -26,10 +26,12 @@ read.transactions(file, format = c("basket", "single"), sep = NULL,
     For the \sQuote{basket} format, \code{cols} can be a numeric scalar
     giving the number of the column (field) with the transaction ids.
     If \code{cols = NULL}, the data do not contain transaction ids.}
-\item{rm.duplicates}{a logical value specifying if duplicate items should
+  \item{rm.duplicates}{a logical value specifying if duplicate items should
     be removed from the transactions.}
-\item{encoding}{character string indicating the encoding which is passed to
-\code{readlines} (see \code{Encoding}).}
+  \item{quote}{ a list of characters used as quotes when reading. }
+  \item{skip}{ number of lines to skip in the file before start reading data. }
+  \item{encoding}{character string indicating the encoding which is passed to
+    \code{readLines} or \code{scan} (see \code{Encoding}).}
 }
 \details{
   For \sQuote{basket} format, each line in the transaction data file
@@ -48,18 +50,27 @@ read.transactions(file, format = c("basket", "single"), sep = NULL,
 \author{Michael Hahsler and Kurt Hornik}
 \examples{
 ## create a demo file using basket format for the example
-data <- paste("item1,item2","item1","item2,item3", sep="\n")
+data <- paste(
+  "# this is some test data", 
+  "item1, item2", 
+  "item1", 
+  "item2, item3", 
+  sep="\n")
 cat(data)
 write(data, file = "demo_basket")
 
-## read demo data
-tr <- read.transactions("demo_basket", format = "basket", sep=",")
+## read demo data (skip comment line)
+tr <- read.transactions("demo_basket", format = "basket", sep=",", skip = 1)
 inspect(tr)
 
 
 ## create a demo file using single format for the example
 ## column 1 contains the transaction ID and column 2 contains one item
-data <- paste("trans1 item1", "trans2 item1","trans2 item2", sep ="\n")
+data <- paste(
+  "trans1 item1", 
+  "trans2 item1",
+  "trans2 item2", 
+  sep ="\n")
 cat(data)
 write(data, file = "demo_single")
 
@@ -71,6 +82,5 @@ inspect(tr)
 ## tidy up
 unlink("demo_basket")
 unlink("demo_single")
-
 }
 \keyword{file}

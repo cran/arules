@@ -18,7 +18,7 @@ trans <- as(data, "transactions")
 
 
 ##########################################################
-# test the apriori interface
+# test the APRIORI interface
 context("APRIORI interface")
 
 ### rules (all warnings are for low support)
@@ -56,7 +56,7 @@ expect_true("lhs.support" %in% colnames(quality(r)))
 
 
 ##########################################################
-# test the eclat interface
+# test the ECLAT interface
 
 context("ECLAT interface")
 
@@ -99,7 +99,7 @@ expect_identical(dim(tl), c(20L, 7L))
 expect_equal(as(tl[5], "list"), list('{a,d}' = c("Tr3", "Tr7")))
 
 
-## Compare if aprior and eclat produce the same results 
+## Compare if APRIOR and ECLAT produce the same results 
 data("Income")
 fsets <- apriori(Income, parameter = list(target = "frequ", supp = 0.2),
   control=list(verb=FALSE))

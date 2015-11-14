@@ -1,6 +1,6 @@
 #######################################################################
 # arules - Mining Association Rules and Frequent Itemsets
-# Copyright (C) 2011, 2012 Michael Hahsler, Christian Buchta, 
+# Copyright (C) 2011-2015 Michael Hahsler, Christian Buchta, 
 #			Bettina Gruen and Kurt Hornik
 #
 # This program is free software; you can redistribute it and/or modify
@@ -30,16 +30,8 @@ setGeneric("%pin%",
 setGeneric("%ain%",
     function(x, table) standardGeneric("%ain%"))
 
-## Deprecated!
-setGeneric("SORT",
-    function(x, ...) standardGeneric("SORT"))
-
 setGeneric("LIST",
     function(from, ...) standardGeneric("LIST"))
-
-## Deprecated!
-setGeneric("WRITE",
-    function(x, file = "", ...) standardGeneric("WRITE"))
 
 setGeneric("write",
     function(x, file = "", ...) standardGeneric("write"))

@@ -56,6 +56,23 @@
 \section{Extends}{
   Class \code{\linkS4class{itemMatrix}}, directly.
 }
+
+\details{
+Transactions can be created by coersion from lists
+containing transactions, but also from matrix and data.frames.
+However, you will need to prepare your data first. Association rule mining can only use items and does not work with continuous variables. 
+
+For example, an item describing a person (i.e., the considered object called a transaction) could be \emph{tall}. The fact that the person is tall would be encoded in the transaction containing the item \emph{tall}. This is typically encoded in a transaction-by-items matrix by a \code{TRUE} value. This is why \code{as.transaction} can deal with logical columns, because it assumes the column stands for an item. The function also can convert columns with nominal values (i.e., factors) into a series of binary items (one for each level). So if you have nominal variables then you need to make sure they are factors (and not characters or numbers) using something like 
+
+\code{data[,"a_nominal_var"] <- factor(data[,"a_nominal_var"])}.
+
+Continuous variables need to be discretized first. An item resulting from discretization might be \emph{age>18} and the column contains only \code{TRUE} or \code{FALSE}. Alternatively it can be a factor with levels \emph{age<=18}, \emph{50=>age>18} and \emph{age>50}. These will be automatically converted into 3 items, one for each level. Have a look at the function \code{\link{discretize}} for automatic discretization.
+
+Complete examples for how to prepare data can be found in the man pages for \code{\link{Income}} and
+\code{\link{Adult}}.
+
+}
+
 \section{Methods}{
   \describe{
   %  \item{[}{\code{signature(x = "transactions")};
@@ -63,10 +80,9 @@
   %    extracts transactions and the second argument can be used to
   %    extract a subset of items (using item IDs)}
     \item{coerce}{\code{signature(from = "matrix", to = "transactions")};
-      produces a transactions data set from a binary incidence matrix. 
+      produces a transactions data set from a binary incidence matrix.
       The row names are used as item labels and the column names are
-      stores as transaction IDs.
-    }
+      stores as transaction IDs.}
     \item{coerce}{\code{signature(from = "transactions", to = "matrix")};
       coerces the transactions data set into a binary incidence matrix.
     }
@@ -96,9 +112,9 @@
       as a data.frame. 
       Note that this does not reverse coercion from data.frame 
       to \code{transactions}.}
-    \item{coerce}{\code{signature(from = "ngCMatrix", to = "transactions")};         Note that the ngCMatrix needs to have the items as rows!}
+    \item{coerce}{\code{signature(from = "ngCMatrix", to = "transactions")};              Note that the ngCMatrix needs to have the items as rows!}
     \item{dimnames, rownames, colnames}{\code{signature(x = "transactions")};
-        returns row (transactionID) and column (item) names.}
+      returns row (transactionID) and column (item) names.}
     \item{labels}{\code{signature(x = "transactions")};
       returns the labels for the itemsets in each transaction 
       (see \code{itemMatrix}).} 

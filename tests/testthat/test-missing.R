@@ -5,7 +5,5 @@
 ## * dissimilarity
 ## * pmml
 ## * predict
-## * read_write
-## * ruleInduction
 ## * supportingTransactions
 
