@@ -110,6 +110,12 @@ setGeneric("is.superset",
 setGeneric("is.subset",
     function(x, y = NULL, proper = FALSE, sparse = FALSE, ...) standardGeneric("is.subset"))
 
+setGeneric("is.significant",
+    function(x, transactions, alpha = 0.01, adjust = "bonferroni") standardGeneric("is.significant"))
+
+setGeneric("is.redundant",
+    function(x, ...) standardGeneric("is.redundant"))
+
 #setGeneric("labels",
 #    function(object, ...) standardGeneric("labels"))
 
