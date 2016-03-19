@@ -164,8 +164,8 @@ rulesIncomeLarge <- subset(rules, subset = rhs %in% "income=large" & lift > 1.2)
 ###################################################
 ### code chunk number 23: subset
 ###################################################
-inspect(head(sort(rulesIncomeSmall, by = "confidence"), n = 3))
-inspect(head(sort(rulesIncomeLarge, by = "confidence"), n = 3))
+inspect(head(rulesIncomeSmall, n = 3, by = "confidence"))
+inspect(head(rulesIncomeLarge, n = 3, by = "confidence"))
 
 
 ###################################################

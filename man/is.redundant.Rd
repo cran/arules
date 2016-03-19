@@ -18,23 +18,35 @@ is.redundant(x, ...)
   \item{...}{ additional arguments. }
 }
 \details{
-Zaki (2000) defines redundant rules as rules where a super rule (items added to the rule's LHS) have the same or higher confidence.
+A rule is redundant if it does not improve confidence over a more specific 
+rule (a rule with items added to the lhs). That is, a more specific rule is redundant if it is less 
+predictive than a more general rule. This is equivalent to a 
+negative \emph{improvement} as defined by Bayardo et al. (2000).
 
-In this implementation other measures, e.g. lift, can be used as well. 
+In this implementation other measures than confidence, e.g. 
+improvement of lift, can be used as well. 
 }
 \value{
 returns a logical vector indicating which rules are redundant.
 }
-%\seealso{
-%}
+\seealso{
+\code{\link{interestMeasure}}
+}
 \references{
-Zaki, M. J. (2000) Generating non-redundant association rules. \emph{ Proceedings of the sixth ACM SIGKDD International Conference on Knowledge Discovery and Data Mining,} 34--42.
+Bayardo, R. , R. Agrawal, and D. Gunopulos (2000). Constraint-based rule mining in large, dense databases. \emph{Data Mining and Knowledge Discovery,} 4(2/3):217--240.
 }
 \examples{
 data("Income")
 rules <- apriori(Income, parameter = list(support = 0.5))
 is.redundant(rules)
 
+## add Bayado's improvement for comparison
+quality(rules)$improvement <- interestMeasure(rules, measure = "improvement")
+
+## redundant rules
+inspect(rules[is.redundant(rules)])
+
+## non-redundant rules
 inspect(rules[!is.redundant(rules)])
 }
 \author{Michael Hahsler}

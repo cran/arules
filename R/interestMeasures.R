@@ -187,7 +187,7 @@ setMethod("interestMeasure",  signature(x = "rules"),
       interestMeasure(x, "support", transactions, reuse)/
         (interestMeasure(x, "coverage", transactions, reuse) 
           * support(rhs(x), transactions)))
-    if(measure == "improvement") return(.improvement(x, transactions, reuse))
+    if(measure == "improvement") return(.improvement(x, transactions, reuse, ...))
     if(measure == "hyperLift") return(
       .hyperLift(x, transactions, reuse, ...))
     if(measure == "hyperConfidence") return(
@@ -279,46 +279,41 @@ setMethod("interestMeasure",  signature(x = "rules"),
     ## substitutes; Pr[C_XY > c_XY]
     res <- stats::phyper(c_XY, m=c_Y, n=t-c_X, k=c_X, lower.tail = significance)
   
-  ## todo: check resulting NaN
+  ## TODO: check resulting NaN
   res
 }
-
 
 ## Minimum Improvement (Bayardo et al. 1999)
 ## Let the improvement of a rule be defined as the minimum
 ## difference between its confidence and the confidence of any
 ## proper sub-rule with the same consequent.
 
-.improvement <- function(x, transactions = NULL, reuse = TRUE) {
+.improvement <- function(x, transactions = NULL, reuse = TRUE, 
+  quality_measure = "confidence") {
   
-  
-  conf <- interestMeasure(x, "confidence", transactions, reuse)
+  ## Note: improvement is defined for confidence, but could also used with 
+  ## other measures
+  q <- interestMeasure(x, quality_measure, transactions, reuse)
   #conf <- quality(x)$confidence
   imp <- numeric(length(x))
   
-  ## find sets of rules w/the same rhs 
-  rhsList <- LIST(rhs(x), decode = FALSE)
-  rhsUnique <- unique(rhsList)
+  ### do it by unique rhs
+  rr <- .Call(R_pnindex, rhs(x)@data, NULL, FALSE, PACKAGE = "arules")
   
-  for(i in rhsUnique) {
-    sameRhs <- which(is.element(rhsList, i))
-    lhsSameRhs <- lhs(x)[sameRhs]
+  for(r in unique(rr)) {
+    pos <- which(rr==r) 
     
-    for(j in sameRhs) {
-      ## find subsets
-      subRules <- sameRhs[is.superset(lhs(x)[j], 
-        lhsSameRhs, proper = TRUE)]
-      
-      ## calculate improvement
-      imp[j] <- conf[j] - suppressWarnings(max(conf[subRules]))
-    }
+    q2 <- q[pos]
+    ### FALSE is for verbose
+    qsubmax <- .Call(R_pnmax, lhs(x[pos])@data, q2, FALSE, 
+      PACKAGE = "arules")
+  
+    imp[pos] <- q2 - qsubmax
   }
-  
-  ### no improvement with missing smaller rule 
-  imp[!is.finite(imp)] <- NA
-  
-  return(imp)
+
+  imp
 }
+
 
 ## count helpers
 .getCounts <- function(x, transactions, reuse = TRUE){

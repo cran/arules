@@ -41,10 +41,14 @@
  }
 \section{Slots}{
   \describe{
-    \item{\code{transactionInfo}:}{a data.frame
-      with vectors of the same length as the number of
-      transactions.  Each vector can hold additional information, e.g.,
-      store transaction IDs or user IDs for each transaction.}
+    \item{\code{itemsetInfo}:}{a data.frame
+      with one row per transaction (each transaction is considered an 
+      itemset).  The data.frame
+      can hold columns with additional information, e.g.,
+      transaction IDs or user IDs for each transaction. \bold{Note:} this
+      slot is inherited from class \code{\linkS4class{itemMatrix}}, but
+      should be accessed in transactions with the 
+      method \code{transactionInfo()}.}
     \item{\code{data}:}{object of class
       \code{\link[Matrix:ngCMatrix-class]{ngCMatrix}} to store the
       binary incidence matrix (see
@@ -58,7 +62,7 @@
 }
 
 \details{
-Transactions can be created by coersion from lists
+Transactions can be created by coercion from lists
 containing transactions, but also from matrix and data.frames.
 However, you will need to prepare your data first. Association rule mining can only use items and does not work with continuous variables. 
 
@@ -71,6 +75,10 @@ Continuous variables need to be discretized first. An item resulting from discre
 Complete examples for how to prepare data can be found in the man pages for \code{\link{Income}} and
 \code{\link{Adult}}.
 
+Transactions are represented as sparse binary matrices of class
+\code{\link{itemMatrix}}. If you work with several transaction sets at the 
+same time, then the encoding (order of the items in the binary matrix) in the different sets is important.
+See \code{\link{itemCoding}} to learn how to encode and recode transaction sets. 
 }
 
 \section{Methods}{
@@ -119,9 +127,9 @@ Complete examples for how to prepare data can be found in the man pages for \cod
       returns the labels for the itemsets in each transaction 
       (see \code{itemMatrix}).} 
     \item{transactionInfo<-}{\code{signature(x = "transactions")};
-      replaces the transactionInfo data frame}
+      replaces the transaction information with a new data.frame.}
     \item{transactionInfo}{\code{signature(x = "transactions")};
-      returns transactionInfo}
+      returns the transaction information as a data.frame.}
     \item{show}{\code{signature(object = "transactions")}}
     \item{summary}{\code{signature(object = "transactions")}}
   }
@@ -134,6 +142,7 @@ Complete examples for how to prepare data can be found in the man pages for \cod
   \code{\link{c}},
   \code{\link{image}},
   \code{\link{inspect}},
+  \code{\link{itemCoding}},
   \code{\link{read.transactions}},
   \code{\link{random.transactions}},
   \code{\link{sets}},

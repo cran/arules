@@ -215,6 +215,10 @@ setMethod("%in%", signature(x = "itemMatrix", table = "character"),
   }
 )
 
+setMethod("%in%", signature(x = "itemMatrix", table = "itemMatrix"),
+  function(x, table) x %in% itemLabels(table)
+)
+
 ## all items have to be in
 setMethod("%ain%", signature(x = "itemMatrix", table = "character"),
   function(x, table) {
@@ -271,7 +275,8 @@ setMethod("[", signature(x = "itemMatrix", i = "ANY", j = "ANY", drop = "ANY"),
       x@data <- .Call("R_colSubset_ngCMatrix", x@data, i, 
         PACKAGE="arules")
       
-      x@itemsetInfo <- x@itemsetInfo[i,, drop = FALSE]
+      ### only subset if we have rows
+      if(nrow(x@itemsetInfo)) x@itemsetInfo <- x@itemsetInfo[i,, drop = FALSE]
     }
     
     if (!missing(j)) {

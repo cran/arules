@@ -412,9 +412,10 @@ approche et une etude de sensibilite au bruit. In
 \emph{Mesures de Qualite pour la fouille de donnees. 
 Revue des Nouvelles Technologies de l'Information, RNTI.}
 
-Bayardo, R. , R. Agrawal, and D. Gunopulos (G). Constraint-based rule mining
+Bayardo, R. , R. Agrawal, and D. Gunopulos (2000). 
+Constraint-based rule mining
 in large, dense databases.  \emph{Data Mining and Knowledge Discovery},
-4(2/3):217--240, 2000.
+4(2/3):217--240.
 
 Berzal, Fernando, Ignacio Blanco, Daniel Sanchez and Maria-Amparo Vila (2002).
 Measuring the accuracy and interest of
@@ -498,7 +499,7 @@ quality(rules) <- cbind(quality(rules),
 	hyperConfidence = interestMeasure(rules, measure = "hyperConfidence", 
 	transactions = Income))
 
-inspect(head(sort(rules, by = "hyperConfidence")))
+inspect(head(rules, by = "hyperConfidence"))
 
 ## calculate several measures
 m <- interestMeasure(rules, c("confidence", "oddsRatio", "leverage"), 

@@ -48,11 +48,6 @@ setClass("itemMatrix",
 setMethod(initialize, "itemMatrix", function(.Object, ...) { 
   .Object <- callNextMethod()
   
-  ## itemInfo has to match
-  ## fix empty data.frame in itemsetInfo
-  if(all(dim(.Object@itemsetInfo) == 0)) 
-    .Object@itemsetInfo <- data.frame(matrix(ncol = 0, nrow = nrow(.Object)))
-  
   validObject(.Object)
   .Object
 })
@@ -65,7 +60,8 @@ setClass("summary.itemMatrix",
     itemSummary   = "integer",
     lengths       = "table",
     lengthSummary = "table",
-    itemInfo      = "data.frame"
+    itemInfo      = "data.frame",
+    itemsetInfo      = "data.frame"
   )
 )
 
@@ -73,18 +69,13 @@ setClass("summary.itemMatrix",
 ## transactions 
 
 setClass("transactions",
-  representation(
-    transactionInfo = "data.frame"
-  ),
   contains = "itemMatrix",
-  
-  prototype(transactionInfo = data.frame()),
   
   validity = function(object) {
     ## check dimensions
     ## no transactionInfo (empty data.frame)
-    if (length(object@transactionInfo) &&
-        length(object@transactionInfo[[1]]) != length(object))
+    if (length(object@itemsetInfo) &&
+        length(object@itemsetInfo[[1]]) != length(object))
       return("transactionInfo does not match number of transactions")
     
     TRUE
@@ -94,18 +85,12 @@ setClass("transactions",
 setMethod(initialize, "transactions", function(.Object, ...) { 
   .Object <- callNextMethod()
   
-  ## itemInfo has to match
-  ## fix empty data.frame in transactionInfo
-  if(all(dim(.Object@transactionInfo) == 0)) 
-    .Object@transactionInfo <- data.frame(matrix(ncol = 0, nrow = nrow(.Object)))
-  
   validObject(.Object)
   .Object
 })
 
 
 setClass("summary.transactions",
-  representation(transactionInfo = "data.frame"),
   contains = "summary.itemMatrix"
 )
 
@@ -141,11 +126,6 @@ setClass("tidLists",
 
 setMethod(initialize, "tidLists", function(.Object, ...) { 
   .Object <- callNextMethod()
-  
-  ## itemInfo has to match
-  ## fix empty data.frame in transactionInfo
-  if(all(dim(.Object@transactionInfo) == 0)) 
-    .Object@transactionInfo <- data.frame(matrix(ncol = 0, nrow = ncol(.Object)))
   
   validObject(.Object)
   .Object

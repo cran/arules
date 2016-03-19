@@ -1,7 +1,7 @@
 # arules - Mining Association Rules and Frequent Itemsets - R package
 
-[![CRAN version](http://www.r-pkg.org/badges/version/arules)](http://cran.r-project.org/web/packages/arules/index.html)
-[![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/arules)](http://cran.r-project.org/web/packages/arules/index.html)
+[![CRAN version](http://www.r-pkg.org/badges/version/arules)](https://cran.r-project.org/package=arules)
+[![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/arules)](https://cran.r-project.org/package=arules)
 [![Travis-CI Build Status](https://travis-ci.org/mhahsler/arules.svg?branch=master)](https://travis-ci.org/mhahsler/arules)
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/mhahsler/arules?branch=master&svg=true)](https://ci.appveyor.com/project/mhahsler/arules)
 
@@ -85,7 +85,8 @@ R> inspect(head(sort(rules, by = "lift")))
 
 ## Further Information
 
-* Michael Hahsler, Bettina G&uuml;n and Kurt Hornik, [arules - A Computational Environment for Mining Association Rules and Frequent Item Sets](http://dx.doi.org/10.18637/jss.v014.i15) _Journal of Statistical Software,_ 14(15), 2005.
+* Michael Hahsler, Bettina G&uuml;n and Kurt Hornik, [arules - A Computational Environment for Mining Association Rules and Frequent Item Sets.](http://dx.doi.org/10.18637/jss.v014.i15) _Journal of Statistical Software,_ 14(15), 2005.
+* Michael Hahsler, Sudheer Chelluboina, Kurt Hornik, and Christian Buchta. [The arules R-package ecosystem: Analyzing interesting patterns from large transaction datasets.](http://jmlr.csail.mit.edu/papers/v12/hahsler11a.html) _Journal of Machine Learning Research,_ 12:1977-1981, 2011.
 * [arules package vignette](http://cran.r-project.org/web/packages/arules/vignettes/arules.pdf) with complete examples.
 * [Reference manual](http://cran.r-project.org/web/packages/arules/arules.pdf)
 

@@ -12,7 +12,8 @@ useDynLib(arules,
   R_wcount_ngCMatrix,
   R_weclat_ngCMatrix,
   R_rowWSums_ngCMatrix,
-  R_hits_ngCMatrix
+  R_hits_ngCMatrix,
+  R_pnmax
 )
 
 import("methods")
@@ -39,8 +40,11 @@ export(
   "abbreviate",
   "discretize",
   "addAggregate",
-  "filterAggregate"
-)
+  "filterAggregate",
+  "%in%",
+  "%pin%",
+  "%ain%"
+  )
 
 exportClasses(
   "itemMatrix", "summary.itemMatrix",
@@ -62,6 +66,7 @@ exportMethods(
   "LIST",
   "[",
   "aggregate",
+  "abbreviate",
   "addComplement",
   "coverage",
   "crossTable",
@@ -73,6 +78,7 @@ exportMethods(
   "duplicated",
   "encode",
   "generatingItemsets",
+  "head",
   "image", 
   "info", "info<-", 
   "initialize", 
@@ -125,9 +131,3 @@ exportMethods(
   "predict",
   "dissimilarity"
 )
-
-S3method(abbreviate, default)
-S3method(abbreviate, transactions)
-S3method(abbreviate, rules)
-S3method(abbreviate, itemsets)
-S3method(abbreviate, tidLists)

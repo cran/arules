@@ -52,12 +52,6 @@
     do.call("new", c(from, Class = to))
 }
 
-
-## FIXME: this is defined in base and the only way to make it work 
-## is to redefine it here
-"%in%" <-  function(x, table) match(x, table, nomatch = 0) > 0
-
-
 ## Combine Meta data (used for assoctiations and itemMatrix)
 ## x, y ... two S4 objects with data.frames as meta data
 ## name ... name of the slot with the data.frame
@@ -65,7 +59,10 @@
 .combineMeta <- function(x, y, name, ...) {
     mx <- slot(x, name)
     my <- slot(y, name)
-    
+   
+    ## return empty data.frame
+    if(ncol(mx) == 0 && ncol(my) == 0) return(data.frame())
+     
     ## add empty data.frame if nrows is 0 or corrupt
     if(nrow(mx) != length(x)) mx <- data.frame(matrix(nrow = nrow(x), ncol = 0))
     if(nrow(my) != length(y)) my <- data.frame(matrix(nrow = nrow(y), ncol = 0))
@@ -73,15 +70,14 @@
     ## make column names conforming (rbind fixes order) 
     cols <- unique(c(colnames(mx), colnames(my)))
     
-    ## Note: rbind does not preserve rows is ncol==0!
+    ## Note: rbind does not preserve rows if ncol==0!
     if(length(cols) > 0) {
-      for(col in cols[!(cols %in% colnames(mx))]) mx[[col]] <- NA
-      for(col in cols[!(cols %in% colnames(my))]) my[[col]] <- NA
+      for(col in cols[!(cols %in% colnames(mx))]) 
+	  mx[[col]] <- rep(NA_real_, times = nrow(mx))
+      for(col in cols[!(cols %in% colnames(my))]) 
+	  my[[col]] <- rep(NA_real_, times = nrow(my))
       rbind(mx, my)
     }else{
       data.frame(matrix(nrow = length(x)+length(y), ncol = 0))
     }
 }
-
-
-###

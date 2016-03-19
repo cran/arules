@@ -255,7 +255,7 @@ setAs("tidLists", "transactions",
     new("transactions", 
       data            = t(from@data), 
       itemInfo        = from@itemInfo, 
-      transactionInfo = from@transactionInfo
+      itemsetInfo = from@transactionInfo
     ))
 
 setAs("transactions", "tidLists",
@@ -263,7 +263,7 @@ setAs("transactions", "tidLists",
     new("tidLists", 
       data            = t(from@data), 
       itemInfo        = from@itemInfo, 
-      transactionInfo = from@transactionInfo))
+      transactionInfo = transactionInfo(from)))
 
 ##
 setAs("tidLists", "itemMatrix",
@@ -296,6 +296,15 @@ setAs("itemMatrix", "tidLists",
 ## TODO: Add replacement functions
 setMethod("transactionInfo", signature(x = "tidLists"),
   function(x) x@transactionInfo)
+
+setReplaceMethod("transactionInfo", signature(x = "tidLists"),
+  function(x, value) {
+    x@transactionInfo <- value
+    validObject(x)
+    x
+  }
+)
+
 
 setMethod("itemInfo", signature(object = "tidLists"),
   function(object) object@itemInfo)

@@ -77,8 +77,7 @@ eclat <-  function(data, parameter = NULL, control = NULL)
     result@items@itemInfo <- data@itemInfo
    
     ## empty itemsetInfo
-    result@items@itemsetInfo <- 
-      data.frame(matrix(nrow = length(result), ncol = 0))
+    result@items@itemsetInfo <- data.frame()
      
     ## make sure quality is a data.frame
     result@quality <- as.data.frame(result@quality,)
@@ -93,7 +92,7 @@ eclat <-  function(data, parameter = NULL, control = NULL)
     ## make sure tid list itemInfo is ok
     if (!is.null(result@tidLists)) {
       result@tidLists@itemInfo <- data.frame(labels = labels(result))
-      result@tidLists@transactionInfo <- data@transactionInfo
+      result@tidLists@transactionInfo <- transactionInfo(data)
     }
     
     result
