@@ -13,10 +13,13 @@
 }
 \usage{
 dissimilarity(x, y = NULL, method = NULL, args = NULL, \ldots)
+
 \S4method{dissimilarity}{itemMatrix}(x, y = NULL, method = NULL, args = NULL,
 	which = "transactions")
+
 \S4method{dissimilarity}{associations}(x, y = NULL, method = NULL, args = NULL,
-	which = "transactions")
+	which = "associations")
+
 \S4method{dissimilarity}{matrix}(x, y = NULL, method = NULL, args = NULL)
 }
 \arguments{
@@ -74,9 +77,10 @@ dissimilarity(x, y = NULL, method = NULL, args = NULL, \ldots)
 
  }
   \item{args}{ a list of additional arguments for the methods.}  
-   \item{which}{a character string indicating if the dissimilarity should be 
-     calculated between transactions (default) or items (use \code{"items"}). }
-   \item{\ldots}{further arguments.}
+  \item{which}{a character string indicating if the dissimilarity should be 
+     calculated between transactions/associations (default) 
+     or items (use \code{"items"}). }
+  \item{\ldots}{further arguments.}
 }
 \value{
   returns an object of class \code{dist}.
@@ -93,9 +97,7 @@ data("Groceries")
 
 s <- Groceries[,itemFrequency(Groceries)>0.05]
 d_jaccard <- dissimilarity(s, which = "items")
-plot(hclust(d_jaccard, method = "ward"))
-
-
+plot(hclust(d_jaccard, method = "ward.D2"))
 
 ## cluster transactions for a sample of Adult
 data("Adult")
@@ -103,29 +105,30 @@ s <- sample(Adult, 500)
 
 ##  calculate Jaccard distances and do hclust
 d_jaccard <- dissimilarity(s)
-hc <- hclust(d_jaccard)
-plot(hc)
+hc <- hclust(d_jaccard, method = "ward.D2")
+plot(hc, labels = FALSE, main = "Dendrogram for Transactions (Jaccard)")
 
 ## get 20 clusters and look at the difference of the item frequencies (bars) 
 ## for the top 20 items) in cluster 1 compared to the data (line) 
 assign <- cutree(hc, 20)
 itemFrequencyPlot(s[assign==1], population=s, topN=20)
 
-## calculate affinity-based distances and do hclust
+## calculate affinity-based distances between transactions and do hclust
 d_affinity <- dissimilarity(s, method = "affinity")
-hc <- hclust(d_affinity)
-plot(hc)
+hc <- hclust(d_affinity, method = "ward.D2")
+plot(hc, labels = FALSE, main = "Dendrogram for Transactions (Affinity)")
 
-
-## cluster rules
+## cluster association rules
 rules <- apriori(Adult, parameter=list(support=0.3))
 rules <- subset(rules, subset = lift > 2)
 
-## use affinity
-## we need to supply the item affinities from the dataset (sample)
+## use affinity to cluster rules
+## Note: we need to supply the transactions (or affinities) from the 
+## dataset (sample).
 d_affinity <- dissimilarity(rules, method = "affinity", 
-  args = list(affinity = affinity(s)))
-plot(hclust(d_affinity))
+  args = list(transactions = s))
+hc <- hclust(d_affinity, method = "ward.D2")
+plot(hc, main = "Dendrogram for Rules (Affinity)") 
 }
 \references{
   Sneath, P. H. A. (1957) Some thoughts on bacterial classification. 

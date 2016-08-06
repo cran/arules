@@ -15,7 +15,7 @@ Additional packages in the arules family are: [arulesViz](http://github.com/mhah
 ## Installation
 
 * __Stable CRAN version:__ install from within R.
-* __Current development version:__ Download package from [AppVeyor](https://ci.appveyor.com/project/mhahsler/arules/build/artifacts) or install via `intall_git("mhahsler/arules")` (needs devtools) 
+* __Current development version:__ Download package from [AppVeyor](https://ci.appveyor.com/project/mhahsler/arules/build/artifacts) or install via `install_git("mhahsler/arules")` (needs devtools) 
 
 ## Example
 ```R
@@ -85,8 +85,11 @@ R> inspect(head(sort(rules, by = "lift")))
 
 ## Further Information
 
-* Michael Hahsler, Bettina G&uuml;n and Kurt Hornik, [arules - A Computational Environment for Mining Association Rules and Frequent Item Sets.](http://dx.doi.org/10.18637/jss.v014.i15) _Journal of Statistical Software,_ 14(15), 2005.
+
+* Development version of [arules on github](https://github.com/mhahsler/arules).
+* Michael Hahsler, Bettina Gr&uuml;n and Kurt Hornik, [arules - A Computational Environment for Mining Association Rules and Frequent Item Sets.](http://dx.doi.org/10.18637/jss.v014.i15) _Journal of Statistical Software,_ 14(15), 2005.
 * Michael Hahsler, Sudheer Chelluboina, Kurt Hornik, and Christian Buchta. [The arules R-package ecosystem: Analyzing interesting patterns from large transaction datasets.](http://jmlr.csail.mit.edu/papers/v12/hahsler11a.html) _Journal of Machine Learning Research,_ 12:1977-1981, 2011.
 * [arules package vignette](http://cran.r-project.org/web/packages/arules/vignettes/arules.pdf) with complete examples.
 * [Reference manual](http://cran.r-project.org/web/packages/arules/arules.pdf)
 
+_Maintainer:_ [Michael Hahsler](http://michael.hahsler.net)
