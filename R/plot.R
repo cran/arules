@@ -17,14 +17,11 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+### produce a better error message for plot of associations
+plot.associations <- function(x, ...) stop("Needed package 'arulesViz' not installed or loaded!")
 
-## Find redundant rules
-## redundant rules are rules which do not improve confidence over the
-## confidence of their proper sub-rules (i.e., have a negative improvement).
-
-setMethod("is.redundant", signature(x = "rules"),
-  function(x, measure = "confidence") {
-    interestMeasure(x, measure = "improvement", transactions = NULL, reuse = TRUE, 
-      quality_measure = measure) <= 0
-  }
-)
+### call image for itemMatrix and transactions 
+plot.itemMatrix <- function(x, ...) {
+  warning("Use image() instead of plot().")
+  image(x, ...)
+}

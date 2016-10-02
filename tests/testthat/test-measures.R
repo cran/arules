@@ -49,10 +49,8 @@ expect_equal(m1, m2)
 ###################################################################
 # test measures for rules
 
-expect_warning(
-  rules <- apriori(trans, parameter=list(supp=0.01, conf = 0.5), 
-    control=list(verb=FALSE))
-)
+rules <- apriori(trans, parameter=list(supp=0.01, conf = 0.5), 
+  control=list(verb=FALSE))
 
 ## calculate all measures (just to see if one creates an error)
 m1 <- interestMeasure(rules, transactions = trans)
@@ -68,10 +66,20 @@ context("is.redundant")
 
 red <- is.redundant(rules)
 imp <- interestMeasure(rules, measure = "improvement")
-expect_equal(red, imp<0)
+expect_equal(red, imp<=0)
 
 #inspect(rules[!red])
 #inspect(rules[red])
 
+
+context("support")
+
+s_tid <- support(rules, trans, control=list(method="tidlist"))
+s_ptree <- support(rules, trans, control=list(method="ptree"))
+expect_equal(s_tid, s_ptree)
+expect_equal(s_tid, quality(rules)$support)
+
+
 ## FIXME: test others
+
 
