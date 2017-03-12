@@ -41,7 +41,7 @@ apriori(data, parameter = NULL, appearance = NULL, control = NULL)
   \deqn{\{\} => \{beer\}}{{} => {beer}}
   
   will be created. 
-  These rules mean that no matter what other items are involved the 
+  These rules mean that no matter what other items are involved, the 
   item in the RHS will appear with the probability given by the rule's
   confidence (which equals the support).
   If you want to avoid these rules then use 
@@ -60,6 +60,7 @@ apriori(data, parameter = NULL, appearance = NULL, control = NULL)
   hit these limits in the "checking subsets" line of the output. The 
   time limit is only checked when the subset size increases, so
   it may run significantly longer than what you specify in maxtime.
+  Setting \code{maxtime=0} disables the time limit.
   
   Interrupting execution with Control-C/Esc is not recommended. 
   Memory cleanup will be prevented resulting in a memory leak. Also,

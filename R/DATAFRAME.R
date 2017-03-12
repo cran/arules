@@ -17,36 +17,48 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-### itemUnion
-setMethod("itemUnion", signature(x = "itemMatrix", y = "itemMatrix"),
-  function(x, y) {
-    if(length(x)!=length(y)) stop("Length mismatch between x and y!")
-    
-    ### the C code does not deal well with a large number of dense rules.
-    #x@data <- .Call(R_or_ngCMatrix", x@data, y@data) 
-    
-    x@data <- as(x@data+y@data, "ngCMatrix")
-    
-    x
-  }
-)
 
-setMethod("itemSetdiff", signature(x = "itemMatrix", y = "itemMatrix"),
-  function(x, y) {
-    if(length(x)!=length(y)) stop("Length mismatch between x and y!")
-    
-    x@data <- as(drop0(as(x@data-y@data >0, "dgCMatrix")), "ngCMatrix")
-    x
-  }
-)
-
-setMethod("itemIntersect", signature(x = "itemMatrix", y = "itemMatrix"),
-  function(x, y) {
-    if(length(x)!=length(y)) stop("Length mismatch between x and y!")
-    
-    x@data <- as(drop0(x@data*y@data), "ngCMatrix")
-    x
+setMethod("DATAFRAME", signature(from = "rules"),
+  function(from, separate = TRUE, ...) {
+    if(separate) {
+      antes <- labels(lhs(from), ...)
+      conseqs <- labels(rhs(from), ...)
+      
+      data.frame(
+        LHS = factor(antes, levels = unique(antes)),
+        RHS = factor(conseqs, levels = unique(conseqs)),
+        quality(from)
+      )
+    }else{
+      rule <- labels(from, ...)
+      
+      data.frame(
+        rule = factor(rule, levels = unique(rule)),
+        quality(from)
+      )
+    }
   }
 )
 
 
+setMethod("DATAFRAME", signature(from = "itemsets"),
+  function(from, ...) {
+    is <- labels(from, ...)
+    
+    data.frame(
+      items = factor(is, levels = unique(is)),
+      quality(from)
+    )
+  }
+)
+
+setMethod("DATAFRAME", signature(from = "itemMatrix"),
+  function(from, ...) {
+    is <- labels(from, ...)
+    
+    data.frame(
+      items = factor(is, levels = unique(is)),
+      itemsetInfo(from)       
+    )
+  }
+)

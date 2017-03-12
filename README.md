@@ -1,18 +1,18 @@
-# arules - Mining Association Rules and Frequent Itemsets - R package
+# arules --- Mining Association Rules and Frequent Itemsets with R
 
 [![CRAN version](http://www.r-pkg.org/badges/version/arules)](https://cran.r-project.org/package=arules)
 [![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/arules)](https://cran.r-project.org/package=arules)
 [![Travis-CI Build Status](https://travis-ci.org/mhahsler/arules.svg?branch=master)](https://travis-ci.org/mhahsler/arules)
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/mhahsler/arules?branch=master&svg=true)](https://ci.appveyor.com/project/mhahsler/arules)
 
-This R package provides the infrastructure for representing,
+The arules package for R provides the infrastructure for representing,
 manipulating and analyzing transaction data and patterns (frequent
 itemsets and association rules). Also provides interfaces to
 C implementations of the association mining algorithms Apriori and Eclat.
 
 Additional packages in the arules family are: 
 
-* [arulesViz](http://github.com/mhahsler/arulesViz): Visualization of association rules. 
+* [arulesViz](http://mhahsler.github.io/arulesViz/): Visualization of association rules. 
 * [arulesCBA](http://github.com/ianjjohnson/arulesCBA): Classification based on association rules.  
 * [arulesSequences](https://cran.r-project.org/package=arulesSequences):
    Mining frequent sequences.
@@ -21,17 +21,26 @@ Additional packages in the arules family are:
 
 ## Installation
 
-* __Stable CRAN version:__ install from within R.
-* __Current development version:__ Download package from [AppVeyor](https://ci.appveyor.com/project/mhahsler/arules/build/artifacts) or install via `install_git("mhahsler/arules")` (needs devtools) 
-
-## Example
+__Stable CRAN version:__ install from within R with
 ```R
-R> library("arules")
-R> data("Adult")
+install.packages("arules")
+```
+__Current development version:__ Download package from [AppVeyor](https://ci.appveyor.com/project/mhahsler/arules/build/artifacts) or install from GitHub (needs devtools). 
+```R 
+install_git("mhahsler/arules")
+``` 
 
-R> ## Mine association rules
-R> rules <- apriori(Adult, parameter = list(supp = 0.5, conf = 0.9, target = "rules"))
+## Usage
 
+Load package and mine some association rules.
+```R
+library("arules")
+data("Adult")
+
+rules <- apriori(Adult, parameter = list(supp = 0.5, conf = 0.9, target = "rules"))
+```
+
+```
 Parameter specification:
  confidence minval smax arem  aval originalSupport support minlen maxlen target   ext
         0.9    0.1    1 none FALSE            TRUE     0.5      1     10  rules FALSE
@@ -51,9 +60,14 @@ creating transaction tree ... done [0.03s].
 checking subsets of size 1 2 3 4 done [0.00s].
 writing ... [52 rule(s)] done [0.00s].
 creating S4 object  ... done [0.01s].
+```
 
-R> ## Show some basic statistics
-R> summary(rules)
+Show basic statistics.
+```R
+summary(rules)
+```
+
+```
 set of 52 rules
 
 rule length distribution (lhs + rhs):
@@ -75,9 +89,14 @@ summary of quality measures:
 mining info:
   data ntransactions support confidence
  Adult         48842     0.5        0.9
+```
 
-R> ## Inspect rules with the highest lift
-R> inspect(head(sort(rules, by = "lift")))
+Inspect rules with the highest lift.
+```R
+inspect(head(rules, by = "lift"))
+```
+
+```
     lhs                               rhs                              support confidence     lift
 [1] {sex=Male,                                                                                    
      native-country=United-States} => {race=White}                   0.5415421  0.9051090 1.058554
@@ -91,16 +110,13 @@ R> inspect(head(sort(rules, by = "lift")))
      sex=Male}                     => {native-country=United-States} 0.5415421  0.9204803 1.025691
 [6] {race=White,                                                                                  
      capital-gain=None}            => {native-country=United-States} 0.7194628  0.9202807 1.025469
-
 ```
 
-## Further Information
+## References
 
-* List changes from [NEWS.md](https://github.com/mhahsler/arules/blob/master/NEWS.md)
-* [Reference manual](https://cran.r-project.org/package=arules/arules.pdf)
-* [arules package vignette](https://cran.r-project.org/package=arules/vignettes/arules.pdf) with complete examples.
-* Development version of [arules on github](https://github.com/mhahsler/arules).
+* [Intro article with examples](https://cran.r-project.org/package=arules/vignettes/arules.pdf) by Michael Hahsler, Bettina Gr&uuml;n, Kurt Hornik and
+Christian Buchta.
 * Michael Hahsler, Bettina Gr&uuml;n and Kurt Hornik, [arules - A Computational Environment for Mining Association Rules and Frequent Item Sets.](http://dx.doi.org/10.18637/jss.v014.i15) _Journal of Statistical Software,_ 14(15), 2005.
 * Michael Hahsler, Sudheer Chelluboina, Kurt Hornik, and Christian Buchta. [The arules R-package ecosystem: Analyzing interesting patterns from large transaction datasets.](http://jmlr.csail.mit.edu/papers/v12/hahsler11a.html) _Journal of Machine Learning Research,_ 12:1977-1981, 2011.
-
-_Maintainer:_ [Michael Hahsler](http://michael.hahsler.net)
+* Hahsler, Michael (2015). 
+[A Probabilistic Comparison of Commonly Used Interest Measures for Association Rules](http://michael.hahsler.net/research/association_rules/measures.html), 2015, URL: http://michael.hahsler.net/research/association_rules/measures.html.

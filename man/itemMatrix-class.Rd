@@ -44,7 +44,7 @@
 \alias{t,ngCMatrix-method}
 \alias{plot.itemMatrix}
 
-\title{Class ``itemMatrix'' --- Sparse Binary Incidence Matrix to Represent Sets
+\title{Class itemMatrix --- Sparse Binary Incidence Matrix to Represent Sets
   of Items}
 \description{The \code{itemMatrix} class is the basic building block
   for transactions, itemsets and rules in package \pkg{arules}. 
@@ -126,9 +126,6 @@ See \code{\link{itemCoding}} to learn how to encode and recode itemMatrix object
       returns the dimensions of the itemMatrix.}
     \item{dimnames, rownames, colnames}{\code{signature(x = "itemMatrix")};
         returns row (itemsetID) and column (item) names.}
-    \item{labels}{\code{signature(x = "transactions")};
-      returns the labels for the itemsets in each transaction 
-      (see \code{itemMatrix}).} 
     \item{dimnames}{\code{signature(x = "itemMatrix")};
       returns dimnames.}
     \item{dimnames<-}{\code{signature(x = "itemMatrix", value = "list")};

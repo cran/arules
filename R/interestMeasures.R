@@ -141,8 +141,8 @@ setMethod("interestMeasure",  signature(x = "rules"),
       "jaccard", "kappa",
       "mutualInformation", "lambda", "jMeasure", "laplace",
       "certainty", "addedValue",
-      
-      ### FIXME: add to man page!
+      "maxconfidence",
+       
       "ralambrodrainy",
       "descriptiveConfirm",
       "confirmedConfidence",
@@ -197,6 +197,7 @@ setMethod("interestMeasure",  signature(x = "rules"),
     if(measure == "RLD") return(.RLD(x, transactions, reuse))
     if(measure == "imbalance") return(.imbalance(x, transactions, reuse))
     if(measure == "kulczynski") return(.kulc(x, transactions, reuse))
+    if(measure == "maxconfidence") return(.maxConf(x, transactions, reuse))
     
     
     ## all other measures are implemented here (counts is in ...)
@@ -251,11 +252,9 @@ setMethod("interestMeasure",  signature(x = "rules"),
 ## (confidence level that we observe too high/low counts)
 ## 
 ## uses the model from:
-## Michael Hahsler, Kurt Hornik, and Thomas Reutterer. 
-## Implications of probabilistic data modeling for rule mining. 
-## Report 14, Research Report Series, Department of Statistics and 
-## Mathematics, Wirtschaftsuniversitaet Wien, Augasse 2-6, 1090 Wien, 
-## Austria, March 2005.
+## Hahsler, Michael and Kurt Hornik (2007). New probabilistic 
+## interest measures for association rules. 
+## Intelligent Data Analysis, 11(5):437--455.
 
 
 .hyperConfidence <- function(x, transactions, reuse = TRUE, complements = TRUE, 
@@ -277,9 +276,10 @@ setMethod("interestMeasure",  signature(x = "rules"),
   
   else
     ## substitutes; Pr[C_XY > c_XY]
-    res <- stats::phyper(c_XY, m=c_Y, n=t-c_X, k=c_X, lower.tail = significance)
+    ## empty LHS causes a div by zero -> NAN
+    suppressWarnings(res <- stats::phyper(c_XY, m=c_Y, n=t-c_X, k=c_X, lower.tail = significance))
   
-  ## TODO: check resulting NaN
+  res[is.nan(res)] <- NA
   res
 }
 
@@ -298,15 +298,14 @@ setMethod("interestMeasure",  signature(x = "rules"),
   imp <- numeric(length(x))
   
   ### do it by unique rhs
-  rr <- .Call(R_pnindex, rhs(x)@data, NULL, FALSE, PACKAGE = "arules")
+  rr <- .Call(R_pnindex, rhs(x)@data, NULL, FALSE)
   
   for(r in unique(rr)) {
     pos <- which(rr==r) 
     
     q2 <- q[pos]
     ### FALSE is for verbose
-    qsubmax <- .Call(R_pnmax, lhs(x[pos])@data, q2, FALSE, 
-      PACKAGE = "arules")
+    qsubmax <- .Call(R_pnmax, lhs(x[pos])@data, q2, FALSE)
   
     imp[pos] <- q2 - qsubmax
   }
@@ -360,8 +359,9 @@ setMethod("interestMeasure",  signature(x = "rules"),
 ## more measures
 ## see Tan et al. Introduction to Data Mining, 2006
 
-.basicRuleMeasure <- function(x, measure, counts, significance = FALSE, ...) {
-  ### significance is only used by chi-squared
+.basicRuleMeasure <- function(x, measure, counts, 
+  significance = FALSE, compliment = TRUE, ...) {
+  ### significance and compliment are only used by chi-squared
   
   N   <- counts$N
   f1x <- counts$f1x
@@ -435,7 +435,7 @@ setMethod("interestMeasure",  signature(x = "rules"),
   if(measure == "doc") return((f11/f1x)-(f01/f0x))
   
   
-  ## this one is from Bing Liu, Wynne Hsu, and Yiming Ma (1999) 
+  ## chi-squared is from Bing Liu, Wynne Hsu, and Yiming Ma (1999) 
   if(measure == "chiSquared") {
     
     chi2 <- c()
@@ -454,7 +454,7 @@ setMethod("interestMeasure",  signature(x = "rules"),
     ## qchisq(0.05, df =1, lower.tail=FALSE)
     ## [1] 3.841459
     if(!significance) return(chi2)
-    else return(stats::pchisq(q=chi2, df=1, lower.tail=FALSE))
+    else return(stats::pchisq(q=chi2, df=1, lower.tail=!compliment))
   }
   
   stop("Specified measure not implemented.")
@@ -522,6 +522,21 @@ setMethod("interestMeasure",  signature(x = "rules"),
   ## rhs support
   Y <- .rhsSupport(x, transactions = transactions, reuse = reuse)
   
-  kulc <- XY/2 * (1/X + 1/Y)
-  kulc
+  XY/2 * (1/X + 1/Y)
+}
+
+## Maximum Confidence measure see T. Wu et al. 2010
+# maxConf = max{supp(X,Y)/supp(X), supp(X,Y)/supp(Y)}
+.maxConf <- function(x, transactions, reuse = TRUE) {
+  if(is.null(transactions)) stop("transactions missing. Please specify the data used to mine the rules as transactions!")
+
+  XY <- interestMeasure(x, measure = "support", 
+    transactions  = transactions, reuse = reuse)
+  ## lhs support
+  X <- interestMeasure(x, measure = "coverage", 
+    transactions = transactions, reuse = reuse)
+  ## rhs support
+  Y <- .rhsSupport(x, transactions = transactions, reuse = reuse)
+  
+  pmax(XY/X, XY/Y)
 }

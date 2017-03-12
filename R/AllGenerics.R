@@ -36,6 +36,9 @@ setGeneric("%ain%",
 setGeneric("LIST",
     function(from, ...) standardGeneric("LIST"))
 
+setGeneric("DATAFRAME",
+    function(from, ...) standardGeneric("DATAFRAME"))
+
 setGeneric("addComplement",
     function(x, labels, complementLabels=NULL) standardGeneric("addComplement"))
 
@@ -93,13 +96,14 @@ setGeneric("itemFrequencyPlot",
     function(x, ...) standardGeneric("itemFrequencyPlot"))
 
 setGeneric("is.superset",
-    function(x, y = NULL, proper = FALSE, sparse = FALSE, ...) standardGeneric("is.superset"))
+    function(x, y = NULL, proper = FALSE, sparse = TRUE, ...) standardGeneric("is.superset"))
 
 setGeneric("is.subset",
-    function(x, y = NULL, proper = FALSE, sparse = FALSE, ...) standardGeneric("is.subset"))
+    function(x, y = NULL, proper = FALSE, sparse = TRUE, ...) standardGeneric("is.subset"))
 
 setGeneric("is.significant",
-    function(x, transactions, alpha = 0.01, adjust = "bonferroni") standardGeneric("is.significant"))
+    function(x, transactions, method = "fisher", 
+      alpha = 0.01, adjust = "bonferroni") standardGeneric("is.significant"))
 
 setGeneric("is.redundant",
     function(x, ...) standardGeneric("is.redundant"))

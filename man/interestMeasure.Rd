@@ -2,11 +2,12 @@
 \alias{interestMeasure}
 \alias{interestMeasure,rules-method}
 \alias{interestMeasure,itemsets-method}
-\title{Calculating various additional interest measures}
+\title{Calculate Additional Interest Measures}
 \description{
 Provides the generic function \code{interestMeasure} and the needed S4 method 
 to calculate various additional interest measures for existing sets of
-itemsets or rules.
+itemsets or rules. Definitions and equations can be found in
+\href{http://michael.hahsler.net/research/association_rules/measures.html}{Hahsler (2015)}.
 }
 \usage{
 interestMeasure(x, measure, transactions = NULL, reuse = TRUE, ...)
@@ -103,9 +104,12 @@ the proportion of transactions that do not contain \eqn{X}.
   Fisher's Exact Test might be more appropriate 
   (see below).
   
-  Called with \code{significance=TRUE}, the p-value of the test for independence is returned instead of the chi-squared statistic.  
+  Called with \code{significance=TRUE}, the p-value of the test for 
+  independence is returned instead of the chi-squared statistic.  
+  For p-values, substitutes effects can be tested using 
+  the parameter \code{complements = FALSE}.  
   
-  Range: \eqn{[0, \infty]}{[0, Inf]}}
+  Range: \eqn{[0, \infty]}{[0, Inf]}} or p-value scale
 
 \item{"certainty", certainty factor, CF, Loevinger (Berzal et al., 2002)}{
   The certainty factor is a measure of variation of the probability that 
@@ -130,7 +134,7 @@ the proportion of transactions that do not contain \eqn{X}.
   Defined as 
   \eqn{\frac{supp(X)supp(\overline{Y})}{supp(X \cup \overline{Y})}}{supp(X)supp(!Y)/supp(X & !Y)}. 
   
-  Range: \eqn{[.5, \infty]}{[.5, Inf]} (\eqn{1} indicates unrelated items)}
+  Range: \eqn{[0, \infty]}{[0, Inf]} (\eqn{1} indicates unrelated items)}
 
 \item{"cosine" (Tan et al., 2004)}{
   Defined as \eqn{\frac{supp(X \cup Y)}{\sqrt{(supp(X)supp(Y))}}}{supp(X & Y)/sqrt(supp(X)supp(Y))}
@@ -178,8 +182,11 @@ the proportion of transactions that do not contain \eqn{X}.
     Range: \eqn{[-1, 1]}}
 
 \item{"fishersExactTest", Fisher's exact test (Hahsler and Hornik, 2007)}{
-  Statistical significance test used in the analysis of contingency tables 
-  where sample sizes are small. Returns the p-value.
+  p-value of Fisher's exact test used in the analysis of contingency tables 
+  where sample sizes are small.
+  By default complementary effects are mined, substitutes can be found
+  by using the parameter \code{complements = FALSE}. 
+  
   Note that it is equal to hyper-confidence with \code{significance=TRUE}.
   
   Range: \eqn{[0, 1]} (p-value scale)}
@@ -236,7 +243,7 @@ the proportion of transactions that do not contain \eqn{X}.
   there is only a  5\% chance that the count for the rule was generated
   randomly.
   
-  Per default complementary effects are mined, substitutes can be found
+  By default complementary effects are mined, substitutes can be found
   by using the parameter \code{complements = FALSE}. 
   
   Range: \eqn{[0, 1]}}
@@ -267,8 +274,8 @@ the proportion of transactions that do not contain \eqn{X}.
   
   Range: \eqn{[0, 1]}}
 
-\item{"jaccard", Jaccard coefficient (Tan and Kumar, 2000)}{
-  Defined as \eqn{\frac{supp(X \cup Y)}{supp(X) + supp(Y) - supp(X \cup Y)}}{supp(X & Y) / (supp(X) + supp(Y) - supp(X & Y))}
+\item{"jaccard", Jaccard coefficient (Tan and Kumar, 2000) sometimes also called Coherence (Wu et al., 2010)}{
+  Null-invariant measure defined as \eqn{\frac{supp(X \cup Y)}{supp(X) + supp(Y) - supp(X \cup Y)}}{supp(X & Y) / (supp(X) + supp(Y) - supp(X & Y))}
 
   Range: \eqn{[-1, 1]} (0 for independence)}
 
@@ -288,7 +295,7 @@ the proportion of transactions that do not contain \eqn{X}.
 
   Range: \eqn{[-1, 1]} (0 for independence)}
 
-\item{"kulczynski" (Wu, Chen and Han, 2007; Kulczynski, 1927)}{
+\item{"kulczynski" (Wu, Chen and Han, 2010; Kulczynski, 1927)}{
 
   Calculate the null-invariant Kulczynski measure with a preference for 
   skewed patterns. 
@@ -329,6 +336,12 @@ the proportion of transactions that do not contain \eqn{X}.
   Lift quantifies dependence between X and Y by \eqn{\frac{supp(X \cup Y)}{supp(X)supp(Y)}}{supp(X&Y)/(supp(X)supp(Y))}.
   
   Range: \eqn{[0, \infty]}{[0, Inf]} (1 means independence)}
+
+\item{"maxConfidence" (Wu et al. 2010)}{
+  Null-invariant measure defined as \eqn{max{conf(X->Y), conf(X->Y)}}.
+  
+  Range: \eqn{[0, 1]}
+}
 
 \item{"mutualInformation", uncertainty, M (Tan et al., 2002)}{
   Measures the information gain for Y provided by X.
@@ -404,6 +417,9 @@ the proportion of transactions that do not contain \eqn{X}.
    defined.
 }
 \references{
+Hahsler, Michael (2015). 
+A Probabilistic Comparison of Commonly Used Interest Measures for Association Rules, 2015, URL: \url{http://michael.hahsler.net/research/association_rules/measures.html}.
+
 Agrawal, R., H Mannila, R Srikant, H Toivonen, AI Verkamo (1996).
 Fast Discovery of Association Rules.
 \emph{Advances in Knowledge Discovery and Data Mining} 12 (1), 307--328.
@@ -478,10 +494,7 @@ Tan, Pang-Ning, Vipin Kumar, and Jaideep Srivastava (2004). Selecting the right
 objective measure for association analysis. \emph{Information Systems},
 29(4):293--313.
 
-Wu, Tianyi, Yuguo Chen, and Jiawei Han (2007). Association Mining in Large Databases: A Re-examination of Its Measures. In \emph{Proceedings of the 11th European conference on Principles and Practice of Knowledge Discovery in Databases (PKDD 2007)}, Springer-Verlag, Berlin, Heidelberg, 621--628.
-
-Wu, T., Y. Chen, and J. Han (2010). Re-examination of interestingness measures in pattern mining: A unified framework. \emph{Data Mining and Knowledge Discovery},
-2010.
+Wu, T., Y. Chen, and J. Han (2010). Re-examination of interestingness measures in pattern mining: A unified framework. \emph{Data Mining and Knowledge Discovery}, 21(3):371-397, 2010.
 
 Xiong, Hui, Pang-Ning Tan, and Vipin Kumar (2003). Mining strong affinity
 association patterns in data sets with skewed support distribution. In Bart

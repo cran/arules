@@ -16,8 +16,8 @@
 \alias{coerce,NULL,ECparameter-method}
 \alias{coerce,list,ECparameter-method}
 
-\title{Classes ``ASparameter'', ``APparameter'', ``ECparameter'' ---
-  Specifying the `parameter' Argument of apriori() and eclat()}
+\title{Classes ASparameter, APparameter, ECparameter ---
+  Specifying the parameter Argument of apriori() and eclat()}
 \description{
   The \code{ASparameter} class holds the mining parameters (e.g., minimum
   support) for the used mining algorithms.  \code{APparameter} and
@@ -50,7 +50,8 @@
 	\item \code{"frequent itemsets"} 
 	\item \code{"maximally frequent itemsets"}
 	\item \code{"closed frequent itemsets"}
-	\item \code{"rules"} (only available for Apriori) 
+	\item \code{"rules"} (only available for Apriori; 
+	     use \code{\link{ruleInduction}} for \code{eclat}.) 
  	\item \code{"hyperedgesets"} (only available for Apriori; 
 	see references for the definition of association hyperedgesets)
       }
@@ -90,7 +91,8 @@
       a rule (lhs and rhs) instead of lhs support.  Make sure to use
       \code{ext = TRUE} if \code{originalSupport} is set to \code{FALSE}
       (default: \code{TRUE})}
-    \item{\code{maxtime}:}{ Time limit in seconds for checking subsets 
+    \item{\code{maxtime}:}{ Time limit in seconds for checking subsets. 
+    \code{maxtime=0} disables the time limit.  
       (default: 5 seconds)}
   }
   
@@ -118,7 +120,9 @@
 }
 \seealso{
   \code{\link{apriori}},
-  \code{\link{eclat}}
+  \code{\link{eclat}},
+  \code{\link{weclat}} (for weighted rule mining),
+  \code{\link{ruleInduction}}
 }
 \author{Michael Hahsler and Bettina Gruen}
 \keyword{classes}

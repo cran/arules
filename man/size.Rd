@@ -4,7 +4,7 @@
 \alias{size,itemsets-method}
 \alias{size,rules-method}
 \alias{size,tidLists-method}
-\title{Getting the Size of Each Element}
+\title{Number of Items}
 \description{
   Provides the generic function \code{size} and S4 methods to get the size of
   each element from objects based on \code{\linkS4class{itemMatrix}}.  For
@@ -14,10 +14,6 @@
 }
 \usage{
 size(x, ...)
-%\S4method{size}{itemMatrix}(x)
-%\S4method{size}{itemsets}(x)
-%\S4method{size}{rules}(x)
-%\S4method{size}{tidLists}(x)
 }
 \arguments{
   \item{x}{an object.}

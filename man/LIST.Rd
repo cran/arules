@@ -4,9 +4,7 @@
 \alias{LIST,transactions-method}
 \alias{LIST,tidLists-method}
 \alias{coerce,ngCMatrix,list-method}
-\title{
-  List Representation for Objects Based on ``itemMatrix''
-}
+\title{List Representation for Objects Based on Class itemMatrix}
 \description{
   Provides the generic function \code{LIST} and the S4 methods to create a list
   representation from objects based on \code{\linkS4class{itemMatrix}} (e.g.,
@@ -46,13 +44,17 @@ LIST(from, \dots)
 \seealso{
   \code{\link{decode}},
   \code{\link{coerce,itemMatrix,list-method}},
-  \code{\link{itemMatrix-class}}
+  \code{\link{itemMatrix-class}},
+  \code{\link{DATAFRAME}}
 }
 \author{Michael Hahsler}
 \examples{
 data(Adult)
 
+### default coercions (same as as(Adult[1:5], "list"))
 LIST(Adult[1:5])
+
+### coercion without item decoding
 LIST(Adult[1:5], decode = FALSE)
 }
 \keyword{manip}
