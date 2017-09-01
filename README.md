@@ -10,14 +10,45 @@ manipulating and analyzing transaction data and patterns (frequent
 itemsets and association rules). Also provides interfaces to
 C implementations of the association mining algorithms Apriori and Eclat.
 
-Additional packages in the arules family are: 
+### arules core packages: 
 
+* [arules](http://mhahsler.github.io/arules/): arules base package with data structures, mining algorithms (APRIORI and ECLAT), interest measures. 
 * [arulesViz](http://mhahsler.github.io/arulesViz/): Visualization of association rules. 
-* [arulesCBA](http://github.com/ianjjohnson/arulesCBA): Classification based on association rules.  
+* [arulesCBA](http://github.com/ianjjohnson/arulesCBA): Classification algorithms based on association rules (includes CBA).  
 * [arulesSequences](https://cran.r-project.org/package=arulesSequences):
-   Mining frequent sequences.
+   Mining frequent sequences (cSPADE).
+
+### Other related packages:
+
+#### Additional mining algorithms 
+
 * [arulesNBMiner](http://github.com/mhahsler/arulesNBMiner):
   Mining NB-frequent itemsets and NB-precise rules.
+* [opusminer](https://cran.r-project.org/package=opusminer): OPUS Miner algorithm for filtered top-k association discovery.
+* [RKEEL](https://cran.r-project.org/package=RKEEL): Interface to KEEL's association rule mining algorithm.
+* [RSarules](https://cran.r-project.org/package=RSarules): Mining algorithm which randomly samples association rules with one pre-chosen item as the consequent from a transaction dataset.
+
+
+#### In-database analytics
+
+* [ibmdbR](https://cran.r-project.org/package=ibmdbR): IBM in-database analytics for R can calculate association rules from a database table.
+* [rfml](https://cran.r-project.org/package=rfml): Mine frequent itemsets or association rules using a MarkLogic server. 
+
+#### Interface
+
+* [rattle](https://cran.r-project.org/package=rattle): Provides a graphical user interface for association rule mining.
+* [pmml](https://cran.r-project.org/package=pmml): Generates PMML (predictive model markup language) for association rules.
+
+#### Classification 
+
+* [arc](https://cran.r-project.org/package=arc): Alternative CBA implementation. 
+* [rCBA](https://cran.r-project.org/package=rCBA): Alternative CBA implementation.
+* [sblr](https://cran.r-project.org/package=sbrl): Scalable Bayesian rule lists algorithm for classification.
+
+#### Recommendation/Prediction
+
+* [recommenerlab](https://cran.r-project.org/package=recommenderlab): Supports creating predictions using association rules.
+
 
 ## Installation
 
@@ -27,7 +58,8 @@ install.packages("arules")
 ```
 __Current development version:__ Download package from [AppVeyor](https://ci.appveyor.com/project/mhahsler/arules/build/artifacts) or install from GitHub (needs devtools). 
 ```R 
-install_git("mhahsler/arules")
+library("devtools")
+install_github("mhahsler/arules")
 ``` 
 
 ## Usage

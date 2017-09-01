@@ -51,7 +51,8 @@ setMethod("interestMeasure",  signature(x = "itemsets"),
    
     ## deal with multiple measures
     if(length(measure) > 1) return(as.data.frame(sapply(measure, FUN = 
-        function(m) interestMeasure(x, m, transactions, reuse, ...))))
+        function(m) interestMeasure(x, m, transactions, reuse, ...),
+      USE.NAMES = TRUE, simplify = FALSE)))
     
     ## first see if we already have it:
     if(reuse && !is.null(quality(x)[[measure]])) return(quality(x)[[measure]])
@@ -142,6 +143,7 @@ setMethod("interestMeasure",  signature(x = "rules"),
       "mutualInformation", "lambda", "jMeasure", "laplace",
       "certainty", "addedValue",
       "maxconfidence",
+      "rulePowerFactor",
        
       "ralambrodrainy",
       "descriptiveConfirm",
@@ -169,9 +171,9 @@ setMethod("interestMeasure",  signature(x = "rules"),
     
     measure <- builtin_measures[ind]
    
-    ## deal with multiple measures
     if(length(measure) > 1) return(as.data.frame(sapply(measure, FUN = 
-        function(m) interestMeasure(x, m, transactions, reuse, ...))))
+        function(m) interestMeasure(x, m, transactions, reuse, ...), 
+      USE.NAMES = TRUE, simplify = FALSE)))
     
     ## first see if we already have it:
     if(reuse && !is.null(quality(x)[[measure]])) return(quality(x)[[measure]])
@@ -181,13 +183,17 @@ setMethod("interestMeasure",  signature(x = "rules"),
       transactions, type = "relative"))
     if(measure == "coverage") return(coverage(x, transactions, reuse))
     if(measure == "confidence") return(
-      interestMeasure(x, "support", transactions, reuse)/
+      interestMeasure(x, "support", transactions, reuse) /
         interestMeasure(x, "coverage", transactions, reuse))
     if(measure == "lift") return(
-      interestMeasure(x, "support", transactions, reuse)/
+      interestMeasure(x, "support", transactions, reuse) /
         (interestMeasure(x, "coverage", transactions, reuse) 
           * support(rhs(x), transactions)))
-    if(measure == "improvement") return(.improvement(x, transactions, reuse, ...))
+    if(measure == "rulePowerFactor") return(
+      interestMeasure(x, "support", transactions, reuse) * 
+        interestMeasure(x, "confidence", transactions, reuse))
+    if(measure == "improvement") return(
+      .improvement(x, transactions, reuse, ...))
     if(measure == "hyperLift") return(
       .hyperLift(x, transactions, reuse, ...))
     if(measure == "hyperConfidence") return(
@@ -384,7 +390,7 @@ setMethod("interestMeasure",  signature(x = "rules"),
   if(measure == "collectiveStrength") return(f11*f00/(f1x*fx1+f0x+fx0) * 
       (N^2 -f1x*fx1-f0x*fx0)/(N-f11-f00))
   if(measure == "jaccard") return(f11/(f1x+fx1-f11))
-  if(measure == "kappa") return((N*f11+N*f00-f1x*fx1-f0x*fx0)/N^2-f1x*fx1-f0x*fx0)
+  if(measure == "kappa") return((N*f11+N*f00-f1x*fx1-f0x*fx0)/(N^2-f1x*fx1-f0x*fx0))
   if(measure == "lambda") {
     max_x0x1 <- apply(cbind(fx1, fx0), 1, max)
     lambda <- (apply(cbind(f11, f10), 1, max) + apply(cbind(f01, f00), 1, max) -
@@ -415,7 +421,7 @@ setMethod("interestMeasure",  signature(x = "rules"),
   if(measure == "confirmedConfidence") return(1 - 2*f10/f1x)
   if(measure == "casualSupport") return((f1x+fx1-2*f10)/N)
   if(measure == "casualConfidence") return(1 - f10/N * (1/f1x + 1/fx1))
-  if(measure == "leastContradiction") return((f1x - 2*f10)/fx1)
+  if(measure == "leastContradiction") return((f1x - f10)/fx1)
   if(measure == "centeredConfidence") return(fx0/N - f10/f1x)
   if(measure == "varyingLiaison") return((f1x-f10)/(f1x*fx1/N) - 1)
   if(measure == "yuleQ") {

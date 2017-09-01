@@ -164,7 +164,7 @@ the proportion of transactions that do not contain \eqn{X}.
     
     Range: \eqn{[-1, 1]}}
 
-\item{"counterexample", example and counterexample rate}{
+\item{"counterexample", example and counter-example rate}{
     \eqn{\frac{supp(X \cup Y) - supp(X \cup \overline{Y})}{supp(X \cup Y)}}{(supp(X & Y) - supp(X & !Y)) / supp(X & Y)}
     
     Range: \eqn{[0, 1]}}
@@ -360,7 +360,7 @@ the proportion of transactions that do not contain \eqn{X}.
     
   Range: \eqn{[-1, 1]} (0 when X and Y are independent)}
 
-\item{"ralambrodrainy", Ralambrodrainy Measure (Ralambrodrainy, 1991)}{
+\item{"ralambrodrainy", Ralambrodrainy Measure (Diatta et al, 2007)}{
     
     Range: \eqn{[0, 1]}}
 
@@ -373,6 +373,12 @@ the proportion of transactions that do not contain \eqn{X}.
     
     Range: \eqn{[0, 1]}}
 
+\item{"rulePowerFactor", rule power factor (Ochin and Kumar, 2016)}{
+
+    Product of support and confidence. Can be seen as rule confidence weighted
+    by support. 
+    
+    Range: \eqn{[0, 1]}}
 
 \item{"sebag", Sebag measure (Sebag and Schoenauer, 1988)}{
     Defined as \eqn{\frac{supp(X \cup Y)}{supp(X \cup \overline{Y})}}{supp(X & Y)/supp(X & !Y)}
@@ -430,6 +436,10 @@ approche et une etude de sensibilite au bruit. In
 \emph{Mesures de Qualite pour la fouille de donnees. 
 Revue des Nouvelles Technologies de l'Information, RNTI.}
 
+Bernard, Jean-Marc and Charron, Camilo (1996).
+L'analyse implicative bayesienne, une methode pour l'etude des dependances orientees. II : modele logique sur un tableau de contingence
+Mathematiques et Sciences Humaines, Volume 135 (1996), p. 5--18. 
+
 Bayardo, R. , R. Agrawal, and D. Gunopulos (2000). 
 Constraint-based rule mining
 in large, dense databases.  \emph{Data Mining and Knowledge Discovery},
@@ -444,6 +454,8 @@ Brin, Sergey, Rajeev Motwani, Jeffrey D. Ullman, and Shalom Tsur (1997). Dynamic
 itemset counting and implication rules for market basket data. In \emph{SIGMOD
 1997, Proceedings ACM SIGMOD International Conference on Management of Data},
 pages 255--264, Tucson, Arizona, USA.
+
+Diatta, J., H. Ralambondrainy, and A. Totohasina (2007). Towards a unifying probabilistic implicative normalized quality measure for association rules. In \emph{Quality Measures in Data Mining,} 237--250, 2007.
 
 Hahsler, Michael and Kurt Hornik (2007). New probabilistic interest measures for association rules. \emph{Intelligent Data Analysis}, 11(5):437--455.
 
@@ -467,6 +479,8 @@ Liu, Bing, Wynne Hsu, and Yiming Ma (1999). Pruning and summarizing the
 discovered associations. In \emph{KDD '99: Proceedings of the fifth ACM SIGKDD
 international conference on Knowledge discovery and data mining}, pages
 125--134.  ACM Press, 1999.
+
+Ochin, Suresh, and  Kumar, Nisheeth Joshi (2016). Rule Power Factor: A New Interest Measure in Associative Classification. \emph{6th International Conference On Advances In Computing and Communications, ICACC 2016,} 6-8 September 2016, Cochin, India.
 
 Omiecinski, Edward R. (2003). Alternative interest measures for mining
 associations in databases. \emph{IEEE Transactions on Knowledge and Data
