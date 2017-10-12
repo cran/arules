@@ -1,6 +1,6 @@
 Package: arules
-Version: 1.5-3
-Date: 2017-08-17
+Version: 1.5-4
+Date: 2017-10-12
 Title: Mining Association Rules and Frequent Itemsets
 Authors@R: c(person("Michael", "Hahsler", role = c("aut", "cre", "cph"),
 		email = "mhahsler@lyle.smu.edu"),
@@ -15,7 +15,7 @@ Description: Provides the infrastructure for representing,
     C implementations of the association mining algorithms Apriori and Eclat
     by C. Borgelt.
 Classification/ACM: G.4, H.2.8, I.5.1
-URL: http://mhahsler.github.io/arules/, http://lyle.smu.edu/IDA/arules
+URL: https://github.com/mhahsler/arules, http://lyle.smu.edu/IDA/arules
 BugReports: https://github.com/mhahsler/arules
 Depends: R (>= 3.3.2), Matrix (>= 1.2-0)
 Imports: stats, methods, graphics, utils
@@ -27,7 +27,7 @@ Copyright: The code for apriori and eclat in src/rapriori.c was
         Michael Hahsler, Christian Buchta, Bettina Gruen and Kurt
         Hornik.
 NeedsCompilation: yes
-Packaged: 2017-08-31 22:51:10 UTC; hahsler
+Packaged: 2017-10-12 05:03:00 UTC; hahsler
 Author: Michael Hahsler [aut, cre, cph],
   Christian Buchta [aut, cph],
   Bettina Gruen [aut, cph],
@@ -36,4 +36,4 @@ Author: Michael Hahsler [aut, cre, cph],
   Christian Borgelt [ctb, cph]
 Maintainer: Michael Hahsler <mhahsler@lyle.smu.edu>
 Repository: CRAN
-Date/Publication: 2017-09-01 15:11:07 UTC
+Date/Publication: 2017-10-12 19:27:26 UTC

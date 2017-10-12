@@ -1,3 +1,15 @@
+# arules 1.5-4 (10/12/2017)
+
+## New Features
+* Improved speed for read.transactions with format = "single" significantly.
+* Appearance for apriori now guesses the default parameter automatically and 
+  does some more checking, making the specification of templates easier.
+
+## Bug Fixes
+* Fixed null pointer in error message code.
+* head does now not result in an error for empty rule sets 
+  (bug reported by cornejom).
+
 # arules 1.5-3 (08/31/2017)
 
 ## New Features

@@ -1,6 +1,7 @@
 # arules --- Mining Association Rules and Frequent Itemsets with R
 
 [![CRAN version](http://www.r-pkg.org/badges/version/arules)](https://cran.r-project.org/package=arules)
+ [![Rdoc](http://www.rdocumentation.org/badges/version/arules)](http://www.rdocumentation.org/packages/arules) 
 [![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/arules)](https://cran.r-project.org/package=arules)
 [![Travis-CI Build Status](https://travis-ci.org/mhahsler/arules.svg?branch=master)](https://travis-ci.org/mhahsler/arules)
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/mhahsler/arules?branch=master&svg=true)](https://ci.appveyor.com/project/mhahsler/arules)
@@ -12,8 +13,8 @@ C implementations of the association mining algorithms Apriori and Eclat.
 
 ### arules core packages: 
 
-* [arules](http://mhahsler.github.io/arules/): arules base package with data structures, mining algorithms (APRIORI and ECLAT), interest measures. 
-* [arulesViz](http://mhahsler.github.io/arulesViz/): Visualization of association rules. 
+* [arules](https://cran.r-project.org/package=arules): arules base package with data structures, mining algorithms (APRIORI and ECLAT), interest measures. 
+* [arulesViz](https://cran.r-project.org/package=arulesViz): Visualization of association rules. 
 * [arulesCBA](http://github.com/ianjjohnson/arulesCBA): Classification algorithms based on association rules (includes CBA).  
 * [arulesSequences](https://cran.r-project.org/package=arulesSequences):
    Mining frequent sequences (cSPADE).
