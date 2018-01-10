@@ -1,3 +1,12 @@
+# arules 1.5-5 (01/09/2018)
+
+## New Features
+* Added (absolut support) "count" as an interest measure. 
+* itemLabels can now be assigned for rules and itemsets. 
+
+## Bug Fixes
+* Fixed bug in subset with signature itemMatrix, itemMatrix (reported by rwdvc).
+
 # arules 1.5-4 (10/12/2017)
 
 ## New Features

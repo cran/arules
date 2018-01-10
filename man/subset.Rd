@@ -33,16 +33,21 @@ so the items (lhs/rhs/items) and the columns in the quality
 data.frame can be directly referred to by their names.
 
 Important operators to select itemsets containing items specified by their 
-labels are \code{\%in\%} (select itemsets matching
-\emph{any} given item),  \code{\%ain\%} (select only itemsets matching
-\emph{all} given item) and  \code{\%pin\%} (\code{\%in\%} with partial
-matching).
+labels are 
+\code{\%in\%} (select itemsets matching \emph{any} given item),  
+\code{\%ain\%} (select only itemsets matching \emph{all} given item),
+\code{\%oin\%} (select only itemsets matching \emph{only} the given item),
+and  \code{\%pin\%} (\code{\%in\%} with partial matching).
 }
 \value{
 An object of the same class as \code{x} containing only the
 elements which satisfy the conditions.
 }
 \seealso{
+  \code{\link{\%in\%}},
+  \code{\link{\%pin\%}},
+  \code{\link{\%ain\%}},
+  \code{\link{\%oin\%}},
   \code{\link{itemMatrix-class}},
   \code{\link{itemsets-class}},
   \code{\link{rules-class}},
