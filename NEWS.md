@@ -1,3 +1,19 @@
+# arules 1.6-0 (2/28/2018)
+
+## Major Changes
+* discretize: the default method is now "frequency" and categories was 
+    renamed breaks to be consistent with cut in R-base.
+
+## New Features
+* Added interest measure "importance".
+* Added method items for transactions.
+* Added discretizeDF to apply discretization to all numeric 
+  columns in a data.frame.
+
+## Bug Fixes
+* Fixed typo in inspect for tidLists (reported by Carlos Chavarria). 
+* Fixed bug in %in% for itemMatrix (reported by Henrique Lemos)
+
 # arules 1.5-5 (01/09/2018)
 
 ## New Features
@@ -6,6 +22,7 @@
 
 ## Bug Fixes
 * Fixed bug in subset with signature itemMatrix, itemMatrix (reported by rwdvc).
+* Fixed pointer punning warning.
 
 # arules 1.5-4 (10/12/2017)
 
