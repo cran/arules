@@ -1,6 +1,6 @@
 Package: arules
-Version: 1.6-0
-Date: 2018-2-28
+Version: 1.6-1
+Date: 2018-04-04
 Title: Mining Association Rules and Frequent Itemsets
 Authors@R: c(person("Michael", "Hahsler", role = c("aut", "cre", "cph"),
 		email = "mhahsler@lyle.smu.edu"),
@@ -25,8 +25,9 @@ Copyright: The code for apriori and eclat in src/rapriori.c was
         1996-2003 Christian Borgelt. All other code is Copyright (C)
         Michael Hahsler, Christian Buchta, Bettina Gruen and Kurt
         Hornik.
+RoxygenNote: 6.0.1
 NeedsCompilation: yes
-Packaged: 2018-03-01 00:20:03 UTC; hahsler
+Packaged: 2018-04-07 03:17:59 UTC; hahsler
 Author: Michael Hahsler [aut, cre, cph],
   Christian Buchta [aut, cph],
   Bettina Gruen [aut, cph],
@@ -35,4 +36,4 @@ Author: Michael Hahsler [aut, cre, cph],
   Christian Borgelt [ctb, cph]
 Maintainer: Michael Hahsler <mhahsler@lyle.smu.edu>
 Repository: CRAN
-Date/Publication: 2018-03-06 16:56:13 UTC
+Date/Publication: 2018-04-07 03:48:04 UTC
