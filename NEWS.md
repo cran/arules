@@ -1,3 +1,16 @@
+# arules 1.6-2 (12/02/2018)
+
+## New Features
+* discretizeDF now understands the method "none" which skips discretization.
+* discretizeDF now reports which column produces the problem.
+
+## Changes
+* transactions: numeric columns are now discretized during coersion using discretizeDF (with a warning).
+
+## Bug Fixes
+* The spurious warning for reaching maxlen in apriori is now removed (reported by Ryan J. Cole).
+* Fixed matrix check in function dissimilarity. 
+
 # arules 1.6-1 (04/04/2018)
 
 ## Bug Fixes

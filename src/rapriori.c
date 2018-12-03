@@ -373,7 +373,9 @@ ta_sort(iset->items, iset->cnt); /* prepare the transaction */
       double supp, conf;
       char   *apps    = NULL;       /* item appearance indicator vector */
       clock_t     t,tt,tc,x;        /* timer for measurements */
-      
+      int maxlen_warn = param->maxlen;
+        
+        
       tacnt = in->tnb;
       /* --- set transactions --- */
       t = clock();                /* start the timer */
@@ -470,13 +472,14 @@ ta_sort(iset->items, iset->cnt); /* prepare the transaction */
         /* Check if we run into limits */
         if(ist_height(istree) >= param->maxlen){
           /* if (param->verbose) Rprintf(" *stopping (maxlen reached)*"); */
-          Rf_warning("Mining stopped (maxlen reached). Only patterns up to a length of %d returned!", param->maxlen);
+          if(ist_height(istree) >= maxlen_warn)
+            if (param->verbose) Rf_warning("Mining stopped (maxlen reached). Only patterns up to a length of %d returned!", param->maxlen);
           break;
         }
         
         if(SEC_SINCE(t) > param->maxtime && param->maxtime > 0) {
           /* if (param->verbose) Rprintf(" *stopping (time limit)*"); */
-          Rf_warning("Mining stopped (time limit reached). Only patterns up to a length of %d returned!", 
+          if (param->verbose) Rf_warning("Mining stopped (time limit reached). Only patterns up to a length of %d returned!", 
                      ist_height(istree));
           break;
         }
@@ -801,16 +804,16 @@ SEXP returnObject(RULESET *set, SEXP dim, ARparameter *param, SEXP itemInfo)
   SEXP ans, class, tp, qual, q, rownames, names, items, lhs, rhs, trans, tidLists;
   
   if (param->target <= TT_CLSET)	{
-    ans = PROTECT(NEW_OBJECT(MAKE_CLASS("itemsets")));
+    ans = PROTECT(NEW_OBJECT_OF_CLASS("itemsets"));
     len = 1; /* number of quality measures */
   }
   else if (param->target == TT_RULE) {
-    ans = PROTECT(NEW_OBJECT(MAKE_CLASS("rules")));
+    ans = PROTECT(NEW_OBJECT_OF_CLASS("rules"));
     len = 3;
   }
   else {
     /* hyperedges */
-    ans = PROTECT(NEW_OBJECT(MAKE_CLASS("itemsets")));
+    ans = PROTECT(NEW_OBJECT_OF_CLASS("itemsets"));
     len = 2;
   }
   
@@ -819,7 +822,7 @@ SEXP returnObject(RULESET *set, SEXP dim, ARparameter *param, SEXP itemInfo)
   if (param->ext) len++;
   
   /* set items/lhs */
-  items = PROTECT(NEW_OBJECT(MAKE_CLASS("ngCMatrix")));
+  items = PROTECT(NEW_OBJECT_OF_CLASS("ngCMatrix"));
   tp = PROTECT(NEW_INTEGER(set->ttotal));
   for (i = 0; i < set->ttotal; i++) 
     INTEGER(tp)[i] = atoi(set->body[i]);
@@ -840,7 +843,7 @@ SEXP returnObject(RULESET *set, SEXP dim, ARparameter *param, SEXP itemInfo)
   
   sort_ngCMatrix(items);
   
-  lhs = PROTECT(NEW_OBJECT(MAKE_CLASS("itemMatrix")));
+  lhs = PROTECT(NEW_OBJECT_OF_CLASS("itemMatrix"));
   SET_SLOT(lhs , install("data"), items);
   SET_SLOT(lhs , install("itemInfo"), itemInfo);
   
@@ -852,7 +855,7 @@ SEXP returnObject(RULESET *set, SEXP dim, ARparameter *param, SEXP itemInfo)
   
   /* set rhs for rules */	
   if (param->target == TT_RULE) {
-    items = PROTECT(NEW_OBJECT(MAKE_CLASS("ngCMatrix")));
+    items = PROTECT(NEW_OBJECT_OF_CLASS("ngCMatrix"));
     
     tp = PROTECT(NEW_INTEGER(set->rnb));
     for (i = 0; i < set->rnb; i++) 
@@ -873,7 +876,7 @@ SEXP returnObject(RULESET *set, SEXP dim, ARparameter *param, SEXP itemInfo)
     
     sort_ngCMatrix(items);
     
-    rhs =  PROTECT(NEW_OBJECT(MAKE_CLASS("itemMatrix")));
+    rhs =  PROTECT(NEW_OBJECT_OF_CLASS("itemMatrix"));
     SET_SLOT(rhs, install("data"), items);
     SET_SLOT(rhs, install("itemInfo"), itemInfo);
     SET_SLOT(ans, install("rhs"), rhs);
@@ -929,7 +932,7 @@ SEXP returnObject(RULESET *set, SEXP dim, ARparameter *param, SEXP itemInfo)
   
   /* set transaction ID list (possible with eclat) */	
   if (param->trans) {
-    trans = PROTECT(NEW_OBJECT(MAKE_CLASS("ngCMatrix")));
+    trans = PROTECT(NEW_OBJECT_OF_CLASS("ngCMatrix"));
     
     tp = PROTECT(NEW_INTEGER(set->trtotal));
     for (i = 0; i < set->trtotal; i++) INTEGER(tp)[i] = set->trans[i];
@@ -951,7 +954,7 @@ SEXP returnObject(RULESET *set, SEXP dim, ARparameter *param, SEXP itemInfo)
     
     sort_ngCMatrix(trans);
     
-    tidLists = PROTECT(NEW_OBJECT(MAKE_CLASS("tidLists")));
+    tidLists = PROTECT(NEW_OBJECT_OF_CLASS("tidLists"));
     SET_SLOT(tidLists, install("data"), trans);
     
     SET_SLOT(ans, install("tidLists"), tidLists);
@@ -1041,11 +1044,11 @@ SEXP rapriori(SEXP x, SEXP y, SEXP dim, SEXP parms, SEXP control, SEXP app, SEXP
     else param.rsdef = IST_BODY;
     
     if ((param.target == TT_HEDGE) & param.ext) {
-      warning("No extended measure available.\n");
+      Rf_warning("No extended measure available.\n");
       LOGICAL(GET_SLOT(parms, install("ext")))[0] = param.ext = 0;
     }
     if ((param.target != TT_RULE) & param.aval) {
-      warning("No additional measure available.\n");
+      Rf_warning("No additional measure available.\n");
       LOGICAL(GET_SLOT(parms, install("aval")))[0] = param.aval= 0;
       param.arem = EM_NONE;
       SET_SLOT(parms, install("arem"), PROTECT(ScalarString(CREATE_STRING_VECTOR("none"))));
@@ -1054,7 +1057,7 @@ SEXP rapriori(SEXP x, SEXP y, SEXP dim, SEXP parms, SEXP control, SEXP app, SEXP
     if (param.arem == EM_NONE)   {       /* if no add. rule eval. measure, */
     REAL(GET_SLOT(parms, install("minval")))[0] = param.minval = 0;
       if (param.aval) {
-        warning("No additional measure available.\n");		
+        Rf_warning("No additional measure available.\n");		
         LOGICAL(GET_SLOT(parms, install("aval")))[0] = param.aval = 0;
         /* clear the corresp. output flag */
       }
@@ -1071,7 +1074,7 @@ SEXP rapriori(SEXP x, SEXP y, SEXP dim, SEXP parms, SEXP control, SEXP app, SEXP
           
         }/* rule specific settings */
         if ((param.filter <= -1) || (param.filter >= 1)) {
-          warning("Parameter 'filter' set to 0.\n");
+          Rf_warning("Parameter 'filter' set to 0.\n");
           REAL(GET_SLOT(control, install("filter")))[0] = param.filter = 0;
           
         }
