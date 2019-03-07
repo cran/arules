@@ -1,3 +1,12 @@
+# arules 1.6-3 (03/06/2019)
+
+## New Features
+* read.transactions gained parameter header to read files with column headers.
+
+## Bug Fixes
+* Fixed PROTECT placement in C code discovered by rchk.
+* S4 objects use now show instead of print.
+
 # arules 1.6-2 (12/02/2018)
 
 ## New Features

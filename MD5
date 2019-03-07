@@ -1,6 +1,6 @@
-86b1b0c60385b3d3b267ecedd0abd867 *DESCRIPTION
+84a2a96642cda153ad978f487c04bc04 *DESCRIPTION
 e3afc9b2ad3378811d13b932b07b27e8 *NAMESPACE
-af7c964f1c4360f27bcea35ee7dbcd70 *NEWS.md
+ef41b0e0f0e99a36b7693a2a0618fd06 *NEWS.md
 e683b9da0ea2dd3bb07269445deb499f *R/AAADefs.R
 cc421a91d173947a3676a606c49d48a6 *R/AllClasses.R
 806417c801b8481f3ac15f6198a7f8b9 *R/AllGenerics.R
@@ -10,14 +10,14 @@ e3ad3ac32248fb37e8ab07886da82728 *R/abbreviate.R
 3a986932de8840bff6995973479a1a45 *R/addComplement.R
 add29924ee7c2d3832577f27e5f33acb *R/aggregate.R
 a51b0b8c8cbf96900ebff54abde82a69 *R/appearance.R
-b58140a75ec9efbfde568493f829a274 *R/apriori.R
+805ed4ac44eefd2b137e8c4a761497b7 *R/apriori.R
 81d7cceee35dee8b4e95796db7f62167 *R/associations.R
 533892a8934371dc62d8f238dda85b1d *R/control.R
 d84e671f91d84f66c3b11c316c0bd313 *R/coverage.R
 9bee3ae6c7516c695e5f9e4d1a49ac7c *R/crossTable.R
 922dff8e5e8ef79a49b29b57cbee80bc *R/discretize.R
 40e3ebc9df66a4d343bfbef9ebea41da *R/dissimilarity.R
-80c416c142271d97caf2cef52a606c3c *R/eclat.R
+1d50d35cb3ea75abd526cf30a1ec1f4b *R/eclat.R
 7d0b7ff2a39e93543270b95b486e5144 *R/image.R
 be0551ad829c4c24c883453b965e7388 *R/inspect.R
 623e1c0eb414663ef56ff39853c5e86e *R/interestMeasures.R
@@ -35,7 +35,7 @@ b69f7a893904f1993bbf34708ec76c17 *R/parameter.R
 f00057aa3c21cf238cc4ee21d629a61d *R/pmml.R
 7a94622b2ef240f9c927d26c98058135 *R/predict.R
 a5a283bfbdd71f3122e5abf5e270f59d *R/random.transactions.R
-9bef4601a786fda55b8bd53a1cbd1efa *R/read_write.R
+f4c90ee451d50c7f1761d626730a7a79 *R/read_write.R
 e36bff528f3a5a946d95e1993d569e96 *R/ruleInduction.R
 68292230085bca597317a3771daecee7 *R/rules.R
 07f9ed45216c34e7b1d3ec4bc1f09b10 *R/sample.R
@@ -46,7 +46,7 @@ ca750ad6829025a70540e4291e073bd2 *R/sets.R
 f95f56e2cfba1d82d66fd4c6951e7084 *R/supportingTransactions.R
 a0913165fe7070349637ac8af7a2bb39 *R/tidLists.R
 ea1d0ac2f5faa0759b725e88718e1f61 *R/transactions.R
-f670e8281d41216401f021e53b9f71b5 *R/warm.R
+cf60ff311eacaffc25daa77d2499194e *R/warm.R
 43d6b1fa080ff4d92b582cbb5573a134 *README.md
 c280c1522f08a82e386373a8f7a25c3e *build/vignette.rds
 c2588d596b5509c7d0abf8d7fa83b982 *data/Adult.rda
@@ -58,10 +58,10 @@ fd55b4f46a67abb3dc7d4b6b78bb762a *data/IncomeESL.rda
 ebcf61faebc4e1f4571078220d5150be *data/Mushroom.rda
 d29a7c6a484acc7fddc69314a2f9bff4 *data/SunBai.rda
 75860e208f7fada719f8f33186a5dcc4 *data/datalist
-3602d275136e89b378345a684d82cb8f *inst/CITATION
+44c054ee3a801e7210ee621ccf00f477 *inst/CITATION
 97e46687e16e0b7daa82a17ff4d26807 *inst/doc/arules.R
 82154e4f85f468e617ba2e4c219f6f75 *inst/doc/arules.Rnw
-7043d6cad24d8364140d8f88381fcf63 *inst/doc/arules.pdf
+428ee06ec3de4361f927bec63d365551 *inst/doc/arules.pdf
 26e6030c1b852de77291cb173f39f603 *man/APappearance-class.Rd
 aa2292aa4c976c6d072fbee43647c2e5 *man/AScontrol-class.Rd
 905146969986a318ecbd4a2ea02ab9e3 *man/ASparameter-class.Rd
@@ -108,7 +108,7 @@ d5b94a4dfa4d88e9dec332ebec5b320b *man/pmml.Rd
 0d125334a0859b4a5c3a4743ce3190ad *man/predict.Rd
 10176f368059484d14c1869b8d98b34a *man/proximity-classes.Rd
 a3d685da546498cdc275555fa8eab450 *man/random.transactions.Rd
-d2eaf459f6b2595c499bb777d50c3cf3 *man/read.transactions.Rd
+f327c06f7a8a2b94d8755bd448f8eb14 *man/read.transactions.Rd
 5c6cbcd0ed442271ba451c7edbccf707 *man/ruleInduction.Rd
 fc18e49307bb71f111fa7b1e88fe3978 *man/rules-class.Rd
 e826a87b76d52a7d8cc8ade46fc5109d *man/sample.Rd
@@ -120,7 +120,7 @@ e826a87b76d52a7d8cc8ade46fc5109d *man/sample.Rd
 b457a78d6b269f53d97613e2e8be7942 *man/support.Rd
 8b796030a5fb4d860f97aa0dd4df9a15 *man/supportingTransactions.Rd
 08f436507fbc997d0e80113434095f0e *man/tidLists-class.Rd
-46747c9d57cb8bf7b80ede723088ddb1 *man/transactions-class.Rd
+29c47510d34c514730373b5680190f4d *man/transactions-class.Rd
 ddece7bcdaa4974d40acca4f3fc0f973 *man/unique.Rd
 80db72858c19fff61b7e4a252f7e3e50 *man/weclat.Rd
 81a9f129f76ba6c004aa0070e1caa1ac *man/write.Rd
@@ -136,11 +136,11 @@ f4449ce318828e9cd8f8dde57f6e7106 *src/istree.c
 2442bcb670833ea3a23eab899119a971 *src/matrix.c
 7fafe2e48de116a733ed59b30c5d8543 *src/newS4object.c
 81139ca0dad96021337c96eb58992cbe *src/newS4object.h
-99c20a9a2689345fe774bbe37ae5b386 *src/ptree.c
-6ce7e15e61202b7fa184a154bbaff80d *src/rapriori.c
+ac8f6b999bb55f538eb9fd48431cc133 *src/ptree.c
+38cb0914b8832ecadd55749b538d567b *src/rapriori.c
 758bddb5c4f14cbc549dd467087aa3e4 *src/rapriori.h
 c20038ef96d846ed41dc2314eba90b6b *src/reclat.c
-909d325a6be206bb587822b32c8f2a90 *src/similarity.c
+e9cb98a45433f40b9443f3d529e2caf3 *src/similarity.c
 1f76c59fe7c75faf1e237789a0466a44 *src/symtab.c
 998bae7a7825866a6f84ec2be24641d9 *src/symtab.h
 d1a45f3bec6bb51b0e2ae98c88da65e8 *src/tfscan.c
@@ -150,7 +150,7 @@ d1a45f3bec6bb51b0e2ae98c88da65e8 *src/tfscan.c
 07f66ed5f4d37d23895b648f6c692bd4 *src/tract.h
 e4c06b880a1b90000f1eb0365f233400 *src/vecops.c
 c7e84bbabd243ca6c76989ea92ff861a *src/vecops.h
-d6b2838787a5c27dc65131b3b042235c *src/warm.c
+747aaaca738d7b1c9f49def314dcb27d *src/warm.c
 51f87c64bb41ecf16188a5e0cca045e4 *tests/testthat.R
 f288b7639dd2daa0dc9252d7ad9a3d53 *tests/testthat/test-apriori.R
 fdab06ab09a6571b4040c4caef0d3fff *tests/testthat/test-associations.R
@@ -160,7 +160,7 @@ f1ac94bfa17fae4dfb73bc29ff6be20a *tests/testthat/test-extract.R
 df06300ab9a5cb6b97ddede4a37e4114 *tests/testthat/test-itemMatrix.R
 8ebd198560fbb3adf1634a8e0f301e4e *tests/testthat/test-matrix.R
 496b36acd99f83fcdd5167a3f78c66ff *tests/testthat/test-missing.R
-633dcbeb8ceb09d3c4bba614a9fc64c8 *tests/testthat/test-read_write.R
+a5c550e90bc29bade73b683fce2081e1 *tests/testthat/test-read_write.R
 79d4cc61a1372239edfa561f5466535d *tests/testthat/test-ruleInduction.R
 c8b787e14c5e621b16ffcb32b8f78a32 *tests/testthat/test-sets.R
 f3bd0576026cd73e12daa7c55ac094a4 *tests/testthat/test-tidLists.R
