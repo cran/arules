@@ -1,3 +1,9 @@
+# arules 1.6-4 (08/27/2019)
+
+## Bug Fixes
+* Fixed rounding bug affecting is.closed (reported by clcazer).
+* Fixed TYPO in Ralambondrainy Measure (reported by andreijl).
+
 # arules 1.6-3 (03/06/2019)
 
 ## New Features
