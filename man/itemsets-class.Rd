@@ -26,9 +26,6 @@
 \description{
   The \code{itemsets} class represents a set of itemsets and the associated
   quality measures. 
-  
-  Note that the class can also represent a multiset of itemsets with duplicated
-  elements. Duplicated elements can be removed with \code{\link{unique}}.
 }
 \section{Objects from the Class}{
   Objects are the result of calling the functions \code{\link{apriori}}
@@ -73,7 +70,7 @@
 %      returns the item labels used to encode the itemsets.}
     \item{labels}{\code{signature(object = "itemsets")};
       returns labels for the itemsets as a
-      character vector. The labels have te following format: 
+      character vector. The labels have the following format: 
 	"{item1, item2,..., itemn}"}
    \item{itemLabels}{\code{signature(object = "itemsets")};
       returns the item labels used to encode the itemsets as
@@ -87,7 +84,19 @@
       returns the transaction ID list}
   }
 }
+\details{
+  Itemsets are usually created by calling an association rule mining algorithm like \code{\link{apriori}}.
+  Itemsets store the items as an object of class \code{\link{itemMatrix}}. 
+  
+  To create itemsets manually, the itemMatrix for the items
+  of the itemsets can be created using \code{\link{itemCoding}}.
+  An example is in the Example section below.
+  
+  Mined itemsets sets typically contain several interest measures accessible with the \code{\link{quality}} method.
+  Additional measures can be calculated via \code{\link{interestMeasure}}.
+}
 \seealso{
+  \code{\link{associations-class}}, 
   \code{\link{[-methods}},
   \code{\link{apriori}},
   \code{\link{c}},
@@ -95,12 +104,12 @@
   \code{\link{eclat}},
   \code{\link{inspect}},
   \code{\link{is.maximal}},
+  \code{\link{itemCoding}}
   \code{\link{length}},
   \code{\link{match}},
   \code{\link{sets}},
   \code{\link{size}},
   \code{\link{subset}},
-  \code{\link{associations-class}}, 
   \code{\link{tidLists-class}} 
 }
 \author{Michael Hahsler}
@@ -124,5 +133,17 @@ as(items(fsets.top5), "matrix")
 ## Warning: for efficiency reasons, the ngCMatrix you get is transposed 
 as(items(fsets.top5), "ngCMatrix")
 
+## Create a rules for the Adult dataset manually and calcualte some interest Measures
+twoitemsets <- new("itemsets", 
+  items = encode(list(
+      c("age=Young", "relationship=Unmarried"),
+      c("age=Old")
+    ), itemLabels = itemLabels(Adult))
+)
+
+quality(twoitemsets) <- data.frame(support = interestMeasure(twoitemsets, 
+  measure = c("support"), transactions = Adult))
+
+inspect(twoitemsets)
 }
 \keyword{classes}

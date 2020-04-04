@@ -1,8 +1,23 @@
+# arules 1.6-5 (04/03/2020)
+
+## New Features
+* improved speed for calculating interestMeasures for rules and itemsets with no available 
+  quality information or reuse = FALSE.
+* Manual pages for associations were improved with examples for itemCoding.
+* MAnual page for interestMeasures is now linked with the associated web page.
+* interest measure laplace (Laplace confidence) gained parameter k for the number of classes.
+
+## Bug Fixes
+* read.transactions: Parameter encoding is now correctly passed on to scan (reported by Sisi-Wiciel).
+* interestMeasure was not calculating count for itemsets (reported by clcazer).
+* removed the duplicated interest measure: "descriptiveConfirm" use "confirmedConfidence" instead.
+
 # arules 1.6-4 (08/27/2019)
 
 ## Bug Fixes
 * Fixed rounding bug affecting is.closed (reported by clcazer).
 * Fixed TYPO in Ralambondrainy Measure (reported by andreijl).
+
 
 # arules 1.6-3 (03/06/2019)
 
@@ -12,6 +27,7 @@
 ## Bug Fixes
 * Fixed PROTECT placement in C code discovered by rchk.
 * S4 objects use now show instead of print.
+
 
 # arules 1.6-2 (12/02/2018)
 

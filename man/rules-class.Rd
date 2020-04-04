@@ -31,11 +31,7 @@
 
 \title{Class rules --- A Set of Rules}
 \description{
-The \code{rules} class represents a set of rules.
-
-Note that the class can also represent a multiset of rules with duplicated
-elements. Duplicated elements can be removed with \code{\link{unique}}.
-
+The \code{rules} class represents a set of rules. 
 }
 \section{Objects from the Class}{
   Objects are the result of calling the function \code{\link{apriori}}.
@@ -113,26 +109,41 @@ elements. Duplicated elements can be removed with \code{\link{unique}}.
     \item{summary}{\code{signature(object = "rules")}}
   }
 }
+\details{
+Rules are usually created by calling an assoication rule mining algorithm like \code{\link{apriori}}.
+Rules store the LHS and the RHS separately as objects of class \code{\link{itemMatrix}}. 
+
+To create rules manualy, the itemMatrix for the LHS and the RHS
+of the rules can be created using \code{\link{itemCoding}}.
+Note the two matrices 
+need to have the itemLabels (i.e., columns of the sparse matrix) in the same order.  
+An example is in the Example section below.
+
+Mined rule sets typically contain several interest measures accessible with the \code{\link{quality}} method.
+Additional measures can be calculated via \code{\link{interestMeasure}}.
+
+}
 \seealso{
+\code{\link{associations-class}},
 \code{\link{[-methods}},
 \code{\link{apriori}},
 \code{\link{c}},
 \code{\link{duplicated}},
 \code{\link{inspect}},
+\code{\link{itemCoding}}
 \code{\link{length}},
 \code{\link{match}},
 \code{\link{sets}},
 \code{\link{size}},
 \code{\link{subset}},
-\code{\link{associations-class}},
-\code{\link{itemMatrix-class}},
 }
 \author{Michael Hahsler}
 \examples{
 data("Adult")
 
-## Mine rules.
-rules <- apriori(Adult, parameter = list(support = 0.4))
+## Mine rules
+rules <- apriori(Adult, parameter = list(support = 0.3))
+rules
 
 ## Select a subset of rules using partial matching on the items 
 ## in the right-hand-side and a quality measure
@@ -148,5 +159,22 @@ inspect(rules.sub[1:3])
 labels(rules.sub[1:3])
 labels(rules.sub[1:3], itemSep = " + ", setStart = "", setEnd="", 
   ruleSep = " ---> ")
+
+## Create a rules for the Adult dataset manually and calcualte some interest Measures
+twoRule <- new("rules", 
+  lhs = encode(list(
+      c("age=Young", "relationship=Unmarried"),
+      c("age=Old")
+    ), itemLabels = itemLabels(Adult)),
+  rhs = encode(list(
+      c("income=small"),
+      c("income=large")
+      ), itemLabels = itemLabels(Adult))
+)
+
+quality(twoRule) <- interestMeasure(twoRule, 
+  measure = c("support", "confidence", "lift"), transactions = Adult)
+
+inspect(twoRule)
 }
 \keyword{classes}
