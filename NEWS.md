@@ -1,10 +1,27 @@
+# arules 1.6-6 (05/14/2020)
+
+## New Features
+* added interestMeasure rhsSupport.
+* added interestMeasure stdLift.
+* addComplement now adds variables and levels to indicate what items are complments.
+
+## Changes
+* apriori and eclat now by default also reports coverage (ext defaults to TRUE and lhs.support is now called coverage).
+* addComplement now adds variables and levels itemInfo.
+* discretize now drops non-unique breaks with a warning (instead of producing an error).
+
+## Bug Fixes
+* DATAFRAME now works if itemsetInfo is empty.
+* interestMeasure hyperlift now works without specifying transactions. 
+* Changed c() to as.integer() for factors (R has changed).
+
 # arules 1.6-5 (04/03/2020)
 
 ## New Features
 * improved speed for calculating interestMeasures for rules and itemsets with no available 
   quality information or reuse = FALSE.
 * Manual pages for associations were improved with examples for itemCoding.
-* MAnual page for interestMeasures is now linked with the associated web page.
+* Manual page for interestMeasures is now linked with the associated web page.
 * interest measure laplace (Laplace confidence) gained parameter k for the number of classes.
 
 ## Bug Fixes

@@ -149,7 +149,8 @@ setMethod("interestMeasure",  signature(x = "rules"),
       measure <- add$method
     }
     
-    builtin_measures <- c("support", "count", "coverage", "confidence", "lift",
+    builtin_measures <- c("support", "confidence", "lift", "count",
+      "coverage", "rhsSupport", 
       "leverage", "hyperLift", "hyperConfidence", "fishersExactTest", 
       "improvement",
       "chiSquared", "cosine", "conviction", "gini", "oddsRatio", "phi",
@@ -173,7 +174,8 @@ setMethod("interestMeasure",  signature(x = "rules"),
       "yuleY",
       "lerman",
       "implicationIndex",
-      "importance"
+      "importance",
+      "stdLift"
     )
     
     if(missing(measure)) measure <- builtin_measures
@@ -224,6 +226,7 @@ setMethod("interestMeasure",  signature(x = "rules"),
     
     ## calculate measure (support, confidence, lift and coverage are already handled)
     if(measure == "count") return(round(quality(x)[["support"]] * .getN(x, transactions)))
+    if(measure == "rhsSupport") return(.rhsSupport(x, transactions))
     if(measure == "rulePowerFactor") return(quality(x)[["support"]] * quality(x)[["confidence"]]) 
     if(measure == "improvement") return(.improvement(x, transactions, reuse, ...))
     if(measure == "hyperLift") return(.hyperLift(x, transactions, reuse, ...))
@@ -233,6 +236,7 @@ setMethod("interestMeasure",  signature(x = "rules"),
     if(measure == "imbalance") return(.imbalance(x, transactions, reuse))
     if(measure == "kulczynski") return(.kulc(x, transactions, reuse))
     if(measure == "maxconfidence") return(.maxConf(x, transactions, reuse))
+    if(measure == "stdLift") return(.stdLift(x, transactions, reuse, ...))
     
     ## all other measures are implemented here (counts is in ...)
     ret <- .basicRuleMeasure(x, measure, counts = .getCounts(x, transactions, reuse), ...)
@@ -271,7 +275,6 @@ setMethod("interestMeasure",  signature(x = "rules"),
   c_XY <- counts$f11
   c_X <- counts$f1x
   c_Y <- counts$fx1
-  t <- length(transactions)
   
   Q <- stats::qhyper(d, m = c_Y, n = t - c_Y, k = c_X, lower.tail = TRUE)
   hyperlift <- c_XY / Q
@@ -565,4 +568,44 @@ setMethod("interestMeasure",  signature(x = "rules"),
   Y <- .rhsSupport(x, transactions = transactions, reuse = reuse)
   
   pmax(XY/X, XY/Y)
+}
+
+## Standardising the Lift of an Association Rule
+# by McNicholas, 2008, DOI: 10.1016/j.csda.2008.03.013
+
+.stdLift <- function(rules, transactions = NULL, reuse = TRUE, correct = TRUE) {
+  measures <- interestMeasure(rules, 
+    c("support", "confidence", "lift", "coverage", "rhsSupport"), 
+    transactions = transactions, reuse = reuse)
+  
+  n <- info(rules)$ntransactions
+  if(is.null(n)) {
+    if(is.null(transactions)) 
+      stop("rules do not contain info from transactions. transactions are needed.")
+    n <- length(transactions)
+  }
+  
+  supp_A <- measures$coverage
+  supp_B <- measures$rhsSupport 
+  
+  # upper bound of lift
+  lambda <- pmax(supp_A + supp_B - 1, 1/n)/(supp_A * supp_B) 
+  
+  # correct lambda for min. confidence and min. support
+  if(correct) {
+    c <- info(rules)$confidence
+    s <- info(rules)$support
+    
+    if(!is.null(c) && !is.null(s)) 
+      lambda <- pmax(lambda, 4*s/(1+s)^2, s/(supp_A * supp_B), c/supp_B)     
+    else
+      warning("minimum support or confidence not available in info(x). Using uncorrected std_lift instead.")
+  }
+  
+  # lower bound of lift
+  upsilon <- 1/pmax(supp_A, supp_B)
+  
+  stdLift <- (measures$lift - lambda) / (upsilon - lambda)
+  stdLift[is.nan(stdLift)] <- 1
+  stdLift
 }
