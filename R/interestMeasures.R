@@ -175,7 +175,8 @@ setMethod("interestMeasure",  signature(x = "rules"),
       "lerman",
       "implicationIndex",
       "importance",
-      "stdLift"
+      "stdLift",
+      "boost"
     )
     
     if(missing(measure)) measure <- builtin_measures
@@ -189,7 +190,7 @@ setMethod("interestMeasure",  signature(x = "rules"),
     measure <- builtin_measures[ind]
 
     ## remove quality information if we do not want to reuse! Then we can start reusing
-    if(!reuse) quality(x) <- data.frame(1:length(x))[,0]
+    if(!reuse) quality(x) <- data.frame(seq_len(length(x)))[,0]
     reuse <- TRUE
     
     ## first see if we already have it:
@@ -225,6 +226,7 @@ setMethod("interestMeasure",  signature(x = "rules"),
     if(reuse && !is.null(quality(x)[[measure]])) return(quality(x)[[measure]])
     
     ## calculate measure (support, confidence, lift and coverage are already handled)
+    if(measure == "boost") return(.conf_boost(x, transactions, reuse, ...))
     if(measure == "count") return(round(quality(x)[["support"]] * .getN(x, transactions)))
     if(measure == "rhsSupport") return(.rhsSupport(x, transactions))
     if(measure == "rulePowerFactor") return(quality(x)[["support"]] * quality(x)[["confidence"]]) 
@@ -341,13 +343,19 @@ setMethod("interestMeasure",  signature(x = "rules"),
     q2 <- q[pos]
     ### FALSE is for verbose
     qsubmax <- .Call(R_pnmax, lhs(x[pos])@data, q2, FALSE)
-  
+    
     imp[pos] <- q2 - qsubmax
   }
 
   imp
 }
 
+.conf_boost <- function(x, transactions = NULL, reuse = TRUE) {
+  imp <- .improvement(x, transactions, reuse)
+  conf <- interestMeasure(x, "confidence", transactions, reuse)
+  
+  conf/(conf - imp)
+}
 
 ## count helpers
 .getCounts <- function(x, transactions, reuse = TRUE){
@@ -468,7 +476,7 @@ setMethod("interestMeasure",  signature(x = "rules"),
   if(measure == "chiSquared") {
     
     chi2 <- c()
-    for(i in 1:length(x)) {
+    for(i in seq_len(length(x))) {
       fo <- matrix(c(f00[i], f01[i], f10[i], f11[i]), ncol=2)
       fe <- tcrossprod(c(fx0[i], fx1[i]), c(f0x[i], f1x[i])) /N
       ## check if approximation is ok
@@ -502,7 +510,7 @@ setMethod("interestMeasure",  signature(x = "rules"),
   f00 <- counts$f00
   
   RLD <- numeric(length(x))
-  for(i in 1:length(x)) {
+  for(i in seq_len(length(x))) {
     D <- (f11[i]*f00[i]-f10[i]*f01[i])/N
     if (D > 0) 
       if (f01[i] < f10[i]) RLD[i] <- D/(D+f01[i])
@@ -599,7 +607,7 @@ setMethod("interestMeasure",  signature(x = "rules"),
     if(!is.null(c) && !is.null(s)) 
       lambda <- pmax(lambda, 4*s/(1+s)^2, s/(supp_A * supp_B), c/supp_B)     
     else
-      warning("minimum support or confidence not available in info(x). Using uncorrected std_lift instead.")
+      warning("minimum support or confidence not available in info(x). Using uncorrected stdLift instead.")
   }
   
   # lower bound of lift

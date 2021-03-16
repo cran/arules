@@ -7,7 +7,7 @@
 Provides the generic function \code{interestMeasure} and the needed S4 method 
 to calculate various additional interest measures for existing sets of
 itemsets or rules. A searchable list of definitions, equations and references for all available interest measures can be found here: 
-\href{http://michael.hahsler.net/research/association_rules/measures.html}{A Probabilistic Comparison of Commonly Used Interest Measures for Association Rules} (Hahsler, 2015).
+\href{https://michael.hahsler.net/research/association_rules/measures.html}{A Probabilistic Comparison of Commonly Used Interest Measures for Association Rules} (Hahsler, 2015).
 }
 \usage{
 interestMeasure(x, measure, transactions = NULL, reuse = TRUE, ...)
@@ -90,6 +90,15 @@ interestMeasure(x, measure, transactions = NULL, reuse = TRUE, ...)
 
   Range: \eqn{[-.5, 1]}}
 
+\item{"boost", confidence boost (Balcazar, 2013)}{ 
+  
+  Confidence boost is the ratio of the confidence of a rule to the confidence of any more general rule (i.e., a rule with the same consequent but one or more items removed in the LHS). 
+  Values larger than 1 mean the new rule boosts the confidence compared to the best, more general rule. The measure is related to the improvement measure.
+  See details: \href{https://michael.hahsler.net/research/association_rules/measures.html#boost}{Confidence boost}
+
+  Range: \eqn{[0, \infty]}{[0, Inf]}}
+
+
 \item{"chiSquared", \eqn{\chi^2}{X^2} statistic (Liu et al., 1999)}{ 
 
   The chi-squared statistic 
@@ -112,9 +121,10 @@ interestMeasure(x, measure, transactions = NULL, reuse = TRUE, ...)
   Called with \code{significance=TRUE}, the p-value of the test for 
   independence is returned instead of the chi-squared statistic.  
   For p-values, substitutes effects can be tested using 
-  the parameter \code{complements = FALSE}.  
+  the parameter \code{complements = FALSE}.
+  Correction for multiple comparisons can be done using \code{\link{p.adjust}}.
   
-  Range: \eqn{[0, \infty]}{[0, Inf]}} or p-value scale
+  Range: \eqn{[0, \infty]}{[0, Inf]} or p-value scale}
 
 \item{"certainty", certainty factor, CF, Loevinger (Berzal et al., 2002)}{
   The certainty factor is a measure of variation of the probability that 
@@ -207,6 +217,7 @@ interestMeasure(x, measure, transactions = NULL, reuse = TRUE, ...)
   See details: \href{https://michael.hahsler.net/research/association_rules/measures.html#fishersExactTest}{Fisher's Exact Test}
   
   Note that it is equal to hyper-confidence with \code{significance=TRUE}.
+  Correction for multiple comparisons can be done using \code{\link{p.adjust}}.
   
   Range: \eqn{[0, 1]} (p-value scale)}
 
@@ -271,6 +282,9 @@ interestMeasure(x, measure, transactions = NULL, reuse = TRUE, ...)
   the minimum difference between its confidence and the confidence of any
   more general rule (i.e., a rule with the same consequent but one or 
   more items removed in the LHS). 
+  Special case: We define improvement for a rules with an empty LHS 
+  as its confidence.
+  
   See details: \href{https://michael.hahsler.net/research/association_rules/measures.html#improvement}{Improvement}
   
   Range: \eqn{[0, 1]}}
@@ -280,7 +294,7 @@ interestMeasure(x, measure, transactions = NULL, reuse = TRUE, ...)
   that contain the items in X and Y, respectively.
   See details: \href{https://michael.hahsler.net/research/association_rules/measures.html#jaccard}{Jaccard coefficient}
 
-  Range: \eqn{[-1, 1]} (0 for independence)}
+  Range: \eqn{[0, 1]}}
 
 \item{"jMeasure", J-measure, J (Smyth and Goodman, 1991)}{ 
   A scaled measures of cross entropy to measure the information content of a rule.
@@ -475,7 +489,7 @@ indices used in population genetics. It evaluates the deviation
 }
 \references{
 Hahsler, Michael (2015). 
-A Probabilistic Comparison of Commonly Used Interest Measures for Association Rules, 2015, URL: \url{http://michael.hahsler.net/research/association_rules/measures.html}.
+A Probabilistic Comparison of Commonly Used Interest Measures for Association Rules, 2015, URL: \url{https://michael.hahsler.net/research/association_rules/measures.html}.
 
 Agrawal, R., H Mannila, R Srikant, H Toivonen, AI Verkamo (1996).
 Fast Discovery of Association Rules.
@@ -487,14 +501,16 @@ approche et une etude de sensibilite au bruit. In
 \emph{Mesures de Qualite pour la fouille de donnees. 
 Revue des Nouvelles Technologies de l'Information, RNTI.}
 
-Bernard, Jean-Marc and Charron, Camilo (1996).
-L'analyse implicative bayesienne, une methode pour l'etude des dependances orientees. II : modele logique sur un tableau de contingence
-Mathematiques et Sciences Humaines, Volume 135 (1996), p. 5--18. 
+Jose L. Balcazar. Formal and computational properties of the confidence boost of association rules. \emph{ACM Transactions on Knowledge Discovery from Data,} 7(4), December 2013. 
 
 Bayardo, R. , R. Agrawal, and D. Gunopulos (2000). 
 Constraint-based rule mining
 in large, dense databases.  \emph{Data Mining and Knowledge Discovery,}
 4(2/3):217--240.
+
+Bernard, Jean-Marc and Charron, Camilo (1996).
+L'analyse implicative bayesienne, une methode pour l'etude des dependances orientees. II : modele logique sur un tableau de contingence
+Mathematiques et Sciences Humaines, Volume 135 (1996), p. 5--18. 
 
 Berzal, Fernando, Ignacio Blanco, Daniel Sanchez and Maria-Amparo Vila (2002).
 Measuring the accuracy and interest of

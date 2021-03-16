@@ -3,14 +3,13 @@
 [![CRAN version](https://www.r-pkg.org/badges/version/arules)](https://cran.r-project.org/package=arules)
 [![Rdoc](https://www.rdocumentation.org/badges/version/arules)](https://www.rdocumentation.org/packages/arules) 
 [![CRAN RStudio mirror downloads](https://cranlogs.r-pkg.org/badges/arules)](https://cran.r-project.org/package=arules)
-[![Travis-CI Build Status](https://travis-ci.org/mhahsler/arules.svg?branch=master)](https://travis-ci.org/mhahsler/arules)
-[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/mhahsler/arules?branch=master&svg=true)](https://ci.appveyor.com/project/mhahsler/arules)
+[![R build status](https://github.com/mhahsler/arules/workflows/R-CMD-check/badge.svg)](https://github.com/mhahsler/arules/actions)
 
 The arules package for R provides the infrastructure for representing,
 manipulating and analyzing transaction data and patterns
 using [frequent itemsets and association rules](https://en.wikipedia.org/wiki/Association_rule_learning). Also provides a wide range of 
 [interest measures](https://michael.hahsler.net/research/association_rules/measures.html) and mining algorithms including a interfaces and the code of
-Borgelt's efficient C implementations of the association mining algorithms [Apriori](http://www.borgelt.net/apriori.html) and [Eclat](http://www.borgelt.net/eclat.html).
+Borgelt's efficient C implementations of the association mining algorithms [Apriori](https://borgelt.net/apriori.html) and [Eclat](https://borgelt.net/eclat.html).
 
 ### arules core packages: 
 
@@ -64,10 +63,9 @@ __Stable CRAN version:__ install from within R with
 ```R
 install.packages("arules")
 ```
-__Current development version:__ Download package from [AppVeyor](https://ci.appveyor.com/project/mhahsler/arules/build/artifacts) or install from GitHub (needs devtools). 
+__Current development version:__ install from GitHub (needs devtools and [Rtools for Windows] (https://cran.r-project.org/bin/windows/Rtools/)). 
 ```R 
-library("devtools")
-install_github("mhahsler/arules")
+devtools::install_github("mhahsler/arules")
 ``` 
 
 ## Usage
@@ -152,6 +150,9 @@ inspect(head(rules, by = "lift"))
      capital-gain=None}            => {native-country=United-States} 0.7194628  0.9202807 1.025469
 ```
 
+## Usage from Python
+
+See [Getting started with R arules using Python.](https://mhahsler.github.io/arules/Python/arules_python.html)
 
 ## Support
 
@@ -161,9 +162,7 @@ Questions should be posted on [stackoverflow and tagged with arules](https://sta
 
 ## References
 
-* [Intro article with examples](https://cran.r-project.org/package=arules/vignettes/arules.pdf) by Michael Hahsler, Bettina Gr&uuml;n, Kurt Hornik and
-Christian Buchta.
-* Michael Hahsler, Bettina Gr&uuml;n and Kurt Hornik, [arules - A Computational Environment for Mining Association Rules and Frequent Item Sets.](http://dx.doi.org/10.18637/jss.v014.i15) _Journal of Statistical Software,_ 14(15), 2005.
-* Michael Hahsler, Sudheer Chelluboina, Kurt Hornik, and Christian Buchta. [The arules R-package ecosystem: Analyzing interesting patterns from large transaction datasets.](http://jmlr.csail.mit.edu/papers/v12/hahsler11a.html) _Journal of Machine Learning Research,_ 12:1977-1981, 2011.
-* Hahsler, Michael (2015). 
-[A Probabilistic Comparison of Commonly Used Interest Measures for Association Rules](http://michael.hahsler.net/research/association_rules/measures.html), 2015, URL: http://michael.hahsler.net/research/association_rules/measures.html.
+* Michael Hahsler, Sudheer Chelluboina, Kurt Hornik, and Christian Buchta. [The arules R-package ecosystem: Analyzing interesting patterns from large transaction datasets.](https://jmlr.csail.mit.edu/papers/v12/hahsler11a.html) _Journal of Machine Learning Research,_ 12:1977-1981, 2011.
+* Michael Hahsler, Bettina Gr&uuml;n and Kurt Hornik. [arules - A Computational Environment for Mining Association Rules and Frequent Item Sets.](https://dx.doi.org/10.18637/jss.v014.i15) _Journal of Statistical Software,_ 14(15), 2005.
+* Hahsler, Michael. 
+[A Probabilistic Comparison of Commonly Used Interest Measures for Association Rules](https://michael.hahsler.net/research/association_rules/measures.html), 2015, URL: https://michael.hahsler.net/research/association_rules/measures.html.
