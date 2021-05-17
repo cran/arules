@@ -45,7 +45,8 @@ export(
   "discretize",
   "discretizeDF",
   "addAggregate",
-  "filterAggregate"
+  "filterAggregate",
+  "transactions"
   )
 
 exportClasses(
@@ -72,6 +73,7 @@ exportMethods(
   "aggregate",
   "abbreviate",
   "addComplement",
+  "compatible",
   "coverage",
   "crossTable",
   "c", 

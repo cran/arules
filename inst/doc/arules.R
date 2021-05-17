@@ -9,7 +9,7 @@ set.seed <- 1234
 
 
 ###################################################
-### code chunk number 2: arules.Rnw:1142-1143
+### code chunk number 2: arules.Rnw:1172-1173
 ###################################################
 library("arules")
 
@@ -28,14 +28,14 @@ summary(Epub)
 
 
 ###################################################
-### code chunk number 5: arules.Rnw:1168-1170
+### code chunk number 5: arules.Rnw:1198-1200
 ###################################################
 year <- strftime(as.POSIXlt(transactionInfo(Epub)[["TimeStamp"]]), "%Y")
 table(year)
 
 
 ###################################################
-### code chunk number 6: arules.Rnw:1178-1181
+### code chunk number 6: arules.Rnw:1208-1211
 ###################################################
 Epub2003 <- Epub[year == "2003"]
 length(Epub2003)
@@ -49,32 +49,32 @@ print(image(Epub2003))
 
 
 ###################################################
-### code chunk number 8: arules.Rnw:1207-1208
+### code chunk number 8: arules.Rnw:1237-1238
 ###################################################
 transactionInfo(Epub2003[size(Epub2003) > 20])
 
 
 ###################################################
-### code chunk number 9: arules.Rnw:1220-1221
+### code chunk number 9: arules.Rnw:1250-1251
 ###################################################
 inspect(Epub2003[1:5])
 
 
 ###################################################
-### code chunk number 10: arules.Rnw:1227-1228
+### code chunk number 10: arules.Rnw:1257-1258
 ###################################################
 as(Epub2003[1:5], "list")
 
 
 ###################################################
-### code chunk number 11: arules.Rnw:1234-1236
+### code chunk number 11: arules.Rnw:1264-1266
 ###################################################
 EpubTidLists <- as(Epub, "tidLists")
 EpubTidLists
 
 
 ###################################################
-### code chunk number 12: arules.Rnw:1243-1244
+### code chunk number 12: arules.Rnw:1273-1274
 ###################################################
 as(EpubTidLists[1:3], "list") 
 
@@ -88,14 +88,14 @@ AdultUCI[1:2,]
 
 
 ###################################################
-### code chunk number 14: arules.Rnw:1291-1293
+### code chunk number 14: arules.Rnw:1323-1325
 ###################################################
 AdultUCI[["fnlwgt"]] <- NULL
 AdultUCI[["education-num"]] <- NULL
 
 
 ###################################################
-### code chunk number 15: arules.Rnw:1309-1324
+### code chunk number 15: arules.Rnw:1341-1356
 ###################################################
 AdultUCI[[ "age"]] <- ordered(cut(AdultUCI[[ "age"]], c(15,25,45,65,100)),
     labels = c("Young", "Middle-aged", "Senior", "Old"))
@@ -117,7 +117,7 @@ AdultUCI[[ "capital-loss"]] <- ordered(cut(AdultUCI[[ "capital-loss"]],
 ###################################################
 ### code chunk number 16: coerce
 ###################################################
-Adult <- as(AdultUCI, "transactions")
+Adult <- transactions(AdultUCI)
 Adult
 
 
@@ -134,7 +134,7 @@ summary(Adult)
 
 
 ###################################################
-### code chunk number 19: arules.Rnw:1366-1367
+### code chunk number 19: arules.Rnw:1395-1396
 ###################################################
 itemFrequencyPlot(Adult, support = 0.1, cex.names=0.8)
 
@@ -180,7 +180,7 @@ inspect(head(rulesIncomeLarge, n = 3, by = "confidence"))
 
 
 ###################################################
-### code chunk number 26: arules.Rnw:1491-1494
+### code chunk number 26: arules.Rnw:1520-1523
 ###################################################
 data("Adult")
 fsets <- eclat(Adult, parameter = list(support = 0.05), 
@@ -188,7 +188,7 @@ fsets <- eclat(Adult, parameter = list(support = 0.05),
 
 
 ###################################################
-### code chunk number 27: arules.Rnw:1502-1509
+### code chunk number 27: arules.Rnw:1531-1538
 ###################################################
 singleItems <- fsets[size(items(fsets)) == 1]
 
@@ -200,7 +200,7 @@ head(singleSupport, n = 5)
 
 
 ###################################################
-### code chunk number 28: arules.Rnw:1518-1525
+### code chunk number 28: arules.Rnw:1547-1554
 ###################################################
 itemsetList <- LIST(items(fsets), decode = FALSE)
 
@@ -212,13 +212,13 @@ quality(fsets) <- cbind(quality(fsets), allConfidence)
 
 
 ###################################################
-### code chunk number 29: arules.Rnw:1529-1530
+### code chunk number 29: arules.Rnw:1558-1559
 ###################################################
 summary(fsets)
 
 
 ###################################################
-### code chunk number 30: arules.Rnw:1538-1541
+### code chunk number 30: arules.Rnw:1567-1570
 ###################################################
 fsetsEducation <- subset(fsets, subset = items %pin% "education")
 inspect(sort(fsetsEducation[size(fsetsEducation)>1], 
@@ -226,14 +226,14 @@ inspect(sort(fsetsEducation[size(fsetsEducation)>1],
 
 
 ###################################################
-### code chunk number 31: arules.Rnw:1554-1556
+### code chunk number 31: arules.Rnw:1583-1585
 ###################################################
 data("Adult")
 Adult
 
 
 ###################################################
-### code chunk number 32: arules.Rnw:1565-1571
+### code chunk number 32: arules.Rnw:1594-1600
 ###################################################
 supp <- 0.05
 epsilon <- 0.1
@@ -244,7 +244,7 @@ n
 
 
 ###################################################
-### code chunk number 33: arules.Rnw:1580-1581
+### code chunk number 33: arules.Rnw:1609-1610
 ###################################################
 AdultSample <- sample(Adult, n, replace = TRUE)
 
@@ -257,7 +257,7 @@ AdultSample <- sample(Adult, n, replace = TRUE)
 
 
 ###################################################
-### code chunk number 35: arules.Rnw:1599-1600
+### code chunk number 35: arules.Rnw:1628-1629
 ###################################################
 itemFrequencyPlot(AdultSample, population = Adult, support = supp,
     cex.names = 0.7)
@@ -272,7 +272,7 @@ itemFrequencyPlot(AdultSample, population = Adult, support = supp,
 
 
 ###################################################
-### code chunk number 37: arules.Rnw:1628-1629
+### code chunk number 37: arules.Rnw:1657-1658
 ###################################################
 itemFrequencyPlot(AdultSample, population = Adult, 
     support = supp, lift = TRUE, 
@@ -280,7 +280,7 @@ itemFrequencyPlot(AdultSample, population = Adult,
 
 
 ###################################################
-### code chunk number 38: arules.Rnw:1640-1647
+### code chunk number 38: arules.Rnw:1669-1676
 ###################################################
 time <- system.time(itemsets <- eclat(Adult, 
     parameter = list(support = supp), control = list(verbose = FALSE)))
@@ -292,21 +292,21 @@ timeSample
 
 
 ###################################################
-### code chunk number 39: arules.Rnw:1656-1658
+### code chunk number 39: arules.Rnw:1685-1687
 ###################################################
 # speed up
 time[1] / timeSample[1]
 
 
 ###################################################
-### code chunk number 40: arules.Rnw:1666-1668
+### code chunk number 40: arules.Rnw:1695-1697
 ###################################################
 itemsets
 itemsetsSample
 
 
 ###################################################
-### code chunk number 41: arules.Rnw:1676-1679
+### code chunk number 41: arules.Rnw:1705-1708
 ###################################################
 match <- match(itemsets, itemsetsSample, nomatch = 0)
 ## remove no matches
@@ -314,14 +314,14 @@ sum(match > 0) / length(itemsets)
 
 
 ###################################################
-### code chunk number 42: arules.Rnw:1688-1690
+### code chunk number 42: arules.Rnw:1717-1719
 ###################################################
 summary(quality(itemsets[match == 0])$support)
 summary(quality(itemsetsSample[-match])$support)
 
 
 ###################################################
-### code chunk number 43: arules.Rnw:1699-1705
+### code chunk number 43: arules.Rnw:1728-1734
 ###################################################
 supportItemsets <- quality(itemsets[which(match > 0)])$support
 supportSample <- quality(itemsetsSample[match])$support

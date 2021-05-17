@@ -25,8 +25,16 @@
 ## transaction data
 
 ##*****************************************************
-## coercions
+## constructor
+transactions <- function(x, itemLabels = NULL, transactionInfo = NULL) {
+  trans <- as(x, "transactions")
+  if(!is.null(itemLabels)) trans <- recode(trans, itemLabels = itemLabels)
+  if(!is.null(transactionInfo)) transactionInfo(trans) <- transactionInfo
+  trans
+}
 
+##*****************************************************
+## coercions
 setAs("matrix", "transactions",
   function(from)
     new("transactions", as(from, "itemMatrix"), 
@@ -59,7 +67,7 @@ setMethod("LIST", signature(from = "transactions"),
   function(from, decode = TRUE) {
     l <- LIST(as(from, "itemMatrix"), decode)
     if(decode) names(l) <- transactionInfo(from)$transactionID
-  l  
+    l  
   })
 
 setAs("data.frame", "transactions",

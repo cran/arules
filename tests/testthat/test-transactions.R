@@ -28,6 +28,9 @@ expect_identical(data, as(trans, "list"))
 expect_identical(transactionInfo(trans)$transactionID, names(data))
 expect_identical(sort(itemInfo(trans)$labels), sort(unique(unique(unlist(data)))))
 
+## test constructor
+expect_identical(transactions(data), trans)
+
 ## combine
 expect_equal(c(trans, trans), as(c(data, data),"transactions"))
 
@@ -41,8 +44,8 @@ expect_identical(dimnames(m), dimnames(trans))
 expect_equal(c(trans, trans), as(rbind(m, m),"transactions"))
 
 ## combine with missing items (needs recoding)
-expect_true(all(as(c(trans[,-2], trans[,-3]), "matrix")[1:8,"b"]) == FALSE)
-expect_true(all(as(c(trans[,-2], trans[,-3]), "matrix")[9:15,"c"]) == FALSE)
+expect_warning(expect_true(all(as(c(trans[,-2], trans[,-3]), "matrix")[1:8,"b"]) == FALSE))
+expect_warning(expect_true(all(as(c(trans[,-2], trans[,-3]), "matrix")[9:15,"c"]) == FALSE))
 
 l <- LIST(trans, decode = FALSE)
 expect_identical(length(l), nrow(trans))

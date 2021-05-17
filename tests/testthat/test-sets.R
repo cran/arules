@@ -68,3 +68,36 @@ quality(is) <- cbind(quality(is), isClosed = is.closed(is))
 #inspect(is)
 expect_equal(quality(is)$isClosed[1:5], c(T, T, F, F, F))
 
+
+### union, intersection, setequal, setdiff, is.element
+rules <- apriori(data)
+r1 <- rules[1:10]
+r2 <- rules[6:20]
+
+expect_equal(length(union(r1,r2)), 20L)
+
+expect_equal(length(intersect(r1,r2)), 5L)
+
+expect_false(setequal(r1,r2))
+expect_true(setequal(r1,r1))
+expect_true(setequal(r1,c(rules[5:10], rules[1:5])))
+
+expect_equal(length(setdiff(r1, r2)), 5L)
+expect_equal(length(setdiff(r2, r1)), 10L)
+
+expect_true(is.element(rules[5], r1))
+expect_false(is.element(rules[15], r1))
+
+# union(setA,setB)= setA + setB - intersect(setA,setB)
+expect_equal(length(union(r1, r2)), length(c(r1, r2)) - length(intersect(r1, r2)))
+
+# Test setequal with incompatible itemMatrices containing the same itemsets
+d1 <- as(data, "itemMatrix")
+expect_true(setequal(d1,d1))
+
+d2 <- merge(d1[,6:7], d1[,1:5])
+compatible(d1, d2)
+expect_warning(expect_true(setequal(d1,d2)))
+expect_warning(expect_true(setequal(union(d1, d2), intersect(d1, d2))))
+
+
