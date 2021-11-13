@@ -24,13 +24,23 @@
 ##
 ## a set of rules, subclass of associations
 
-## initialize (to make sure lhs and rhs agree!)
+rules <- function(rhs, lhs, itemLabels, quality = data.frame()) {
+  if (!is(lhs, "itemMatrix")) lhs <- encode(lhs, itemLabels = itemLabels)
+  if (!is(rhs, "itemMatrix")) rhs <- encode(rhs, itemLabels = itemLabels)
+  
+  new("rules", 
+    lhs = lhs,
+    rhs = rhs,
+    quality = quality
+  )
+}
 
+## initialize (to make sure lhs and rhs agree!)
 setMethod("initialize", "rules",
   function(.Object, lhs, rhs, ...) {
     if(!identical(colnames(lhs), colnames(rhs))) {
       warning("item labels in lhs and rhs do not match. recoding rhs!")
-      rhs <- recode(rhs, match=lhs)
+      rhs <- recode(rhs, itemLabels = lhs)
     }
     
     .Object@lhs <- lhs
@@ -75,14 +85,14 @@ setMethod("labels", signature(object = "rules"),
               labels(object@rhs, ...), sep = ""))
 
 setMethod("itemLabels", signature(object = "rules"),
-    function(object)itemLabels(lhs(object)))
+    function(object) itemLabels(lhs(object)))
 
 setReplaceMethod("itemLabels", signature(object = "rules"),
   function(object, value) {
-    #itemLabels(lhs(object)) <- value
-    ### this low level operation avoids the validity check
+    ### these low level operation avoids the validity check till all labels are changed
     itemLabels(object@lhs) <- value
-    itemLabels(rhs(object)) <- value
+    itemLabels(object@rhs) <- value
+    validObject(object)
     object
   }
 )

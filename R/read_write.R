@@ -39,9 +39,14 @@ read.transactions <-
   function(file, format = c("basket", "single"), 
     header = FALSE, sep = "", cols = NULL, 
     rm.duplicates = FALSE, quote = "\"'", skip = 0, 
-    encoding="unknown") {
+    encoding = "unknown") {
     
     format <- match.arg(format)
+    
+    if (is.character(file)) { 
+      file <- file(file, "r")
+      on.exit(close(file))
+    }
     
     if (format == "basket") {
       data <- lapply(readLines(file, encoding = encoding), 
@@ -52,7 +57,7 @@ read.transactions <-
       if(header) skip <- skip + 1
       
       ## skip
-      if(skip>0) data <- data[-seq_len(skip)]
+      if(skip > 0) data <- data[-seq_len(skip)]
       
       if (!is.null(cols)) {
         if (!(is(cols, "numeric") && (length(cols) == 1)))
@@ -82,13 +87,15 @@ read.transactions <-
     if(header) {
       colnames <- scan(file = file, what = "", sep = sep, quote = quote,
         quiet = TRUE, skip = skip, nlines = 1, encoding = encoding)
-      skip <- skip + 1
       if(is(cols, "character")){
         cols <- match(cols, colnames)
         if(any(is.na(cols)))
           stop("'cols' does not match entries in header of file.")
       }
-    }
+      
+      # connection continues at the current position
+      skip <- 0
+     }
     
     ## Else we get the numbers of the columns directly
     if(length(cols) != 2) 
@@ -143,7 +150,7 @@ setMethod("write", signature(x = "transactions"),
       l <- LIST(x)
       dat <- data.frame(transactionID = rep(labels(l),lapply(l, length)), 
         item = unlist(l), row.names = NULL)
-      write.table(dat, file = file, sep = sep, quote = quote, 
+      utils::write.table(dat, file = file, sep = sep, quote = quote, 
         row.names = FALSE, col.names = FALSE, ...)
     }
     invisible(dat)
@@ -152,6 +159,6 @@ setMethod("write", signature(x = "transactions"),
 
 setMethod("write", signature(x = "associations"),
   function(x, file = "", sep= " ", quote = TRUE, ...) 
-    write.table(as(x, "data.frame"), file = file, 
+    utils::write.table(as(x, "data.frame"), file = file, 
       sep = sep, quote = quote, ...)
 )

@@ -86,14 +86,16 @@ trans <-  list(
     c("A", "G", "H")
 )
 
+weight <- c(5, 10, 6, 7, 5, 1)
+
 ## convert list to transactions
 trans <-  transactions(trans)
 
 ## add weight information
-transactionInfo(trans) <- data.frame(weights = c(5, 10, 6, 7, 5, 1))
+transactionInfo(trans) <- data.frame(weight = weight)
 inspect(trans)
 
-## mine weightd support itemsets 
+## mine weighed support itemsets 
 s <- weclat(trans, parameter = list(support = 0.3),
 		       control = list(verbose = TRUE))
 inspect(sort(s))
