@@ -1,3 +1,9 @@
+# arules 1.7-1 (11/18/2021)
+
+## Changes
+
+* Changed int to unsigned int in bitmat.c (function static int _exists) to ensure bit shifting works. The bitmap support buffer is not allocated with zeros. 
+
 # arules 1.7-0 (11/12/2021)
 
 ## New Feature

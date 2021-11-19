@@ -1,6 +1,6 @@
-e7322e3e339946f42e5add54bd7464b4 *DESCRIPTION
+5a8078cf6dff9db49ac9e83b373528ca *DESCRIPTION
 4fe9fb7babb7c67029c7d6fe236b0115 *NAMESPACE
-7636e83bbf8729a9928831ccb7c1c57c *NEWS.md
+ac53a670003e401522403149f11f6884 *NEWS.md
 abd1ec421b0b473e723b8fec133d2e18 *R/AAADefs.R
 992dc7aab30a7817c5f9d3bc72b6737a *R/AllClasses.R
 2ff9206493af11f0dd09ef4c15d27e48 *R/AllGenerics.R
@@ -51,7 +51,7 @@ a0913165fe7070349637ac8af7a2bb39 *R/tidLists.R
 844a5627d7f4a77a63a65e254aaec7dd *R/transactions.R
 cf60ff311eacaffc25daa77d2499194e *R/warm.R
 db2e13a3ee8283fb0dfecd8c1ac7a476 *README.md
-17ab0208f2365ca9c3e483a3d2db6383 *build/partial.rdb
+7908e2b752578eb9db80f07c1b9994db *build/partial.rdb
 b2d0e88ec877453078e8c9883883e04d *build/vignette.rds
 c2588d596b5509c7d0abf8d7fa83b982 *data/Adult.rda
 caea0674be23e2e2ac064bc88471951c *data/AdultUCI.rda
@@ -65,7 +65,7 @@ d29a7c6a484acc7fddc69314a2f9bff4 *data/SunBai.rda
 84e5e64c04299949d8a189f14e00c98d *inst/CITATION
 eebbdcc5139d882d5a130a0683d897e1 *inst/doc/arules.R
 fb53f6954be49d0874a1fa2b99b6801a *inst/doc/arules.Rnw
-c80b0172f8b0a75fb98e775644276722 *inst/doc/arules.pdf
+d3a618e81c90e7be2ea7a8dfe0ca5893 *inst/doc/arules.pdf
 a9f3e576218afc7d09a12e2ba9ebd9a1 *man/APappearance-class.Rd
 44056fc5adcd853bed38bb8031c66d99 *man/AScontrol-class.Rd
 26dc8d46f59599bbd142597f73a293cd *man/ASparameter-class.Rd
@@ -133,7 +133,7 @@ ddece7bcdaa4974d40acca4f3fc0f973 *man/unique.Rd
 bdd5e038ddb5e32a0d8df9e1e4950f43 *src/Makevars
 997ff3192204f2d8ccecdbc9b14920e5 *src/arch64.h
 964c4981428dadfa840b83cb8a47c750 *src/arrayIndex.c
-c8433fe09e3125e3beeb249e45eb9033 *src/bitmat.c
+a156a089eba9c333a2d07d3a579bb519 *src/bitmat.c
 3a0866ee7910e2cd2ed62e345a7e970f *src/bitmat.h
 99194967360ea5a630e83ba81b01fcec *src/dll.c
 2572c6c2d5312b9f16f9724d4df917c2 *src/issubset.c
