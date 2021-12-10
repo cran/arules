@@ -1,8 +1,18 @@
+# arules 1.7-2 (12/09/2021)
+
+## New Feature
+
+* The C APRIORI implementation can now mine frequent generator itemsets (contributed by Makh2018).
+
+## Bugfixes
+
+* deparse1() needs R 4.0.0
+
 # arules 1.7-1 (11/18/2021)
 
-## Changes
+## Bugfixes
 
-* Changed int to unsigned int in bitmat.c (function static int _exists) to ensure bit shifting works. The bitmap support buffer is not allocated with zeros. 
+* Fixed some C issues: unsigned int in bitmat.c (function static int _exists) to ensure bit shifting works. The bitmap support buffer is now initialized with zeros. 
 
 # arules 1.7-0 (11/12/2021)
 
