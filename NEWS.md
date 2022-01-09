@@ -1,3 +1,15 @@
+# arules 1.7-3 (1/9/2022)
+
+## Changes
+
+* Manual pages are now created using roxygen2.
+* support() uses now explicit arguments instead of control.
+* ruleInduction() uses now explicit arguments instead of control.
+
+## New Feature
+
+* Added interface to fim4r algorithms.
+
 # arules 1.7-2 (12/09/2021)
 
 ## New Feature

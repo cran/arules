@@ -18,29 +18,167 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
+#' Calculate Additional Interest Measures
+#'
+#' Provides the generic function `interestMeasure()` and the
+#' methods to calculate various additional interest measures for existing sets
+#' of [itemsets] or [rules].
+#'
+#' A searchable list of definitions, equations and
+#' references for all available interest measures can be found at
+#' \url{https://mhahsler.github.io/arules/docs/measures}. The descriptions 
+#' are also linked in the list below.
+#'
+#' The following measures are implemented for **itemsets**:
+#' `r arules:::create_measures_doc(arules:::measuresItemsets)`
+#'
+#' The following measures are implemented for **rules**:
+#' `r arules:::create_measures_doc(arules:::measuresRules)`
+#'
+#' @aliases interestMeasure
+#' @family interest measures
+#'
+#' @param x a set of [itemsets] or [rules].
+#' @param measure name or vector of names of the desired interest measures (see
+#' the Details section for available measures). If measure is missing then all available
+#' measures are calculated.
+#' @param transactions the [transactions] used to mine the associations
+#' or a set of different transactions to calculate interest measures from
+#' (Note: you need to set `reuse = FALSE` in the later case).
+#' @param reuse logical indicating if information in the quality slot should be
+#' reuse for calculating the measures. This speeds up the process significantly
+#' since only very little (or no) transaction counting is necessary if support,
+#' confidence and lift are already available. Use `reuse = FALSE` to force
+#' counting (might be very slow but is necessary if you use a different set of
+#' transactions than was used for mining).
+#' @param ... further arguments for the measure calculation. Many measures
+#' are based on contingency table counts and zero counts can produce `NaN` values
+#' (division by zero). This issue can be resolved by using the additional
+#' parameter `smoothCounts` which performs additive smoothing by adds a
+#' "pseudo count" of `smoothCounts` to each cell in the contingency
+#' table. Use `smoothCounts = 1` or larger values for Laplace smoothing.
+#' Use `smoothCounts = .5` for Haldane-Anscombe correction (Haldan, 1940; Anscombe, 1956)
+#' which is often used for chi-squared, phi correlation and related measures.
+#' 
+#' @return If only one measure is used, the function returns a numeric vector
+#' containing the values of the interest measure for each association in the
+#' set of associations `x`.
+#'
+#' If more than one measures are specified, the result is a data.frame
+#' containing the different measures for each association as columns.
+#'
+#' `NA` is returned for rules/itemsets for which a certain measure is not
+#' defined.
+#' @author Michael Hahsler
+#' @seealso [itemsets], [rules]
+#' @references 
+#' Hahsler, Michael (2015). A Probabilistic Comparison of Commonly Used
+#' Interest Measures for Association Rules, 2015, URL:
+#' \url{https://mhahsler.github.io/arules/docs/measures}.
+#' 
+#' Haldane, J.B.S. (1940). "The mean and variance of the moments of chi-squared
+#' when used as a test of homogeneity, when expectations are small".
+#' _Biometrika,_ 29, 133-134.
+#'
+#' Anscombe, F.J. (1956). "On estimating binomial response relations".
+#' _Biometrika,_ 43, 461-464.
+#' @keywords models
+#' @examples
+#'
+#' data("Income")
+#' rules <- apriori(Income)
+#'
+#' ## calculate a single measure and add it to the quality slot
+#' quality(rules) <- cbind(quality(rules),
+#' 	hyperConfidence = interestMeasure(rules, measure = "hyperConfidence",
+#' 	transactions = Income))
+#'
+#' inspect(head(rules, by = "hyperConfidence"))
+#'
+#' ## calculate several measures
+#' m <- interestMeasure(rules, c("confidence", "oddsRatio", "leverage"),
+#' 	transactions = Income)
+#' inspect(head(rules))
+#' head(m)
+#'
+#' ## calculate all available measures for the first 5 rules and show them as a
+#' ## table with the measures as rows
+#' t(interestMeasure(head(rules, 5), transactions = Income))
+#'
+#' ## calculate measures on a different set of transactions (I use a sample here)
+#' ## Note: reuse = TRUE (default) would just return the stored support on the
+#' ##	data set used for mining
+#' newTrans <- sample(Income, 100)
+#' m2 <- interestMeasure(rules, "support", transactions = newTrans, reuse = FALSE)
+#' head(m2)
+#'
+#' ## calculate all available measures for the 5 frequent itemsets with highest support
+#' its <- apriori(Income, parameter = list(target = "frequent itemsets"))
+#' its <- head(its, 5, by = "support")
+#' inspect(its)
+#'
+#' interestMeasure(its, transactions = Income)
+setGeneric("interestMeasure",
+  function(x,
+    measure,
+    transactions = NULL,
+    reuse = TRUE,
+    ...)
+    standardGeneric("interestMeasure"))
 
-##*******************************************************
-## Functions for additional interest measures
-##
 
-## find N from associations or if not available then from transactions
-.getN <- function(x, transactions) {
-  n <- info(x)$ntransactions
-  if (is.null(n)) {
-    if (is.null(transactions))
-      stop("transaction data needed. Please specify the transactions used to mine the itemsets!")
-    n <- length(transactions)
-  }
-  n
+### only used to create the manual pages
+addl_doc <- list(
+  chisquared = "Additional parameters are: `significance = TRUE` returns the p-value of the test for independence instead of the chi-squared statistic. For p-values, substitution effects (the occurrence of one item makes the occurrence of another item less likely) can be tested using the parameter `complements = FALSE`.  Note: Correction for multiple comparisons can be done using [stats::p.adjust()].",
+  fishersexacttest = "By default complementary effects are mined, substitutes can be found by using the parameter `complements = FALSE`. Note that Fisher's exact test is equal to hyper-confidence with `significance = TRUE`. Correction for multiple comparisons can be done using [stats::p.adjust()].",
+  hyperconfidence = "Reports the confidence level by default and the significance level if `significance = TRUE` is used. By default complementary effects are mined, substitutes (too low co-occurrence counts) can be found by using the parameter `complements = FALSE`.",
+  hyperlift = "The used quantile can be changed using parameter `level` (default: `level = 0.99`).",
+  laplace = "Parameter `k` can be used to specify the number of classes (default is 2).",
+  stdLift = "By default, standardized lift is is corrected for minimum support and minimum confidence. Correction can be disabled by using the argument `correct = FALSE`.",
+  table = "Returns the four counts for the contingency table. The entries are labeled `n11`, `n01`, `n10`, and `n00` (the first subscript is for X and the second is for Y; 1 indicated presence and 0 indicates absence). If several measures are specified, then the counts have the prefix `table.`"
+)
+
+create_measures_doc <- function(measures) {
+  measures_doc <-
+    grep("^## ", readLines("docs/measures.md"), value = TRUE)
+  measures_doc <-
+    do.call(rbind,
+      strsplit(measures_doc, '\\s*\\{\\s*|##\\s*|#|\\s*\\}\\s*'))[, c(2, 4)]
+  
+  m <- match(tolower(measures), measures_doc[, 2])
+  if (any(is.na(m)))
+    warning("No matching entry for measure: ",
+      paste(measures[is.na(m)], collapse = ", "))
+  
+  mm <- cbind(measures_doc[m, ], measures)
+  
+  paste0(
+    '* "',
+    mm[, 3],
+    '": [',
+    mm[, 1],
+    '.](https://mhahsler.github.io/arules/docs/measures#',
+    mm[, 2],
+    ') ',
+    sapply(
+      tolower(mm[, 3]),
+      FUN = function(m)
+        if (!is.null(addl_doc[[m]]))
+          addl_doc[[m]]
+        else
+          ""
+    ),
+    collapse = "\n"
+  )
 }
 
-## measures for itemsets
 measuresItemsets <- c("support",
   "count",
   "allConfidence",
   "crossSupportRatio",
   "lift")
 
+#' @rdname interestMeasure
 setMethod("interestMeasure",  signature(x = "itemsets"),
   function(x,
     measure,
@@ -63,11 +201,16 @@ setMethod("interestMeasure",  signature(x = "itemsets"),
       tolower(measuresItemsets)
     ))))
       stop(
-        gettextf("Invalid measure(s) for rules: %s",
-          paste(measure[is.na(ind)], collapse = ", ")), 
-        gettextf("\n\n  Available measures: %s",
-          paste(measuresItemsets, collapse = ", ")), 
-        domain = NA)
+        gettextf(
+          "Invalid measure(s) for rules: %s",
+          paste(measure[is.na(ind)], collapse = ", ")
+        ),
+        gettextf(
+          "\n\n  Available measures: %s",
+          paste(measuresItemsets, collapse = ", ")
+        ),
+        domain = NA
+      )
     
     measure <- measuresItemsets[ind]
     
@@ -102,6 +245,17 @@ setMethod("interestMeasure",  signature(x = "itemsets"),
     ## all other measures are basic measures
     return(.basicItemsetMeasures(x, measure, transactions, ...))
   })
+
+.getN <- function(x, transactions) {
+  ## find N from associations or if not available then from transactions
+  n <- info(x)$ntransactions
+  if (is.null(n)) {
+    if (is.null(transactions))
+      stop("transaction data needed. Please specify the transactions used to mine the itemsets!")
+    n <- length(transactions)
+  }
+  n
+}
 
 .basicItemsetMeasures <- function(x,
   measure,
@@ -227,6 +381,7 @@ measuresRules <-
   )
 
 
+#' @rdname interestMeasure
 setMethod("interestMeasure",  signature(x = "rules"),
   function(x,
     measure,
@@ -249,11 +404,16 @@ setMethod("interestMeasure",  signature(x = "rules"),
       tolower(measuresRules)
     ))))
       stop(
-        gettextf("Invalid measure(s) for rules: %s",
-          paste(measure[is.na(ind)], collapse = ", ")), 
-        gettextf("\n\n  Available measures: %s",
-          paste(measuresRules, collapse = ", ")), 
-        domain = NA)
+        gettextf(
+          "Invalid measure(s) for rules: %s",
+          paste(measure[is.na(ind)], collapse = ", ")
+        ),
+        gettextf(
+          "\n\n  Available measures: %s",
+          paste(measuresRules, collapse = ", ")
+        ),
+        domain = NA
+      )
     
     measure <- measuresRules[ind]
     
@@ -359,6 +519,7 @@ setMethod("interestMeasure",  signature(x = "rules"),
 ## c_Y = count(Y)
 ##
 ## this implements only hyperlift for rules with a single item in the consequent
+
 .hyperLift <- function(x, level = 0.99, ...) {
   counts <- .getCounts(x, ...)
   
@@ -383,7 +544,6 @@ setMethod("interestMeasure",  signature(x = "rules"),
 ## Hahsler, Michael and Kurt Hornik (2007). New probabilistic
 ## interest measures for association rules.
 ## Intelligent Data Analysis, 11(5):437--455.
-
 
 .hyperConfidence <-
   function(x,
@@ -460,7 +620,6 @@ setMethod("interestMeasure",  signature(x = "rules"),
   conf / (conf - imp)
 }
 
-## count helpers
 .getCounts <-
   function(x,
     transactions = NULL,
@@ -540,44 +699,55 @@ setMethod("interestMeasure",  signature(x = "rules"),
 
 
 ## More measures (see Tan et al. Introduction to Data Mining, 2006)
-
 # x can be a set of rules or list with counts (at least n11, n10, n01, n11 and n)
+
 .basicRuleMeasure <- function(x,
   measure,
   transactions = NULL,
-  smoothCounts = 0,        ### adds smoothCounts to the count in each cell to avoid counts of 0
-  significance = FALSE,    ### used by chi-squared
-  compliment = TRUE,       ### used by chi-squared
-  k = 2                    ### k is the number of classes used by laplace
-  ) {
-  
-  if (is(x, "rules")) counts <-
-    .getCounts(x, transactions, smoothCounts = smoothCounts)
+  ### adds smoothCounts to the count in each cell to avoid counts of 0
+  smoothCounts = 0,
+  ### k is the number of classes used by laplace
+  significance = FALSE,
+  ### used by chi-squared
+  compliment = TRUE,
+  ### k is the number of classes used by laplace
+  k = 2) {
+  if (is(x, "rules"))
+    counts <-
+      .getCounts(x, transactions, smoothCounts = smoothCounts)
   else {
     # is counts a matrix?
     if (is.matrix(x)) {
-      counts <- lapply(seq_len(ncol(x)), function(i) x[,i])
+      counts <- lapply(seq_len(ncol(x)), function(i)
+        x[, i])
       names(counts) <- colnames(x)
-    }else counts <- x
+    } else
+      counts <- x
     
     # complete missing counts if x has counts
-    if (is.null(counts$n)) counts$n <- counts$n11 + counts$n10 + counts$n01 + counts$n00
-    if (is.null(counts$n1x)) counts$n1x <- counts$n11 + counts$n10
-    if (is.null(counts$nx1)) counts$nx1 <- counts$n11 + counts$n01
-    if (is.null(counts$n0x)) counts$n0x <- counts$n - counts$n1x
-    if (is.null(counts$nx0)) counts$nx0 <- counts$n - counts$nx1
+    if (is.null(counts$n))
+      counts$n <- counts$n11 + counts$n10 + counts$n01 + counts$n00
+    if (is.null(counts$n1x))
+      counts$n1x <- counts$n11 + counts$n10
+    if (is.null(counts$nx1))
+      counts$nx1 <- counts$n11 + counts$n01
+    if (is.null(counts$n0x))
+      counts$n0x <- counts$n - counts$n1x
+    if (is.null(counts$nx0))
+      counts$nx0 <- counts$n - counts$nx1
   }
   
   
   # note return in with just assigns to m
   m <- with(counts,
-    switch(measure, 
+    switch(
+      measure,
       table = data.frame(
-          n11 = n11,
-          n01 = n01,
-          n10 = n10,
-          n00 = n00
-        ),
+        n11 = n11,
+        n01 = n01,
+        n10 = n10,
+        n00 = n00
+      ),
       support = n11 / n,
       confidence = n11 / n1x,
       lift = n * n11 / (n1x * nx1),
@@ -587,37 +757,38 @@ setMethod("interestMeasure",  signature(x = "rules"),
       cosine = n11 / sqrt(n1x * nx1),
       conviction = n1x * nx0 / (n * n10),
       gini = n1x / n * ((n11 / n1x) ^ 2 + (n10 / n1x) ^ 2) - (nx1 / n) ^ 2 +
-            n0x / n * ((n01 / n0x) ^ 2 + (n00 / n0x) ^ 2) - (nx0 / n) ^ 2,
+        n0x / n * ((n01 / n0x) ^ 2 + (n00 / n0x) ^ 2) - (nx0 / n) ^ 2,
       rulePowerFactor = n11 * n11 / n1x / n,
       oddsRatio = n11 * n00 / (n10 * n01),
       relativeRisk = (n11 / n1x) / (n01 / n0x),
       phi = (n * n11 - n1x * nx1) / sqrt(n1x * nx1 * n0x * nx0),
       leverage = n11 / n - (n1x * nx1 / n ^ 2),
       collectiveStrength = n11 * n00 / (n1x * nx1 + n0x + nx0) *
-            (n ^ 2 - n1x * nx1 - n0x * nx0) / (n - n11 - n00),
+        (n ^ 2 - n1x * nx1 - n0x * nx0) / (n - n11 - n00),
       importance = log(((n11 + 1) * (n0x + 2)) / ((n01 + 1) * (n1x + 2)), base = 10),
       imbalance = abs(n1x - nx1) / (n1x + nx1 - n11),
       jaccard = n11 / (n1x + nx1 - n11),
       kappa = (n * n11 + n * n00 - n1x * nx1 - n0x * nx0) / (n ^ 2 - n1x * nx1 -
-          n0x * nx0), 
+          n0x * nx0),
       
       lambda = {
         max_x0x1 <- apply(cbind(nx1, nx0), 1, max)
         (apply(cbind(n11, n10), 1, max) + apply(cbind(n01, n00), 1, max) -
             max_x0x1) / (n - max_x0x1)
-      }, 
-  
+      },
+      
       mutualInformation = (
-          n00 / n * log(n * n00 / (n0x * nx0)) +
+        n00 / n * log(n * n00 / (n0x * nx0)) +
           n01 / n * log(n * n01 / (n0x * nx1)) +
           n10 / n * log(n * n10 / (n1x * nx0)) +
-          n11 / n * log(n * n11 / (n1x * nx1))) / 
+          n11 / n * log(n * n11 / (n1x * nx1))
+      ) /
         pmin(-1 * (n0x / n * log(n0x / n) + n1x / n * log(n1x / n)), -1 *
-              (nx0 / n * log(nx0 / n) + nx1 / n * log(nx1 / n))), 
+            (nx0 / n * log(nx0 / n) + nx1 / n * log(nx1 / n))),
       
       maxconfidence = pmax(n11 / n1x, n11 / nx1),
       jMeasure = n11 / n * log(n * n11 / (n1x * nx1)) +
-            n10 / n * log(n * n10 / (n1x * nx0)),
+        n10 / n * log(n * n10 / (n1x * nx0)),
       kulczynski =  (n11 / n1x + n11 / nx1) / 2,
       laplace = (n11 + 1) / (n1x + k),
       certainty = (n11 / n1x - nx1 / n) / (1 - nx1 / n),
@@ -636,7 +807,7 @@ setMethod("interestMeasure",  signature(x = "rules"),
       yuleQ = {
         OR <- n11 * n00 / (n10 * n01)
         (OR - 1) / (OR + 1)
-      }, 
+      },
       yuleY = {
         OR <- n11 * n00 / (n10 * n01)
         (sqrt(OR) - 1) / (sqrt(OR) + 1)
@@ -669,22 +840,22 @@ setMethod("interestMeasure",  signature(x = "rules"),
         if (!significance)
           chi2
         else
-          stats::pchisq(
-            q = chi2,
+          stats::pchisq(q = chi2,
             df = 1,
-            lower.tail = !compliment
-          )
+            lower.tail = !compliment)
       }
     ))
-    
-    if (is.null(m)) stop("Specified measure not implemented.")
-    
-    m
+  
+  if (is.null(m))
+    stop("Specified measure not implemented.")
+  
+  m
 }
 
 
 ## RLD see Kenett and Salini 2008
 ## RLD code contributed by Silvia Salini
+
 .RLD <- function(x, ...) {
   counts <- .getCounts(x, ...)
   RLD <- with(counts, {
@@ -694,8 +865,8 @@ setMethod("interestMeasure",  signature(x = "rules"),
       if (D > 0)
         if (n01[i] < n10[i])
           RLD[i] <- D / (D + n01[i])
-        else
-          RLD[i] <- D / (D + n10[i])
+      else
+        RLD[i] <- D / (D + n10[i])
       else
         if (n11[i] < n00[i])
           RLD[i] <- D / (D - n11[i])
