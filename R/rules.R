@@ -331,9 +331,9 @@ setMethod("generatingItemsets", signature(x = "rules"),
 #' @aliases 
 #' coerce,rules,data.frame-method
 #' 
-#' @section Coercion:
+#' @section Coercions:
 #' 
-#' * as("rules", "data.frame")
+#' * `as("rules", "data.frame")`
 NULL
 
 setAs("rules", "data.frame",
@@ -351,7 +351,7 @@ setAs("rules", "data.frame",
 ## used for duplicated, unique, etc. 0 is used as separator
 ## which avoids coercion to character.
 .joinedList <- function(x) {
-  if (class(x) != "rules")
+  if (!is(x, "rules"))
     stop("not of class rules")
   
   mapply(

@@ -1,11 +1,12 @@
-# arules — Mining Association Rules and Frequent Itemsets with R
+
+# <img src="man/figures/logo.svg" align="right" height="139" /> R package arules - Mining Association Rules and Frequent Itemsets
 
 [![CRAN
-version](https://www.r-pkg.org/badges/version/arules)](https://cran.r-project.org/package=arules)
+version](http://www.r-pkg.org/badges/version/arules)](https://CRAN.R-project.org/package=arules)
+[![stream r-universe
+status](https://mhahsler.r-universe.dev/badges/arules)](https://mhahsler.r-universe.dev/ui#package:arules)
 [![CRAN RStudio mirror
-downloads](https://cranlogs.r-pkg.org/badges/arules)](https://cran.r-project.org/package=arules)
-[![R build
-status](https://github.com/mhahsler/arules/workflows/R-CMD-check/badge.svg)](https://github.com/mhahsler/arules/actions)
+downloads](http://cranlogs.r-pkg.org/badges/arules)](https://CRAN.R-project.org/package=arules)
 
 The arules package for R provides the infrastructure for representing,
 manipulating and analyzing transaction data and patterns using [frequent
@@ -39,9 +40,8 @@ Mining](https://mhahsler.github.io/Introduction_to_Data_Mining_R_Examples/book/a
     interest measures.
 -   [arulesViz](https://github.com/mhahsler/arulesViz): Visualization of
     association rules.
--   [arulesCBA](https://github.com/ianjjohnson/arulesCBA):
-    Classification algorithms based on association rules (includes
-    CBA).  
+-   [arulesCBA](https://github.com/ianstenbit/arulesCBA): Classification
+    algorithms based on association rules (includes CBA).  
 -   [arulesSequences](https://cran.r-project.org/package=arulesSequences):
     Mining frequent sequences (cSPADE).
 
@@ -105,17 +105,17 @@ Mining](https://mhahsler.github.io/Introduction_to_Data_Mining_R_Examples/book/a
 
 ## Installation
 
-**Stable CRAN version:** install from within R with
+**Stable CRAN version:** Install from within R with
 
 ``` r
 install.packages("arules")
 ```
 
-**Current development version:** install from GitHub (needs devtools and
-[Rtools for Windows](https://cran.r-project.org/bin/windows/Rtools/)).
+**Current development version:** Install from
+[r-universe.](https://mhahsler.r-universe.dev/ui#package:arules)
 
 ``` r
-devtools::install_github("mhahsler/arules")
+install.packages("arules", repos = "https://mhahsler.r-universe.dev")
 ```
 
 ## Usage
@@ -156,7 +156,7 @@ rules <- apriori(trans, supp = 0.1, conf = 0.9, target = "rules")
     ## set transactions ...[84 item(s), 8993 transaction(s)] done [0.01s].
     ## sorting and recoding items ... [42 item(s)] done [0.00s].
     ## creating transaction tree ... done [0.00s].
-    ## checking subsets of size 1 2 3 4 5 6 done [0.03s].
+    ## checking subsets of size 1 2 3 4 5 6 done [0.02s].
     ## writing ... [457 rule(s)] done [0.00s].
     ## creating S4 object  ... done [0.00s].
 
@@ -242,9 +242,10 @@ arules](https://stackoverflow.com/questions/tagged/arules).
     Statistical Software,* 14(15), 2005.
 -   Hahsler, Michael. [A Probabilistic Comparison of Commonly Used
     Interest Measures for Association
-    Rules](https://michael.hahsler.net/research/association_rules/measures.html),
-    2015, URL:
-    <https://michael.hahsler.net/research/association_rules/measures.html>.
+    Rules](https://mhahsler.github.io/arules/docs/measures), 2015, URL:
+    <https://mhahsler.github.io/arules/docs/measures>.
 -   Michael Hahsler. [An R Companion for Introduction to Data Mining:
     Chapter
-    5](https://mhahsler.github.io/Introduction_to_Data_Mining_R_Examples/book/association-analysis-basic-concepts-and-algorithms.html).
+    5](https://mhahsler.github.io/Introduction_to_Data_Mining_R_Examples/book/association-analysis-basic-concepts-and-algorithms.html),
+    2021, URL:
+    <https://mhahsler.github.io/Introduction_to_Data_Mining_R_Examples/book/>

@@ -1,3 +1,14 @@
+# arules 1.7-4 (8/16/2022)
+
+## Changes
+
+* We install now the latest version of fim4r
+* Changes in coercion for Matrix 1.4-2
+
+## Bugfix
+
+* eclat() now correctly returns frequent itemsets when all have exactly minsupport (reported by GauthierMagnin).
+
 # arules 1.7-3 (1/9/2022)
 
 ## Changes
@@ -10,7 +21,7 @@
 
 * Added interface to fim4r algorithms.
 
-# arules 1.7-2 (12/09/2021)
+#  arules 1.7-2 (12/09/2021)
 
 ## New Feature
 

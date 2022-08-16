@@ -110,12 +110,21 @@ Matrix representation of a set of itemsets and the
 corresponding item labels.
 }
 \details{
+\strong{Representation}
+
 Sets of itemsets are represented as a compressed sparse
-binary matrix. Columns represent items and rows are the set/transactions. In
-the compressed form, each itemset is a vector of column indices (called item
+binary matrix. Conceptually, columns represent items and rows are the sets/transactions.
+In the compressed form, each itemset is a vector of column indices (called item
 IDs) representing the items.
 
-\strong{Note:} If you work with several \code{itemMatrix} objects at the same time (e.g.,
+\strong{Warning:} Ideally, we would store the matrix as a row-oriented sparse
+matrix (\code{ngRMatrix}), but the \pkg{Matrix} package provides better support for
+column-oriented sparse classes (\code{ngCMatrix}). The matrix is therefore internally stored
+in transposed form.
+
+\strong{Working with several \code{itemMatrix} objects}
+
+If you work with several \code{itemMatrix} objects at the same time (e.g.,
 several transaction sets, lhs and rhs of a rule, etc.), then the encoding
 (itemLabes and order of the items in the binary matrix) in the different
 itemMatrices is important and needs to conform. See \link{itemCoding}
@@ -123,44 +132,45 @@ to learn how to encode and recode \code{itemMatrix} objects.
 }
 \section{Functions}{
 \itemize{
-\item \code{summary,itemMatrix-method}: show a summary.
+\item \code{summary(itemMatrix)}: show a summary.
 
-\item \code{dim,itemMatrix-method}: returns the number of rows
+\item \code{dim(itemMatrix)}: returns the number of rows
 (itemsets) and columns (items in the encoding).
 
-\item \code{nitems,itemMatrix-method}: returns the number of items in the encoding.
+\item \code{nitems(itemMatrix)}: returns the number of items in the encoding.
 
-\item \code{length,itemMatrix-method}: returns the number of itemsets (rows) in the matrix.
+\item \code{length(itemMatrix)}: returns the number of itemsets (rows) in the matrix.
 
-\item \code{toLongFormat,itemMatrix-method}: convert the sets to long format
+\item \code{toLongFormat(itemMatrix)}: convert the sets to long format
 (a data.frame with two columns, ID and item). Column names
 can be specified as a character vector of length 2 called \code{cols}.
 
-\item \code{labels,itemMatrix-method}: returns labels for the itemsets.
+\item \code{labels(itemMatrix)}: returns labels for the itemsets.
 The following arguments can be used to customize the representation
 of the labels: \code{itemSep}, \code{setStart} and \code{setEnd}.
 
-\item \code{itemLabels,itemMatrix-method}: returns the item labels used for encoding as a character vector.
+\item \code{itemLabels(itemMatrix)}: returns the item labels used for encoding as a character vector.
 
-\item \code{itemLabels<-,itemMatrix-method}: replaces the item labels used for encoding.
+\item \code{itemLabels(itemMatrix) <- value}: replaces the item labels used for encoding.
 
-\item \code{itemInfo,itemMatrix-method}: returns the whole item/column information data.frame including labels.
+\item \code{itemInfo(itemMatrix)}: returns the whole item/column information data.frame including labels.
 
-\item \code{itemInfo<-,itemMatrix-method}: replaces the item/column info by a data.frame.
+\item \code{itemInfo(itemMatrix) <- value}: replaces the item/column info by a data.frame.
 
-\item \code{itemsetInfo,itemMatrix-method}: returns the item set/row information data.frame.
+\item \code{itemsetInfo(itemMatrix)}: returns the item set/row information data.frame.
 
-\item \code{itemsetInfo<-,itemMatrix-method}: replaces the item set/row info by a data.frame.
+\item \code{itemsetInfo(itemMatrix) <- value}: replaces the item set/row info by a data.frame.
 
-\item \code{dimnames,itemMatrix-method}: returns a list with the dimname vectors.
+\item \code{dimnames(itemMatrix)}: returns a list with the dimname vectors.
 
-\item \code{dimnames<-,itemMatrix,list-method}: replace the dimnames.
+\item \code{dimnames(x = itemMatrix) <- value}: replace the dimnames.
+
 }}
-
 \section{Slots}{
 
 \describe{
-\item{\code{data}}{a sparse matrix of class \linkS4class{ngCMatrix} representing the itemsets. \strong{Note: the matrix is stored for efficiency reasons transposed!}.}
+\item{\code{data}}{a sparse matrix of class \linkS4class{ngCMatrix} representing the itemsets.
+\strong{Warning:} the matrix is stored in transposed form for efficiency reasons!.}
 
 \item{\code{itemInfo}}{a data.frame}
 
@@ -174,16 +184,18 @@ Objects can be created by calls of the form
 created by coercion from a matrix, list or data.frame.
 }
 
-\section{Coercion}{
+\section{Coercions}{
 
 \itemize{
-\item as("matrix", "itemMatrix")
-\item as("itemMatrix", "matrix")
-\item as("list", "itemMatrix")
-\item as("itemMatrix", "list")
-\item as("itemMatrix", "ngCMatrix")
-\item as("ngCMatrix", "itemMatrix")
+\item \code{as("matrix", "itemMatrix")}
+\item \code{as("itemMatrix", "matrix")}
+\item \code{as("list", "itemMatrix")}
+\item \code{as("itemMatrix", "list")}
+\item \code{as("itemMatrix", "ngCMatrix")}
+\item \code{as("ngCMatrix", "itemMatrix")}
 }
+
+\strong{Warning:} the \code{ngCMatrix} representation is transposed!
 }
 
 \examples{
@@ -220,8 +232,10 @@ as(imatrix[1:5], "list")
 as(imatrix[1:5], "matrix")
 
 ## Get first 5 elements (rows) of the itemMatrix as sparse ngCMatrix.
-## Warning: For efficiency reasons, the ngCMatrix is transposed!
+## **Warning:** For efficiency reasons, the ngCMatrix is transposed! You
+## can transpose it again to get the expected format.
 as(imatrix[1:5], "ngCMatrix")
+t(as(imatrix[1:5], "ngCMatrix"))
 
 ## Get labels for the first 5 itemsets (first default and then with
 ## custom formating)
