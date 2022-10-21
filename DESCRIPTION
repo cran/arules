@@ -1,6 +1,6 @@
 Package: arules
-Version: 1.7-4
-Date: 2022-08-16
+Version: 1.7-5
+Date: 2022-10-20
 Title: Mining Association Rules and Frequent Itemsets
 Authors@R: c(person("Michael", "Hahsler", role = c("aut", "cre", "cph"),
 		email = "mhahsler@lyle.smu.edu",
@@ -45,7 +45,7 @@ Collate: 'AAADefs.R' 'Adult.R' 'itemMatrix.R' 'associations.R'
         'subset.R' 'support.R' 'supportingTransactions.R' 'unique.R'
         'warm.R'
 NeedsCompilation: yes
-Packaged: 2022-08-16 20:55:21 UTC; hahsler
+Packaged: 2022-10-21 00:20:00 UTC; hahsler
 Author: Michael Hahsler [aut, cre, cph]
     (<https://orcid.org/0000-0003-2716-1405>),
   Christian Buchta [aut, cph],
@@ -56,4 +56,4 @@ Author: Michael Hahsler [aut, cre, cph]
   Makhlouf Ledmi [ctb]
 Maintainer: Michael Hahsler <mhahsler@lyle.smu.edu>
 Repository: CRAN
-Date/Publication: 2022-08-16 23:50:02 UTC
+Date/Publication: 2022-10-21 16:25:07 UTC

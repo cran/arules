@@ -1,6 +1,6 @@
-bd14214b095529c043b1880f0ddfa843 *DESCRIPTION
+06d8a6ef8fa393bc653b317a7a28e789 *DESCRIPTION
 398778285e248d994f2db467bbb17806 *NAMESPACE
-4779afdd46f589dedd35b6bdc67341a3 *NEWS.md
+03c0af9b5d57682a462d4cca5d3e1411 *NEWS.md
 1409ce2a1b63bd550dae251a7bc41931 *R/AAADefs.R
 8001286d02b1b49c954bf730ed891e60 *R/Adult.R
 43eee5c783add033ba31784ba7d70b7d *R/DATAFRAME.R
@@ -22,7 +22,7 @@ b3271c1779998f69072b7f7ba2ce4333 *R/confint.R
 abb5317e6d39731664e42cef02e1eea7 *R/control.R
 1323a579a7290e43669508a4748e4637 *R/coverage.R
 6dacdbe2c4545cba52ef19bf6f390ecf *R/crossTable.R
-9c418851426eb40e0fde804ef0b58526 *R/discretize.R
+84fa5e3ecaf97feb355de8655cddeea9 *R/discretize.R
 dc20c8e3c8d984985fd3cf588fbead7d *R/dissimilarity.R
 f8ceeebf2c011eba464a8ce92ffd0331 *R/duplicated.R
 d7e315a84480943220f65a13205f4c06 *R/eclat.R
@@ -79,7 +79,7 @@ b4dcf7bfdd3c2da2221af72c2a67bc4c *data/IncomeESL.rda
 84e5e64c04299949d8a189f14e00c98d *inst/CITATION
 eebbdcc5139d882d5a130a0683d897e1 *inst/doc/arules.R
 fb53f6954be49d0874a1fa2b99b6801a *inst/doc/arules.Rnw
-d973ed61ddb8f46968b9c1890cadbcb6 *inst/doc/arules.pdf
+39e613c241b8b326834128742f9fdb38 *inst/doc/arules.pdf
 99e5d9e0f9a1d13f51559cd00f8ca127 *man/APappearance-class.Rd
 955cdd5cada1495ec8e7f94a8038f4fe *man/AScontrol-classes.Rd
 7d3f8ea70f012906df73328319f534e5 *man/ASparameter-classes.Rd
@@ -100,7 +100,7 @@ c252ef774ef4eb0fbc4e0c8a99a46682 *man/c.Rd
 141faca127367a8ea35b9641126ad750 *man/confint.Rd
 0fca9350ff1155da6e59b133953b22c6 *man/coverage.Rd
 6050eb86cf3d2dd2c49365ea477a94dd *man/crossTable.Rd
-83fd6430e197f3c8db8f56b467a4a021 *man/discretize.Rd
+bcfcb79552c4efb22a0771c98e31425c *man/discretize.Rd
 53841e102eafa1e2b864058fe423d941 *man/dissimilarity.Rd
 819dd4cd3489772376b33833d0c6117e *man/duplicated.Rd
 3701f0fd7cf12d7e0c859b71efad4a3f *man/eclat.Rd
@@ -157,7 +157,7 @@ c3f45033efa05485a92129524275a565 *src/istree.c
 dbe9c398ea71d47d930012163064cb02 *src/matrix.c
 7fafe2e48de116a733ed59b30c5d8543 *src/newS4object.c
 81139ca0dad96021337c96eb58992cbe *src/newS4object.h
-8b61f998ec9e73a80074a3374b6ed870 *src/ptree.c
+a6a406080beb78a2cf7177002d639d0f *src/ptree.c
 3459cf11b2f5655209ebc0cb411118bb *src/rapriori.c
 758bddb5c4f14cbc549dd467087aa3e4 *src/rapriori.h
 45113392f256b7beeea34a6abc097647 *src/reclat.c
@@ -171,7 +171,7 @@ da60a66b401030273591f9597ace4b24 *src/tract.c
 2a9a7dcb87dd58814e40419b5c3d2e07 *src/tract.h
 e4c06b880a1b90000f1eb0365f233400 *src/vecops.c
 c7e84bbabd243ca6c76989ea92ff861a *src/vecops.h
-13334b606f0fa27a4df0fb79f6601ab0 *src/warm.c
+83b7a131c9f8c2588cd2b9fc4abfca0e *src/warm.c
 51f87c64bb41ecf16188a5e0cca045e4 *tests/testthat.R
 34c096bd5744d36498f647572eabae79 *tests/testthat/test-apriori.R
 014963a518eabff965492e29a550aeab *tests/testthat/test-associations.R
