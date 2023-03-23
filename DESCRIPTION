@@ -1,16 +1,18 @@
 Package: arules
-Version: 1.7-5
-Date: 2022-10-20
+Version: 1.7-6
+Date: 2023-03-23
 Title: Mining Association Rules and Frequent Itemsets
-Authors@R: c(person("Michael", "Hahsler", role = c("aut", "cre", "cph"),
-		email = "mhahsler@lyle.smu.edu",
-		comment = c(ORCID = "0000-0003-2716-1405")),
-	    person("Christian", "Buchta", role = c("aut", "cph")),
-	    person("Bettina", "Gruen", role = c("aut", "cph")),
-	    person("Kurt", "Hornik", role = c("aut", "cph")),
-	    person("Christian", "Borgelt", role = c("ctb", "cph")),
-	    person("Ian", "Johnson", role = c("ctb")),
-	    person("Makhlouf", "Ledmi", role = c("ctb")))
+Authors@R: c(
+    person("Michael", "Hahsler", role = c("aut", "cre", "cph"),
+	email = "mhahsler@lyle.smu.edu",
+	comment = c(ORCID = "0000-0003-2716-1405")),
+    person("Christian", "Buchta", role = c("aut", "cph")),
+    person("Bettina", "Gruen", role = c("aut", "cph")),
+    person("Kurt", "Hornik", role = c("aut", "cph"),
+	comment = c(ORCID = "0000-0003-4198-9911")),
+    person("Christian", "Borgelt", role = c("ctb", "cph")),
+    person("Ian", "Johnson", role = c("ctb")),
+    person("Makhlouf", "Ledmi", role = c("ctb")))
 Description: Provides the infrastructure for representing, manipulating and analyzing 
   transaction data and patterns (frequent itemsets and association rules). 
   Also provides C implementations of the association mining algorithms Apriori and Eclat. 
@@ -27,7 +29,7 @@ Copyright: The source code for Apriori and Eclat was obtained from
         Christian Borgelt. All other code is Copyright (C) Michael
         Hahsler, Christian Buchta, Bettina Gruen and Kurt Hornik.
 Encoding: UTF-8
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
 Collate: 'AAADefs.R' 'Adult.R' 'itemMatrix.R' 'associations.R'
         'transactions.R' 'tidLists.R' 'itemsets.R' 'rules.R'
         'DATAFRAME.R' 'Epub.R' 'Groceries.R' 'Income.R' 'LIST.R'
@@ -45,15 +47,15 @@ Collate: 'AAADefs.R' 'Adult.R' 'itemMatrix.R' 'associations.R'
         'subset.R' 'support.R' 'supportingTransactions.R' 'unique.R'
         'warm.R'
 NeedsCompilation: yes
-Packaged: 2022-10-21 00:20:00 UTC; hahsler
+Packaged: 2023-03-23 20:56:31 UTC; hahsler
 Author: Michael Hahsler [aut, cre, cph]
     (<https://orcid.org/0000-0003-2716-1405>),
   Christian Buchta [aut, cph],
   Bettina Gruen [aut, cph],
-  Kurt Hornik [aut, cph],
+  Kurt Hornik [aut, cph] (<https://orcid.org/0000-0003-4198-9911>),
   Christian Borgelt [ctb, cph],
   Ian Johnson [ctb],
   Makhlouf Ledmi [ctb]
 Maintainer: Michael Hahsler <mhahsler@lyle.smu.edu>
 Repository: CRAN
-Date/Publication: 2022-10-21 16:25:07 UTC
+Date/Publication: 2023-03-23 21:52:04 UTC
