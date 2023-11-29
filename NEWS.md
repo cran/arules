@@ -1,8 +1,21 @@
+# arules 1.7-7 (11/28/2023)
+
+## Changes
+* is.significant gained parameter reuse. The default for adjust was changed 
+  to "none." 
+* improved some error messages.
+* Added Wikipedia links to measures.md.
+* Added interest measure LIC.
+  
+## Bugfixes
+* Fixed appearance code for fim4r (reported by mytarmail).
+  
+
 # arules 1.7-6 (03/23/2023)
 
 ## Changes
 * Improved the interface for fim4r. support and confidence now uses [0, 1]; added verbose 
-  and origialSupport. 
+  and originalSupport. 
 
 ## Bugfixes
 * eclat and apriori now use the next smaller representable double for minsupp to make sure that >= minsupp works.

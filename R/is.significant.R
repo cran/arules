@@ -34,15 +34,20 @@
 #' @family associations functions
 #' 
 #' @param x a set of [rules].
-#' @param transactions set of [transactions] used to mine the rules.
+#' @param transactions optional set of [transactions]. Only needed if not sufficient
+#'    interest measures are available in `x`. If the test should be performed
+#'    on a transaction set different then the one used for mining (use `reuse = FALSE`). 
 #' @param method test to use. Options are `"fisher"`, `"chisq"`. Note that
 #' the contingency table is likely to have cells with low expected values and
 #' that thus Fisher's Exact Test might be more appropriate than the chi-squared
 #' test.
 #' @param alpha required significance level.
-#' @param adjust method to adjust for multiple comparisons. Options are
+#' @param adjust method to adjust for multiple comparisons. Some options are
 #' `"none"`, `"bonferroni"`, `"holm"`, `"fdr"`, etc. (see
-#' [stats::p.adjust()])
+#' [stats::p.adjust()] for more methods)
+#' @param reuse logical indicating if information in the quality slot should be 
+#'   reuse for calculating the measures. 
+#' @param ... further arguments are passed on to [interestMeasure()].
 #' @return returns a logical vector indicating which rules are significant.
 #' @author Michael Hahsler
 #' @seealso [stats::p.adjust()]
@@ -53,36 +58,39 @@
 #' @keywords manip
 #' @examples
 #' data("Income")
-#' rules <- apriori(Income, parameter = list(support = 0.5))
-#' is.significant(rules, Income)
+#' rules <- apriori(Income, support = 0.2)
+#' is.significant(rules)
 #'
-#' inspect(rules[is.significant(rules, Income)])
+#' rules[is.significant(rules)]
+#'
+#' # Adjust P-values for multiple comparisons
+#' rules[is.significant(rules, adjust = "bonferroni")]
 setGeneric("is.significant",
-  function(x,
-    transactions,
-    method = "fisher",
-    alpha = 0.01,
-    adjust = "bonferroni")
+  function(x, ...)
     standardGeneric("is.significant"))
 
 #' @rdname is.significant
 setMethod("is.significant", signature(x = "rules"),
   function(x,
-    transactions,
+    transactions = NULL,
     method = "fisher",
     alpha = 0.01,
-    adjust = "bonferroni") {
+    adjust = "none",
+    reuse = TRUE,
+    ...) {
     methods <- c("fisher", "chisq")
     m <- pmatch(tolower(method), methods)
     if (is.na(m))
-      stop("Unknown method.")
+      stop("Unknown method. Available methods are: ", 
+           paste(sQuote(methods), collapse = ", "))
     method <- methods[m]
     
     if (method == "fisher")
       p <- interestMeasure(x,
         measure = "fishersExactTest",
         transactions = transactions,
-        reuse = TRUE)
+        reuse = reuse,
+        ...)
     
     ### chisq
     else
@@ -90,11 +98,11 @@ setMethod("is.significant", signature(x = "rules"),
         x,
         measure = "chiSquared",
         transactions = transactions,
-        reuse = TRUE,
-        significance = TRUE
+        significance = TRUE,
+        reuse = reuse,
+        ...
       )
     
-    if (adjust != "none")
-      p <- stats::p.adjust(p, method = adjust)
+    p <- stats::p.adjust(p, method = adjust)
     p <= alpha
   })
