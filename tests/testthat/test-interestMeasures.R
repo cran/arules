@@ -1,8 +1,3 @@
-library("arules")
-library("testthat")
-
-context("interestMeasures")
-
 options(digits = 2)
 
 data <- list(c("A", "B"),
@@ -110,8 +105,6 @@ m5 <- interestMeasure(rules[0], transactions = trans, reuse = TRUE)
 expect_equal(nrow(m5), 0L)
 
 ## is.redundant (this test does not help much)!
-context("is.redundant")
-
 red <- is.redundant(rules)
 imp <- interestMeasure(rules, measure = "improvement")
 expect_equal(red, imp <= 0)
@@ -119,9 +112,7 @@ expect_equal(red, imp <= 0)
 #inspect(rules[!red])
 #inspect(rules[red])
 
-
-context("support")
-
+# test support
 s_tid <- support(rules, trans, control = list(method = "tidlist"))
 s_ptree <- support(rules, trans, control = list(method = "ptree"))
 expect_equal(s_tid, s_ptree)
@@ -129,7 +120,6 @@ expect_equal(s_tid, quality(rules)$support)
 
 ## FIXME: test others
 
-context("test with previous version")
 data("Adult")
 ## Mine association rules.
 rules <- apriori(Adult,
@@ -2914,7 +2904,13 @@ m_previous <- structure(
       1.16, 0.963, 0.981, 0.963, 0.982, 0.969, 1.048, 1.009, 1.004, 
       1.013, 1.006, 0.999, 1.01, 0.977, 1.128, 0.986, 1.156, 0.971, 
       0.958, 0.971, 0.959, 0.98, 1.056, 1.14, 0.971, 1.001, 1.041, 
-      0.995, 0.999, 0.996, 1.002, 0.972, 0.962, 1.099)
+      0.995, 0.999, 0.996, 1.002, 0.972, 0.962, 1.099),
+    LIC = c(Inf, Inf, 1.013, 1.005, 0.987, 0.993, 1.007, 1.003, Inf, 0.997, 
+            0.998, 0.998, 0.999, 0.996, 0.996, 0.997, 0.997, 0.999, Inf, 
+            0.984, 0.992, 0.985, 0.993, 0.988, 0.992, 0.997, 0.998, 0.998, 
+            0.999, 0.996, 0.996, 0.995, 0.998, 0.997, 0.999, 0.994, 0.992, 
+            0.995, 0.994, 0.991, 0.997, 0.998, 0.987, 0.997, 0.991, 0.994, 
+            0.993, 0.995, 0.994, 0.992, 0.99, 0.997)
   ),
   row.names = c(NA,-52L),
   class = "data.frame"

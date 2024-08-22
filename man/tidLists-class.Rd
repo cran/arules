@@ -121,7 +121,7 @@ columns are the transactions.
 \section{Slots}{
 
 \describe{
-\item{\code{data}}{an object of class \linkS4class{ngCMatrix} from package \pkg{Matrix}.}
+\item{\code{data}}{an object of class \link[Matrix:nsparseMatrix-classes]{Matrix::ngCMatrix}.}
 
 \item{\code{itemInfo}}{a data.frame}
 
@@ -191,16 +191,16 @@ inspect(tl2)
 \seealso{
 Other itemMatrix and transactions functions: 
 \code{\link{abbreviate}()},
-\code{\link{crossTable}()},
 \code{\link{c}()},
+\code{\link{crossTable}()},
 \code{\link{duplicated}()},
 \code{\link{extract}},
 \code{\link{hierarchy}},
 \code{\link{image}()},
 \code{\link{inspect}()},
 \code{\link{is.superset}()},
-\code{\link{itemFrequencyPlot}()},
 \code{\link{itemFrequency}()},
+\code{\link{itemFrequencyPlot}()},
 \code{\link{itemMatrix-class}},
 \code{\link{match}()},
 \code{\link{merge}()},

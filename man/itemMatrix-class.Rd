@@ -119,7 +119,7 @@ IDs) representing the items.
 
 \strong{Warning:} Ideally, we would store the matrix as a row-oriented sparse
 matrix (\code{ngRMatrix}), but the \pkg{Matrix} package provides better support for
-column-oriented sparse classes (\code{ngCMatrix}). The matrix is therefore internally stored
+column-oriented sparse classes (\link[Matrix:nsparseMatrix-classes]{Matrix::ngCMatrix}). The matrix is therefore internally stored
 in transposed form.
 
 \strong{Working with several \code{itemMatrix} objects}
@@ -169,7 +169,7 @@ of the labels: \code{itemSep}, \code{setStart} and \code{setEnd}.
 \section{Slots}{
 
 \describe{
-\item{\code{data}}{a sparse matrix of class \linkS4class{ngCMatrix} representing the itemsets.
+\item{\code{data}}{a sparse matrix of class \link[Matrix:nsparseMatrix-classes]{Matrix::ngCMatrix} representing the itemsets.
 \strong{Warning:} the matrix is stored in transposed form for efficiency reasons!.}
 
 \item{\code{itemInfo}}{a data.frame}
@@ -275,16 +275,16 @@ compatible(imatrix_new, imatrix)
 \seealso{
 Other itemMatrix and transactions functions: 
 \code{\link{abbreviate}()},
-\code{\link{crossTable}()},
 \code{\link{c}()},
+\code{\link{crossTable}()},
 \code{\link{duplicated}()},
 \code{\link{extract}},
 \code{\link{hierarchy}},
 \code{\link{image}()},
 \code{\link{inspect}()},
 \code{\link{is.superset}()},
-\code{\link{itemFrequencyPlot}()},
 \code{\link{itemFrequency}()},
+\code{\link{itemFrequencyPlot}()},
 \code{\link{match}()},
 \code{\link{merge}()},
 \code{\link{random.transactions}()},

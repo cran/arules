@@ -1,3 +1,21 @@
+# arules 1.7-8 (08/21/2024)
+  
+## Changes
+* Updated tests for testthat edition 3.
+
+## Internal Changes
+* Disable internal ngCMatrix subsetting code which has issues with R-devel.
+  We use now subsetting provided by package Matrix which is almost as fast.
+* Disable internal code for rowSums and colSums for ngCMatrix. 
+* Internal code for t for ngCMatrix is now only used internally. 
+* The custom code and the exported symbols are now deprecated and will be 
+  removed in the next major release.
+
+## Bugfixes
+* Fixed 'Error in .basicRuleMeasure(..) unused argument 
+  (complement = TRUE)' reported by bachnguyen-tomo.
+* Added package anchors in man pages for ngCMatrix-class.
+
 # arules 1.7-7 (11/28/2023)
 
 ## Changes
@@ -6,6 +24,7 @@
 * improved some error messages.
 * Added Wikipedia links to measures.md.
 * Added interest measure LIC.
+
   
 ## Bugfixes
 * Fixed appearance code for fim4r (reported by mytarmail).

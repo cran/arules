@@ -34,7 +34,7 @@
 #' @references PMML 4.4 - Association Rules.
 #' \url{https://dmg.org/pmml/v4-4/AssociationRules.html}
 #' @keywords interface
-#' @examples
+#' @examplesIf requireNamespace("pmml", quietly = TRUE)
 #' data("Groceries")
 #'
 #' rules <- apriori(Groceries, parameter = list(support = 0.001))

@@ -63,7 +63,7 @@
 #' an object of class [transactions]. 
 #' * by calls of the form  `new("tidLists", ...)`.
 #' 
-#' @slot data an object of class [ngCMatrix-class] from package \pkg{Matrix}.
+#' @slot data an object of class [Matrix::ngCMatrix-class].
 #' @slot itemInfo a data.frame
 #' @slot transactionInfo a data.frame
 #' 
