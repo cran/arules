@@ -1,6 +1,6 @@
-8758cf4c39895b5427996418447831a5 *DESCRIPTION
+0b477f7fd771cacb566d0c43c854c46d *DESCRIPTION
 45b980eea0af4834151aa3373e19f373 *NAMESPACE
-a38094775074de653b685dc20891e6c1 *NEWS.md
+adc786ef1c43615d8ac9db2a11c903dd *NEWS.md
 92b79e7a86470d56229ca492c352bfbe *R/AAADefs.R
 067f5598ceaf4f8a562594ec1068a6af *R/AAA_arules-package.R
 1ac7ee69f6bc4d013a5bba184a321f33 *R/Adult.R
@@ -15,7 +15,7 @@ f8c8afe4fba2b0bdf2d897ad27951c6b *R/Mushroom.R
 37e0624c207e0879dae1c083c79aeeed *R/abbreviate.R
 52afee359f941c49c2518deb8a89e23b *R/addComplement.R
 3c51266cc646c6cf831b4be4d4addb93 *R/appearance.R
-dfc3dad29cbaaf63239fcd0230572607 *R/apriori.R
+40d39381248316da9b65ca32dd5a5d60 *R/apriori.R
 e1ca89b01c4ea152439a619ebdd8c663 *R/associations.R
 9ee512471087f8f7b1a80928306ac93a *R/c.R
 753c85c1f6e061a59c890c566897d77b *R/check_installed.R
@@ -26,7 +26,7 @@ e1ca89b01c4ea152439a619ebdd8c663 *R/associations.R
 dc4a483c8c60ffcf770c534bb318a473 *R/discretize.R
 926c4b3e50f396f954ae2be442468c9e *R/dissimilarity.R
 fc8b8a0b035b6612979203f3711cb45d *R/duplicated.R
-d9514c59ec0b08aadc2aac542c658ce9 *R/eclat.R
+c904cd88ec9484984f67319eec25a070 *R/eclat.R
 2d7cc4af4e9015e2358e43df5d6c3610 *R/extract.R
 0cc18bf1b1415e82963a43f6dede1ef1 *R/fim4r.R
 bb8a31ff3756cfe8786a4802990fd262 *R/hierarchy.R
@@ -66,8 +66,8 @@ ff62e059a458017fee6a1e641bc5577d *R/tidLists.R
 9a145937d7ada6df090cfe665ab34e48 *R/unique.R
 243bdaa027a38da2ce97a368d1b33adc *R/warm.R
 d87c3c5232cd17c0b25715e75b401907 *README.md
-76161b65639451c966be75488458b3c3 *build/partial.rdb
-06ec50759d4916e4b0db5cdbd8c1c4dd *build/vignette.rds
+b52aabe9a2757fc86742763db9dafc9b *build/partial.rdb
+5d2c4c9a1345e42b5f59e4fc83f833b8 *build/vignette.rds
 c2588d596b5509c7d0abf8d7fa83b982 *data/Adult.rda
 caea0674be23e2e2ac064bc88471951c *data/AdultUCI.rda
 55f8b7179a35559c83165ffa06fb7154 *data/Epub.rda
@@ -80,7 +80,7 @@ d29a7c6a484acc7fddc69314a2f9bff4 *data/SunBai.rda
 018b4097a30eee98fd8a9f79135ddc53 *inst/CITATION
 eebbdcc5139d882d5a130a0683d897e1 *inst/doc/arules.R
 fb53f6954be49d0874a1fa2b99b6801a *inst/doc/arules.Rnw
-80fd7590ac22386a124fd14bf1b64733 *inst/doc/arules.pdf
+bc2962ba2ea19cadcdb6a81f1966b811 *inst/doc/arules.pdf
 48311e5cadc97dc4848fd964492ef403 *man/APappearance-class.Rd
 955cdd5cada1495ec8e7f94a8038f4fe *man/AScontrol-classes.Rd
 7d3f8ea70f012906df73328319f534e5 *man/ASparameter-classes.Rd
@@ -95,7 +95,7 @@ bfb9d49b0fc4dcdd1ffbf7ffca97214d *man/DATAFRAME.Rd
 3c3be043b210a18bd54378a0635e6cec *man/abbreviate.Rd
 163c10f3d636edaf9662c220022a1991 *man/addComplement.Rd
 32bbc8c032f60c8bf77f1c0462e584fb *man/affinity.Rd
-b8971c6e7b5c59bbd7106732668aa119 *man/apriori.Rd
+3df1a97d6ce84e1e3a9fe743ff0a5f63 *man/apriori.Rd
 6c6c1043b46c2a9ec333ef5ef74fbd1f *man/arules-package.Rd
 094be9b9e3486894ec16623c27a451d9 *man/associations-class.Rd
 8dbc7181330e4e653a220fa8e8570c9a *man/c.Rd
@@ -105,7 +105,7 @@ e30a8a393e77d7be9044be2de5b7ab84 *man/crossTable.Rd
 366768897d56e2cc4b55e4b8b1f4048f *man/discretize.Rd
 15942fd71d4346ce60fbf92862db8e83 *man/dissimilarity.Rd
 ea53ec090547deb01be773dba2a7148d *man/duplicated.Rd
-305aa43e465c64e795486775efbc2d5f *man/eclat.Rd
+5f20f8ad3a241373ad316f831b792d21 *man/eclat.Rd
 659227ce5c236e16b773b50a29d9978d *man/extract.Rd
 599d9a8e2e1d5a8c4059336996d95da4 *man/figures/logo.svg
 a2a9753d9285d9c8d37c1371a96e7fb4 *man/fim4r.Rd
@@ -155,14 +155,15 @@ c28eeff746179940c134a78bdab0bb33 *src/bitmat.c
 2572c6c2d5312b9f16f9724d4df917c2 *src/issubset.c
 907b314f4a0ff9d279f791eae368dc43 *src/istree.c
 96f00c014d8853d6d4a5003bafb8fe8c *src/istree.h
-20c6922584a5f4e28ae492d1489d7432 *src/matrix.c
+d4c206a3bd75ae15bf520104221583e6 *src/matrix.c
 7fafe2e48de116a733ed59b30c5d8543 *src/newS4object.c
 81139ca0dad96021337c96eb58992cbe *src/newS4object.h
-a6a406080beb78a2cf7177002d639d0f *src/ptree.c
+1abae779d1d120414f0a48a073bc7fca *src/ptree.c
+fd09bea150123ff83bbe7855e7e9af6b *src/r_memcpy.h
 5ca8c25924717bbf414d5d73d091a142 *src/rapriori.c
 758bddb5c4f14cbc549dd467087aa3e4 *src/rapriori.h
 cabd468f04c8c20cf83f37783a42c308 *src/reclat.c
-e9cb98a45433f40b9443f3d529e2caf3 *src/similarity.c
+35abf0c7586f78f37269fd736dab55ae *src/similarity.c
 216b7e32ef61c02952b728c221d87811 *src/symtab.c
 ed164f05c35b406c8464a3dd37e7e28d *src/symtab.h
 d1a45f3bec6bb51b0e2ae98c88da65e8 *src/tfscan.c
@@ -172,7 +173,7 @@ ffc6c44ed9c1c141d2a7828989eb16ff *src/tract.c
 cd7d70feb1510fd86a2254ef621bcba5 *src/tract.h
 e4c06b880a1b90000f1eb0365f233400 *src/vecops.c
 c7e84bbabd243ca6c76989ea92ff861a *src/vecops.h
-83b7a131c9f8c2588cd2b9fc4abfca0e *src/warm.c
+635195d9b2c5c66ea493682cc79cbd3f *src/warm.c
 3cc0838f242d2365812eb69710adff37 *tests/testthat.R
 551b5f86e2ff7742a5034e9871f73a31 *tests/testthat/test-apriori.R
 358064d6be08310b9494e982b942546c *tests/testthat/test-associations.R
