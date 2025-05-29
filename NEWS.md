@@ -1,3 +1,11 @@
+# arules 1.7-11 (05/28/2025)
+
+## Changes
+* dissimilarity(): The parameter which is now replaced with the logical items. 
+* dissimilarity(): Added cross-dissimilarity calculation for Euclidean distances. Dissimilarities
+  are now computed on the sparse itemMatrix objects and tests were added.
+* We use now the built-in R_chk_memcpy and R_chk_memset.
+
 # arules 1.7-10 (04/22/2025)
 
 ## Changes
