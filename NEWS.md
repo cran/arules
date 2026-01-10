@@ -1,3 +1,12 @@
+# arules 1.7.13 (01/07/2026)
+* Fixed link to arulesCBA in README
+* Fixed mailto in vignette.
+
+# arules 1.7.12 (08/08/2025)
+
+## Changes
+* Fixed partial argument matches.
+
 # arules 1.7-11 (05/28/2025)
 
 ## Changes

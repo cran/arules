@@ -1,13 +1,14 @@
 
 # <img src="man/figures/logo.svg" align="right" height="139" /> R package arules - Mining Association Rules and Frequent Itemsets
 
-[![r-universe
-status](https://mhahsler.r-universe.dev/badges/arules)](https://mhahsler.r-universe.dev/arules)
 [![Package on
 CRAN](https://www.r-pkg.org/badges/version/arules)](https://CRAN.R-project.org/package=arules)
 [![CRAN RStudio mirror
 downloads](https://cranlogs.r-pkg.org/badges/arules)](https://CRAN.R-project.org/package=arules)
+![License](https://img.shields.io/cran/l/arules)
 [![Anaconda.org](https://anaconda.org/conda-forge/r-arules/badges/version.svg)](https://anaconda.org/conda-forge/r-arules)
+[![r-universe
+status](https://mhahsler.r-universe.dev/badges/arules)](https://mhahsler.r-universe.dev/arules)
 [![StackOverflow](https://img.shields.io/badge/stackoverflow-arules-orange.svg)](https://stackoverflow.com/questions/tagged/arules)
 
 ## Introduction
@@ -35,7 +36,7 @@ mining algorithms are available via
 
 Code examples can be found in [Chapter 5 of the web book R Companion for
 Introduction to Data
-Mining](https://mhahsler.github.io/Introduction_to_Data_Mining_R_Examples/book/association-analysis-basic-concepts-and-algorithms.html).
+Mining](https://mhahsler.github.io/Introduction_to_Data_Mining_R_Examples/book/association-analysis-basic-concepts.html).
 
 To cite package ‘arules’ in publications use:
 
@@ -66,7 +67,7 @@ To cite package ‘arules’ in publications use:
   interest measures.
 - [arulesViz](https://github.com/mhahsler/arulesViz): Visualization of
   association rules.
-- [arulesCBA](https://github.com/ianstenbit/arulesCBA): Classification
+- [arulesCBA](https://github.com/mhahsler/arulesCBA): Classification
   algorithms based on association rules (includes CBA).  
 - [arulesSequences](https://cran.r-project.org/package=arulesSequences):
   Mining frequent sequences (cSPADE).
@@ -143,10 +144,10 @@ The following R packages use `arules`:
 [fdm2id](https://CRAN.R-project.org/package=fdm2id),
 [GroupBN](https://CRAN.R-project.org/package=GroupBN),
 [ibmdbR](https://CRAN.R-project.org/package=ibmdbR),
-[immcp](https://CRAN.R-project.org/package=immcp),
 [inTrees](https://CRAN.R-project.org/package=inTrees),
 [nuggets](https://CRAN.R-project.org/package=nuggets),
 [opusminer](https://CRAN.R-project.org/package=opusminer),
+[pervasive](https://CRAN.R-project.org/package=pervasive),
 [pmml](https://CRAN.R-project.org/package=pmml),
 [qCBA](https://CRAN.R-project.org/package=qCBA),
 [RareComb](https://CRAN.R-project.org/package=RareComb),
@@ -212,10 +213,10 @@ rules <- apriori(trans, supp = 0.1, conf = 0.9, target = "rules")
     ## Absolute minimum support count: 899 
     ## 
     ## set item appearances ...[0 item(s)] done [0.00s].
-    ## set transactions ...[84 item(s), 8993 transaction(s)] done [0.00s].
+    ## set transactions ...[84 item(s), 8993 transaction(s)] done [0.01s].
     ## sorting and recoding items ... [42 item(s)] done [0.00s].
-    ## creating transaction tree ... done [0.00s].
-    ## checking subsets of size 1 2 3 4 5 6 done [0.02s].
+    ## creating transaction tree ... done [0.01s].
+    ## checking subsets of size 1 2 3 4 5 6 done [0.03s].
     ## writing ... [457 rule(s)] done [0.00s].
     ## creating S4 object  ... done [0.00s].
 
@@ -238,8 +239,8 @@ inspect(head(rules, n = 3, by = "lift"))
 
 ## Using arules with tidyverse
 
-`arules` works seamlessly with [tidyverse](https://www.tidyverse.org/).
-For example:
+`arules` works seamlessly with [tidyverse](https://tidyverse.org/). For
+example:
 
 - `dplyr` can be used for cleaning and preparing the transactions.
 - `transaction()` and other functions accept `tibble` as input.
@@ -256,17 +257,14 @@ library("arules")
 data("IncomeESL")
 
 trans <- IncomeESL |>
-  select(-`ethnic classification`) |>
-  transactions()
+    select(-`ethnic classification`) |>
+    transactions()
 rules <- trans |>
-  apriori(
-    supp = 0.1, conf = 0.9, target = "rules",
-    control = list(verbose = FALSE)
-  )
+    apriori(supp = 0.1, conf = 0.9, target = "rules", control = list(verbose = FALSE))
 rules |>
-  head(3, by = "lift") |>
-  as("data.frame") |>
-  tibble()
+    head(3, by = "lift") |>
+    as("data.frame") |>
+    tibble()
 ```
 
     ## # A tibble: 3 × 6
@@ -296,7 +294,7 @@ arules](https://stackoverflow.com/questions/tagged/arules).
   arXiv:2305.15263 \[cs.DB\], May 2023.
 - Michael Hahsler. [An R Companion for Introduction to Data Mining:
   Chapter
-  5](https://mhahsler.github.io/Introduction_to_Data_Mining_R_Examples/book/association-analysis-basic-concepts-and-algorithms.html),
+  5](https://mhahsler.github.io/Introduction_to_Data_Mining_R_Examples/book/association-analysis-basic-concepts.html),
   2021, URL:
   <https://mhahsler.github.io/Introduction_to_Data_Mining_R_Examples/book/>
 - Hahsler, Michael. [A Probabilistic Comparison of Commonly Used
