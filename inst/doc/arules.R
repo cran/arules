@@ -5,7 +5,7 @@
 ###################################################
 options(width = 75)
 ### for sampling
-set.seed <- 1234
+set.seed(1234)
 
 
 ###################################################
@@ -329,5 +329,3 @@ supportSample <- quality(itemsetsSample[match])$support
 accuracy <- 1 - abs(supportSample - supportItemsets) / supportItemsets
 
 summary(accuracy)
-
-

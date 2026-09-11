@@ -1,0 +1,111 @@
+---
+title: "Item hierarchies"
+author: "Michael Hahsler"
+output:
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Item hierarchies}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+library(arules)
+set.seed(1234)
+```
+
+Often, we deal with many items. For example in a supermarket there may be 10s of
+different types of milk and 100s of different dairy products. 
+An item hierarchy maps detailed items to broader groups. For example,
+milk and yogurt are grouped in the dairy category. 
+This information will help us analyze when rules are true for a whole category.
+
+Item hierarchy level are stored as a column in `itemInfo()` in the transactions.
+
+```{r}
+trans <- transactions(list(
+  T1 = c("apple", "banana"),
+  T2 = c("apple", "yogurt"),
+  T3 = c("banana", "milk"),
+  T4 = c("apple", "banana", "milk"),
+  T5 = c("milk", "yogurt"),
+  T6 = c("apple", "banana", "yogurt")
+))
+itemInfo(trans)
+```
+
+Initially, the transactions only contain the item labels. 
+We can add a category as an level in the hierarchy.
+
+
+```{r}
+category_list <- c(
+  apple = "fruit", banana = "fruit",
+  milk = "dairy", yogurt = "dairy"
+)
+itemInfo(trans)$category <- category_list[itemLabels(trans)]
+itemInfo(trans)
+```
+
+## Aggregating transactions
+
+`aggregate()` replaces item labels with their group. Multiple items from
+the same group in one basket become a single group item.
+
+```{r}
+by_category <- aggregate(trans, by = "category")
+inspect(trans)
+inspect(by_category)
+itemFrequency(by_category)
+```
+
+Mine the aggregated transactions when the analysis is intended to operate only
+at the group level. This calculates valid quality measures for that level.
+
+```{r}
+category_rules <- apriori(
+  by_category,
+  parameter = list(support = 0.3, confidence = 0.5, minlen = 2),
+  control = list(verbose = FALSE)
+)
+inspect(category_rules)
+```
+
+## Mine across hierarchy levels
+
+`addAggregate()` retains items and adds group items.
+By default, group items are marked with an asterisk.
+This creates rules that cross levels.
+
+```{r}
+multilevel <- addAggregate(trans, by = "category")
+inspect(multilevel)
+
+multilevel_rules <- apriori(
+  multilevel,
+  parameter = list(support = 0.1, confidence = 0.6, minlen = 2),
+  control = list(verbose = FALSE)
+)
+multilevel_rules
+```
+
+Adding category items creates trivial rules such as `{apple} => {fruit*}` because
+the hierarchy guarantees them. `filterAggregate()` removes associations that
+contain both a detailed item and its own aggregate. This reduces the size of the
+rule set significantly and makes it easier to interpret.
+
+```{r}
+multilevel_rules <- filterAggregate(multilevel_rules)
+multilevel_rules
+  
+inspect(sort(multilevel_rules, by = "lift"))
+```
+
+## Other vignettes
+
+* [Getting started with arules](getting-started.html)
+* [Preparing transaction data](preparing-transaction-data.html)
+* [Mining and pruning association rules](mining-and-pruning-rules.html)
+* [Interest measures](interest-measures.html)

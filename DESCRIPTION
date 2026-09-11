@@ -1,7 +1,7 @@
 Package: arules
 Title: Mining Association Rules and Frequent Itemsets
-Version: 1.7.14
-Date: 2026-03-28
+Version: 1.7.15
+Date: 2026-09-10
 Authors@R: c(
     person("Michael", "Hahsler", , "mhahsler@lyle.smu.edu", role = c("aut", "cre", "cph"),
            comment = c(ORCID = "0000-0003-2716-1405")),
@@ -23,14 +23,16 @@ URL: https://github.com/mhahsler/arules
 BugReports: https://github.com/mhahsler/arules/issues
 Depends: Matrix (>= 1.4-0), R (>= 4.5.0)
 Imports: generics, graphics, methods, stats, utils
-Suggests: arulesCBA, arulesViz, pmml, proxy, testthat, XML
+Suggests: arulesCBA, arulesViz, knitr, pmml, proxy, rmarkdown,
+        testthat, XML
+Config/testthat/edition: 3
+VignetteBuilder: knitr
 Classification/ACM: G.4, H.2.8, I.5.1
 Copyright: The source code for Apriori and Eclat was obtained from
         http://www.borgelt.net/ and is Copyright (C) 1996-2003
         Christian Borgelt.  All other code is Copyright (C) Michael
         Hahsler, Christian Buchta, Bettina Gruen and Kurt Hornik.
 Encoding: UTF-8
-RoxygenNote: 7.3.3
 Collate: 'AAA_arules-package.R' 'AAA_check_installed.R'
         'AAA_definitions.R' 'AAA_nodots.R' 'Adult.R' 'itemMatrix.R'
         'associations.R' 'transactions.R' 'tidLists.R' 'itemsets.R'
@@ -48,8 +50,9 @@ Collate: 'AAA_arules-package.R' 'AAA_check_installed.R'
         'sample.R' 'sets.R' 'setsItemwise.R' 'size.R' 'sort.R'
         'subset.R' 'support.R' 'supportingTransactions.R' 'unique.R'
         'warm.R'
+Config/roxygen2/version: 8.1.0
 NeedsCompilation: yes
-Packaged: 2026-03-28 21:48:52 UTC; mhahsler
+Packaged: 2026-09-10 20:32:58 UTC; mhahsler
 Author: Michael Hahsler [aut, cre, cph] (ORCID:
     <https://orcid.org/0000-0003-2716-1405>),
   Christian Buchta [aut, cph],
@@ -60,4 +63,4 @@ Author: Michael Hahsler [aut, cre, cph] (ORCID:
   Makhlouf Ledmi [ctb]
 Maintainer: Michael Hahsler <mhahsler@lyle.smu.edu>
 Repository: CRAN
-Date/Publication: 2026-03-29 06:10:40 UTC
+Date/Publication: 2026-09-11 06:00:02 UTC

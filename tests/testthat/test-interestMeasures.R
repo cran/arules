@@ -1,4 +1,24 @@
+test_that("interest measures", {
 options(digits = 2)
+
+expect_measure_ranges <- function(measures, ranges) {
+  expect_setequal(names(measures), rownames(ranges))
+
+  for (measure in names(measures)) {
+    values <- measures[[measure]]
+    values <- values[!is.na(values)]
+    tolerance <- sqrt(.Machine$double.eps)
+
+    expect_true(
+      all(values >= ranges[measure, "lower"] - tolerance),
+      info = paste(measure, "is below its documented range")
+    )
+    expect_true(
+      all(values <= ranges[measure, "upper"] + tolerance),
+      info = paste(measure, "is above its documented range")
+    )
+  }
+}
 
 data <- list(
   c("A", "B"),
@@ -60,6 +80,16 @@ expect_equal(round(quality(fsets)$allConfidence, 2), ac)
 ## test all measures for itemsets
 m1 <- interestMeasure(fsets, transactions = trans)
 
+## Ranges documented in docs/measures.md.
+itemset_ranges <- rbind(
+  support = c(lower = 0, upper = 1),
+  count = c(lower = 0, upper = length(trans)),
+  allConfidence = c(lower = 0, upper = 1),
+  crossSupportRatio = c(lower = 0, upper = 1),
+  lift = c(lower = 0, upper = Inf)
+)
+expect_measure_ranges(m1, itemset_ranges)
+
 ## now recalculate the measures using the transactions
 m2 <- interestMeasure(fsets, transactions = trans, reuse = FALSE)
 expect_equal(m1, m2)
@@ -86,6 +116,28 @@ rules <- apriori(trans,
 ## calculate all measures (just to see if one creates an error)
 m1 <- interestMeasure(rules, transactions = trans)
 
+
+## Check deprecated measures! Remove at next major release.
+expect_warning(
+  old_causal_support <- interestMeasure(rules, "casualSupport", transactions = trans),
+  "deprecated"
+)
+expect_equal(
+  old_causal_support,
+  interestMeasure(rules, "causalSupport", transactions = trans)
+)
+
+expect_warning(
+  old_causal_confidence <- interestMeasure(rules, "casualConfidence", transactions = trans),
+  "deprecated"
+)
+expect_equal(
+  old_causal_confidence,
+  interestMeasure(rules, "causalConfidence", transactions = trans)
+)
+## end
+
+
 ## ruleset without quality data.frame
 rules2 <- rules
 quality(rules2) <- quality(rules)[, 0]
@@ -96,10 +148,10 @@ m2 <- interestMeasure(rules[1], transactions = trans)
 expect_equal(nrow(m2), 1L)
 
 ## coverage
-expect_equal(coverage(rules), support(lhs(rules), trans = trans))
+expect_equal(coverage(rules), support(lhs(rules), transactions = trans))
 expect_equal(
-  coverage(rules, trans = trans, reuse = FALSE),
-  support(lhs(rules), trans = trans)
+  coverage(rules, transactions = trans, reuse = FALSE),
+  support(lhs(rules), transactions = trans)
 )
 
 ## check for empty ruleset
@@ -123,7 +175,43 @@ s_ptree <- support(rules, trans, control = list(method = "ptree"))
 expect_equal(s_tid, s_ptree)
 expect_equal(s_tid, quality(rules)$support)
 
-## FIXME: test others
+## Test the classifier and dependence measures from a contingency table.
+counts <- list(n = 100, n11 = 20, n10 = 10, n01 = 30, n00 = 40)
+new_measure_names <- c(
+  "accuracy", "precision", "recall", "fScore", "balancedAccuracy",
+  "netconf", "zhang"
+)
+new_measures <- sapply(
+  new_measure_names,
+  function(measure) arules:::.basicRuleMeasure(counts, measure)
+)
+expect_equal(
+  unname(new_measures),
+  unname(c(
+    accuracy = .6,
+    precision = 2 / 3,
+    recall = .4,
+    fScore = .5,
+    balancedAccuracy = (.4 + 40 / 50) / 2,
+    netconf = (.2 - .3 * .5) / (.3 * .7),
+    zhang = (.2 - .3 * .5) / max(.2 * .7, .3 * (.5 - .2))
+  )),
+  tolerance = 1e-14
+)
+
+count_matrix <- matrix(
+  c(20, 10, 30, 40),
+  nrow = 1,
+  dimnames = list(NULL, c("n11", "n10", "n01", "n00"))
+)
+expect_equal(
+  unname(arules:::.basicRuleMeasure(
+    count_matrix,
+    "confidence",
+    smoothCounts = .5
+  )),
+  20.5 / (20.5 + 10.5)
+)
 
 data("Adult")
 ## Mine association rules.
@@ -138,6 +226,74 @@ rules <- apriori(Adult,
 m_r <- interestMeasure(rules, transactions = Adult, reuse = TRUE)
 m <- interestMeasure(rules, transactions = Adult, reuse = FALSE)
 expect_equal(m_r, m)
+
+## Ranges documented in docs/measures.md. Undefined values (NA/NaN) are
+## ignored, while infinite values are accepted only for unbounded ranges.
+n <- length(Adult)
+rule_ranges <- rbind(
+  support = c(lower = 0, upper = 1),
+  confidence = c(lower = 0, upper = 1),
+  lift = c(lower = 0, upper = Inf),
+  count = c(lower = 0, upper = n),
+  addedValue = c(lower = -1 + 1 / n, upper = 1 - 1 / n),
+  boost = c(lower = 0, upper = Inf),
+  causalConfidence = c(lower = 0, upper = 1),
+  causalSupport = c(lower = 0, upper = 1),
+  accuracy = c(lower = 0, upper = 1),
+  balancedAccuracy = c(lower = 0, upper = 1),
+  centeredConfidence = c(lower = -1 + 1 / n, upper = 1 - 1 / n),
+  certainty = c(lower = -Inf, upper = 1),
+  chiSquared = c(lower = 0, upper = Inf),
+  collectiveStrength = c(lower = 0, upper = Inf),
+  confirmedConfidence = c(lower = -1, upper = 1),
+  conviction = c(lower = 0, upper = Inf),
+  cosine = c(lower = 0, upper = 1),
+  counterexample = c(lower = -Inf, upper = 1),
+  coverage = c(lower = 0, upper = 1),
+  doc = c(lower = -1, upper = 1),
+  fishersExactTest = c(lower = 0, upper = 1),
+  gini = c(lower = 0, upper = 1 / 2),
+  hyperConfidence = c(lower = 0, upper = 1),
+  hyperLift = c(lower = 0, upper = Inf),
+  imbalance = c(lower = 0, upper = 1),
+  implicationIndex = c(lower = -Inf, upper = Inf),
+  importance = c(lower = -Inf, upper = Inf),
+  improvement = c(lower = -1, upper = 1),
+  jaccard = c(lower = 0, upper = 1),
+  jMeasure = c(lower = 0, upper = 1 / exp(1)),
+  kappa = c(lower = -1, upper = 1),
+  kulczynski = c(lower = 0, upper = 1),
+  lambda = c(lower = 0, upper = 1),
+  laplace = c(lower = 0, upper = 1),
+  leastContradiction = c(lower = -Inf, upper = 1),
+  lerman = c(lower = -Inf, upper = Inf),
+  leverage = c(lower = -1 / 4, upper = 1 / 4),
+  LIC = c(lower = 0, upper = Inf),
+  maxconfidence = c(lower = 0, upper = 1),
+  mutualInformation = c(lower = 0, upper = 1),
+  netconf = c(lower = -1, upper = 1),
+  oddsRatio = c(lower = 0, upper = Inf),
+  phi = c(lower = -1, upper = 1),
+  ralambondrainy = c(lower = 0, upper = 1),
+  relativeRisk = c(lower = 0, upper = Inf),
+  rhsSupport = c(lower = 0, upper = 1),
+  RLD = c(lower = 0, upper = 1),
+  rulePowerFactor = c(lower = 0, upper = 1),
+  precision = c(lower = 0, upper = 1),
+  recall = c(lower = 0, upper = 1),
+  fScore = c(lower = 0, upper = 1),
+  sebag = c(lower = 0, upper = Inf),
+  stdLift = c(lower = 0, upper = 1),
+  table.n11 = c(lower = 0, upper = n),
+  table.n01 = c(lower = 0, upper = n),
+  table.n10 = c(lower = 0, upper = n),
+  table.n00 = c(lower = 0, upper = n),
+  varyingLiaison = c(lower = -1, upper = Inf),
+  zhang = c(lower = -1, upper = 1),
+  yuleQ = c(lower = -1, upper = 1),
+  yuleY = c(lower = -1, upper = 1)
+)
+expect_measure_ranges(m, rule_ranges)
 
 # dput(round(m_r, 3))
 m_previous <- structure(
@@ -1262,58 +1418,58 @@ m_previous <- structure(
       0.839
     ),
     collectiveStrength = c(
-      0,
-      0,
-      2100.469,
-      1109.947,
-      885.158,
-      537.551,
-      1505.665,
-      821.045,
-      2209.719,
-      444.05,
-      257.474,
-      343.017,
-      199.964,
-      0,
-      0,
-      1095.646,
-      2071.171,
-      2983.257,
-      5296.758,
-      1183.735,
-      703.514,
-      1151.931,
-      690.502,
-      528.595,
-      2702.14,
-      1763.053,
-      981.469,
-      1710.534,
-      948.714,
-      805.671,
-      1476.354,
-      660.623,
-      2315.901,
-      366.007,
-      2236.759,
-      250.406,
-      431.434,
-      193.157,
-      331.092,
-      783.815,
-      3036.8,
-      5290.847,
-      680.099,
-      1049.923,
-      2754.658,
-      967.708,
-      1737.545,
-      934.617,
-      1684.277,
-      358.06,
-      645.367,
-      2372.283
+      1,
+      1,
+      1.058,
+      1.024,
+      0.932,
+      0.964,
+      1.042,
+      1.021,
+      1.301,
+      0.969,
+      0.981,
+      0.981,
+      0.989,
+      0.932,
+      0.932,
+      1.008,
+      1.04,
+      1.118,
+      1.284,
+      0.934,
+      0.965,
+      0.934,
+      0.966,
+      0.943,
+      1.087,
+      1.017,
+      1.008,
+      1.023,
+      1.011,
+      0.998,
+      1.018,
+      0.964,
+      1.205,
+      0.976,
+      1.236,
+      0.95,
+      0.937,
+      0.951,
+      0.943,
+      0.962,
+      1.102,
+      1.251,
+      0.946,
+      1.001,
+      1.075,
+      0.99,
+      0.999,
+      0.993,
+      1.004,
+      0.95,
+      0.937,
+      1.166
     ),
     jaccard = c(
       0.917,
@@ -2059,167 +2215,167 @@ m_previous <- structure(
       0.899,
       0.912
     ),
-    casualSupport = c(
-      1.752,
-      1.86,
-      1.419,
-      1.49,
-      1.459,
-      1.551,
-      1.506,
-      1.587,
-      1.619,
-      1.626,
-      1.726,
-      1.664,
-      1.766,
-      1.777,
-      1.705,
-      1.448,
-      1.395,
-      1.392,
-      1.34,
-      1.392,
-      1.478,
-      1.4,
-      1.487,
-      1.488,
-      1.39,
-      1.418,
-      1.494,
-      1.438,
-      1.516,
-      1.534,
-      1.476,
-      1.568,
-      1.555,
-      1.663,
-      1.582,
-      1.652,
-      1.585,
-      1.69,
-      1.621,
-      1.434,
-      1.364,
-      1.312,
-      1.43,
-      1.446,
-      1.366,
-      1.447,
-      1.391,
-      1.467,
-      1.411,
-      1.595,
-      1.529,
-      1.518
+    causalSupport = c(
+      0.917,
+      0.953,
+      0.585,
+      0.583,
+      0.624,
+      0.644,
+      0.671,
+      0.681,
+      0.824,
+      0.791,
+      0.819,
+      0.829,
+      0.859,
+      0.871,
+      0.871,
+      0.541,
+      0.56,
+      0.597,
+      0.63,
+      0.557,
+      0.571,
+      0.565,
+      0.581,
+      0.581,
+      0.595,
+      0.583,
+      0.587,
+      0.603,
+      0.609,
+      0.628,
+      0.641,
+      0.733,
+      0.76,
+      0.757,
+      0.787,
+      0.746,
+      0.75,
+      0.784,
+      0.787,
+      0.528,
+      0.569,
+      0.602,
+      0.523,
+      0.54,
+      0.571,
+      0.54,
+      0.556,
+      0.561,
+      0.576,
+      0.688,
+      0.694,
+      0.723
     ),
-    casualConfidence = c(
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1
+    causalConfidence = c(
+      0.459,
+      0.477,
+      0.713,
+      0.718,
+      0.569,
+      0.595,
+      0.642,
+      0.655,
+      0.635,
+      0.514,
+      0.533,
+      0.501,
+      0.521,
+      0.475,
+      0.457,
+      0.716,
+      0.712,
+      0.732,
+      0.757,
+      0.606,
+      0.632,
+      0.602,
+      0.629,
+      0.592,
+      0.709,
+      0.676,
+      0.691,
+      0.669,
+      0.684,
+      0.653,
+      0.641,
+      0.541,
+      0.656,
+      0.557,
+      0.645,
+      0.531,
+      0.512,
+      0.518,
+      0.499,
+      0.649,
+      0.74,
+      0.763,
+      0.626,
+      0.707,
+      0.716,
+      0.689,
+      0.674,
+      0.682,
+      0.667,
+      0.555,
+      0.539,
+      0.667
     ),
     leastContradiction = c(
-      1,
-      1,
-      0.593,
-      0.588,
-      0.66,
-      0.664,
-      0.699,
-      0.697,
-      0.878,
+      0.91,
+      0.951,
+      0.547,
+      0.563,
+      0.59,
+      0.627,
+      0.642,
+      0.665,
+      0.804,
+      0.772,
+      0.81,
+      0.814,
       0.852,
-      0.854,
-      0.896,
-      0.897,
-      0.913,
-      0.949,
+      0.864,
+      0.859,
+      0.519,
+      0.521,
+      0.551,
+      0.567,
+      0.517,
+      0.55,
+      0.526,
+      0.56,
+      0.561,
+      0.549,
       0.545,
-      0.566,
-      0.603,
-      0.633,
-      0.579,
-      0.584,
-      0.589,
-      0.594,
-      0.598,
-      0.605,
-      0.597,
-      0.595,
-      0.62,
-      0.619,
-      0.641,
-      0.666,
-      0.784,
-      0.802,
-      0.786,
-      0.835,
-      0.777,
-      0.807,
-      0.818,
-      0.85,
-      0.536,
-      0.57,
-      0.598,
-      0.533,
-      0.544,
-      0.577,
-      0.546,
       0.567,
       0.568,
       0.59,
-      0.714,
-      0.742,
-      0.758
+      0.609,
+      0.609,
+      0.709,
+      0.732,
+      0.745,
+      0.763,
+      0.733,
+      0.727,
+      0.773,
+      0.767,
+      0.505,
+      0.52,
+      0.534,
+      0.5,
+      0.517,
+      0.522,
+      0.518,
+      0.516,
+      0.539,
+      0.538,
+      0.673,
+      0.667,
+      0.691
     ),
     centeredConfidence = c(
       0,
@@ -2926,7 +3082,10 @@ m_previous <- structure(
   class = "data.frame"
 )
 
-if (!all(setequal(names(m_previous), names(m_r)))) {
-  warning("Not all interestMeasures are tested! Missing data for: ", paste(setdiff(names(m_r), names(m_previous)), collapse = ", "))
+missing_measures <- setdiff(names(m_r), c(names(m_previous), new_measure_names))
+if (length(missing_measures)) {
+  warning("Not all interestMeasures are tested! Missing data for: ", paste(missing_measures, collapse = ", "))
 }
-expect_equivalent(m_previous, round(m_r[names(m_previous)], 3))
+
+expect_equal(m_previous, round(m_r[names(m_previous)], 3), ignore_attr = TRUE)
+})

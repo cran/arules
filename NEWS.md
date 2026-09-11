@@ -1,3 +1,41 @@
+# arules 1.7.15 (09/10/2026)
+
+## New Features
+
+* Added interest measures: Netconf and Zhang’s Measure
+* Added classification measures for rules: accuracy, precision, recall,
+  F-score, and balanced accuracy.
+
+## Bug Fixes
+
+* `predict()`: Fixed block-size handling and block boundaries. Blocked
+  prediction now processes each observation exactly once and correctly handles
+  a single-row `newdata` object.
+* `aggregate()`: Fixed aggregation of `itemsets`, which previously discarded
+  the aggregated object.
+* Fixed the error message produced in non-interactive sessions when a suggested
+  package is not installed.
+* `ruleInduction()` now warns about unknown arguments.
+* Corrected the formulas for collective strength, causal support and
+  confidence, least contradiction, and substitute hyper-confidence.
+* The misspelled interest-measure names `casualSupport` and
+  `casualConfidence` are deprecated. Use `causalSupport` and
+  `causalConfidence` instead.
+* fixed count smoothing for interest measure computation.
+* fixed the bootstrap se attribute.
+
+## Documentation and Maintenance
+
+* Added tests for `aggregate()`, `predict()`, PMML round trips, and
+  `supportingTransactions()`.
+* Switched the test suite explicitly to testthat edition 3.
+* Fixed the random seed initialization in the package vignette.
+* Fixed TYPOs.
+* Improved parameter descriptions and general documentation.
+* Added five short task-oriented R Markdown vignettes.
+
+
+
 # arules 1.7.14 (03/28/2026)
 * Added PROTECT to all getAttr calls in src.
 * Removed deprecated src sparse matrix functions.
@@ -611,4 +649,3 @@
 # arules 0.1-0 (4/15/2005)
 
 * Alpha and beta versions
-
